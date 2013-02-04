@@ -1043,6 +1043,7 @@ $(document).ready(function () {
     $("#lensButton").click(function () {
         partialGraph.position(0,0,1);
         partialGraph.refresh();
+        partialGraph.startForceAtlas2();
     });
     
     $('#sigma-example').dblclick(function(event) {
