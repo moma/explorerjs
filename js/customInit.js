@@ -191,6 +191,7 @@ function selection(currentNode){
 }
 
 function getOpossitesNodes(node_id, with_zoom) {
+    console.log("Clickeaste a:"+node_id+" - "+Nodes[node_id]);
         
     var node = partialGraph._core.graph.nodesIndex[node_id];
     if (!node) return null;
@@ -378,7 +379,8 @@ function graphNGrams(node_id){
                 
             }
             
-        }
+        } 
+        $("#searchinput").val(Nodes[node_id].label+" - "+partialGraph.getNodesCount());
         partialGraph.startForceAtlas2();
     }
 }
@@ -425,7 +427,7 @@ function graphDocs(node_id){
             }
             
         }
-        //partialGraph._core.graph.nodesIndex[node_id].active=true;
+        $("#searchinput").val(Nodes[node_id]+" - "+partialGraph.getNodesCount());
         partialGraph.startForceAtlas2();
     }
 }
@@ -900,8 +902,6 @@ $(document).ready(function () {
     
     partialGraph.ctxMini = document.getElementById('overview').getContext('2d');
     partialGraph.ctxMini.clearRect(0, 0, 200, 175);
-    partialGraph.centreX=0;
-    partialGraph.centreY=0;   
     
     $('#sigma-example').css('background-color','white');
     
@@ -924,7 +924,7 @@ $(document).ready(function () {
         partialGraph.stopForceAtlas2();
         
         //partialGraph.draw();
-        getOpossitesNodes(event.content, false); 
+        getOpossitesNodes(event.content, false);
         
         if(is_empty(selections)==true){  
             $("#names").html(""); //Information extracted, just added
@@ -1136,6 +1136,7 @@ $(document).ready(function () {
             edgesTF=true;
         }
         else {
+            $("#searchinput").val(partialGraph.getNodesCount());
             partialGraph.startForceAtlas2();
             edgesTF=false;
         }
