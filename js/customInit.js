@@ -380,7 +380,6 @@ function graphNGrams(node_id){
             }
             
         } 
-        $("#searchinput").val(Nodes[node_id].label+" - "+partialGraph.getNodesCount());
         partialGraph.startForceAtlas2();
     }
 }
@@ -427,7 +426,6 @@ function graphDocs(node_id){
             }
             
         }
-        $("#searchinput").val(Nodes[node_id]+" - "+partialGraph.getNodesCount());
         partialGraph.startForceAtlas2();
     }
 }
@@ -1136,7 +1134,6 @@ $(document).ready(function () {
             edgesTF=true;
         }
         else {
-            $("#searchinput").val(partialGraph.getNodesCount());
             partialGraph.startForceAtlas2();
             edgesTF=false;
         }
