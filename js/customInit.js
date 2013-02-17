@@ -193,8 +193,10 @@ function selection(currentNode){
 function getOpossitesNodes(node_id, with_zoom) {
     console.log("Clickeaste a:"+node_id+" - "+Nodes[node_id]);
         
+    console.log("hola");
     var node = partialGraph._core.graph.nodesIndex[node_id];
     if (!node) return null;
+    /*
     var nodes = [];
     if(node_id.toString().charAt(0)=="D"){
         //Click in Human: I've to show his keywords
@@ -210,9 +212,11 @@ function getOpossitesNodes(node_id, with_zoom) {
             nodes[i] = Nodes[bipartiteN2D[node_id].neighbours[i]];
         }  
     }
+    */
+    if(node_id.toString().charAt(0)=="D")flag=1;
+    else flag=2;
+    selection(node);  
     
-    
-    selection(node);    
     
     
     
@@ -324,10 +328,6 @@ function getOpossitesNodes(node_id, with_zoom) {
         });
     });
     
-//console.log(names);
-    
-//console.log(opossites.neighbours);
-/***** The animation *****/
         
 }   
 
@@ -338,8 +338,8 @@ function pushLabel(node_id,node_label) {
     });
 }
 
-function graphNGrams(node_id){
-        
+function graphNGrams(node_id){        
+    console.log("in graphNGrams, node_id: "+node_id);
     if(node_id.charAt(0)=="N") {
         labels = [];
         
@@ -385,7 +385,7 @@ function graphNGrams(node_id){
 }
         
 function graphDocs(node_id){
-        
+    console.log("in graphDocs, node_id: "+node_id);
     partialGraph.emptyGraph(); 
     //partialGraph.stopForceAtlas2();
     
@@ -931,7 +931,7 @@ $(document).ready(function () {
         }
     });
     
-    partialGraph.draw();
+    partialGraph.startForceAtlas2();
     
     
     

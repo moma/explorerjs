@@ -7,7 +7,6 @@ var strSearchBar = "Search";
 
 var sigmaJsDrawingProperties = {
     defaultLabelColor: 'black',
-    //defaultEdgeColor: 'black',
     defaultLabelSize: 14,
     defaultLabelBGColor: '#fff',
     defaultLabelHoverColor: '#000',
@@ -22,7 +21,6 @@ var sigmaJsDrawingProperties = {
 var sigmaJsGraphProperties = {
     //minNodeSize: 0.5,
     //maxNodeSize: 5,
-    //m
     minNodeSize: 1,
     maxNodeSize: 5,
     minEdgeSize: 1,
