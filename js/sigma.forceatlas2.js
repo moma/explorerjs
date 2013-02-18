@@ -950,7 +950,7 @@ sigma.publicPrototype.startForceAtlas2 = function() {
     this.forceatlas2.setAutoSettings();
     this.forceatlas2.init();
   //}
-
+  $("#overviewzone").hide();
   this.addGenerator('forceatlas2', this.forceatlas2.atomicGo, function(){
     return true;
   });
@@ -958,4 +958,11 @@ sigma.publicPrototype.startForceAtlas2 = function() {
 
 sigma.publicPrototype.stopForceAtlas2 = function() {
   this.removeGenerator('forceatlas2');
+  partialGraph.imageMini="";
+  partialGraph.ctxMini="";
+  partialGraph.ctxMini = document.getElementById('overview').getContext('2d');
+  partialGraph.ctxMini.clearRect(0, 0, 200, 175);
+  updateMap();
+  partialGraph.refresh();
+  $("#overviewzone").show();
 };
