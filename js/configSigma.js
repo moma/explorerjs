@@ -21,7 +21,7 @@ var sigmaJsDrawingProperties = {
 var sigmaJsGraphProperties = {
     //minNodeSize: 0.5,
     //maxNodeSize: 5,
-    minNodeSize: 3,
+    minNodeSize: 2,
     maxNodeSize: 5,
     minEdgeSize: 1,
     maxEdgeSize: 1

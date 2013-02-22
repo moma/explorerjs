@@ -251,14 +251,12 @@ function selection(currentNode){
         }
     }
     partialGraph.refresh();
-//console.log(selections.length);
     
 }
 
 function getOpossitesNodes(node_id, with_zoom) {
-    console.log("Clickeaste a:"+node_id+" - "+Nodes[node_id]);
+    console.log("You've clicked:"+node_id+" - "+Nodes[node_id]);
         
-    console.log("holamundou");
     
     if(socsemFlag==true) {
         cancelSelection();
@@ -287,15 +285,6 @@ function getOpossitesNodes(node_id, with_zoom) {
     if(node_id.toString().charAt(0)=="D")flag=1;
     else flag=2;
     selection(node);  
-    
-    console.log("Selections: ");
-    console.log(selections);
-    console.log("Opossites: ");
-    console.log(opossites);
-    console.log(nodes2);
-    
-    
-    
     
     var opos = ArraySort(opossites, function(a,b){
         return b-a
@@ -357,14 +346,11 @@ function getOpossitesNodes(node_id, with_zoom) {
     if(flag==2 && socsemFlag==false) {
         opossitesNodes += '<h4>Neighbours</h4>';
         opossitesNodes += '<ul>';
-        //console.log(nodes1);
         for (i=0;i<opos.length;i++) {
             if(i==25){
                 opossitesNodes += '<li>[...]</li>';
                 break;
             }
-            /**///Problema serio
-            //console.log(opos[i].key);
             if(i==0) {
                 opossitesNodes += '<li style="cursor: pointer" onclick="graphDocs(\'' + opos[i].key + '\');edgesTF=false;selections=[];opossites=[];"><h2>' + nodes1[opos[i].key].label+  '</h2></li>';
             }
@@ -393,14 +379,11 @@ function getOpossitesNodes(node_id, with_zoom) {
     if(flag==2 && socsemFlag==true) {
         opossitesNodes += '<h4>Neighbours</h4>';
         opossitesNodes += '<ul>';
-        //console.log(nodes1);
         for (i=0;i<opos.length;i++) {
             if(i==25){
                 opossitesNodes += '<li>[...]</li>';
                 break;
             }
-            /**///Problema serio
-            //console.log(opos[i].key);
             if(i==0) {
                 opossitesNodes += '<li style="cursor: pointer" onclick="graphDocs(\'' + opos[i].key + '\');edgesTF=false;selections=[];opossites=[];"><h2>' + nodes2[opos[i].key].label+  '</h2></li>';
             }
@@ -493,6 +476,8 @@ function graphNGrams(node_id){
             }
             
         } 
+        var node = partialGraph._core.graph.nodesIndex[node_id];
+        selection(node);
         partialGraph.startForceAtlas2();
     }
 }
@@ -539,6 +524,8 @@ function graphDocs(node_id){
             }
             
         }
+        var node = partialGraph._core.graph.nodesIndex[node_id];
+        selection(node);
         partialGraph.startForceAtlas2();
     }
 }
@@ -685,6 +672,7 @@ function fullExtract(){
                 /*      Para asignar tamaño a los NGrams    */
                 if(attr==4) {
                     if(val<30) val=30;
+                    //Nodes[id].size=(parseInt(val).toFixed(2)*5)/70;
                     Nodes[id].size=parseInt(val).toFixed(2);
                     node.size=Nodes[id].size;
                 }
@@ -810,7 +798,6 @@ function fullExtract(){
         
 }
     
-
 function is_empty(obj) {
 
     // Assume if it has a length property with a non-zero value
@@ -826,12 +813,17 @@ function is_empty(obj) {
 }
 
 function alertCheckBox(e){
-    if(e.checked==true) {
-        console.log("efecto bind 1: fade");
+    
+    //De-activate previous Binds
+    partialGraph.unbind("overnodes");
+    partialGraph.unbind("outnodes");
+
+    if(e.checked==true) {        
+        console.log("effect: fade");
         // Bind events :
         var greyColor = 'yellow';
         partialGraph.bind('overnodes',function(event){
-            console.log("Dentro del efecto OverNodes");
+            console.log("Inside OverNodes - Fade");
             var nodes = event.content;
             var neighbors = {};
             partialGraph.iterEdges(function(e){
@@ -863,7 +855,7 @@ function alertCheckBox(e){
         });
         
         partialGraph.bind('outnodes',function(){
-            console.log("Dentro del efecto OutNodes");
+            console.log("Inside OutNodes - Fade");
             partialGraph.iterEdges(function(e){
                 e.color = e.attr['grey'] ? e.attr['true_color'] : e.color;
                 e.attr['grey'] = 0;
@@ -874,7 +866,7 @@ function alertCheckBox(e){
         });
     }
     else {
-        console.log("efecto bind 2: hide");
+        console.log("effect: hide");
         
         partialGraph.bind('overnodes',function(event){
             var nodes = event.content;
@@ -901,6 +893,7 @@ function alertCheckBox(e){
             }).draw(2,2,2);
         });
     }
+    
 }
 
 function trackMouse() {
@@ -974,9 +967,9 @@ function onGraphScroll(evt, delta) {
             if (partialGraph.position().ratio > minZoom) {
                 partialGraph.position().ratio--;
                 var _el = $(this),
-                    _off = $(this).offset(),
-                    _deltaX = evt.pageX - _el.width() / 2 - _off.left,
-                    _deltaY = evt.pageY - _el.height() / 2 - _off.top;
+                _off = $(this).offset(),
+                _deltaX = evt.pageX - _el.width() / 2 - _off.left,
+                _deltaY = evt.pageY - _el.height() / 2 - _off.top;
                 partialGraph.centreX -= ( Math.SQRT2 - 1 ) * _deltaX / partialGraph.echelleGenerale;
                 partialGraph.centreY -= ( Math.SQRT2 - 1 ) * _deltaY / partialGraph.echelleGenerale;
                 $("#zoomSlider").slider("value",partialGraph.position().ratio);
@@ -986,9 +979,9 @@ function onGraphScroll(evt, delta) {
                 partialGraph.position().ratio++;
                 partialGraph.echelleGenerale = Math.pow( Math.SQRT2, partialGraph.position().ratio );
                 var _el = $(this),
-                    _off = $(this).offset(),
-                    _deltaX = evt.pageX - _el.width() / 2 - _off.left,
-                    _deltaY = evt.pageY - _el.height() / 2 - _off.top;
+                _off = $(this).offset(),
+                _deltaX = evt.pageX - _el.width() / 2 - _off.left,
+                _deltaY = evt.pageY - _el.height() / 2 - _off.top;
                 partialGraph.centreX += ( Math.SQRT2 - 1 ) * _deltaX / partialGraph.echelleGenerale;
                 partialGraph.centreY += ( Math.SQRT2 - 1 ) * _deltaY / partialGraph.echelleGenerale;
                 $("#zoomSlider").slider("value",partialGraph.position().ratio);
@@ -1019,13 +1012,12 @@ function initializeMap() {
         width : overviewWidth,
         height : overviewHeight
     });
-    //partialGraph.timeRefresh = setInterval(traceMap,60);
+//partialGraph.timeRefresh = setInterval(traceMap,60);
 
 }
 
 function updateMap(){
     console.log("updating MiniMap");
-    console.log(partialGraph);
     partialGraph.iterNodes(function(n){
         partialGraph.ctxMini.fillStyle = n.color;
         partialGraph.ctxMini.beginPath();
@@ -1051,10 +1043,10 @@ function traceMap() {
     partialGraph.ctxMini.putImageData(partialGraph.imageMini, 0, 0);
     
     var _r = 0.25 / partialGraph.echelleGenerale,
-        _x = - _r * partialGraph.decalageX,
-        _y = - _r * partialGraph.decalageY,
-        _w = _r * partialGraph._core.width,
-        _h = _r * partialGraph._core.height;
+    _x = - _r * partialGraph.decalageX,
+    _y = - _r * partialGraph.decalageY,
+    _w = _r * partialGraph._core.width,
+    _h = _r * partialGraph._core.height;
     partialGraph.ctxMini.strokeStyle = "rgb(220,0,0)";
     partialGraph.ctxMini.lineWidth = 3;
     partialGraph.ctxMini.fillStyle = "rgba(120,120,120,0.2)";
@@ -1092,8 +1084,6 @@ $(document).ready(function () {
     
     partialGraph.bind('downnodes', function (event) {       
         partialGraph.stopForceAtlas2();
-        
-        //partialGraph.draw();
         getOpossitesNodes(event.content, false);
         
         if(is_empty(selections)==true){  
@@ -1103,13 +1093,37 @@ $(document).ready(function () {
         }
     });
     
+    partialGraph.bind('overnodes',function(event){
+        var nodes = event.content;
+        var neighbors = {};
+        partialGraph.iterEdges(function(e){
+            if(nodes.indexOf(e.source)>=0 || nodes.indexOf(e.target)>=0){
+                //if(nodes.indexOf(e.source)>=0) console.log("SOURCE: "+e.source+" - target: "+e.target);
+                //if(nodes.indexOf(e.target)>=0)console.log("source: "+e.source+" - TARGET: "+e.target);
+                neighbors[e.source] = 1;
+                neighbors[e.target] = 1;
+            }
+        }).iterNodes(function(n){
+            if(!neighbors[n.id]){
+                n.hidden = 1;
+            }
+        }).draw(2,2,2);
+    });
+  
+    partialGraph.bind('outnodes',function(){
+        partialGraph.iterEdges(function(e){
+            e.hidden = 0;
+        }).iterNodes(function(n){
+            n.hidden = 0;
+        }).draw(2,2,2);
+    });
+    
     partialGraph.startForceAtlas2();
     
     
     
     
     $("#loading").remove();
-    //console.log(partialGraph._core.mousecaptor);
     
     $("#aUnfold").click(function() {
         var _cG = $("#leftcolumn");
@@ -1240,11 +1254,11 @@ $(document).ready(function () {
     ;//.mousewheel(onGraphScroll);
     
     $("#socio").click(function () {
-        console.log("socio");
+        console.log("socio-graph");
     });
     
     $("#semantic").click(function () {
-        console.log("sem");
+        console.log("semantic-graph");
     });
     
     $("#sociosemantic").click(function () {
