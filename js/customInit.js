@@ -314,16 +314,16 @@ function getOpossitesNodes(node_id, with_zoom) {
                 break;
             }
             if(i==0) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="graphNGrams(\'' + opos[i].key + '\',true);edgesTF=false;selections=[];opossites=[];"><h2>' + nodes2[opos[i].key].label+  '</h2></li>';
+                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphNGrams(\'' + opos[i].key + '\',true);"><h2>' + nodes2[opos[i].key].label+  '</h2></li>';
             }
             if(i==1) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="graphNGrams(\'' + opos[i].key + '\',true);edgesTF=false;selections=[];opossites=[];"><h3>' + nodes2[opos[i].key].label+  '</h3></li>';
+                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphNGrams(\'' + opos[i].key + '\',true);"><h3>' + nodes2[opos[i].key].label+  '</h3></li>';
             }
             
             if(i==2) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="graphNGrams(\'' + opos[i].key + '\',true);edgesTF=false;selections=[];opossites=[];"><h4>' + nodes2[opos[i].key].label+  '</h4></li>';
+                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphNGrams(\'' + opos[i].key + '\',true);"><h4>' + nodes2[opos[i].key].label+  '</h4></li>';
             }
-            if(i>2) opossitesNodes += '<li style="cursor: pointer" onclick="graphNGrams(\'' + opos[i].key + '\',true);edgesTF=false;selections=[];opossites=[];">' + nodes2[opos[i].key].label+  '</li>';
+            if(i>2) opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphNGrams(\'' + opos[i].key + '\',true);">' + nodes2[opos[i].key].label+  '</li>';
             
         }
         
@@ -352,19 +352,19 @@ function getOpossitesNodes(node_id, with_zoom) {
                 break;
             }
             if(i==0) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="graphDocs(\'' + opos[i].key + '\');edgesTF=false;selections=[];opossites=[];"><h2>' + nodes1[opos[i].key].label+  '</h2></li>';
+                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');"><h2>' + nodes1[opos[i].key].label+  '</h2></li>';
             }
             
             if(i==1) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="graphDocs(\'' + opos[i].key + '\');edgesTF=false;selections=[];opossites=[];"><h3>' + nodes1[opos[i].key].label+  '<h3></li>';
+                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');"><h3>' + nodes1[opos[i].key].label+  '<h3></li>';
             }
             
             if(i==2) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="graphDocs(\'' + opos[i].key + '\');edgesTF=false;selections=[];opossites=[];"><h4>' + nodes1[opos[i].key].label+  '<h4></li>';
+                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');"><h4>' + nodes1[opos[i].key].label+  '<h4></li>';
             }
             
             if(i>2) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="graphDocs(\'' + opos[i].key + '\');edgesTF=false;selections=[];opossites=[];">' + nodes1[opos[i].key].label+  '</li>';
+                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');">' + nodes1[opos[i].key].label+  '</li>';
             }
         }
         /*
@@ -385,19 +385,19 @@ function getOpossitesNodes(node_id, with_zoom) {
                 break;
             }
             if(i==0) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="graphDocs(\'' + opos[i].key + '\');edgesTF=false;selections=[];opossites=[];"><h2>' + nodes2[opos[i].key].label+  '</h2></li>';
+                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');"><h2>' + nodes2[opos[i].key].label+  '</h2></li>';
             }
             
             if(i==1) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="graphDocs(\'' + opos[i].key + '\');edgesTF=false;selections=[];opossites=[];"><h3>' + nodes2[opos[i].key].label+  '<h3></li>';
+                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');"><h3>' + nodes2[opos[i].key].label+  '<h3></li>';
             }
             
             if(i==2) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="graphDocs(\'' + opos[i].key + '\');edgesTF=false;selections=[];opossites=[];"><h4>' + nodes2[opos[i].key].label+  '<h4></li>';
+                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');"><h4>' + nodes2[opos[i].key].label+  '<h4></li>';
             }
             
             if(i>2) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="graphDocs(\'' + opos[i].key + '\');edgesTF=false;selections=[];opossites=[];">' + nodes2[opos[i].key].label+  '</li>';
+                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');">' + nodes2[opos[i].key].label+  '</li>';
             }
         }
         /*
@@ -1093,13 +1093,12 @@ $(document).ready(function () {
         }
     });
     
+    /* Initial Effect (Add unchecked): FADE */
     partialGraph.bind('overnodes',function(event){
         var nodes = event.content;
         var neighbors = {};
         partialGraph.iterEdges(function(e){
             if(nodes.indexOf(e.source)>=0 || nodes.indexOf(e.target)>=0){
-                //if(nodes.indexOf(e.source)>=0) console.log("SOURCE: "+e.source+" - target: "+e.target);
-                //if(nodes.indexOf(e.target)>=0)console.log("source: "+e.source+" - TARGET: "+e.target);
                 neighbors[e.source] = 1;
                 neighbors[e.target] = 1;
             }
@@ -1117,6 +1116,7 @@ $(document).ready(function () {
             n.hidden = 0;
         }).draw(2,2,2);
     });
+    /* Initial Effect (Add unchecked): FADE */
     
     partialGraph.startForceAtlas2();
     
@@ -1262,6 +1262,10 @@ $(document).ready(function () {
     });
     
     $("#sociosemantic").click(function () {
+        console.log("content selections: "+is_empty(selections));
+        console.log(selections);
+        console.log("content opossites: "+is_empty(opossites));
+        console.log(opossites);
         if(!is_empty(selections) && !is_empty(opossites)){
             partialGraph.emptyGraph();
             for(var i in selections) {
