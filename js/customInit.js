@@ -127,6 +127,8 @@ function search(string) {
 
   
 function selection(currentNode){
+    console.log("Checkbox value: "+checkBox);
+    if(checkBox==false) cancelSelection();
     if(socsemFlag==false){
         if((typeof selections[currentNode.id])=="undefined"){
             selections[currentNode.id] = 1;
@@ -813,17 +815,16 @@ function is_empty(obj) {
 }
 
 function alertCheckBox(e){
-    
     //De-activate previous Binds
     partialGraph.unbind("overnodes");
     partialGraph.unbind("outnodes");
-
-    if(e.checked==true) {        
+    
+    checkBox=e.checked;
+    if(e.checked==true) {//Fade nodes on Hover  
         console.log("effect: fade");
         // Bind events :
         var greyColor = 'yellow';
         partialGraph.bind('overnodes',function(event){
-            console.log("Inside OverNodes - Fade");
             var nodes = event.content;
             var neighbors = {};
             partialGraph.iterEdges(function(e){
@@ -855,7 +856,6 @@ function alertCheckBox(e){
         });
         
         partialGraph.bind('outnodes',function(){
-            console.log("Inside OutNodes - Fade");
             partialGraph.iterEdges(function(e){
                 e.color = e.attr['grey'] ? e.attr['true_color'] : e.color;
                 e.attr['grey'] = 0;
@@ -865,9 +865,7 @@ function alertCheckBox(e){
             }).draw(2,2,2);
         });
     }
-    else {
-        console.log("effect: hide");
-        
+    else {//Hide nodes on Hover
         partialGraph.bind('overnodes',function(event){
             var nodes = event.content;
             var neighbors = {};
