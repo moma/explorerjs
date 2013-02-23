@@ -841,7 +841,8 @@ function alertCheckBox(e){
                     neighbors[e.source] = 1;
                     neighbors[e.target] = 1;
                 }
-            }).iterNodes(function(n){
+            }).draw(2,1,2);
+            partialGraph.iterNodes(function(n){
                 if(!neighbors[n.id]){
                     if(!n.attr['grey']){
                         n.attr['true_color'] = n.color;
@@ -852,17 +853,18 @@ function alertCheckBox(e){
                     n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
                     n.attr['grey'] = 0;
                 }
-            }).draw(2,2,2);
+            }).draw(2,1,2);
         });
         
         partialGraph.bind('outnodes',function(){
             partialGraph.iterEdges(function(e){
                 e.color = e.attr['grey'] ? e.attr['true_color'] : e.color;
                 e.attr['grey'] = 0;
-            }).iterNodes(function(n){
+            }).draw(2,1,2);
+            partialGraph.iterNodes(function(n){
                 n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
                 n.attr['grey'] = 0;
-            }).draw(2,2,2);
+            }).draw(2,1,2);
         });
     }
     else {//Hide nodes on Hover
@@ -874,24 +876,25 @@ function alertCheckBox(e){
                     neighbors[e.source] = 1;
                     neighbors[e.target] = 1;
                 }
-            }).iterNodes(function(n){
+            }).draw(2,1,2);
+            partialGraph.iterNodes(function(n){
                 if(!neighbors[n.id]){
                     n.hidden = 1;
                 }else{
                     n.hidden = 0;
                 }
-            }).draw(2,2,2);
+            }).draw(2,1,2);
         });
   
         partialGraph.bind('outnodes',function(){
             partialGraph.iterEdges(function(e){
                 e.hidden = 0;
-            }).iterNodes(function(n){
+            }).draw(2,1,2);
+            partialGraph.iterNodes(function(n){
                 n.hidden = 0;
-            }).draw(2,2,2);
+            }).draw(2,1,2);
         });
-    }
-    
+    }    
 }
 
 function trackMouse() {
@@ -1104,7 +1107,7 @@ $(document).ready(function () {
             if(!neighbors[n.id]){
                 n.hidden = 1;
             }
-        }).draw(2,2,2);
+        }).draw(2,1,2);
     });
   
     partialGraph.bind('outnodes',function(){
@@ -1112,7 +1115,7 @@ $(document).ready(function () {
             e.hidden = 0;
         }).iterNodes(function(n){
             n.hidden = 0;
-        }).draw(2,2,2);
+        }).draw(2,1,2);
     });
     /* Initial Effect (Add unchecked): FADE */
     
