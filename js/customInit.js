@@ -16,6 +16,8 @@ var checkBox=false;
 var socsemFlag=false;
 var constantNGramFilter;
 var previousNodeSize=0;
+var socialFlag=true;
+var semanticFlag=false;
 
 var overviewWidth = 200;
 var overviewHeight = 175;
@@ -129,7 +131,6 @@ function search(string) {
 
   
 function selection(currentNode){
-    console.log("Checkbox value: "+checkBox);
     if(checkBox==false) {
         for(var i in selections){
             node = partialGraph._core.graph.nodesIndex[i];
@@ -448,6 +449,7 @@ function pushLabel(node_id,node_label) {
 
 function graphNGrams(node_id){        
     console.log("in graphNGrams, node_id: "+node_id);
+    $("#category-B").show();$("#category-A").hide();
     if(node_id.charAt(0)=="N") {
         labels = [];
         
@@ -496,6 +498,7 @@ function graphNGrams(node_id){
         
 function graphDocs(node_id){
     console.log("in graphDocs, node_id: "+node_id);
+    $("#category-A").show();$("#category-B").hide();
     partialGraph.emptyGraph(); 
     //partialGraph.stopForceAtlas2();
     
@@ -710,21 +713,14 @@ function fullExtract(){
                 if(parseInt(node.size) > parseInt(maxNodeSize)) maxNodeSize= node.size;
             }
         }
-    }
-    console.log("minNodeSize: "+minNodeSize);
-    console.log("maxNodeSize: "+maxNodeSize);
-    
+    }    
     constantNGramFilter= ((parseInt(maxNodeSize)*(5-2+0.1))/(5))*0.001;
-    console.log(constantNGramFilter);
     for(var it in Nodes){
         if(it.charAt(0)=="N") {
             Nodes[it].size = ""+(3+(parseInt(Nodes[it].size)-1)*constantNGramFilter);
         }
         
     }
-    //    partialGraph.iterNodes(function (n){
-    //        if(n.id.toString().charAt(0)=="N") console.log(n);
-    //    });
     
     var edgeId = 0;
     var edgesNodes = gexf.getElementsByTagName('edges');
@@ -1123,6 +1119,7 @@ $(document).ready(function () {
     partialGraph.ctxMini.clearRect(0, 0, 200, 175);
     
     $('#sigma-example').css('background-color','white');
+    $("#category-B").hide();
     
    
     
@@ -1319,10 +1316,10 @@ $(document).ready(function () {
     });
     
     $("#sociosemantic").click(function () {
-        console.log("content selections: "+is_empty(selections));
-        console.log(selections);
-        console.log("content opossites: "+is_empty(opossites));
-        console.log(opossites);
+//        console.log("content selections: "+is_empty(selections));
+//        console.log(selections);
+//        console.log("content opossites: "+is_empty(opossites));
+//        console.log(opossites);
         if(!is_empty(selections) && !is_empty(opossites)){
             partialGraph.emptyGraph();
             for(var i in selections) {
@@ -1360,6 +1357,8 @@ $(document).ready(function () {
             }
             partialGraph.startForceAtlas2();
             socsemFlag=true;
+            $("#category-A").show();
+            $("#category-B").show();
         }
         else alert("You must select a node!");
     });
@@ -1439,12 +1438,19 @@ $(document).ready(function () {
         }
     });
     $("#sliderBNodeSize").slider({
-        value: b_node_size * 100.0,
-        max: 100.0,
+        value: 1,
+        min: 1,
+        max: 25,
         animate: true,
         slide: function(event, ui) {
-            console.log("NGrams - Tamaño Nodo: "+ui.value);
-        //return callSlider("#sliderBNodeSize", "filter.b.node.size");
+            partialGraph.iterNodes(function (n) {
+                if(n.id.charAt(0)=="N") {
+                    //console.log("anterior: "+n.size+" - actual: "+(parseFloat(Nodes[n.id].size) + parseFloat((ui.value-1))*0.3));
+                    n.size = parseFloat(Nodes[n.id].size) + parseFloat((ui.value-1))*0.3;
+                }
+            });
+            partialGraph.startForceAtlas2();
+        //return callSlider("#sliderANodeSize", "filter.a.node.size");
         }
     });
     $("#sliderSelectionZone").slider({
