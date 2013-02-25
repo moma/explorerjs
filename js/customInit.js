@@ -14,6 +14,7 @@ var b_node_filter_max= 1.0;
 
 var checkBox=false;
 var socsemFlag=false;
+var constantNGramFilter;
 
 var overviewWidth = 200;
 var overviewHeight = 175;
@@ -128,7 +129,15 @@ function search(string) {
   
 function selection(currentNode){
     console.log("Checkbox value: "+checkBox);
-    if(checkBox==false) cancelSelection();
+    if(checkBox==false) {
+        for(var i in selections){
+            node = partialGraph._core.graph.nodesIndex[i];
+            node.active = false;
+        }
+        opossites = [];
+        selections = [];
+        partialGraph.refresh();
+    }
     if(socsemFlag==false){
         if((typeof selections[currentNode.id])=="undefined"){
             selections[currentNode.id] = 1;
@@ -596,6 +605,8 @@ function fullExtract(){
     var nodesNodes = gexf.getElementsByTagName('nodes') // The list of xml nodes 'nodes' (plural)
   
     labels = [];
+    var minNodeSize=5.00;
+    var maxNodeSize=5.00;
     for(i=0; i<nodesNodes.length; i++){
         var nodesNode = nodesNodes[i];  // Each xml node 'nodes' (plural)
         var nodeNodes = nodesNode.getElementsByTagName('node'); // The list of xml nodes 'node' (no 's')
@@ -673,23 +684,47 @@ function fullExtract(){
                 });
                 /*      Para asignar tamaño a los NGrams    */
                 if(attr==4) {
-                    if(val<30) val=30;
+                    //if(val<30) val=30;
                     //Nodes[id].size=(parseInt(val).toFixed(2)*5)/70;
                     Nodes[id].size=parseInt(val).toFixed(2);
                     node.size=Nodes[id].size;
+                    if(id.charAt(0)=="D") {
+                        Nodes[id].size = "5";
+                        node.size = "5";
+                    }
                 }
             /*      Para asignar tamaño a los NGrams    */
             }
                 
             if(node.attributes[0].val=="Document"){
+                node.size=5.0;
                 partialGraph.addNode(id,node);
                 labels.push({
                     'label' : label, 
                     'desc': Nodes[id].attributes[0].val
                 });
             }
+            else {
+                if(parseInt(node.size) < parseInt(minNodeSize)) minNodeSize= node.size;
+                if(parseInt(node.size) > parseInt(maxNodeSize)) maxNodeSize= node.size;
+            }
         }
     }
+    console.log("minNodeSize: "+minNodeSize);
+    console.log("maxNodeSize: "+maxNodeSize);
+    
+    constantNGramFilter= ((parseInt(maxNodeSize)*(5-2+0.1))/(5))*0.001;
+    console.log(constantNGramFilter);
+    for(var it in Nodes){
+        if(it.charAt(0)=="N") {
+            Nodes[it].size = ""+(3+(parseInt(Nodes[it].size)-1)*constantNGramFilter);
+        }
+        
+    }
+    //    partialGraph.iterNodes(function (n){
+    //        if(n.id.toString().charAt(0)=="N") console.log(n);
+    //    });
+    
     var edgeId = 0;
     var edgesNodes = gexf.getElementsByTagName('edges');
     for(i=0; i<edgesNodes.length; i++){
@@ -1056,6 +1091,26 @@ function traceMap() {
     partialGraph.ctxMini.strokeRect( _x, _y, _w, _h );
 }
 
+function trackMouse() {
+    var ctx = partialGraph._core.domElements.mouse.getContext('2d');
+    ctx.globalCompositeOperation = "source-over";
+    ctx.clearRect(0, 0, partialGraph._core.domElements.nodes.width, partialGraph._core.domElements.nodes.height);
+
+    var x;
+    var y;
+
+    x = partialGraph._core.mousecaptor.mouseX;
+    y = partialGraph._core.mousecaptor.mouseY;
+
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(x, y, cursor_size, 0, Math.PI * 2, true);
+    ctx.closePath();
+    ctx.stroke();
+};
+
+
 $(document).ready(function () {
 
     $("#warning").html(getWarning());
@@ -1368,8 +1423,9 @@ $(document).ready(function () {
         }
     });
     $("#sliderANodeSize").slider({
-        value: a_node_size * 100.0,
-        max: 100.0,
+        value: 35,
+        min: 20,
+        max: 50,
         animate: true,
         slide: function(event, ui) {
             console.log("Docs - Tamaño Nodo: "+ui.value);
