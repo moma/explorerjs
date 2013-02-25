@@ -1429,11 +1429,9 @@ $(document).ready(function () {
         max: 25,
         animate: true,
         slide: function(event, ui) {
-            console.log("Docs - Tamanio Nodo: "+ui.value);
             partialGraph.iterNodes(function (n) {
                 if(n.id.charAt(0)=="D") {
                     n.size = parseFloat(Nodes[n.id].size) + parseFloat((ui.value-1))*0.3;
-                    console.log("ConstantSize: "+Nodes[n.id].size+" - factor: "+((ui.value-1)*0.02)+" - n.size: "+n.size);
                 }
             });
             partialGraph.startForceAtlas2();
