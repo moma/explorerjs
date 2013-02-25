@@ -15,6 +15,7 @@ var b_node_filter_max= 1.0;
 var checkBox=false;
 var socsemFlag=false;
 var constantNGramFilter;
+var previousNodeSize=0;
 
 var overviewWidth = 200;
 var overviewHeight = 175;
@@ -1423,12 +1424,19 @@ $(document).ready(function () {
         }
     });
     $("#sliderANodeSize").slider({
-        value: 35,
-        min: 20,
-        max: 50,
+        value: 1,
+        min: 1,
+        max: 25,
         animate: true,
         slide: function(event, ui) {
-            console.log("Docs - Tamaño Nodo: "+ui.value);
+            console.log("Docs - Tamanio Nodo: "+ui.value);
+            partialGraph.iterNodes(function (n) {
+                if(n.id.charAt(0)=="D") {
+                    n.size = parseFloat(Nodes[n.id].size) + parseFloat((ui.value-1))*0.3;
+                    console.log("ConstantSize: "+Nodes[n.id].size+" - factor: "+((ui.value-1)*0.02)+" - n.size: "+n.size);
+                }
+            });
+            partialGraph.startForceAtlas2();
         //return callSlider("#sliderANodeSize", "filter.a.node.size");
         }
     });
