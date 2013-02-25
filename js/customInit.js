@@ -738,6 +738,7 @@ function fullExtract(){
                 sourceID:   source,
                 targetID:   target,
                 label:      "",
+                weight: 1,
                 attributes: []
             };
             
@@ -750,6 +751,7 @@ function fullExtract(){
                 sourceID:   source,
                 targetID:   target,
                 label:      "",
+                weight: 1,
                 attributes: []
             };
 
@@ -766,6 +768,10 @@ function fullExtract(){
                 if(k==1) {
                     kind=val;
                     edge.label=val;
+                }
+                if(k==0) {
+                    Edges[indice].weight = val;
+                    edge.weight = val;
                 }
                 Edges[indice].attributes.push({
                     attr:attr, 
