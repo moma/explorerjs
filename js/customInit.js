@@ -1437,11 +1437,21 @@ $(document).ready(function () {
     });
     $("#sliderBEdgeWeight").slider({
         range: true,
-        values: [b_edge_filter_min * 100.0, b_edge_filter_max * 100.0],
+        min: 0.00045,
+        max: 5.0,
+        values: [0.00045, 5.0],
+        step: 0.01,
         animate: true,
         slide: function(event, ui) {
-            console.log("NGrams - Peso Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-        //return callSlider("#sliderBEdgeWeight", "filter.b.edge.weight");
+            console.log("NGrams-keywords - Peso Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+            var edgesTemp = partialGraph._core.graph.edges;
+            for(i=0;i<edgesTemp.length;i++){
+                if(edgesTemp[i].weight>=ui.values[ 0 ] && edgesTemp[i].weight<=ui.values[ 1 ]) {
+                    edgesTemp[i].hidden=false;
+                }
+                else edgesTemp[i].hidden=true;
+            }
+            partialGraph.startForceAtlas2();
         }
     });
     $("#sliderBNodeWeight").slider({
@@ -1453,11 +1463,13 @@ $(document).ready(function () {
         slide: function(event, ui) {
             console.log("NGrams - Peso Nodo: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
             partialGraph.iterNodes(function (n){
-                if(n.size>=parseFloat(ui.values[ 0 ]) && n.size<=parseFloat(ui.values[ 1 ])) {
-                    n.hidden = false;
-                }
-                else {
-                    n.hidden=true;
+                if(n.id.charAt(0)=="N"){
+                    if(n.size>=parseFloat(ui.values[ 0 ]) && n.size<=parseFloat(ui.values[ 1 ])) {
+                        n.hidden = false;
+                    }
+                    else {
+                        n.hidden=true;
+                    }
                 }
             //console.log(n);
             });
