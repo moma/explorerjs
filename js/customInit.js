@@ -15,9 +15,13 @@ var b_node_filter_max= 1.0;
 var checkBox=false;
 var socsemFlag=false;
 var constantNGramFilter;
-var previousNodeSize=0;
 var socialFlag=true;
 var semanticFlag=false;
+var maxNodeSize;
+var minNodeSize;
+var sliderNodeWeight;
+var maxEdgeWeight;
+var minEdgeWeight;
 
 var overviewWidth = 200;
 var overviewHeight = 175;
@@ -449,7 +453,8 @@ function pushLabel(node_id,node_label) {
 
 function graphNGrams(node_id){        
     console.log("in graphNGrams, node_id: "+node_id);
-    $("#category-B").show();$("#category-A").hide();
+    $("#category-B").show();
+    $("#category-A").hide();
     if(node_id.charAt(0)=="N") {
         labels = [];
         
@@ -463,6 +468,7 @@ function graphNGrams(node_id){
             partialGraph.addNode(nodes2[node_id].neighbours[i],Nodes[nodes2[node_id].neighbours[i]]);
             pushLabel(nodes2[node_id].neighbours[i],Nodes[nodes2[node_id].neighbours[i]].label);
         }  
+        
         /* ALGORITMO ESTRELLA*/
         var existingNodes = partialGraph._core.graph.nodes;
         var edgesFound = [];
@@ -498,7 +504,8 @@ function graphNGrams(node_id){
         
 function graphDocs(node_id){
     console.log("in graphDocs, node_id: "+node_id);
-    $("#category-A").show();$("#category-B").hide();
+    $("#category-A").show();
+    $("#category-B").hide();
     partialGraph.emptyGraph(); 
     //partialGraph.stopForceAtlas2();
     
@@ -609,8 +616,8 @@ function fullExtract(){
     var nodesNodes = gexf.getElementsByTagName('nodes') // The list of xml nodes 'nodes' (plural)
   
     labels = [];
-    var minNodeSize=5.00;
-    var maxNodeSize=5.00;
+    minNodeSize=5.00;
+    maxNodeSize=5.00;
     for(i=0; i<nodesNodes.length; i++){
         var nodesNode = nodesNodes[i];  // Each xml node 'nodes' (plural)
         var nodeNodes = nodesNode.getElementsByTagName('node'); // The list of xml nodes 'node' (no 's')
@@ -723,7 +730,9 @@ function fullExtract(){
     }
     
     var edgeId = 0;
-    var edgesNodes = gexf.getElementsByTagName('edges');
+    var edgesNodes = gexf.getElementsByTagName('edges');    
+    minEdgeWeight=5.0;
+    maxEdgeWeight=0.0;
     for(i=0; i<edgesNodes.length; i++){
         var edgesNode = edgesNodes[i];
         var edgeNodes = edgesNode.getElementsByTagName('edge');
@@ -772,6 +781,8 @@ function fullExtract(){
                 if(k==0) {
                     Edges[indice].weight = val;
                     edge.weight = val;
+                    if(edge.weight < minEdgeWeight) minEdgeWeight= edge.weight;
+                    if(edge.weight > maxEdgeWeight) maxEdgeWeight= edge.weight;
                 }
                 Edges[indice].attributes.push({
                     attr:attr, 
@@ -835,7 +846,6 @@ function fullExtract(){
                 
         }
     }
-        
 }
     
 function is_empty(obj) {
@@ -1177,8 +1187,8 @@ $(document).ready(function () {
         }).draw(2,1,2);
     });
     /* Initial Effect (Add unchecked): FADE */
-    
     partialGraph.startForceAtlas2();
+    
     
     
     
@@ -1322,10 +1332,10 @@ $(document).ready(function () {
     });
     
     $("#sociosemantic").click(function () {
-//        console.log("content selections: "+is_empty(selections));
-//        console.log(selections);
-//        console.log("content opossites: "+is_empty(opossites));
-//        console.log(opossites);
+        //        console.log("content selections: "+is_empty(selections));
+        //        console.log(selections);
+        //        console.log("content opossites: "+is_empty(opossites));
+        //        console.log(opossites);
         if(!is_empty(selections) && !is_empty(opossites)){
             partialGraph.emptyGraph();
             for(var i in selections) {
@@ -1394,19 +1404,34 @@ $(document).ready(function () {
     
     $("#sliderAEdgeWeight").slider({
         range: true,
-        values: [a_edge_filter_min * 100.0, a_edge_filter_max * 100.0],
+        min: 0.00045,
+        max: 5.0,
+        values: [0.00045, 5.0],
+        step: 0.01,
         animate: true,
         slide: function(event, ui) {
+            console.log(minEdgeWeight+" - "+maxEdgeWeight);
             console.log("Docs - Peso Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+            partialGraph.iterEdges(function (e){
+                if(e.weight>=ui.values[ 0 ] && e.weight<=ui.values[ 1 ]) e.hidden=false;
+                else e.hidden=true;
+            });
+            partialGraph.startForceAtlas2();
         //return callSlider("#sliderAEdgeWeight", "filter.a.edge.weight");
         }
     });
     $("#sliderANodeWeight").slider({
         range: true,
+        min: 1,
+        max: 100,
         values: [a_node_filter_min * 100.0, a_node_filter_max * 100.0],
         animate: true,
         slide: function(event, ui) {
             console.log("Docs - Peso Nodo: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+        //            partialGraph.iterNodes(function (n){
+        //                if(n.id=="D::Pierre__Baudot") n.hidden = true;
+        //                //console.log(n);
+        //            });
         //return callSlider("#sliderANodeWeight", "filter.a.node.weight");
         }
     });
@@ -1421,10 +1446,22 @@ $(document).ready(function () {
     });
     $("#sliderBNodeWeight").slider({
         range: true,
-        values: [b_node_filter_min * 100.0, b_node_filter_max * 100.0],
+        min: parseInt(minNodeSize),
+        max: parseInt(maxNodeSize),
+        values: [parseInt(minNodeSize), parseInt(maxNodeSize)],
         animate: true,
         slide: function(event, ui) {
             console.log("NGrams - Peso Nodo: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+            partialGraph.iterNodes(function (n){
+                if(n.size>=parseFloat(ui.values[ 0 ]) && n.size<=parseFloat(ui.values[ 1 ])) {
+                    n.hidden = false;
+                }
+                else {
+                    n.hidden=true;
+                }
+            //console.log(n);
+            });
+            partialGraph.startForceAtlas2();
         //return callSlider("#sliderBNodeWeight", "filter.b.node.weight");
         }
     });
