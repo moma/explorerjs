@@ -1211,8 +1211,8 @@ $(document).ready(function () {
         });
     /* Initial Effect (Add unchecked): HIDE */
     
-    //partialGraph.startForceAtlas2();
-    partialGraph.draw();    
+    partialGraph.startForceAtlas2();
+    //partialGraph.draw();    
     
     $("#loading").remove();
     
