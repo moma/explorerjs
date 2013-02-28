@@ -862,34 +862,39 @@ function is_empty(obj) {
     return true;
 }
 
-function alertCheckBox(e){
+function alertCheckBox(eventCheck){
     //De-activate previous Binds
     partialGraph.unbind("overnodes");
     partialGraph.unbind("outnodes");
     
-    checkBox=e.checked;
-    if(e.checked==true) {//Fade nodes on Hover  
+    //console.log(partialGraph._core.graph.edges);
+    
+    checkBox=eventCheck.checked;
+    if(eventCheck.checked==true) {//Fade nodes on Hover  
         console.log("effect: fade");
         // Bind events :
-        var greyColor = 'yellow';
+        var greyColor = '#666';
         partialGraph.bind('overnodes',function(event){
             var nodes = event.content;
             var neighbors = {};
-            partialGraph.iterEdges(function(e){
-                if(nodes.indexOf(e.source)<0 && nodes.indexOf(e.target)<0){
-                    if(!e.attr['grey']){
-                        e.attr['true_color'] = e.color;
-                        e.color = greyColor;
-                        e.attr['grey'] = 1;
+            var e = partialGraph._core.graph.edges; 
+            for(i=0;i<e.length;i++){
+                if(nodes.indexOf(e[i].source.id)<0 && nodes.indexOf(e[i].target.id)<0){
+                    if(!e[i].attr['grey']){
+                        e[i].attr['true_color'] = e[i].color;
+                        e[i].color = greyColor;
+                        e[i].attr['grey'] = 1;
                     }
                 }else{
-                    e.color = e.attr['grey'] ? e.attr['true_color'] : e.color;
-                    e.attr['grey'] = 0;
+                    e[i].color = e[i].attr['grey'] ? e[i].attr['true_color'] : e[i].color;
+                    e[i].attr['grey'] = 0;
 
-                    neighbors[e.source] = 1;
-                    neighbors[e.target] = 1;
+                    neighbors[e[i].source.id] = 1;
+                    neighbors[e[i].target.id] = 1;
                 }
-            }).draw(2,1,2);
+            }
+            partialGraph.draw(2,1,2);
+            
             partialGraph.iterNodes(function(n){
                 if(!neighbors[n.id]){
                     if(!n.attr['grey']){
@@ -905,26 +910,32 @@ function alertCheckBox(e){
         });
         
         partialGraph.bind('outnodes',function(){
-            partialGraph.iterEdges(function(e){
-                e.color = e.attr['grey'] ? e.attr['true_color'] : e.color;
-                e.attr['grey'] = 0;
-            }).draw(2,1,2);
+            var e = partialGraph._core.graph.edges;
+            for(i=0;i<e.length;i++){
+                e[i].color = e[i].attr['grey'] ? e[i].attr['true_color'] : e[i].color;
+                e[i].attr['grey'] = 0;
+            }
+            partialGraph.draw(2,1,2);
+            
             partialGraph.iterNodes(function(n){
                 n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
                 n.attr['grey'] = 0;
             }).draw(2,1,2);
         });
     }
-    else {//Hide nodes on Hover
-        partialGraph.bind('overnodes',function(event){
+    else {//Hide nodes on Hover        
+        partialGraph.bind('overnodes',function(event){            
             var nodes = event.content;
             var neighbors = {};
-            partialGraph.iterEdges(function(e){
-                if(nodes.indexOf(e.source)>=0 || nodes.indexOf(e.target)>=0){
-                    neighbors[e.source] = 1;
-                    neighbors[e.target] = 1;
+            var e = partialGraph._core.graph.edges;
+            for(i=0;i<e.length;i++){
+                if(nodes.indexOf(e[i].source.id)>=0 || nodes.indexOf(e[i].target.id)>=0){
+                    neighbors[e[i].source.id] = 1;
+                    neighbors[e[i].target.id] = 1;
                 }
-            }).draw(2,1,2);
+            }
+            partialGraph.draw(2,1,2);
+            
             partialGraph.iterNodes(function(n){
                 if(!neighbors[n.id]){
                     n.hidden = 1;
@@ -935,9 +946,12 @@ function alertCheckBox(e){
         });
   
         partialGraph.bind('outnodes',function(){
-            partialGraph.iterEdges(function(e){
-                e.hidden = 0;
-            }).draw(2,1,2);
+            var e = partialGraph._core.graph.edges;
+            for(i=0;i<e.length;i++){
+                e[i].hidden = 0;
+            }
+            partialGraph.draw(2,1,2);
+            
             partialGraph.iterNodes(function(n){
                 n.hidden = 0;
             }).draw(2,1,2);
@@ -1127,7 +1141,6 @@ function trackMouse() {
 $(document).ready(function () {
 
     $("#warning").html(getWarning());
-    
 
     partialGraph = sigma.init(document.getElementById('sigma-example')).drawingProperties(sigmaJsDrawingProperties).graphProperties(sigmaJsGraphProperties).mouseProperties(sigmaJsMouseProperties);
     
@@ -1162,36 +1175,44 @@ $(document).ready(function () {
             $("#information").html("");
         }
     });
-    
-    /* Initial Effect (Add unchecked): FADE */
-    partialGraph.bind('overnodes',function(event){
-        var nodes = event.content;
-        var neighbors = {};
-        partialGraph.iterEdges(function(e){
-            if(nodes.indexOf(e.source)>=0 || nodes.indexOf(e.target)>=0){
-                neighbors[e.source] = 1;
-                neighbors[e.target] = 1;
+        
+    /* Initial Effect (Add unchecked): HIDE */
+        partialGraph.bind('overnodes',function(event){            
+            var nodes = event.content;
+            var neighbors = {};
+            var e = partialGraph._core.graph.edges;
+            for(i=0;i<e.length;i++){
+                if(nodes.indexOf(e[i].source.id)>=0 || nodes.indexOf(e[i].target.id)>=0){
+                    neighbors[e[i].source.id] = 1;
+                    neighbors[e[i].target.id] = 1;
+                }
             }
-        }).iterNodes(function(n){
-            if(!neighbors[n.id]){
-                n.hidden = 1;
-            }
-        }).draw(2,1,2);
-    });
+            partialGraph.draw(2,1,2);
+            
+            partialGraph.iterNodes(function(n){
+                if(!neighbors[n.id]){
+                    n.hidden = 1;
+                }else{
+                    n.hidden = 0;
+                }
+            }).draw(2,1,2);
+        });
   
-    partialGraph.bind('outnodes',function(){
-        partialGraph.iterEdges(function(e){
-            e.hidden = 0;
-        }).iterNodes(function(n){
-            n.hidden = 0;
-        }).draw(2,1,2);
-    });
-    /* Initial Effect (Add unchecked): FADE */
-    partialGraph.startForceAtlas2();
+        partialGraph.bind('outnodes',function(){
+            var e = partialGraph._core.graph.edges;
+            for(i=0;i<e.length;i++){
+                e[i].hidden = 0;
+            }
+            partialGraph.draw(2,1,2);
+            
+            partialGraph.iterNodes(function(n){
+                n.hidden = 0;
+            }).draw(2,1,2);
+        });
+    /* Initial Effect (Add unchecked): HIDE */
     
-    
-    
-    
+    //partialGraph.startForceAtlas2();
+    partialGraph.draw();    
     
     $("#loading").remove();
     
@@ -1332,10 +1353,6 @@ $(document).ready(function () {
     });
     
     $("#sociosemantic").click(function () {
-        //        console.log("content selections: "+is_empty(selections));
-        //        console.log(selections);
-        //        console.log("content opossites: "+is_empty(opossites));
-        //        console.log(opossites);
         if(!is_empty(selections) && !is_empty(opossites)){
             partialGraph.emptyGraph();
             for(var i in selections) {
@@ -1410,14 +1427,19 @@ $(document).ready(function () {
         step: 0.01,
         animate: true,
         slide: function(event, ui) {
-            console.log(minEdgeWeight+" - "+maxEdgeWeight);
-            console.log("Docs - Peso Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-            partialGraph.iterEdges(function (e){
-                if(e.weight>=ui.values[ 0 ] && e.weight<=ui.values[ 1 ]) e.hidden=false;
-                else e.hidden=true;
+            //console.log("Docs - Peso Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+            $.doTimeout(300,function (){
+                var edgesTemp = partialGraph._core.graph.edges;
+                for(i=0;i<edgesTemp.length;i++){
+                    if(edgesTemp[i].attr.attributes[1].val=="nodes1"){
+                        if(edgesTemp[i].weight>=ui.values[ 0 ] && edgesTemp[i].weight<=ui.values[ 1 ]) {
+                            edgesTemp[i].hidden=false;
+                        }
+                        else edgesTemp[i].hidden=true;
+                    }
+                }
+                partialGraph.draw();
             });
-            partialGraph.startForceAtlas2();
-        //return callSlider("#sliderAEdgeWeight", "filter.a.edge.weight");
         }
     });
     $("#sliderANodeWeight").slider({
@@ -1427,12 +1449,7 @@ $(document).ready(function () {
         values: [a_node_filter_min * 100.0, a_node_filter_max * 100.0],
         animate: true,
         slide: function(event, ui) {
-            console.log("Docs - Peso Nodo: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-        //            partialGraph.iterNodes(function (n){
-        //                if(n.id=="D::Pierre__Baudot") n.hidden = true;
-        //                //console.log(n);
-        //            });
-        //return callSlider("#sliderANodeWeight", "filter.a.node.weight");
+        //console.log("Docs - Peso Nodo: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
         }
     });
     $("#sliderBEdgeWeight").slider({
@@ -1443,15 +1460,19 @@ $(document).ready(function () {
         step: 0.01,
         animate: true,
         slide: function(event, ui) {
-            console.log("NGrams-keywords - Peso Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-            var edgesTemp = partialGraph._core.graph.edges;
-            for(i=0;i<edgesTemp.length;i++){
-                if(edgesTemp[i].weight>=ui.values[ 0 ] && edgesTemp[i].weight<=ui.values[ 1 ]) {
-                    edgesTemp[i].hidden=false;
+            //console.log("NGrams-keywords - Peso Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+            $.doTimeout(300,function (){
+                var edgesTemp = partialGraph._core.graph.edges;
+                for(i=0;i<edgesTemp.length;i++){
+                    if(edgesTemp[i].attr.attributes[1].val=="nodes2"){
+                        if(edgesTemp[i].weight>=ui.values[ 0 ] && edgesTemp[i].weight<=ui.values[ 1 ]) {
+                            edgesTemp[i].hidden=false;
+                        }
+                        else edgesTemp[i].hidden=true;
+                    }
                 }
-                else edgesTemp[i].hidden=true;
-            }
-            partialGraph.startForceAtlas2();
+                partialGraph.draw();
+            });
         }
     });
     $("#sliderBNodeWeight").slider({
@@ -1461,20 +1482,20 @@ $(document).ready(function () {
         values: [parseInt(minNodeSize), parseInt(maxNodeSize)],
         animate: true,
         slide: function(event, ui) {
-            console.log("NGrams - Peso Nodo: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-            partialGraph.iterNodes(function (n){
-                if(n.id.charAt(0)=="N"){
-                    if(n.size>=parseFloat(ui.values[ 0 ]) && n.size<=parseFloat(ui.values[ 1 ])) {
-                        n.hidden = false;
+            //console.log("NGrams - Peso Nodo: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+            $.doTimeout(300,function (){
+                partialGraph.iterNodes(function (n){
+                    if(n.id.charAt(0)=="N"){
+                        if(n.size>=parseFloat(ui.values[ 0 ]) && n.size<=parseFloat(ui.values[ 1 ])) {
+                            n.hidden = false;
+                        }
+                        else {
+                            n.hidden=true;
+                        }
                     }
-                    else {
-                        n.hidden=true;
-                    }
-                }
-            //console.log(n);
+                });
+                partialGraph.draw();
             });
-            partialGraph.startForceAtlas2();
-        //return callSlider("#sliderBNodeWeight", "filter.b.node.weight");
         }
     });
     $("#sliderANodeSize").slider({
@@ -1483,13 +1504,14 @@ $(document).ready(function () {
         max: 25,
         animate: true,
         slide: function(event, ui) {
-            partialGraph.iterNodes(function (n) {
-                if(n.id.charAt(0)=="D") {
-                    n.size = parseFloat(Nodes[n.id].size) + parseFloat((ui.value-1))*0.3;
-                }
+            $.doTimeout(300,function (){
+                partialGraph.iterNodes(function (n) {
+                    if(n.id.charAt(0)=="D") {
+                        n.size = parseFloat(Nodes[n.id].size) + parseFloat((ui.value-1))*0.3;
+                    }
+                });
+                partialGraph.draw();
             });
-            partialGraph.startForceAtlas2();
-        //return callSlider("#sliderANodeSize", "filter.a.node.size");
         }
     });
     $("#sliderBNodeSize").slider({
@@ -1498,14 +1520,14 @@ $(document).ready(function () {
         max: 25,
         animate: true,
         slide: function(event, ui) {
-            partialGraph.iterNodes(function (n) {
-                if(n.id.charAt(0)=="N") {
-                    //console.log("anterior: "+n.size+" - actual: "+(parseFloat(Nodes[n.id].size) + parseFloat((ui.value-1))*0.3));
-                    n.size = parseFloat(Nodes[n.id].size) + parseFloat((ui.value-1))*0.3;
-                }
+            $.doTimeout(300,function (){
+                partialGraph.iterNodes(function (n) {
+                    if(n.id.charAt(0)=="N") {
+                        n.size = parseFloat(Nodes[n.id].size) + parseFloat((ui.value-1))*0.3;
+                    }
+                });
+                partialGraph.draw();
             });
-            partialGraph.startForceAtlas2();
-        //return callSlider("#sliderANodeSize", "filter.a.node.size");
         }
     });
     $("#sliderSelectionZone").slider({
@@ -1518,32 +1540,5 @@ $(document).ready(function () {
         //return callSlider("#sliderSelectionZone", "selectionRadius");
         }
     });
-    
-    
-  
-
-/* Controls 
-    $("#in").click(function () {
-        partialGraph.zoomTo(partialGraph._core.domElements.nodes.width / 2, partialGraph._core.domElements.nodes.height / 2, partialGraph._core.mousecaptor.ratio * 1.5);
-    });
-    $("#out").click(function () {
-        partialGraph.zoomTo(partialGraph._core.domElements.nodes.width / 2, partialGraph._core.domElements.nodes.height / 2, partialGraph._core.mousecaptor.ratio * 0.5);
-    });
-    $("#center").click(function () {
-        partialGraph.position(0,0,1).draw();
-    });
-    $("#cancel").click(function () {
-        cancelSelection();    
-    });
-
-    $("#helpbutton").click(function () {
-        $("#help").fadeIn('fast');
-    });
-    $("#closewindow, #closeimage").click(function () {
-        $("#help").fadeOut('fast');
-    });
-    
-    
-    /******************* GEXF integration **********************/
     
 });
