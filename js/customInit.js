@@ -705,6 +705,7 @@ function fullExtract(){
         }
     }    
     constantNGramFilter= ((parseInt(maxNodeSize)*(5-2+0.1))/(5))*0.001;
+    //New scale for node size: now, between 2 and 5 instead [1,70]
     for(var it in Nodes){
         if(it.charAt(0)=="N") {
             Nodes[it].size = ""+(3+(parseInt(Nodes[it].size)-1)*constantNGramFilter);
@@ -1228,7 +1229,7 @@ $(document).ready(function () {
     $.ui.autocomplete.prototype._renderItem = function(ul, item) {
         var searchVal = $("#searchinput").val();
         var desc = extractContext(item.desc, searchVal);
-        return $('<li></li>')
+        return $('<li onclick=\'var s = "'+item.label+'"; search(s);$("#searchinput").val(strSearchBar);\'></li>')
         .data('item.autocomplete', item)
         .append("<a><span class=\"labelresult\">" + item.label + "</span><br ><small>" + desc + "<small></a>" )
         .appendTo(ul);
