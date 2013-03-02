@@ -282,23 +282,6 @@ function getOpossitesNodes(node_id, with_zoom) {
     
     var node = partialGraph._core.graph.nodesIndex[node_id];
     if (!node) return null;
-    /*
-    var nodes = [];
-    if(node_id.toString().charAt(0)=="D"){
-        //Click in Human: I've to show his keywords
-        flag=1;//Hago click en Document izquierdo de informacion de nodos
-        for(i=0;i<bipartiteD2N[node_id].neighbours.length;i++) {
-            nodes[i] = Nodes[bipartiteD2N[node_id].neighbours[i]];
-        }  
-    }
-    else {
-        //Click in Keyword: I've to show his humans' 
-        flag=2;//Hago click en Document izquierdo de informacion de nodos       
-        for(i=0;i<bipartiteN2D[node_id].neighbours.length;i++) {
-            nodes[i] = Nodes[bipartiteN2D[node_id].neighbours[i]];
-        }  
-    }
-    */
     if(node_id.toString().charAt(0)=="D")flag=1;
     else flag=2;
     selection(node);  
@@ -327,7 +310,7 @@ function getOpossitesNodes(node_id, with_zoom) {
         
         for (i=0;i<opos.length;i++) {
             if(i==25){
-                opossitesNodes += '<li>[...]</li>';
+                opossitesNodes += '<li>[...]</li>';/**/
                 break;
             }
             if(i==0) {
@@ -873,7 +856,7 @@ function alertCheckBox(eventCheck){
     if(eventCheck.checked==true) {//Fade nodes on Hover  
         console.log("effect: fade");
         // Bind events :
-        var greyColor = '#666';
+        var greyColor = '#9b9e9e';
         partialGraph.bind('overnodes',function(event){
             var nodes = event.content;
             var neighbors = {};
