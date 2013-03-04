@@ -13,6 +13,8 @@ var b_node_filter_min= 0.0;
 var b_node_filter_max= 1.0;
 
 var checkBox=false;
+var overNodes=false;
+
 var socsemFlag=false;
 var constantNGramFilter;
 var socialFlag=true;
@@ -859,6 +861,7 @@ function alertCheckBox(eventCheck){
         // Bind events :
         var greyColor = '#9b9e9e';
         partialGraph.bind('overnodes',function(event){
+            overNodes = true;
             var nodes = event.content;
             var neighbors = {};
             var e = partialGraph._core.graph.edges; 
@@ -894,6 +897,7 @@ function alertCheckBox(eventCheck){
         });
         
         partialGraph.bind('outnodes',function(){
+            overNodes=false;
             var e = partialGraph._core.graph.edges;
             for(i=0;i<e.length;i++){
                 e[i].color = e[i].attr['grey'] ? e[i].attr['true_color'] : e[i].color;
