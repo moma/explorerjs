@@ -948,6 +948,7 @@ function alertCheckBox(eventCheck){
 }
 
 function trackMouse() {
+    $.doTimeout(300,function (){
     var ctx = partialGraph._core.domElements.mouse.getContext('2d');
     ctx.globalCompositeOperation = "source-over";
     ctx.clearRect(0, 0, partialGraph._core.domElements.nodes.width, partialGraph._core.domElements.nodes.height);
@@ -957,13 +958,16 @@ function trackMouse() {
 
     x = partialGraph._core.mousecaptor.mouseX;
     y = partialGraph._core.mousecaptor.mouseY;
-
+    
+    //console.log("Hola"); 
+    console.log("x: "+x+" - y: "+y+" delay"); 
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.arc(x, y, cursor_size, 0, Math.PI * 2, true);
     ctx.closePath();
     ctx.stroke();
+    });
 };
 
 function changeGraphPosition(evt, echelle) {
@@ -1116,6 +1120,8 @@ function trackMouse() {
 
     x = partialGraph._core.mousecaptor.mouseX;
     y = partialGraph._core.mousecaptor.mouseY;
+    
+    console.log("x: "+x+" - y: "+y);
 
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 1;
@@ -1155,6 +1161,7 @@ $(document).ready(function () {
     
     partialGraph.bind('downnodes', function (event) {       
         partialGraph.stopForceAtlas2();
+        console.log(partialGraph._core.graph.getNodes(event.content));
         getOpossitesNodes(event.content, false);
         
         if(is_empty(selections)==true){  
@@ -1199,7 +1206,7 @@ $(document).ready(function () {
         });
     /* Initial Effect (Add unchecked): HIDE */
     
-    partialGraph.startForceAtlas2();
+    //partialGraph.startForceAtlas2();
     //partialGraph.draw();    
     
     $("#loading").remove();
