@@ -2,7 +2,7 @@
 var zoom=0;
 var a_node_size= 0.50;
 var b_node_size= 0.50;
-var cursor_size= 0.01;
+var cursor_size= 0.00;
 var a_edge_filter_min= 0.0;
 var a_edge_filter_max= 1.0;
 var a_node_filter_min= 0.0;
@@ -137,7 +137,7 @@ function search(string) {
 
   
 function selection(currentNode){
-    if(checkBox==false) {
+    if(checkBox==false && cursor_size==0) {
         for(var i in selections){
             node = partialGraph._core.graph.nodesIndex[i];
             node.active = false;
@@ -145,7 +145,8 @@ function selection(currentNode){
         opossites = [];
         selections = [];
         partialGraph.refresh();
-    }
+    }    
+    
     if(socsemFlag==false){
         if((typeof selections[currentNode.id])=="undefined"){
             selections[currentNode.id] = 1;
@@ -854,8 +855,8 @@ function alertCheckBox(eventCheck){
     partialGraph.unbind("outnodes");
     
     //console.log(partialGraph._core.graph.edges);
+    if((typeof eventCheck.checked)!="undefined") checkBox=eventCheck.checked;
     
-    checkBox=eventCheck.checked;
     if(eventCheck.checked==true) {//Fade nodes on Hover  
         console.log("effect: fade");
         // Bind events :
@@ -948,7 +949,6 @@ function alertCheckBox(eventCheck){
 }
 
 function trackMouse() {
-    $.doTimeout(300,function (){
     var ctx = partialGraph._core.domElements.mouse.getContext('2d');
     ctx.globalCompositeOperation = "source-over";
     ctx.clearRect(0, 0, partialGraph._core.domElements.nodes.width, partialGraph._core.domElements.nodes.height);
@@ -959,15 +959,12 @@ function trackMouse() {
     x = partialGraph._core.mousecaptor.mouseX;
     y = partialGraph._core.mousecaptor.mouseY;
     
-    //console.log("Hola"); 
-    console.log("x: "+x+" - y: "+y+" delay"); 
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.arc(x, y, cursor_size, 0, Math.PI * 2, true);
     ctx.closePath();
     ctx.stroke();
-    });
 };
 
 function changeGraphPosition(evt, echelle) {
@@ -1110,27 +1107,46 @@ function traceMap() {
     partialGraph.ctxMini.strokeRect( _x, _y, _w, _h );
 }
 
-function trackMouse() {
-    var ctx = partialGraph._core.domElements.mouse.getContext('2d');
-    ctx.globalCompositeOperation = "source-over";
-    ctx.clearRect(0, 0, partialGraph._core.domElements.nodes.width, partialGraph._core.domElements.nodes.height);
-
-    var x;
-    var y;
-
-    x = partialGraph._core.mousecaptor.mouseX;
-    y = partialGraph._core.mousecaptor.mouseY;
-    
-    console.log("x: "+x+" - y: "+y);
-
-    ctx.strokeStyle = '#000';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(x, y, cursor_size, 0, Math.PI * 2, true);
-    ctx.closePath();
-    ctx.stroke();
-};
-
+function updateDownNodeEvent(flagEvent){    
+    partialGraph.unbind("downnodes");
+    partialGraph.unbind("overnodes");
+    partialGraph.unbind("outnodes");
+    if(flagEvent==false){
+        //If cursor_size=0 -> Normal and single mouse-selection
+        alertCheckBox(checkBox);
+        partialGraph.bind('downnodes', function (event) {
+            //console.log(partialGraph._core.graph.getNodes(event.content));
+            //partialGraph.stopForceAtlas2();
+            getOpossitesNodes(event.content, false);
+        
+            if(is_empty(selections)==true){  
+                $("#names").html(""); //Information extracted, just added
+                $("#opossiteNodes").html(""); //Information extracted, just added
+                $("#information").html("");
+            }
+        });
+    }
+    else {
+        //If cursor_size>0 -> Multiple mouse-selection
+        partialGraph.bind('downnodes', function (event) {
+            if(checkBox==false) cancelSelection();
+            x1 = partialGraph._core.mousecaptor.mouseX;
+            y1 = partialGraph._core.mousecaptor.mouseY;
+            //dist1(centerClick,selectionRadius)
+            partialGraph.iterNodes(function(n){
+                distance = Math.sqrt(
+                    Math.pow((x1-parseInt(n.displayX)),2) +
+                    Math.pow((y1-parseInt(n.displayY)),2)
+                    );
+                if(parseInt(distance)<=cursor_size) {
+                    selection(n);
+                }
+            });
+            partialGraph.refresh();
+        });
+        
+    }
+}
 
 $(document).ready(function () {
 
@@ -1158,53 +1174,42 @@ $(document).ready(function () {
         
     window.onhashchange = updateMap;
     
-    
-    partialGraph.bind('downnodes', function (event) {       
-        partialGraph.stopForceAtlas2();
-        console.log(partialGraph._core.graph.getNodes(event.content));
-        getOpossitesNodes(event.content, false);
+    updateDownNodeEvent(false);
         
-        if(is_empty(selections)==true){  
-            $("#names").html(""); //Information extracted, just added
-            $("#opossiteNodes").html(""); //Information extracted, just added
-            $("#information").html("");
+    /* Initial Effect (Add: unchecked) HIDE */
+    partialGraph.bind('overnodes',function(event){            
+        var nodes = event.content;
+        var neighbors = {};
+        var e = partialGraph._core.graph.edges;
+        for(i=0;i<e.length;i++){
+            if(nodes.indexOf(e[i].source.id)>=0 || nodes.indexOf(e[i].target.id)>=0){
+                neighbors[e[i].source.id] = 1;
+                neighbors[e[i].target.id] = 1;
+            }
         }
-    });
-        
-    /* Initial Effect (Add unchecked): HIDE */
-        partialGraph.bind('overnodes',function(event){            
-            var nodes = event.content;
-            var neighbors = {};
-            var e = partialGraph._core.graph.edges;
-            for(i=0;i<e.length;i++){
-                if(nodes.indexOf(e[i].source.id)>=0 || nodes.indexOf(e[i].target.id)>=0){
-                    neighbors[e[i].source.id] = 1;
-                    neighbors[e[i].target.id] = 1;
-                }
-            }
-            partialGraph.draw(2,1,2);
+        partialGraph.draw(2,1,2);
             
-            partialGraph.iterNodes(function(n){
-                if(!neighbors[n.id]){
-                    n.hidden = 1;
-                }else{
-                    n.hidden = 0;
-                }
-            }).draw(2,1,2);
-        });
-  
-        partialGraph.bind('outnodes',function(){
-            var e = partialGraph._core.graph.edges;
-            for(i=0;i<e.length;i++){
-                e[i].hidden = 0;
-            }
-            partialGraph.draw(2,1,2);
-            
-            partialGraph.iterNodes(function(n){
+        partialGraph.iterNodes(function(n){
+            if(!neighbors[n.id]){
+                n.hidden = 1;
+            }else{
                 n.hidden = 0;
-            }).draw(2,1,2);
-        });
-    /* Initial Effect (Add unchecked): HIDE */
+            }
+        }).draw(2,1,2);
+    });
+  
+    partialGraph.bind('outnodes',function(){
+        var e = partialGraph._core.graph.edges;
+        for(i=0;i<e.length;i++){
+            e[i].hidden = 0;
+        }
+        partialGraph.draw(2,1,2);
+            
+        partialGraph.iterNodes(function(n){
+            n.hidden = 0;
+        }).draw(2,1,2);
+    });
+    /* Initial Effect (Add: unchecked) HIDE */
     
     //partialGraph.startForceAtlas2();
     //partialGraph.draw();    
@@ -1532,6 +1537,8 @@ $(document).ready(function () {
         animate: true,
         change: function(event, ui) {
             cursor_size= ui.value;
+            if(cursor_size==0) updateDownNodeEvent(false);
+            else updateDownNodeEvent(true); 
         //return callSlider("#sliderSelectionZone", "selectionRadius");
         }
     });
