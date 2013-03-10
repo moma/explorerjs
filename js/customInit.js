@@ -109,6 +109,7 @@ function extractContext(string, context) {
 }
   
 function cancelSelection () {
+    console.log("cancelSelection");
     for(var i in selections){
         node = partialGraph._core.graph.nodesIndex[i];
         node.active = false;
@@ -171,8 +172,7 @@ function selection(currentNode){
                 
                 }
             }
-        
-            currentNode.active=true;
+            currentNode.active=true; 
         }
         else {
             delete selections[currentNode.id];        
@@ -275,17 +275,18 @@ function selection(currentNode){
 }
 
 function getOpossitesNodes(node_id, with_zoom) {
-    console.log("You've clicked:"+node_id+" - "+Nodes[node_id]);
-        
     
+    var node;    
+    if(with_zoom==true) node=node_id;
+    else node = partialGraph._core.graph.nodesIndex[node_id];
+    //console.log("You've clicked:"+node.id);    
     if(socsemFlag==true) {
         cancelSelection();
         socsemFlag=false;
     }
     
-    var node = partialGraph._core.graph.nodesIndex[node_id];
     if (!node) return null;
-    if(node_id.toString().charAt(0)=="D")flag=1;
+    if(node.id.toString().charAt(0)=="D")flag=1;
     else flag=2;
     selection(node);  
     
@@ -1139,7 +1140,7 @@ function updateDownNodeEvent(flagEvent){
                     Math.pow((y1-parseInt(n.displayY)),2)
                     );
                 if(parseInt(distance)<=cursor_size) {
-                    selection(n);
+                    getOpossitesNodes(n,true);
                 }
             });
             partialGraph.refresh();
@@ -1152,7 +1153,10 @@ $(document).ready(function () {
 
     $("#warning").html(getWarning());
 
-    partialGraph = sigma.init(document.getElementById('sigma-example')).drawingProperties(sigmaJsDrawingProperties).graphProperties(sigmaJsGraphProperties).mouseProperties(sigmaJsMouseProperties);
+    partialGraph = sigma.init(document.getElementById('sigma-example'))
+                        .drawingProperties(sigmaJsDrawingProperties)
+                        .graphProperties(sigmaJsGraphProperties)
+                        .mouseProperties(sigmaJsMouseProperties);
     
     partialGraph.ctxMini = document.getElementById('overview').getContext('2d');
     partialGraph.ctxMini.clearRect(0, 0, 200, 175);
