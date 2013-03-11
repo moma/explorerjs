@@ -217,8 +217,8 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
       case 4: // Auto adjust speed
         var totalSwinging = 0;  // How much irregular movement
         var totalEffectiveTraction = 0;  // Hom much useful movement
-        var swingVSnode1=0;
-        var sumdxdy=0;  /**/
+        var swingingSum=0;
+        var promdxdy=0;  /**/
 
         nodes.forEach(function(n) {
           var fixed = n.fixed || false;
@@ -229,8 +229,8 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
             // If the node has a burst change of direction,
             // then it's not converging.
             totalSwinging += n.fa2.mass * swinging;
-            swingVSnode1 += swinging;
-            sumdxdy += (Math.abs(n.fa2.dx)+Math.abs(n.fa2.dy))/2; /**/
+            swingingSum += swinging;
+            promdxdy += (Math.abs(n.fa2.dx)+Math.abs(n.fa2.dy))/2; /**/
             
             totalEffectiveTraction += n.fa2.mass *
                                       0.5 *
@@ -243,9 +243,9 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
 
         self.p.totalSwinging = totalSwinging;
         
-        var convg= ((Math.pow(nodes.length,2))/sumdxdy);    /**/
-        var swVSnodesVSlen = swingVSnode1/nodes.length;     /**/
-        if(convg > swVSnodesVSlen){          
+        var convg= ((Math.pow(nodes.length,2))/promdxdy);    /**/
+        var swingingVSnodes_length = swingingSum/nodes.length;     /**/
+        if(convg > swingingVSnodes_length){          
             partialGraph.stopForceAtlas2();     
         }
         
