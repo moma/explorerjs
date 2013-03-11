@@ -139,6 +139,7 @@ function search(string) {
   
 function selection(currentNode){
     if(checkBox==false && cursor_size==0) {
+        console.log("You've clicked:"+currentNode.id);    
         for(var i in selections){
             node = partialGraph._core.graph.nodesIndex[i];
             node.active = false;
@@ -279,14 +280,13 @@ function getOpossitesNodes(node_id, with_zoom) {
     var node;    
     if(with_zoom==true) node=node_id;
     else node = partialGraph._core.graph.nodesIndex[node_id];
-    //console.log("You've clicked:"+node.id);    
     if(socsemFlag==true) {
         cancelSelection();
         socsemFlag=false;
     }
     
     if (!node) return null;
-    if(node.id.toString().charAt(0)=="D")flag=1;
+    if(node.id.charAt(0)=="D")flag=1;
     else flag=2;
     selection(node);  
     
@@ -1215,7 +1215,7 @@ $(document).ready(function () {
     });
     /* Initial Effect (Add: unchecked) HIDE */
     
-    //partialGraph.startForceAtlas2();
+    partialGraph.startForceAtlas2();
     //partialGraph.draw();    
     
     $("#loading").remove();
