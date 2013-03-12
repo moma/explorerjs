@@ -1129,7 +1129,7 @@ function updateDownNodeEvent(flagEvent){
     }
     else {
         //If cursor_size>0 -> Multiple mouse-selection
-        partialGraph.bind('downnodes', function (event) {
+        partialGraph.bind('downnodes', function (event) {/**/
             if(checkBox==false) cancelSelection();
             x1 = partialGraph._core.mousecaptor.mouseX;
             y1 = partialGraph._core.mousecaptor.mouseY;
