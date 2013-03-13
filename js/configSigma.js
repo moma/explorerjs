@@ -6,6 +6,7 @@ var maxSearchResults = 10;
 var strSearchBar = "Search";
 
 
+var gexf;
 var zoom=0;
 var a_node_size= 0.50;
 var b_node_size= 0.50;
@@ -39,7 +40,6 @@ var minZoom = 1;
 var maxZoom = 7;
 var moveDelay = 80, zoomDelay = 2;
 //var Vecindad;
-var gexf;
 var partialGraph;
 var labels = [];    
 var Nodes = []; 

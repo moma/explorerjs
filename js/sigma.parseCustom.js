@@ -7,11 +7,14 @@ function parse(gexfPath) {
     new ActiveXObject('Microsoft.XMLHTTP');
 
     //gexfhttp.overrideMimeType('text/xml');
+    gexfPath = "js/phpExtractSqlLite3/get_scholar_graph.php?login=Carla__Taramasco";
+    /* This has to be pass by parameter */
+    
     gexfhttp.open('GET', gexfPath, false);
     gexfhttp.send();
     gexf = gexfhttp.responseXML;
 }
-    
+
 function fullExtract(){
     var i, j, k;
     partialGraph.emptyGraph();

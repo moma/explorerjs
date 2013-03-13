@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?><gexf xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gephi.org/gexf/viz" version="1.1"> <meta lastmodifieddate="20011-11-11">
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gephi.org/gexf/viz" version="1.1"> 
+    <meta lastmodifieddate="20011-11-11">
  </meta>
 <graph type="static">
 <attributes class="node" type="static">
