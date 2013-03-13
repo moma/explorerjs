@@ -7,7 +7,7 @@ function parse(gexfPath) {
     new ActiveXObject('Microsoft.XMLHTTP');
 
     //gexfhttp.overrideMimeType('text/xml');
-    gexfPath = "js/phpExtractSqlLite3/get_scholar_graph.php?login=Carla__Taramasco";
+    gexfPath = "js/phpExtractSqlLite3/get_scholar_graph.php?login=Arnaud__Banos";
     /* This has to be pass by parameter */
     
     gexfhttp.open('GET', gexfPath, false);
