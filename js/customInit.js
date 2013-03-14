@@ -78,13 +78,12 @@ function search(string) {
             return;
         }                
     });
-    getOpossitesNodes(id_node, true);
+    getOpossitesNodes(id_node, false);
 }
 
   
 function selection(currentNode){
     if(checkBox==false && cursor_size==0) {
-        console.log("You've clicked:"+currentNode.id);    
         for(var i in selections){
             node = partialGraph._core.graph.nodesIndex[i];
             node.active = false;
@@ -220,10 +219,9 @@ function selection(currentNode){
     
 }
 
-function getOpossitesNodes(node_id, with_zoom) {
-    
+function getOpossitesNodes(node_id, entireNode) {
     var node;    
-    if(with_zoom==true) node=node_id;
+    if(entireNode==true) node=node_id;
     else node = partialGraph._core.graph.nodesIndex[node_id];
     if(socsemFlag==true) {
         cancelSelection();
@@ -507,7 +505,6 @@ function alertCheckBox(eventCheck){
     if((typeof eventCheck.checked)!="undefined") checkBox=eventCheck.checked;
     
     if(eventCheck.checked==true) {//Fade nodes on Hover  
-        console.log("effect: fade");
         // Bind events :
         var greyColor = '#9b9e9e';
         partialGraph.bind('overnodes',function(event){
