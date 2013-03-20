@@ -82,5 +82,6 @@ var sigmaJsGraphProperties = {
     maxEdgeSize: 1
 };
 var sigmaJsMouseProperties = {
+    minRatio:0.3,
     maxRatio: 32
 };

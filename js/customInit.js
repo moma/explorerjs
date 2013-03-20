@@ -816,6 +816,7 @@ $(document).ready(function () {
     fullExtract(); 
     console.log("Parsing complete.");
     
+    partialGraph.zoomTo(partialGraph._core.domElements.nodes.width / 2, partialGraph._core.domElements.nodes.height / 2, 0.8);
     partialGraph.draw();
       
     initializeMap();
@@ -966,6 +967,7 @@ $(document).ready(function () {
     
     $("#lensButton").click(function () {
         partialGraph.position(0,0,1);
+        partialGraph.zoomTo(partialGraph._core.domElements.nodes.width / 2, partialGraph._core.domElements.nodes.height / 2, 0.8);
         partialGraph.refresh();
         partialGraph.startForceAtlas2();
     });
