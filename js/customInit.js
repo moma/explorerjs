@@ -409,22 +409,19 @@ function graphNGrams(node_id){
                 i1="N"+existingNodes[i].id.substring(3,existingNodes[i].id.length)+";"+"N"+existingNodes[j].id.substring(3,existingNodes[j].id.length);                    
                 i2="N"+existingNodes[j].id.substring(3,existingNodes[j].id.length)+";"+"N"+existingNodes[i].id.substring(3,existingNodes[i].id.length);                    
                       
-                if((typeof Edges[i1])!="undefined"){
-                    //I've found a source Node
-                    //Edges[i1].label="nodes2";
-                    edgesFound[0]=Edges[i1];
-                    partialGraph.addEdge(edgesFound[0].label,edgesFound[0].sourceID,edgesFound[0].targetID,edgesFound[0]);
-                        
-                }
-                if((typeof Edges[i2])!="undefined"){
-                    //I've found a target Node
-                    //Edges[i2].label="nodes2";
-                    edgesFound[1]=Edges[i2];
-                    partialGraph.addEdge(edgesFound[1].label,edgesFound[1].sourceID,edgesFound[1].targetID,edgesFound[1]);
-                }
-                
-            }
-            
+                if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined"){
+                    
+                    if(Edges[i1].weight > Edges[i2].weight){
+                        partialGraph.addEdge(Edges[i1].label,Edges[i1].sourceID,Edges[i1].targetID,Edges[i1]);
+                    }
+                    if(Edges[i1].weight < Edges[i2].weight){
+                        partialGraph.addEdge(Edges[i2].label,Edges[i2].sourceID,Edges[i2].targetID,Edges[i2]);
+                    }
+                    if(Edges[i1].weight == Edges[i2].weight){
+                        partialGraph.addEdge(Edges[i1].label,Edges[i1].sourceID,Edges[i1].targetID,Edges[i1]);
+                    }
+                }                
+            }            
         } 
         var node = partialGraph._core.graph.nodesIndex[node_id];
         selection(node);
@@ -459,22 +456,19 @@ function graphDocs(node_id){
                 i1="D"+existingNodes[i].id.substring(3,existingNodes[i].id.length)+";"+"D"+existingNodes[j].id.substring(3,existingNodes[j].id.length);                    
                 i2="D"+existingNodes[j].id.substring(3,existingNodes[j].id.length)+";"+"D"+existingNodes[i].id.substring(3,existingNodes[i].id.length);                    
                       
-                if((typeof Edges[i1])!="undefined"){
-                    //I've found a source Node
-                    //Edges[i1].label="nodes1";
-                    edgesFound[0]=Edges[i1];
-                    partialGraph.addEdge(edgesFound[0].label,edgesFound[0].sourceID,edgesFound[0].targetID,edgesFound[0]);
-                        
+                if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined"){
+                    
+                    if(Edges[i1].weight > Edges[i2].weight){
+                        partialGraph.addEdge(Edges[i1].label,Edges[i1].sourceID,Edges[i1].targetID,Edges[i1]);
+                    }
+                    if(Edges[i1].weight < Edges[i2].weight){
+                        partialGraph.addEdge(Edges[i2].label,Edges[i2].sourceID,Edges[i2].targetID,Edges[i2]);
+                    }
+                    if(Edges[i1].weight == Edges[i2].weight){
+                        partialGraph.addEdge(Edges[i1].label,Edges[i1].sourceID,Edges[i1].targetID,Edges[i1]);
+                    }
                 }
-                if((typeof Edges[i2])!="undefined"){
-                    //I've found a target Node
-                    //Edges[i2].label="nodes1";
-                    edgesFound[1]=Edges[i2];
-                    partialGraph.addEdge(edgesFound[1].label,edgesFound[1].sourceID,edgesFound[1].targetID,edgesFound[1]);
-                }
-                
             }
-            
         }
         var node = partialGraph._core.graph.nodesIndex[node_id];
         selection(node);
@@ -799,9 +793,9 @@ $(document).ready(function () {
     $("#warning").html(getWarning());
 
     partialGraph = sigma.init(document.getElementById('sigma-example'))
-                        .drawingProperties(sigmaJsDrawingProperties)
-                        .graphProperties(sigmaJsGraphProperties)
-                        .mouseProperties(sigmaJsMouseProperties);
+    .drawingProperties(sigmaJsDrawingProperties)
+    .graphProperties(sigmaJsGraphProperties)
+    .mouseProperties(sigmaJsMouseProperties);
     
     partialGraph.ctxMini = document.getElementById('overview').getContext('2d');
     partialGraph.ctxMini.clearRect(0, 0, 200, 175);
@@ -818,7 +812,7 @@ $(document).ready(function () {
     
     partialGraph.zoomTo(partialGraph._core.domElements.nodes.width / 2, partialGraph._core.domElements.nodes.height / 2, 0.8);
     partialGraph.draw();
-      
+         
     initializeMap();
     updateMap();
         
@@ -1021,23 +1015,43 @@ $(document).ready(function () {
                 
                     i1=existingNodes[i].id.charAt(0)+existingNodes[i].id.substring(3,existingNodes[i].id.length)+";"+existingNodes[j].id.charAt(0)+existingNodes[j].id.substring(3,existingNodes[j].id.length);                    
                     i2=existingNodes[j].id.charAt(0)+existingNodes[j].id.substring(3,existingNodes[j].id.length)+";"+existingNodes[i].id.charAt(0)+existingNodes[i].id.substring(3,existingNodes[i].id.length);                    
-                    
-                    if((typeof Edges[i1])!="undefined"){
-                        //I've found a source Node
-                        //Edges[i1].label=label1;
-                        edgesFound[0]=Edges[i1];
-                        partialGraph.addEdge(edgesFound[0].label,edgesFound[0].sourceID,edgesFound[0].targetID,edgesFound[0]);
+
+                    if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined"){
+                        if(Edges[i1].weight > Edges[i2].weight ){
+                            partialGraph.addEdge(Edges[i1].label,Edges[i1].sourceID,Edges[i1].targetID,Edges[i1]);
+                        }
+                        if(Edges[i1].weight < Edges[i2].weight){
+                            partialGraph.addEdge(Edges[i2].label,Edges[i2].sourceID,Edges[i2].targetID,Edges[i2]);
+                        }
+                        if(Edges[i1].weight == Edges[i2].weight){
+                            if(Edges[i1].attributes[1].val=="nodes1"){
+                                indexS = Edges[i1].sourceID.charAt(0)+Edges[i1].sourceID.substring(3,Edges[i1].sourceID.length);
+                                indexT = Edges[i1].targetID.charAt(0)+Edges[i1].targetID.substring(3,Edges[i1].targetID.length);  
+                                if( (typeof partialGraph._core.graph.edgesIndex[indexT+";"+indexS])=="undefined" &&
+                                    (typeof partialGraph._core.graph.edgesIndex[indexS+";"+indexT])=="undefined"){
+                                    partialGraph.addEdge(Edges[i1].label,Edges[i1].sourceID,Edges[i1].targetID,Edges[i1]);
+                                }
+                            }
+                            else partialGraph.addEdge(Edges[i1].label,Edges[i1].sourceID,Edges[i1].targetID,Edges[i1]);
+                        }
                         
                     }
-                    if((typeof Edges[i2])!="undefined"){
-                        //I've found a target Node
-                        //Edges[i2].label=label2;
-                        edgesFound[1]=Edges[i2];
-                        partialGraph.addEdge(edgesFound[1].label,edgesFound[1].sourceID,edgesFound[1].targetID,edgesFound[1]);
+                    else {
+                        if((typeof Edges[i1])!="undefined" && Edges[i1].attributes[1].val=="bipartite"){
+                            //I've found a source Node
+                            //Edges[i1].label=label1;
+                            edgesFound[0]=Edges[i1];
+                            partialGraph.addEdge(edgesFound[0].label,edgesFound[0].sourceID,edgesFound[0].targetID,edgesFound[0]);
+                        
+                        }
+                        if((typeof Edges[i2])!="undefined" && Edges[i2].attributes[1].val=="bipartite"){
+                            //I've found a target Node
+                            //Edges[i2].label=label2;
+                            edgesFound[1]=Edges[i2];
+                            partialGraph.addEdge(edgesFound[1].label,edgesFound[1].sourceID,edgesFound[1].targetID,edgesFound[1]);
+                        }
                     }
-                
-                }
-            
+                }            
             }
             partialGraph.startForceAtlas2();
             socsemFlag=true;

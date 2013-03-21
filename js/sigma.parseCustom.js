@@ -317,8 +317,12 @@ function fullExtract(){
                 }
                 else bipartiteN2D[target].neighbours.push(source);
             }
-            if(edge.attributes[1].val=="nodes1"){
-                partialGraph.addEdge(indice,source,target,edge);
+            if(edge.attributes[1].val=="nodes1"){                
+                indexS = source.charAt(0)+source.substring(3,source.length);
+                indexT = target.charAt(0)+target.substring(3,target.length);                
+                if( (typeof partialGraph._core.graph.edgesIndex[indexT+";"+indexS])=="undefined" ){
+                    partialGraph.addEdge(indice,source,target,edge);
+                }
             }
                 
         }
