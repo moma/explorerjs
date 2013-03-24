@@ -15,14 +15,8 @@ function ArraySort(array, sortFunc){
         return sortFunc(o1.value, o2.value);
     });   
     return tmp;      
-};
-    
-function getWarning() {
-    var isIE = /*@cc_on!@*/false;
-    var loadingText = isIE ? "Ce site n'est pas assuré de fonctionner sous Internet Explorer. Il devrait marcher avec <a href=\"www.mozilla.org/fr/firefox/\">Firefox</a> ou <a href=\"https://www.google.com/chrome\">Chrome</a>." : "";
-    return loadingText;
 }
-
+    
 function extractContext(string, context) {
     var matched = string.toLowerCase().indexOf(context.toLowerCase());
 
@@ -66,8 +60,6 @@ function cancelSelection () {
     $("#names").html(""); //Information extracted, just added
     $("#opossiteNodes").html(""); //Information extracted, just added
     $("#information").html("");
-//$("#leftcontent").html("");
-
 }
 
 function search(string) {
@@ -477,7 +469,6 @@ function graphDocs(node_id){
 }
        
 function is_empty(obj) {
-
     // Assume if it has a length property with a non-zero value
     // that that property is correct.
     if (obj.length && obj.length > 0)    return false;
@@ -486,7 +477,6 @@ function is_empty(obj) {
     for (var key in obj) {
         if (hasOwnProperty.call(obj, key))    return false;
     }
-
     return true;
 }
 
@@ -495,7 +485,6 @@ function alertCheckBox(eventCheck){
     partialGraph.unbind("overnodes");
     partialGraph.unbind("outnodes");
     
-    //console.log(partialGraph._core.graph.edges);
     if((typeof eventCheck.checked)!="undefined") checkBox=eventCheck.checked;
     
     if(eventCheck.checked==true) {//Fade nodes on Hover  
@@ -790,8 +779,6 @@ function updateDownNodeEvent(flagEvent){
 
 $(document).ready(function () {
 
-    $("#warning").html(getWarning());
-
     partialGraph = sigma.init(document.getElementById('sigma-example'))
     .drawingProperties(sigmaJsDrawingProperties)
     .graphProperties(sigmaJsGraphProperties)
@@ -802,8 +789,6 @@ $(document).ready(function () {
     
     $('#sigma-example').css('background-color','white');
     $("#category-B").hide();
-    
-   
     
     console.log("parsing...");        
     parse(gexfLocation);
@@ -1015,40 +1000,41 @@ $(document).ready(function () {
                 
                     i1=existingNodes[i].id.charAt(0)+existingNodes[i].id.substring(3,existingNodes[i].id.length)+";"+existingNodes[j].id.charAt(0)+existingNodes[j].id.substring(3,existingNodes[j].id.length);                    
                     i2=existingNodes[j].id.charAt(0)+existingNodes[j].id.substring(3,existingNodes[j].id.length)+";"+existingNodes[i].id.charAt(0)+existingNodes[i].id.substring(3,existingNodes[i].id.length);                    
+                    
+                    indexS1 = existingNodes[i].id.charAt(0)+existingNodes[i].id.substring(3,existingNodes[i].id.length);
+                    indexT1 = existingNodes[j].id.charAt(0)+existingNodes[j].id.substring(3,existingNodes[j].id.length); 
+                    
+                    indexS2 = existingNodes[j].id.charAt(0)+existingNodes[j].id.substring(3,existingNodes[j].id.length);  
+                    indexT2 = existingNodes[i].id.charAt(0)+existingNodes[i].id.substring(3,existingNodes[i].id.length);     
 
                     if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined"){
                         if(Edges[i1].weight > Edges[i2].weight ){
-                            partialGraph.addEdge(Edges[i1].label,Edges[i1].sourceID,Edges[i1].targetID,Edges[i1]);
+                            partialGraph.addEdge(indexS1+";"+indexT1,Edges[i1].sourceID,Edges[i1].targetID,Edges[i1]);
                         }
                         if(Edges[i1].weight < Edges[i2].weight){
-                            partialGraph.addEdge(Edges[i2].label,Edges[i2].sourceID,Edges[i2].targetID,Edges[i2]);
+                            partialGraph.addEdge(indexS2+";"+indexT2,Edges[i2].sourceID,Edges[i2].targetID,Edges[i2]);
                         }
                         if(Edges[i1].weight == Edges[i2].weight){
-                            if(Edges[i1].attributes[1].val=="nodes1"){
-                                indexS = Edges[i1].sourceID.charAt(0)+Edges[i1].sourceID.substring(3,Edges[i1].sourceID.length);
-                                indexT = Edges[i1].targetID.charAt(0)+Edges[i1].targetID.substring(3,Edges[i1].targetID.length);  
-                                if( (typeof partialGraph._core.graph.edgesIndex[indexT+";"+indexS])=="undefined" &&
-                                    (typeof partialGraph._core.graph.edgesIndex[indexS+";"+indexT])=="undefined"){
-                                    partialGraph.addEdge(Edges[i1].label,Edges[i1].sourceID,Edges[i1].targetID,Edges[i1]);
+                            if(Edges[i1].attributes[1].val!="bipartite") {
+                                console.log(Edges[i1].sourceID + " -> "+Edges[i1].targetID+" = "+Edges[i1].weight);            
+                                if( (typeof partialGraph._core.graph.edgesIndex[indexS1+";"+indexT1])=="undefined" &&
+                                    (typeof partialGraph._core.graph.edgesIndex[indexT1+";"+indexS1])=="undefined" ){
+                                    partialGraph.addEdge(indexS1+";"+indexT1,Edges[i1].sourceID,Edges[i1].targetID,Edges[i1]);
                                 }
                             }
-                            else partialGraph.addEdge(Edges[i1].label,Edges[i1].sourceID,Edges[i1].targetID,Edges[i1]);
                         }
+                        
                         
                     }
                     else {
                         if((typeof Edges[i1])!="undefined" && Edges[i1].attributes[1].val=="bipartite"){
                             //I've found a source Node
-                            //Edges[i1].label=label1;
-                            edgesFound[0]=Edges[i1];
-                            partialGraph.addEdge(edgesFound[0].label,edgesFound[0].sourceID,edgesFound[0].targetID,edgesFound[0]);
+                            partialGraph.addEdge(indexS1+";"+indexT1,Edges[i1].sourceID,Edges[i1].targetID,Edges[i1]);
                         
                         }
                         if((typeof Edges[i2])!="undefined" && Edges[i2].attributes[1].val=="bipartite"){
                             //I've found a target Node
-                            //Edges[i2].label=label2;
-                            edgesFound[1]=Edges[i2];
-                            partialGraph.addEdge(edgesFound[1].label,edgesFound[1].sourceID,edgesFound[1].targetID,edgesFound[1]);
+                            partialGraph.addEdge(indexS2+";"+indexT2,Edges[i2].sourceID,Edges[i2].targetID,Edges[i2]);
                         }
                     }
                 }            
@@ -1057,6 +1043,7 @@ $(document).ready(function () {
             socsemFlag=true;
             $("#category-A").show();
             $("#category-B").show();
+            console.log(partialGraph._core.graph);
         }
         else alert("You must select a node!");
     });
