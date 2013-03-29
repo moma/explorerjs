@@ -795,6 +795,28 @@ $(document).ready(function () {
     fullExtract(); 
     console.log("Parsing complete.");
     
+    
+    /*======= Show some labels at the beginning =======*/
+    minIn=50,
+    maxIn=0,
+    minOut=50,
+    maxOut=0;        
+    partialGraph.iterNodes(function(n){
+        if(parseInt(n.inDegree) < minIn) minIn= n.inDegree;
+        if(parseInt(n.inDegree) > maxIn) maxIn= n.inDegree;
+        if(parseInt(n.outDegree) < minOut) minOut= n.outDegree;
+        if(parseInt(n.outDegree) > maxOut) maxOut= n.outDegree;
+    });
+    partialGraph.iterNodes(function(n){
+        if(n.inDegree==minIn) n.forceLabel=true;
+        if(n.inDegree==maxIn) n.forceLabel=true;
+        if(n.outDegree==minOut) n.forceLabel=true;
+        if(n.outDegree==maxOut) n.forceLabel=true;
+    });
+    /*======= Show some labels at the beginning =======*/
+    
+    
+    
     partialGraph.zoomTo(partialGraph._core.domElements.nodes.width / 2, partialGraph._core.domElements.nodes.height / 2, 0.8);
     partialGraph.draw();
          

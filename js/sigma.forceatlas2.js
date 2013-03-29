@@ -240,7 +240,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
                                       );
           }
         });
-
+        
         self.p.totalSwinging = totalSwinging;
         
         var convg= ((Math.pow(nodes.length,2))/promdxdy);    /**/
@@ -951,6 +951,9 @@ sigma.publicPrototype.startForceAtlas2 = function() {
     this.forceatlas2.init();
   //}
   $("#overviewzone").hide();
+//  node = partialGraph._core.graph.nodesIndex["D::Arnaud__Banos"];
+//  node.forceLabel=true;
+//  console.log(partialGraph._core.graph.nodesIndex["D::Arnaud__Banos"]);
   this.addGenerator('forceatlas2', this.forceatlas2.atomicGo, function(){
     return true;
   });
