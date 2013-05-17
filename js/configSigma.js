@@ -23,6 +23,8 @@ var b_node_filter_max= 1.0;
 var checkBox=false;
 var overNodes=false;
 
+var swclick=false;
+var swhover=false;
 var socsemFlag=false;
 var constantNGramFilter;
 var socialFlag=true;
