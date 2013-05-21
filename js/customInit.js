@@ -73,6 +73,13 @@ function search(string) {
     getOpossitesNodes(id_node, false);
 }
 
+function changeNewButtons() {
+    if ( is_empty(selections)==true ){
+        document.getElementById("socio").src="img/trans/inactive_scholar.png";
+        document.getElementById("switch").src="img/trans/inactive_plus.png";
+        document.getElementById("semantic").src="img/trans/inactive_tag.png";
+    }
+}
   
 function selection(currentNode){
     if(checkBox==false && cursor_size==0) {
@@ -88,18 +95,18 @@ function selection(currentNode){
     if(socsemFlag==false){
         if((typeof selections[currentNode.id])=="undefined"){
             selections[currentNode.id] = 1;
-        
-            if(currentNode.id.charAt(0)=="D"){
+            //console.log(currentNode.id);
+            //console.log(bipartiteD2N["D::Bruce__Edmonds"].neighbours);
+            if(currentNode.id.charAt(0)=="D" && (typeof bipartiteD2N[currentNode.id])!="undefined"){
                 for(i=0;i<bipartiteD2N[currentNode.id].neighbours.length;i++) {
-                    //opossitesbipartiteD2N[currentNode.id].neighbours[i]];
-                    if((typeof opossites[bipartiteD2N[currentNode.id].neighbours[i].toString()])=="undefined"){
+                    if((typeof opossites[bipartiteD2N[currentNode.id].neighbours[i]])=="undefined"){
                         opossites[bipartiteD2N[currentNode.id].neighbours[i]]=1;
                     }
                     else {
                         opossites[bipartiteD2N[currentNode.id].neighbours[i]]++;
                     }
                 }
-            }    
+            }  
             if(currentNode.id.charAt(0)=="N"){
                 for(i=0;i<bipartiteN2D[currentNode.id].neighbours.length;i++) {
                     if((typeof opossites[bipartiteN2D[currentNode.id].neighbours[i]])=="undefined"){
@@ -880,7 +887,7 @@ $(document).ready(function () {
     parse(gexfLocation);
     fullExtract(); 
     console.log("Parsing complete.");    
-    
+    changeNewButtons();
     /*======= Show some labels at the beginning =======*/
     minIn=50,
     maxIn=0,
