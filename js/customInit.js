@@ -74,11 +74,11 @@ function search(string) {
 }
 
 function changeNewButtons() {
-    if ( is_empty(selections)==true ){
-        document.getElementById("socio").src="img/trans/inactive_scholar.png";
-        document.getElementById("switch").src="img/trans/inactive_plus.png";
-        document.getElementById("semantic").src="img/trans/inactive_tag.png";
-    }
+//    if ( is_empty(selections)==true ){
+//        document.getElementById("socio").src="img/trans/inactive_scholar.png";
+//        document.getElementById("switch").src="img/trans/inactive_plus.png";
+//        document.getElementById("semantic").src="img/trans/inactive_tag.png";
+//    }
 }
   
 function selection(currentNode){
