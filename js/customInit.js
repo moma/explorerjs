@@ -1089,30 +1089,54 @@ $(document).ready(function () {
     ;//.mousewheel(onGraphScroll);
     
     $("#switch").click(function () {
-        var existingNodes;
-        if(swclick==false) {
-            $("#switch").text("Keywords");
-            partialGraph.emptyGraph();
-            for(var n in Nodes) {                
-                if(Nodes[n].attributes[0].val=="NGram"){
-                    partialGraph.addNode(n,Nodes[n]);
-                }                
-            }  
-            createEdgesForExistingNodes("Keywords");
-            swclick=true;
+        url=window.location.origin+"/IntegracionSigmaGexf/";
+        if(document.getElementById("switch").src==url+"img/trans/graph_meso.png") {
+            document.getElementById("switch").src=url+"img/trans/graph_macro.png";
+            if(is_empty(selections)==true) {            
+                document.getElementById("socio").src=url+"img/trans/null_scholar.png";
+                document.getElementById("semantic").src=url+"img/trans/null_tag.png";
+            }
+            else {         
+                document.getElementById("socio").src=url+"img/trans/inactive_scholar.png";
+                document.getElementById("semantic").src=url+"img/trans/inactive_tag.png";                
+            }
         }
         else {
-            $("#switch").text("Scholars");
-            partialGraph.emptyGraph();
-            for(var n in Nodes) {                
-                if(Nodes[n].attributes[0].val=="Document"){
-                    partialGraph.addNode(n,Nodes[n]);
-                }                
-            }    
-            createEdgesForExistingNodes("Scholars");
-            swclick=false;            
+            document.getElementById("switch").src=url+"img/trans/graph_meso.png";
+            if(is_empty(selections)==true) {            
+                document.getElementById("socio").src=url+"img/trans/null_scholars.png";
+                document.getElementById("semantic").src=url+"img/trans/null_tags.png";
+            }
+            else {         
+                document.getElementById("socio").src=url+"img/trans/inactive_scholars.png";
+                document.getElementById("semantic").src=url+"img/trans/inactive_tags.png";                
+            }
         }
-        partialGraph.startForceAtlas2();
+        
+//        var existingNodes;
+//        if(swclick==false) {
+//            $("#switch").text("Keywords");
+//            partialGraph.emptyGraph();
+//            for(var n in Nodes) {                
+//                if(Nodes[n].attributes[0].val=="NGram"){
+//                    partialGraph.addNode(n,Nodes[n]);
+//                }                
+//            }  
+//            createEdgesForExistingNodes("Keywords");
+//            swclick=true;
+//        }
+//        else {
+//            $("#switch").text("Scholars");
+//            partialGraph.emptyGraph();
+//            for(var n in Nodes) {                
+//                if(Nodes[n].attributes[0].val=="Document"){
+//                    partialGraph.addNode(n,Nodes[n]);
+//                }                
+//            }    
+//            createEdgesForExistingNodes("Scholars");
+//            swclick=false;            
+//        }
+//        partialGraph.startForceAtlas2();
     });
     
     
