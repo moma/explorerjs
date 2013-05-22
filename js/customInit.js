@@ -78,64 +78,80 @@ function changeNewButtons() {
     baseurl=window.location.origin+"/IntegracionSigmaGexf/";
     fullurl=baseurl+"img/trans/";
     
-    
-    if(document.getElementById("switch").src==fullurl+"graph_macro.png"){
-        document.getElementById("socio").src=fullurl+"inactive_scholar.png";
-        document.getElementById("semantic").src=fullurl+"inactive_tag.png";
-        document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
-    }
-    if(document.getElementById("switch").src==fullurl+"graph_meso.png"){
-        document.getElementById("socio").src=fullurl+"inactive_scholars.png";
-        document.getElementById("semantic").src=fullurl+"inactive_tags.png";
-        document.getElementById("sociosemantic").src=fullurl+"null_sociosem.png";        
-    }
-    
-    //if(document.getElementById("switch").src==fullurl+"graph_macro_null.png");
-    //if(document.getElementById("switch").src==fullurl+"graph_meso_null.png");
-    
-    
-    
-    if(document.getElementById("sociosemantic").src==fullurl+"active_sociosem.png") {
-        if( document.getElementById("switch").src==fullurl+"graph_macro.png" ){
-            document.getElementById("switch").src=fullurl+"graph_macro_null.png";
-        }
-        if( document.getElementById("switch").src==fullurl+"graph_meso.png" ){
-            document.getElementById("switch").src=fullurl+"graph_meso_null.png";
-        }
-    }
-    else {
+    if(document.getElementById("socio").src==fullurl+"active_scholar.png") {
         
-        if(document.getElementById("switch").src==fullurl+"graph_macro.png"){
-               
-            document.getElementById("switch").src=fullurl+"graph_meso.png";
-            document.getElementById("socio").src=fullurl+"inactive_scholar.png";
-            document.getElementById("semantic").src=fullurl+"inactive_tag.png";
-            document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
+    }
+    if(document.getElementById("socio").src==fullurl+"active_scholars.png") {
+        document.getElementById("semantic").src=fullurl+"inactive_tags.png";
+        document.getElementById("sociosemantic").src=fullurl+"null_sociosem.png";
+        document.getElementById("switch").src=fullurl+"graph_meso.png"
+    }
     
-            if(is_empty(selections)==true) {            
-                document.getElementById("socio").src=fullurl+"null_scholar.png";
-                document.getElementById("semantic").src=fullurl+"null_tag.png";
-            }
-            else {         
-                document.getElementById("socio").src=fullurl+"inactive_scholar.png";
-                document.getElementById("semantic").src=fullurl+"inactive_tag.png";                
-            }
-        }
-        if(document.getElementById("switch").src==fullurl+"graph_meso.png"){
-            document.getElementById("socio").src=fullurl+"inactive_scholars.png";
-            document.getElementById("semantic").src=fullurl+"inactive_tags.png";
-            document.getElementById("sociosemantic").src=fullurl+"null_sociosem.png";    
-            document.getElementById("switch").src=fullurl+"graph_macro.png";
-            if(is_empty(selections)==true) {            
-                document.getElementById("socio").src=fullurl+"null_scholars.png";
-                document.getElementById("semantic").src=fullurl+"null_tags.png";
-            }
-            else {         
-                document.getElementById("socio").src=fullurl+"inactive_scholars.png";
-                document.getElementById("semantic").src=fullurl+"inactive_tags.png";                
-            }
-        }
-    } 
+    if(document.getElementById("semantic").src==fullurl+"active_tag.png") {
+        
+    }
+    if(document.getElementById("semantic").src==fullurl+"active_tags.png") {        
+        document.getElementById("socio").src=fullurl+"inactive_scholars.png";
+        document.getElementById("sociosemantic").src=fullurl+"null_sociosem.png";
+        document.getElementById("switch").src=fullurl+"graph_meso.png"
+    }
+//    if(document.getElementById("switch").src==fullurl+"graph_macro.png"){
+//        document.getElementById("socio").src=fullurl+"inactive_scholar.png";
+//        document.getElementById("semantic").src=fullurl+"inactive_tag.png";
+//        document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
+//    }
+//    if(document.getElementById("switch").src==fullurl+"graph_meso.png"){
+//        document.getElementById("socio").src=fullurl+"inactive_scholars.png";
+//        document.getElementById("semantic").src=fullurl+"inactive_tags.png";
+//        document.getElementById("sociosemantic").src=fullurl+"null_sociosem.png";        
+//    }
+//    
+//    //if(document.getElementById("switch").src==fullurl+"graph_macro_null.png");
+//    //if(document.getElementById("switch").src==fullurl+"graph_meso_null.png");
+//    
+//    
+//    
+//    if(document.getElementById("sociosemantic").src==fullurl+"active_sociosem.png") {
+//        if( document.getElementById("switch").src==fullurl+"graph_macro.png" ){
+//            document.getElementById("switch").src=fullurl+"graph_macro_null.png";
+//        }
+//        if( document.getElementById("switch").src==fullurl+"graph_meso.png" ){
+//            document.getElementById("switch").src=fullurl+"graph_meso_null.png";
+//        }
+//    }
+//    else {
+//        
+//        if(document.getElementById("switch").src==fullurl+"graph_macro.png"){
+//               
+//            document.getElementById("switch").src=fullurl+"graph_meso.png";
+//            document.getElementById("socio").src=fullurl+"inactive_scholar.png";
+//            document.getElementById("semantic").src=fullurl+"inactive_tag.png";
+//            document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
+//    
+//            if(is_empty(selections)==true) {            
+//                document.getElementById("socio").src=fullurl+"null_scholar.png";
+//                document.getElementById("semantic").src=fullurl+"null_tag.png";
+//            }
+//            else {         
+//                document.getElementById("socio").src=fullurl+"inactive_scholar.png";
+//                document.getElementById("semantic").src=fullurl+"inactive_tag.png";                
+//            }
+//        }
+//        if(document.getElementById("switch").src==fullurl+"graph_meso.png"){
+//            document.getElementById("socio").src=fullurl+"inactive_scholars.png";
+//            document.getElementById("semantic").src=fullurl+"inactive_tags.png";
+//            document.getElementById("sociosemantic").src=fullurl+"null_sociosem.png";    
+//            document.getElementById("switch").src=fullurl+"graph_macro.png";
+//            if(is_empty(selections)==true) {            
+//                document.getElementById("socio").src=fullurl+"null_scholars.png";
+//                document.getElementById("semantic").src=fullurl+"null_tags.png";
+//            }
+//            else {         
+//                document.getElementById("socio").src=fullurl+"inactive_scholars.png";
+//                document.getElementById("semantic").src=fullurl+"inactive_tags.png";                
+//            }
+//        }
+//    } 
 }
   
 function selection(currentNode){
@@ -926,32 +942,206 @@ function createEdgesForExistingNodes (typeOfNodes) {
     }
 }
 
-function changeInactvHover(img) {    
+function changeInactvHover(img) { 
     baseurl=window.location.origin+"/IntegracionSigmaGexf/";
     fullurl=baseurl+"img/trans/";
-
-    console.log(img.src);
-    console.log(fullurl+"inactive_scholar.png");
-    
-    if ( img.src==fullurl+"inactive_scholar.png" ) {
-        console.log("changing one");
-        img.src="/img/trans/hover_scholar.png"
+    if(img.id=="socio") {
+        if ( img.src==fullurl+"inactive_scholar.png" ) {
+            img.src=fullurl+"hover_scholar.png"
+        }
+        if ( img.src==fullurl+"inactive_scholars.png" ) {
+            img.src=fullurl+"hover_scholars.png"
+        }
     }
-    if ( img.src==fullurl+"inactive_scholars.png" ) {
-        console.log("changing two");
-        img.src="/img/trans/hover_scholars.png"
+    if(img.id=="semantic") {
+        if ( img.src==fullurl+"inactive_tag.png" ) {
+            img.src=fullurl+"hover_tag.png"
+        }
+        if ( img.src==fullurl+"inactive_tags.png" ) {
+            img.src=fullurl+"hover_tags.png"
+        }        
+    }
+    if(img.id=="switch"){
+        changeflag=false;
+        if(img.src==fullurl+"graph_meso.png") {
+            img.src=fullurl+"graph_macro.png";
+            changeflag=true;
+        }
+        if(img.src==fullurl+"graph_macro.png" && changeflag==false){
+            img.src=fullurl+"graph_meso.png";
+        }
     }
 }
 
-function changeHoverInactv(img) {
-    if ( img.src=="/img/trans/hover_scholar.png" ) {
-    console.log("changing two");
-        img.src="/img/trans/inactive_scholar.png"
+function changeHoverInactv(img) {  
+    baseurl=window.location.origin+"/IntegracionSigmaGexf/";
+    fullurl=baseurl+"img/trans/";
+    if(img.id=="socio") {
+        if ( img.src==fullurl+"hover_scholar.png" ) {
+            img.src=fullurl+"inactive_scholar.png"
+        }
+        if ( img.src==fullurl+"hover_scholars.png" ) {
+            img.src=fullurl+"inactive_scholars.png"
+        }        
     }
+    if(img.id=="semantic") {
+        if ( img.src==fullurl+"hover_tag.png" ) {
+            img.src=fullurl+"inactive_tag.png"
+        }
+        if ( img.src==fullurl+"hover_tags.png" ) {
+            img.src=fullurl+"inactive_tags.png"
+        }
+    }
+    if(img.id=="switch"){
+        changeflag=false;
+        if(img.src==fullurl+"graph_macro.png") {
+            img.src=fullurl+"graph_meso.png";
+            changeflag=true;
+        }
+        if(img.src==fullurl+"graph_meso.png" && changeflag==false){
+            img.src=fullurl+"graph_macro.png";
+        }
+    }
+}
 
-    if ( img.src=="/img/trans/hover_scholars.png" ) {
-        img.src="/img/trans/inactive_scholars.png"
+function changeHoverActive(img) {     
+    baseurl=window.location.origin+"/IntegracionSigmaGexf/";
+    fullurl=baseurl+"img/trans/";
+    
+    if(img.id=="socio") {
+        if ( img.src==fullurl+"hover_scholar.png" ) {
+            img.src=fullurl+"active_scholar.png";           
+            if(document.getElementById("semantic").src==fullurl+"active_tag.png") {
+                document.getElementById("semantic").src=fullurl+"inactive_tag.png"
+            }
+            socioClick();
+        }
+        if ( img.src==fullurl+"hover_scholars.png" ) {
+            img.src=fullurl+"active_scholars.png";            
+            if(document.getElementById("semantic").src==fullurl+"active_tags.png") {
+                document.getElementById("semantic").src=fullurl+"inactive_tags.png"
+            }
+            changeToMeso();         
+        }
+        changeNewButtons();
     }
+    
+    if(img.id=="semantic") {
+        if ( img.src==fullurl+"hover_tag.png" ) {
+            img.src=fullurl+"active_tag.png";
+            if(document.getElementById("socio").src==fullurl+"active_scholar.png") {
+                document.getElementById("socio").src=fullurl+"inactive_scholar.png"
+            }
+            semanticClick();
+            
+        }
+        if ( img.src==fullurl+"hover_tags.png" ) {
+            img.src=fullurl+"active_tags.png";
+            if(document.getElementById("socio").src==fullurl+"active_scholars.png") {
+                document.getElementById("socio").src=fullurl+"inactive_scholars.png"
+            }
+            changeToMeso()
+        }
+        changeNewButtons();
+    }
+}
+
+function semanticClick(){    
+    var displayedGraph;
+    for(var i in selections) {
+        if(i.charAt(0)=="D") displayedGraph="Scholars";
+        else displayedGraph="Keywords";
+        break;
+    }
+        
+    if(displayedGraph=="Scholars") {
+        if(!is_empty(opossites)){
+            partialGraph.emptyGraph();
+            for(var i in opossites) {
+                partialGraph.addNode(i,Nodes[i]);
+            }
+            createEdgesForExistingNodes("Keywords");
+            partialGraph.startForceAtlas2();
+        }
+
+    }
+    else {// displayedGraph=="Keywords"
+        if(!is_empty(selections)){
+            partialGraph.emptyGraph();
+            for(var i in selections) {
+                partialGraph.addNode(i,Nodes[i]);
+                for(var j in nodes2[i].neighbours) { 
+                    id=nodes2[i].neighbours[j];
+                    partialGraph.addNode(id,Nodes[id]);
+                }
+            }
+            createEdgesForExistingNodes("Keywords");
+            partialGraph.startForceAtlas2();
+        }
+            
+    }    
+}
+
+function socioClick() {        
+    var displayedGraph;
+    for(var i in selections) {
+        if(i.charAt(0)=="D") displayedGraph="Scholars";
+        else displayedGraph="Keywords";
+        break;
+    }
+        
+    if(displayedGraph=="Scholars") {
+        if(!is_empty(selections)){
+            partialGraph.emptyGraph();
+            for(var i in selections) {
+                partialGraph.addNode(i,Nodes[i]);
+                for(var j in nodes1[i].neighbours) { 
+                    id=nodes1[i].neighbours[j];
+                    partialGraph.addNode(id,Nodes[id]);
+                }
+            }
+            createEdgesForExistingNodes("Scholars");
+            partialGraph.startForceAtlas2();
+        }
+    }
+    else {// displayedGraph=="Keywords"
+        if(!is_empty(opossites)){
+            partialGraph.emptyGraph();
+            for(var i in opossites) {
+                partialGraph.addNode(i,Nodes[i]);
+            }
+            createEdgesForExistingNodes("Scholars");
+            partialGraph.startForceAtlas2();
+        }
+    }
+    
+}
+
+function changeToMeso() {    
+    
+    if(swclick==false) {
+        $("#switch").text("Keywords");
+        partialGraph.emptyGraph();
+        for(var n in Nodes) {                
+            if(Nodes[n].attributes[0].val=="NGram"){
+                partialGraph.addNode(n,Nodes[n]);
+            }                
+        }  
+        createEdgesForExistingNodes("Keywords");
+        swclick=true;
+    }
+    else {
+        $("#switch").text("Scholars");
+        partialGraph.emptyGraph();
+        for(var n in Nodes) {                
+            if(Nodes[n].attributes[0].val=="Document"){
+                partialGraph.addNode(n,Nodes[n]);
+            }                
+        }    
+        createEdgesForExistingNodes("Scholars");
+        swclick=false;            
+    }
+    partialGraph.startForceAtlas2();    
 }
 
 $(document).ready(function () {
@@ -1171,114 +1361,8 @@ $(document).ready(function () {
     .mouseout(endMove)
     ;//.mousewheel(onGraphScroll);
     
-    $("#switch").click(function () {
-        changeNewButtons();
-        
-    //        var existingNodes;
-    //        if(swclick==false) {
-    //            $("#switch").text("Keywords");
-    //            partialGraph.emptyGraph();
-    //            for(var n in Nodes) {                
-    //                if(Nodes[n].attributes[0].val=="NGram"){
-    //                    partialGraph.addNode(n,Nodes[n]);
-    //                }                
-    //            }  
-    //            createEdgesForExistingNodes("Keywords");
-    //            swclick=true;
-    //        }
-    //        else {
-    //            $("#switch").text("Scholars");
-    //            partialGraph.emptyGraph();
-    //            for(var n in Nodes) {                
-    //                if(Nodes[n].attributes[0].val=="Document"){
-    //                    partialGraph.addNode(n,Nodes[n]);
-    //                }                
-    //            }    
-    //            createEdgesForExistingNodes("Scholars");
-    //            swclick=false;            
-    //        }
-    //        partialGraph.startForceAtlas2();
-    });
-    
-    
-    $("#socio").click(function () {
-        baseurl=window.location.origin+"/IntegracionSigmaGexf/";
-        fullurl=baseurl+"img/trans/";
-    
-    
-        
-        
-        var displayedGraph;
-        for(var i in selections) {
-            if(i.charAt(0)=="D") displayedGraph="Scholars";
-            else displayedGraph="Keywords";
-            break;
-        }
-        
-        if(displayedGraph=="Scholars") {
-            if(!is_empty(selections)){
-                partialGraph.emptyGraph();
-                for(var i in selections) {
-                    partialGraph.addNode(i,Nodes[i]);
-                    for(var j in nodes1[i].neighbours) { 
-                        id=nodes1[i].neighbours[j];
-                        partialGraph.addNode(id,Nodes[id]);
-                    }
-                }
-                createEdgesForExistingNodes("Scholars");
-                partialGraph.startForceAtlas2();
-            }
-        }
-        else {// displayedGraph=="Keywords"
-            if(!is_empty(opossites)){
-                partialGraph.emptyGraph();
-                for(var i in opossites) {
-                    partialGraph.addNode(i,Nodes[i]);
-                }
-                createEdgesForExistingNodes("Scholars");
-                partialGraph.startForceAtlas2();
-            }
-        }
-    }
-    );
-        
-        
-    $("#semantic").click(function () {
-        var displayedGraph;
-        for(var i in selections) {
-            if(i.charAt(0)=="D") displayedGraph="Scholars";
-            else displayedGraph="Keywords";
-            break;
-        }
-        
-        if(displayedGraph=="Scholars") {
-            if(!is_empty(opossites)){
-                partialGraph.emptyGraph();
-                for(var i in opossites) {
-                    partialGraph.addNode(i,Nodes[i]);
-                }
-                createEdgesForExistingNodes("Keywords");
-                partialGraph.startForceAtlas2();
-            }
 
-        }
-        else {// displayedGraph=="Keywords"
-            if(!is_empty(selections)){
-                partialGraph.emptyGraph();
-                for(var i in selections) {
-                    partialGraph.addNode(i,Nodes[i]);
-                    for(var j in nodes2[i].neighbours) { 
-                        id=nodes2[i].neighbours[j];
-                        partialGraph.addNode(id,Nodes[id]);
-                    }
-                }
-                createEdgesForExistingNodes("Keywords");
-                partialGraph.startForceAtlas2();
-            }
-            
-        }
-    }
-    );
+    
     
     $("#sociosemantic").click(function () {
         if(!is_empty(selections) && !is_empty(opossites)){
