@@ -11,7 +11,7 @@
         <script type="text/javascript" src="js/jquery/jquery-1.7.2.min.js"></script> 
         <script src="js/jquery/jquery-ui.min.js" type="text/javascript"></script>
         <script src="js/jquery/jquery.ba-dotimeout.min.js" type="text/javascript"></script>
-                      
+
         <script src="js/sigma.min.js" type="text/javascript" language="javascript"></script>
         <script src="js/sigma.forceatlas2.js" type="text/javascript" language="javascript"></script>
         <script src="js/configSigma.js" type="text/javascript" language="javascript"></script>
@@ -24,23 +24,23 @@
         <div id="hdb">
             <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
                 <div id="title" class="unselectable toolbar-left">
-                    
+
                     <img style="cursor: pointer" title="Scholars" 
                          src="img/trans/null_scholars.png" 
                          width="40" id="socio" class="fg-button toolbar-left"
                          onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
                          onClick='changeHoverActive(this)'
-                    ></img>
-                    
+                         ></img>
+
                     <img style="cursor: pointer" title="Mixed" src="img/trans/null_sociosem.png" width="45" 
                          id="sociosemantic" class="fg-button toolbar-left"></img>
-                    
+
                     <img style="cursor: pointer" title="Keywords" 
                          src="img/trans/inactive_tags.png" 
                          width="39" id="semantic" class="fg-button toolbar-left"
                          onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
                          onClick='changeHoverActive(this)'
-                    ></img> 
+                         ></img> 
                     <!--
                     <img style="cursor: pointer" title="Socio-Semantic" src="img/new_sociosem.png" width="40" id="sociosemantic" class="fg-button toolbar-left"></img>
                     -->
@@ -49,13 +49,13 @@
                         <span class="sliderLabel"> &nbsp;&nbsp;&nbsp;&nbsp;cursor size</span>
                         <div id="sliderSelectionZone"></div>
                     </div>
-                       
+
                     <img style="cursor: pointer" title="Switch" 
-                         src="img/trans/graph_meso.png" width="30"
+                         src="img/trans/graph_meso_null.png" width="30"
                          id="switch" class="fg-button toolbar-left"
                          onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
                          onClick='changeHoverActive(this)'
-                    ></img>    
+                         ></img>    
 
                     <div>
                         <input id="searchinput"  autocomplete="off" />
@@ -131,9 +131,8 @@
             <div onmousemove="trackMouse();" class="sigma-expand" id="sigma-example"></div>
 
             <ul id="ctlzoom">
-
                 <li>
-                    <a href="#+" id="zoomPlusButton" title="S'approcher"> </a>
+                    <a href="" id="zoomPlusButton" title="S'approcher"> </a>
                 </li>
 
                 <li id="zoomSliderzone">
@@ -141,16 +140,16 @@
                 </li>
 
                 <li>
-                    <a href="#-" id="zoomMinusButton" title="S'éloigner"> </a>
+                    <a href="" id="zoomMinusButton" title="S'éloigner"> </a>
                 </li>
 
 
                 <li>
-                    <a href="#fisheye" id="lensButton"> </a>
+                    <a href="" id="lensButton"> </a>
                 </li>
 
                 <li>
-                    <a href="#edges" id="edgesButton"> </a>
+                    <a href="" id="edgesButton"> </a>
                 </li>
             </ul>
         </div>
@@ -164,6 +163,13 @@
         <div id="leftcolumn">
             <div id="unfold">
                 <a href="#arrow" id="aUnfold" class="rightarrow"> </a>
+
+                <a href="" title="Status"><img  width="60" src="img/trans/status_title.png"></img></a>
+                
+                <img  width="60" id="nodeType" title="Social" src="img/trans/status_active_scholars.png"></img>
+                    
+                <img width="60" id="viewType" title="Social" src="img/trans/status_macro_view.png"></img>
+
             </div>
             <div id="leftcontent">
                 <div id="names"></div>
