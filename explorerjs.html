@@ -32,8 +32,11 @@
                          onClick='changeHoverActive(this)'
                          ></img>
 
-                    <img style="cursor: pointer" title="Mixed" src="img/trans/null_sociosem.png" width="45" 
-                         id="sociosemantic" class="fg-button toolbar-left"></img>
+                    <img style="cursor: pointer" title="Mixed" src="img/trans/inactive_sociosem.png" width="45" 
+                         id="sociosemantic" class="fg-button toolbar-left"
+                         onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
+                         onClick='changeHoverActive(this)'                         
+                    ></img>
 
                     <img style="cursor: pointer" title="Keywords" 
                          src="img/trans/inactive_tags.png" 
@@ -132,24 +135,24 @@
 
             <ul id="ctlzoom">
                 <li>
-                    <a href="" id="zoomPlusButton" title="S'approcher"> </a>
-                </li>view
+                    <a href="#" id="zoomPlusButton" title="S'approcher"> </a>
+                </li>
 
                 <li id="zoomSliderzone">
                     <div id="zoomSlider"></div>
                 </li>
 
                 <li>
-                    <a href="" id="zoomMinusButton" title="S'éloigner"> </a>
+                    <a href="#" id="zoomMinusButton" title="S'éloigner"> </a>
                 </li>
 
 
                 <li>
-                    <a href="" id="lensButton"> </a>
+                    <a href="#" id="lensButton"> </a>
                 </li>
 
                 <li>
-                    <a href="" id="edgesButton"> </a>
+                    <a href="#" id="edgesButton"> </a>
                 </li>
             </ul>
         </div>
@@ -164,7 +167,7 @@
             <div id="unfold">
                 <a href="#arrow" id="aUnfold" class="rightarrow"> </a>
 
-                <a href="" title="Status"><img  width="60" src="img/trans/status_title.png"></img></a>
+                <a href="#" title="Status"><img  width="60" src="img/trans/status_title.png"></img></a>
                 
                 <img  width="60" id="nodeType" title="Social" src="img/trans/status_active_scholars.png"></img>
                     

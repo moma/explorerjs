@@ -60,6 +60,18 @@ function cancelSelection () {
     $("#names").html(""); //Information extracted, just added
     $("#opossiteNodes").html(""); //Information extracted, just added
     $("#information").html("");
+    overNodes=false;
+    var e = partialGraph._core.graph.edges;
+    for(i=0;i<e.length;i++){
+        e[i].color = e[i].attr['grey'] ? e[i].attr['true_color'] : e[i].color;
+        e[i].attr['grey'] = 0;
+    }
+    partialGraph.draw(2,1,2);
+            
+    partialGraph.iterNodes(function(n){
+        n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
+        n.attr['grey'] = 0;
+    }).draw(2,1,2);
     changeNewButtons();
 }
 
@@ -81,104 +93,41 @@ function changeNewButtons() {
         if(document.getElementById("viewType").src==fullurl+"status_macro_view.png"){
             if(document.getElementById("nodeType").src==fullurl+"status_active_scholars.png"){
                 document.getElementById("socio").src=fullurl+"active_scholars.png";
+                document.getElementById("semantic").src=fullurl+"inactive_tags.png";
+                document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
             }  
             if(document.getElementById("nodeType").src==fullurl+"status_active_tags.png"){
                 document.getElementById("semantic").src=fullurl+"active_tags.png";
+                document.getElementById("socio").src=fullurl+"inactive_scholars.png";
+                document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
             }
+            if(document.getElementById("nodeType").src==fullurl+"status_active_sociosem.png"){
+                document.getElementById("sociosemantic").src=fullurl+"active_sociosem.png";
+                document.getElementById("semantic").src=fullurl+"inactive_tags.png";
+                document.getElementById("socio").src=fullurl+"inactive_scholars.png";
+            }
+        }
+        else {
+            if(document.getElementById("nodeType").src==fullurl+"status_active_scholars.png"){
+                document.getElementById("socio").src=fullurl+"active_scholar.png";
+                document.getElementById("semantic").src=fullurl+"inactive_tag.png";
+                document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
+            }  
+            if(document.getElementById("nodeType").src==fullurl+"status_active_tags.png"){
+                document.getElementById("semantic").src=fullurl+"active_tag.png";
+                document.getElementById("socio").src=fullurl+"inactive_scholar.png";
+                document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
+            }
+            if(document.getElementById("nodeType").src==fullurl+"status_active_sociosem.png"){
+                document.getElementById("sociosemantic").src=fullurl+"active_sociosem.png";
+                document.getElementById("semantic").src=fullurl+"inactive_tag.png";
+                document.getElementById("socio").src=fullurl+"inactive_scholar.png";
+            }            
         }
 
         document.getElementById("switch").src=fullurl+"graph_meso.png";
-    //            if(document.getElementById("socio").src==fullurl+"active_scholars.png"){
-    //                document.getElementById("semantic").src=fullurl+"inactive_tags.png";
-    //                document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
-    //            }        
-    //            if(document.getElementById("semantic").src==fullurl+"active_tags.png"){
-    //                document.getElementById("socio").src=fullurl+"inactive_scholars.png";
-    //                document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
-    //            }
-    //            if(document.getElementById("sociosemantic").src==fullurl+"active_socsem.png"){
-    //                document.getElementById("socio").src=fullurl+"inactive_scholars.png";
-    //                document.getElementById("semantic").src=fullurl+"inactive_tags.png";
-    //            }
     }
-        
-    
-//        if(document.getElementById("sociosemantic").src!=fullurl+"active_socsem.png" &&
-//           document.getElementById("semantic").src!=fullurl+"active_active_tags.png" &&
-//           document.getElementById("socio").src!=fullurl+"active_scholars.png"){
-           
-    
 }
-//    
-//    if(document.getElementById("socio").src==fullurl+"active_scholars.png") {
-//        document.getElementById("semantic").src=fullurl+"inactive_tags.png";
-//        document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
-//        document.getElementById("switch").src=fullurl+"graph_meso.png"
-//    }
-//    
-//    if(document.getElementById("semantic").src==fullurl+"active_tags.png") {        
-//        document.getElementById("socio").src=fullurl+"inactive_scholars.png";
-//        document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
-//        document.getElementById("switch").src=fullurl+"graph_meso.png"
-//    }
-//    if(document.getElementById("switch").src==fullurl+"graph_macro.png"){
-//        document.getElementById("socio").src=fullurl+"inactive_scholar.png";
-//        document.getElementById("semantic").src=fullurl+"inactive_tag.png";
-//        document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
-//    }
-//    if(document.getElementById("switch").src==fullurl+"graph_meso.png"){
-//        document.getElementById("socio").src=fullurl+"inactive_scholars.png";
-//        document.getElementById("semantic").src=fullurl+"inactive_tags.png";
-//        document.getElementById("sociosemantic").src=fullurl+"null_sociosem.png";        
-//    }
-//    
-//    //if(document.getElementById("switch").src==fullurl+"graph_macro_null.png");
-//    //if(document.getElementById("switch").src==fullurl+"graph_meso_null.png");
-//    
-//    
-//    
-//    if(document.getElementById("sociosemantic").src==fullurl+"active_sociosem.png") {
-//        if( document.getElementById("switch").src==fullurl+"graph_macro.png" ){
-//            document.getElementById("switch").src=fullurl+"graph_macro_null.png";
-//        }
-//        if( document.getElementById("switch").src==fullurl+"graph_meso.png" ){
-//            document.getElementById("switch").src=fullurl+"graph_meso_null.png";
-//        }
-//    }
-//    else {
-//        
-//        if(document.getElementById("switch").src==fullurl+"graph_macro.png"){
-//               
-//            document.getElementById("switch").src=fullurl+"graph_meso.png";
-//            document.getElementById("socio").src=fullurl+"inactive_scholar.png";
-//            document.getElementById("semantic").src=fullurl+"inactive_tag.png";
-//            document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
-//    
-//            if(is_empty(selections)==true) {            
-//                document.getElementById("socio").src=fullurl+"null_scholar.png";
-//                document.getElementById("semantic").src=fullurl+"null_tag.png";
-//            }
-//            else {         
-//                document.getElementById("socio").src=fullurl+"inactive_scholar.png";
-//                document.getElementById("semantic").src=fullurl+"inactive_tag.png";                
-//            }
-//        }
-//        if(document.getElementById("switch").src==fullurl+"graph_meso.png"){
-//            document.getElementById("socio").src=fullurl+"inactive_scholars.png";
-//            document.getElementById("semantic").src=fullurl+"inactive_tags.png";
-//            document.getElementById("sociosemantic").src=fullurl+"null_sociosem.png";    
-//            document.getElementById("switch").src=fullurl+"graph_macro.png";
-//            if(is_empty(selections)==true) {            
-//                document.getElementById("socio").src=fullurl+"null_scholars.png";
-//                document.getElementById("semantic").src=fullurl+"null_tags.png";
-//            }
-//            else {         
-//                document.getElementById("socio").src=fullurl+"inactive_scholars.png";
-//                document.getElementById("semantic").src=fullurl+"inactive_tags.png";                
-//            }
-//        }
-//    } 
-
   
 function selection(currentNode){
     if(checkBox==false && cursor_size==0) {
@@ -193,8 +142,6 @@ function selection(currentNode){
     if(socsemFlag==false){
         if((typeof selections[currentNode.id])=="undefined"){
             selections[currentNode.id] = 1;
-            //console.log(currentNode.id);
-            //console.log(bipartiteD2N["D::Bruce__Edmonds"].neighbours);
             if(currentNode.id.charAt(0)=="D" && (typeof bipartiteD2N[currentNode.id])!="undefined"){
                 for(i=0;i<bipartiteD2N[currentNode.id].neighbours.length;i++) {
                     if((typeof opossites[bipartiteD2N[currentNode.id].neighbours[i]])=="undefined"){
@@ -312,6 +259,7 @@ function selection(currentNode){
             currentNode.active=false;
         }
     }
+    partialGraph.zoomTo(partialGraph._core.domElements.nodes.width / 2, partialGraph._core.domElements.nodes.height / 2, 0.8);
     partialGraph.refresh();
     changeNewButtons();
 }
@@ -604,6 +552,7 @@ function alertCheckBox(eventCheck){
                 if(nodes.indexOf(e[i].source.id)<0 && nodes.indexOf(e[i].target.id)<0){
                     if(!e[i].attr['grey']){
                         e[i].attr['true_color'] = e[i].color;
+                        var greyColor
                         e[i].color = greyColor;
                         e[i].attr['grey'] = 1;
                     }
@@ -1023,6 +972,11 @@ function changeInactvHover(img) {
             img.src=fullurl+"hover_tags.png"
         }        
     }
+    if(img.id=="sociosemantic") {
+        if ( img.src==fullurl+"inactive_sociosem.png" ) {
+            img.src=fullurl+"hover_sociosem.png"
+        }     
+    }
 //    if(img.id=="switch"){
 //        changeflag=false;
 //        if(img.src==fullurl+"graph_meso.png") {
@@ -1054,6 +1008,12 @@ function changeHoverInactv(img) {
             img.src=fullurl+"inactive_tags.png"
         }
     }
+    
+    if(img.id=="sociosemantic") {
+        if ( img.src==fullurl+"hover_sociosem.png" ) {
+            img.src=fullurl+"inactive_sociosem.png"
+        }    
+    }
 //    if(img.id=="switch"){
 //        changeflag=false;
 //        if(img.src==fullurl+"graph_macro.png") {
@@ -1078,6 +1038,7 @@ function changeHoverActive(img) {
                 document.getElementById("semantic").src=fullurl+"inactive_tags.png"
             }
             if(document.getElementById("viewType").src==fullurl+"status_macro_view.png"){
+                console.log("");
                 changeToMacro();
             }
             if(document.getElementById("viewType").src==fullurl+"status_meso_view.png"){
@@ -1104,9 +1065,16 @@ function changeHoverActive(img) {
     if(img.id=="switch") { 
         hasbeenclicked=false;
         if ( img.src==fullurl+"graph_meso.png"){
+            socioClick();
             document.getElementById("viewType").src=fullurl+"status_meso_view.png";
             img.src==fullurl+"graph_macro.png";
             hasbeenclicked=true;
+            changeNewButtons();
+        }
+        if ( img.src==fullurl+"graph_macro.png" && hasbeenclicked==false){
+            changeToMacro();
+            document.getElementById("viewType").src=fullurl+"status_macro_view.png";
+            img.src==fullurl+"graph_meso.png";
             changeNewButtons();
         }
     }
@@ -1127,7 +1095,6 @@ function semanticClick(){
                 partialGraph.addNode(i,Nodes[i]);
             }
             createEdgesForExistingNodes("Keywords");
-            partialGraph.startForceAtlas2();
         }
 
     }
@@ -1142,10 +1109,12 @@ function semanticClick(){
                 }
             }
             createEdgesForExistingNodes("Keywords");
-            partialGraph.startForceAtlas2();
         }
             
-    }    
+    }
+//partialGraph.stopForceAtlas2();
+//partialGraph.draw();
+//partialGraph.startForceAtlas2();    
 }
 
 function socioClick() {        
@@ -1167,7 +1136,6 @@ function socioClick() {
                 }
             }
             createEdgesForExistingNodes("Scholars");
-            partialGraph.startForceAtlas2();
         }
     }
     else {// displayedGraph=="Keywords"
@@ -1177,9 +1145,12 @@ function socioClick() {
                 partialGraph.addNode(i,Nodes[i]);
             }
             createEdgesForExistingNodes("Scholars");
-            partialGraph.startForceAtlas2();
+            
         }
     }
+//partialGraph.stopForceAtlas2();
+//partialGraph.draw();
+//partialGraph.startForceAtlas2();
     
 }
 
@@ -1188,28 +1159,42 @@ function changeToMacro() {
     baseurl=window.location.origin+"/IntegracionSigmaGexf/";
     fullurl=baseurl+"img/trans/";
     if(document.getElementById("nodeType").src==fullurl+"status_active_scholars.png") {
+        console.log("1 step")
         document.getElementById("nodeType").src=fullurl+"status_active_tags.png";
+        console.log("2 step")
         partialGraph.emptyGraph();
+        console.log("3 step")
         for(var n in Nodes) {                
             if(Nodes[n].attributes[0].val=="NGram"){
                 partialGraph.addNode(n,Nodes[n]);
             }                
         }  
+        console.log("4 step")
         createEdgesForExistingNodes("Keywords");
+        console.log("5 step")
         swclick=true;
     }
-    else {        
+    else {  
+        console.log("6 step")
         document.getElementById("nodeType").src=fullurl+"status_active_scholars.png";
+        console.log("7 step")
         partialGraph.emptyGraph();
+        console.log("8 step")
         for(var n in Nodes) {                
             if(Nodes[n].attributes[0].val=="Document"){
                 partialGraph.addNode(n,Nodes[n]);
             }                
-        }    
+        }
+        console.log("9 step")
         createEdgesForExistingNodes("Scholars");
+        console.log("10 step")
         swclick=false;            
     }
-    partialGraph.startForceAtlas2();    
+    //partialGraph.stopForceAtlas2();
+    partialGraph.draw();
+    partialGraph.zoomTo(partialGraph._core.domElements.nodes.width / 2, partialGraph._core.domElements.nodes.height / 2, 0.8);
+    partialGraph.refresh();
+    partialGraph.startForceAtlas2();
 }
 
 $(document).ready(function () {
