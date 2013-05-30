@@ -28,13 +28,14 @@ getUrlParam = (function () {
 })();
 
 function parse(gexfPath) {
-    // Load XML file:
     var gexfhttp;
     gexfhttp = window.XMLHttpRequest ?
     new XMLHttpRequest() :
     new ActiveXObject('Microsoft.XMLHTTP');
-
-    gexfPath = "php/get_scholar_graph.php?login="+getUrlParam.nodeidparam;
+    if(getUrlParam.nodeidparam.indexOf("__")===-1)
+        gexfPath = "php/getgraph.php?query="+getUrlParam.nodeidparam;
+    else 
+        gexfPath = "php/get_scholar_graph.php?login="+getUrlParam.nodeidparam;
     
     gexfhttp.open('GET', gexfPath, false);
     gexfhttp.send();
@@ -207,7 +208,7 @@ function fullExtract(){
     }
     
     var edgeId = 0;
-    var edgesNodes = gexf.getElementsByTagName('edges');    
+    var edgesNodes = gexf.getElementsByTagName('edges');
     minEdgeWeight=5.0;
     maxEdgeWeight=0.0;
     for(i=0; i<edgesNodes.length; i++){
@@ -227,10 +228,6 @@ function fullExtract(){
                 weight: 1,
                 attributes: []
             };
-            
-            
-            
-            //Nodes2[source].neighbours.push(target);
                 
             var edge = {
                 id:         j,
@@ -317,14 +314,13 @@ function fullExtract(){
                 }
                 else bipartiteN2D[target].neighbours.push(source);
             }
-            if(edge.attributes[1].val=="nodes1"){                
+            if(edge.attributes[1].val=="nodes1"){  
                 indexS = source.charAt(0)+source.substring(3,source.length);
                 indexT = target.charAt(0)+target.substring(3,target.length);                
                 if( (typeof partialGraph._core.graph.edgesIndex[indexT+";"+indexS])=="undefined" ){
                     partialGraph.addEdge(indice,source,target,edge);
                 }
-            }
-                
+            }                
         }
     }
 }

@@ -214,8 +214,8 @@ $(document).ready(function() {
             tags: collect("tags"),
             organizations: collect("organizations")
         };
-        log("raw query: ");
-        log(query);
+        //console.log("raw query: ");
+        //console.log(query);
         query = encodeURIComponent(JSON.stringify(query));
         return cb(query);
     };
@@ -224,6 +224,8 @@ $(document).ready(function() {
         return $("#welcome").fadeOut("slow", function() {
             show("#loading", "fast");
             return collectFilters(function(query) {
+                //console.log("here");
+                //console.log(query);
                 return window.location.href="explorerjs.html?nodeidparam=" + query;
             });
         });
