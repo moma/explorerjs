@@ -842,20 +842,20 @@ function initializeMap() {
 }
 
 function updateMap(){
-    console.log("updating MiniMap");
-    partialGraph.iterNodes(function(n){
-        partialGraph.ctxMini.fillStyle = n.color;
-        partialGraph.ctxMini.beginPath();
-        numPosibilidades = 2.5 - 0.9;
-        aleat = Math.random() * numPosibilidades;
-        partialGraph.ctxMini.arc(((n.displayX/1.2)-200)*0.25 , ((n.displayY/1.2)+110)*0.25 , (0.9 + aleat)*0.25+1 , 0 , Math.PI*2 , true);
-        //console.log(n.x*1000 +" * 0.25"+" _ "+ n.y*1000 +" * 0.25"+" _ "+ (0.9 + aleat) +" * 0.25 + 1");
-        
-        partialGraph.ctxMini.closePath();
-        partialGraph.ctxMini.fill();
-        
-    });
-    partialGraph.imageMini = partialGraph.ctxMini.getImageData(0, 0, 200, 175);
+//    console.log("updating MiniMap");
+//    partialGraph.iterNodes(function(n){
+//        partialGraph.ctxMini.fillStyle = n.color;
+//        partialGraph.ctxMini.beginPath();
+//        numPosibilidades = 2.5 - 0.9;
+//        aleat = Math.random() * numPosibilidades;
+//        partialGraph.ctxMini.arc(((n.displayX/1.2)-200)*0.25 , ((n.displayY/1.2)+110)*0.25 , (0.9 + aleat)*0.25+1 , 0 , Math.PI*2 , true);
+//        //console.log(n.x*1000 +" * 0.25"+" _ "+ n.y*1000 +" * 0.25"+" _ "+ (0.9 + aleat) +" * 0.25 + 1");
+//        
+//        partialGraph.ctxMini.closePath();
+//        partialGraph.ctxMini.fill();
+//        
+//    });
+//    partialGraph.imageMini = partialGraph.ctxMini.getImageData(0, 0, 200, 175);
 }
 
 function traceMap() {
@@ -1266,6 +1266,39 @@ function changeToMacro(iwannagraph) {
     partialGraph.startForceAtlas2();
 }
 
+function neweffectshow(){
+    pr("hola");
+}
+
+function neweffecthide(){
+    pr("chao");
+}
+
+//$("#aUnfold").click(function() {
+//        var _cG = $("#leftcolumn");
+//        if (_cG.offset().left < 0) {
+//            _cG.animate({
+//                "left" : "0px"
+//            }, function() {
+//                $("#aUnfold").attr("class","leftarrow");
+//                $("#zonecentre").css({
+//                    left: _cG.width() + "px"
+//                });
+//            }); 
+//        } else {
+//            _cG.animate({
+//                "left" : "-" + _cG.width() + "px"
+//            }, function() {
+//                $("#aUnfold").attr("class","rightarrow");
+//                $("#zonecentre").css({
+//                    left: "0"
+//                });
+//            });
+//        }
+//        return false;
+//    });
+
+
 $(document).ready(function () {
 
     partialGraph = sigma.init(document.getElementById('sigma-example'))
@@ -1522,10 +1555,12 @@ $(document).ready(function () {
             partialGraph.stopForceAtlas2();
             partialGraph.draw();
             edgesTF=true;
+            pr("first if: "+edgesTF);
         }
         else {
             partialGraph.startForceAtlas2();
             edgesTF=false;
+            pr("second if: "+edgesTF);
         }
     });
     
