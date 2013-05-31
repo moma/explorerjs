@@ -75,9 +75,8 @@ function cancelSelection () {
         n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
         n.attr['grey'] = 0;
     }).draw(2,1,2);
-//Nodes colors go back to normal
-    
-//changeNewButtons();
+    //Nodes colors go back to normal
+    changeButton("unselectNodes");
 }
 
 function returnBaseUrl(){
@@ -88,7 +87,6 @@ function returnBaseUrl(){
 }
 
 function highlightSelectedNodes(flag){  
-    pr("\tin highlightSelectedNodes");    
     if(!is_empty(selections)){    
         
         fullurl = returnBaseUrl()+"img/trans/";                
@@ -122,35 +120,64 @@ function search(string) {
     getOpossitesNodes(id_node, false);
 }
 
-function changeButton(imgClicked) {   
+function changeButton(buttonClicked) {  
     pr("\tin changeNewButtons");
     fullurl = returnBaseUrl()+"img/trans/";
     hasbeenclicked=false;
-    if(imgClicked=="graph_meso.png"){
-        document.getElementById("switch").src=fullurl+"graph_macro.png";
-        document.getElementById("viewType").src=fullurl+"status_meso_view.png";
-        hasbeenclicked=true;
-    }
-    if(imgClicked=="graph_macro.png" && hasbeenclicked==false){
+    if(buttonClicked=="graph_meso.png"){
         document.getElementById("switch").src=fullurl+"graph_meso.png";
         document.getElementById("viewType").src=fullurl+"status_macro_view.png";
+        hasbeenclicked=true;
+    }
+    if(buttonClicked=="graph_macro.png" && hasbeenclicked==false){
+        document.getElementById("switch").src=fullurl+"graph_macro.png";
+        document.getElementById("viewType").src=fullurl+"status_meso_view.png";
     }
     
-    if(imgClicked=="active_scholars.png"){
+    if(buttonClicked=="active_scholars.png"){
         document.getElementById("socio").src=fullurl+"active_scholars.png";
         document.getElementById("semantic").src=fullurl+"inactive_tags.png";
         document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
+        swclick="social";
     }  
-    if(imgClicked=="active_tags.png"){
+    if(buttonClicked=="active_tags.png"){
         document.getElementById("socio").src=fullurl+"inactive_scholars.png";
         document.getElementById("semantic").src=fullurl+"active_tags.png";
         document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
+        swclick="semantic";
     }
-    if(imgClicked=="active_sociosem.png"){
+    if(buttonClicked=="active_sociosem.png"){
         document.getElementById("socio").src=fullurl+"inactive_scholars.png";
         document.getElementById("semantic").src=fullurl+"inactive_tags.png";
         document.getElementById("sociosemantic").src=fullurl+"active_sociosem.png";
-    }    
+        swclick="sociosemantic";
+    }
+    if(buttonClicked=="selectNode"){
+        if(document.getElementById("switch").src==fullurl+"graph_meso_null.png"){
+            if(document.getElementById("viewType").src==fullurl+"status_macro_view.png"){
+                document.getElementById("switch").src=fullurl+"graph_meso.png";
+            }
+            if(document.getElementById("viewType").src==fullurl+"status_meso_view.png"){
+                document.getElementById("switch").src=fullurl+"graph_macro.png";
+            }
+        }
+    }
+    if(buttonClicked=="unselectNodes"){
+        document.getElementById("switch").src=fullurl+"graph_meso_null.png";
+    }
+//    if(!is_empty(selections)){
+//        //Something selected
+//        if(document.getElementById("switch").src==fullurl+"graph_meso_null.png"){
+//            if(document.getElementById("viewType").src==fullurl+"status_macro_view.png"){
+//                document.getElementById("switch").src=fullurl+"graph_meso.png";
+//            }
+//        }
+//    }
+//    else {//Nothing selected
+//        if(document.getElementById("viewType").src==fullurl+"status_meso_view.png"){
+//            
+//        }
+//    }
 }
 
 function selection(currentNode){
@@ -866,13 +893,7 @@ function hoverNodeEffectWhileFA2(flagEvent) {
         alertCheckBox(checkBox);
         partialGraph.bind('downnodes', function (event) {
             getOpossitesNodes(event.content, false);
-        
-            if(is_empty(selections)==true){  
-                $("#names").html(""); //Information extracted, just added
-                $("#opossiteNodes").html(""); //Information extracted, just added
-                $("#information").html("");
-            }/**/
-            /****
+            /****            
                  *This give me the hoverNodes effect when the FA2 is running.
                 ****/
             var greyColor = '#9b9e9e';/**/
@@ -902,13 +923,20 @@ function hoverNodeEffectWhileFA2(flagEvent) {
                         n.attr['true_color'] = n.color;
                         n.color = greyColor;
                         n.attr['grey'] = 1;
-                    //updateDownNodeEvent
                     }
                 }else{
                     n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
                     n.attr['grey'] = 0;
                 }
             }).draw(2,1,2);
+            
+            if(is_empty(selections)==true){  
+                $("#names").html(""); //Information extracted, just added
+                $("#opossiteNodes").html(""); //Information extracted, just added
+                $("#information").html("");
+                changeButton("unselectNodes");
+            }
+            else changeButton("selectNode");
         });
     //        partialGraph.draw(2,1,2);
     //overNodes=false;/**/
@@ -930,13 +958,19 @@ function hoverNodeEffectWhileFA2(flagEvent) {
                 }
             });
             partialGraph.refresh();
+            if(is_empty(selections)==true){  
+                $("#names").html(""); //Information extracted, just added
+                $("#opossiteNodes").html(""); //Information extracted, just added
+                $("#information").html("");
+                changeButton("unselectNodes");
+            }
+            else changeButton("selectNode");
         });
         
     }
 }
 
 function createEdgesForExistingNodes (typeOfNodes) {
-    pr("in createEdgesForExistingNodes");
     if(typeOfNodes=="Bipartite"){
         var existingNodes = partialGraph._core.graph.nodes;
         var edgesFound = [];
@@ -1071,19 +1105,17 @@ function changeHoverInactv(imgClicked) {
     }
 }
 
-function changeHoverActive(img) { 
+function changeHoverActive(img) {
     fullurl = returnBaseUrl()+"img/trans/";
     if(img.id=="socio") {
         if ( img.src==fullurl+"hover_scholars.png" ) {
             changeButton("active_scholars.png");
             if(document.getElementById("viewType").src==fullurl+"status_macro_view.png"){
                 changeToMacro("social");
-                if(!is_empty(selections)) 
-                pr(partialGraph._core.graph.nodes.length);
+                
             }
             if(document.getElementById("viewType").src==fullurl+"status_meso_view.png"){
                 changeToMeso("social");
-                pr(partialGraph._core.graph.nodes.length);
             }
         }
     }
@@ -1093,11 +1125,9 @@ function changeHoverActive(img) {
             changeButton("active_tags.png");
             if(document.getElementById("viewType").src==fullurl+"status_macro_view.png"){
                 changeToMacro("semantic");
-                pr(partialGraph._core.graph.nodes.length);
             }
             if(document.getElementById("viewType").src==fullurl+"status_meso_view.png"){
                 changeToMeso("semantic");
-                pr(partialGraph._core.graph.nodes.length);
             }
         }
     }
@@ -1107,26 +1137,23 @@ function changeHoverActive(img) {
             changeButton("active_sociosem.png");
             if(document.getElementById("viewType").src==fullurl+"status_macro_view.png"){
                 changeToMacro("sociosemantic");
-                pr(partialGraph._core.graph.nodes.length);
             }
             if(document.getElementById("viewType").src==fullurl+"status_meso_view.png"){
                 changeToMeso("sociosemantic");
-                pr(partialGraph._core.graph.nodes.length);
             }
         }
         
     }
-    
     if(img.id=="switch") { 
         hasbeenclicked=false;
         if ( img.src==fullurl+"graph_meso.png"){
-            changeToMeso();
-            changeButton("graph_meso.png");
+            changeButton("graph_macro.png");
+            changeToMeso(swclick);
             hasbeenclicked=true;
         }
         if ( img.src==fullurl+"graph_macro.png" && hasbeenclicked==false){
-            changeToMacro();
-            changeButton("graph_macro.png");
+            changeButton("graph_meso.png");
+            changeToMacro(swclick);
         }
     }
 }
@@ -1177,12 +1204,16 @@ function changeToMeso(iwannagraph) {
         }
 
     }
-    highlightSelectedNodes(true);    
+    highlightSelectedNodes(true);  
+    partialGraph.draw();
+    partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8);
+    partialGraph.refresh();
+    partialGraph.startForceAtlas2();
 }
 
 function highlightOpossites (list){/*tofix*/
     for(var n in list){
-        partialGraph._core.graph.nodesIndex[n].active = true;
+        partialGraph._core.graph.nodesIndex[n].forceLabel=true;
     }
 }
 
@@ -1202,7 +1233,6 @@ function changeToMacro(iwannagraph) {
                 highlightOpossites(opossites);
             break;
         }
-        swclick=true;
     }
     if(iwannagraph=="social") {
         partialGraph.emptyGraph();
@@ -1216,8 +1246,7 @@ function changeToMacro(iwannagraph) {
             if(n.charAt(0)=='N')
                 highlightOpossites(opossites);
             break;
-        }
-        swclick=false;            
+        }          
     }
     
     if(iwannagraph=="sociosemantic") {
@@ -1227,8 +1256,7 @@ function changeToMacro(iwannagraph) {
         }        
         for(var e in Edges) {     
             partialGraph.addEdge(e,Edges[e].sourceID,Edges[e].targetID,Edges[e]);/*tofix*/
-        }        
-        swclick=false;            
+        }                  
     }
     highlightSelectedNodes(true);
     //partialGraph.stopForceAtlas2();
@@ -1456,27 +1484,27 @@ $(document).ready(function () {
     .mouseout(endMove)
     ;//.mousewheel(onGraphScroll);
     
-//    $("#sociosemantic").click(function () {
-//        if(!is_empty(selections) && !is_empty(opossites)){
-//            partialGraph.emptyGraph();
-//            for(var i in selections) {
-//                partialGraph.addNode(i,Nodes[i]);
-//            }
-//                
-//            for(var i in opossites) {
-//                partialGraph.addNode(i,Nodes[i]);
-//            }
-//                
-//            createEdgesForExistingNodes("Bipartite");
-//            
-//            partialGraph.startForceAtlas2();
-//            socsemFlag=true;
-//            //changeNewButtons();
-//            $("#category-A").show();
-//            $("#category-B").show();
-//        }
-//        else alert("You must select a node!");
-//    });
+    //    $("#sociosemantic").click(function () {
+    //        if(!is_empty(selections) && !is_empty(opossites)){
+    //            partialGraph.emptyGraph();
+    //            for(var i in selections) {
+    //                partialGraph.addNode(i,Nodes[i]);
+    //            }
+    //                
+    //            for(var i in opossites) {
+    //                partialGraph.addNode(i,Nodes[i]);
+    //            }
+    //                
+    //            createEdgesForExistingNodes("Bipartite");
+    //            
+    //            partialGraph.startForceAtlas2();
+    //            socsemFlag=true;
+    //            //changeNewButtons();
+    //            $("#category-A").show();
+    //            $("#category-B").show();
+    //        }
+    //        else alert("You must select a node!");
+    //    });
     
     $("#zoomPlusButton").click(function () {
         partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, partialGraph._core.mousecaptor.ratio * 1.5);
