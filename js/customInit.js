@@ -1267,11 +1267,24 @@ function changeToMacro(iwannagraph) {
 }
 
 function neweffectshow(){
-    pr("hola");
+    legend = document.getElementById("labelchange");
+    image = document.getElementById("availableView");    
+    if(legend.style.display=="none"){
+        $("#labelchange").show();
+        $("#availableView").show();
+    }
+    else {        
+        $("#labelchange").hide();
+        $("#availableView").hide();
+    }
 }
 
 function neweffecthide(){
-    pr("chao");
+    //legend = document.getElementById("labelchange");
+    //image = document.getElementById("availableView");
+//    console.log(legend);
+//    console.log(image);
+//    console.log("\n");
 }
 
 //$("#aUnfold").click(function() {
@@ -1300,7 +1313,6 @@ function neweffecthide(){
 
 
 $(document).ready(function () {
-
     partialGraph = sigma.init(document.getElementById('sigma-example'))
     .drawingProperties(sigmaJsDrawingProperties)
     .graphProperties(sigmaJsGraphProperties)
@@ -1311,6 +1323,8 @@ $(document).ready(function () {
     
     $('#sigma-example').css('background-color','white');
     $("#category-B").hide();
+    $("#labelchange").hide();
+    $("#availableView").hide();
     
     console.log("parsing...");        
     parse(gexfLocation);
