@@ -166,16 +166,17 @@
                 <div align="center" style="left: -250px">
                     <table cellpadding="0" cellspacing="0">
                         <tr>
-                            <td><img width="60" onmouseover="neweffectshow();" id="viewType" 
-                                     title="Social" src="img/trans/status_macro_view.png"></img></td>
-                        <div id="changeViewType">
-                                <td id="labelchange"><img width="60" src="img/trans/status_title_change.png"></img></td>
-                                <td id="availableView">
-                                    <img width="60" src="img/trans/graph_meso_null.png"
-                                        id="switch" class="fg-button toolbar-left"
-                                        onClick='if(swclick=="") {swclick="social";} changeHoverActive(this)'
-                                        ></img></td>
-                            </div>
+                            <td>
+                                <img id="viewType" width="60" onmouseover="neweffectshow();" onmouseout="neweffecthide();" 
+                                     title="Social" src="img/trans/status_macro_view.png"></img>
+                            </td>
+                            <td id="labelchange" onmouseover="neweffectshow();" onmouseout="justhide();">
+                                <img width="60" src="img/trans/status_title_change.png"></img></td>
+                             <td id="availableView" onmouseover="neweffectshow();" onmouseout="justhide();">
+                                 <img id="switch" width="60" src="img/trans/graph_meso_null.png"
+                                        onClick='if(swclick=="") {swclick="social";} changeHoverActive(this)'>
+                                 </img>
+                             </td>
                         </tr>
                     </table>
                 </div>

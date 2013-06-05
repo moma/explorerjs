@@ -118,6 +118,7 @@ function search(string) {
         }                
     });
     getOpossitesNodes(id_node, false);
+    updateLeftPanel();
 }
 
 function changeButton(buttonClicked) {  
@@ -332,28 +333,33 @@ function getOpossitesNodes(node_id, entireNode) {
         flag=2;
     }
     
-    var opos = ArraySort(opossites, function(a,b){
+    opos = ArraySort(opossites, function(a,b){
         return b-a
     });
-    //    console.log("WOLOLO WOLOLO WOLOLO WOLOLO");
-    //    $.ajax({
-    //        type: 'GET',
-    //        url: 'http://localhost/getJsonFromUrl/tagcloud.php',
-    //        data: "url="+JSON.stringify(opos),
-    //        //contentType: "application/json",
-    //        //dataType: 'json',
-    //        success : function(data){ 
-    //            //console.log(data);/**/
-    //        },
-    //        error: function(){ 
-    //            pr("Page Not found.");
-    //        }
-    //    });
-    
+//        console.log("WOLOLO WOLOLO WOLOLO WOLOLO");
+//        $.ajax({
+//            type: 'GET',
+//            url: 'http://localhost/getJsonFromUrl/tagcloud.php',
+//            data: "url="+JSON.stringify(opos),
+//            //contentType: "application/json",
+//            //dataType: 'json',
+//            success : function(data){ 
+//                console.log(data);
+//            },
+//            error: function(){ 
+//                pr("Page Not found.");
+//            }
+//        });
+}
+function updateLeftPanel(){
     var names='';
     var opossitesNodes='';
     var information='';
     
+//    for(var i in opos){
+//        if(i==30) break;
+//        pr(opos[i].key+"\t"+opos[i].value);
+//    }    
     counter=0;
     for(var i in selections){
         if(counter==4){
@@ -893,6 +899,7 @@ function hoverNodeEffectWhileFA2(flagEvent) {
         alertCheckBox(checkBox);
         partialGraph.bind('downnodes', function (event) {
             getOpossitesNodes(event.content, false);
+            updateLeftPanel();
             /****            
                  *This give me the hoverNodes effect when the FA2 is running.
                 ****/
@@ -943,6 +950,7 @@ function hoverNodeEffectWhileFA2(flagEvent) {
     }
     else {
         //If cursor_size>0 -> Multiple mouse-selection
+        //Event: I've clicked a the canvas (NOT A NODE) when the cursor_size is ON
         partialGraph.bind('downnodes', function (event) {
             if(checkBox==false) cancelSelection();
             x1 = partialGraph._core.mousecaptor.mouseX;
@@ -957,6 +965,7 @@ function hoverNodeEffectWhileFA2(flagEvent) {
                     getOpossitesNodes(n,true);
                 }
             });
+            updateLeftPanel();
             partialGraph.refresh();
             if(is_empty(selections)==true){  
                 $("#names").html(""); //Information extracted, just added
@@ -1267,24 +1276,26 @@ function changeToMacro(iwannagraph) {
 }
 
 function neweffectshow(){
-    legend = document.getElementById("labelchange");
-    image = document.getElementById("availableView");    
-    if(legend.style.display=="none"){
-        $("#labelchange").show();
-        $("#availableView").show();
-    }
-    else {        
-        $("#labelchange").hide();
-        $("#availableView").hide();
-    }
+    $("#labelchange").show();
+    $("#availableView").show();  
 }
 
 function neweffecthide(){
-    //legend = document.getElementById("labelchange");
-    //image = document.getElementById("availableView");
-//    console.log(legend);
-//    console.log(image);
-//    console.log("\n");
+    pr($("#labelchange"));
+    $.doTimeout(300,function (){
+        if($("#labelchange")[0].hidden==false){
+            
+        }
+        else {
+            $("#labelchange").hide();
+            $("#availableView").hide(); 
+        }
+    });
+}
+
+function justhide(){    
+    $("#labelchange").hide();
+    $("#availableView").hide();  
 }
 
 //$("#aUnfold").click(function() {

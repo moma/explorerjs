@@ -51,6 +51,7 @@ var Edges = [];
 
 var selections = [];
 var opossites = {};
+var opos=[];
 
 var matches = [];
 
