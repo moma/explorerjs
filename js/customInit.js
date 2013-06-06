@@ -2,16 +2,17 @@
 function pr(msg) {
     console.log(msg);
 }
-
+var oposMAX;
 function ArraySort(array, sortFunc){
     var tmp = [];
-
+    oposMAX=0;
     for (var k in array) {
         if (array.hasOwnProperty(k)) {
             tmp.push({
                 key: k, 
                 value:  array[k]
             });
+            if((array[k]) > oposMAX) oposMAX= array[k];
         }
     }
 
@@ -355,11 +356,8 @@ function updateLeftPanel(){
     var names='';
     var opossitesNodes='';
     var information='';
-    
-//    for(var i in opos){
-//        if(i==30) break;
-//        pr(opos[i].key+"\t"+opos[i].value);
-//    }    
+
+
     counter=0;
     for(var i in selections){
         if(counter==4){
@@ -369,109 +367,50 @@ function updateLeftPanel(){
         names += '<h3><div class="largepill"></div>' + Nodes[i].label + ', </h3>';
         counter++;
     }
+    minFont=12;
+    maxFont=(minFont+oposMAX)-1;  
+    js2='\');"';
     if(flag==1) {
-        opossitesNodes += '<br><h4>Keywords</h4>';
-        opossitesNodes += '<ul>';
-        for (i=0;i<opos.length && typeof(nodes2[opos[i].key])!=="undefined";i++) {
+        opossitesNodes += '<br><h4>Keywords: </h4><div style="margin: 5px 5px;">';
+        js1='onclick="edgesTF=false;selections=[];opossites=[];graphNGrams(\'';
+        for(var i in opos){
             if(i==25){
                 opossitesNodes += '<li>[...]</li>';
                 break;
             }
-            if(i==0) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphNGrams(\'' + opos[i].key + '\',true);"><h2>' + nodes2[opos[i].key].label+  '</h2></li>';
-            }
-            if(i==1) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphNGrams(\'' + opos[i].key + '\',true);"><h3>' + nodes2[opos[i].key].label+  '</h3></li>';
-            }
-            
-            if(i==2) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphNGrams(\'' + opos[i].key + '\',true);"><h4>' + nodes2[opos[i].key].label+  '</h4></li>';
-            }
-            if(i>2) opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphNGrams(\'' + opos[i].key + '\',true);">' + nodes2[opos[i].key].label+  '</li>';
-            
-        }
-        
-        opossitesNodes += '</ul>'
-    
-        information += '<br><h4>Information</h4>';    
-        information += '<ul>';
-            
-        
-        for(var i in selections){
-        
-            information += '<li><b>' + Nodes[i].label + '</b></li>';
-            information += '<li>' + Nodes[i].attributes[3].val + '</li>';
-            information += '</ul><br>';
-        }
+            fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
+            opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer; border: 1px solid green; " '
+            +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+  '</span>&nbsp;&nbsp;';
+
+        }  
     }
-    
-    
     
     if(flag==2 && socsemFlag==false) {
-        opossitesNodes += '<h4>Neighbours</h4>';
-        opossitesNodes += '<ul>';
-        for (i=0;i<opos.length && typeof(nodes1[opos[i].key])!=="undefined";i++) {
+        opossitesNodes += '<h4>Scholars: </h4><div style="margin: 5px 5px;">';
+        pr("max from opos: ");
+        pr(oposMAX);    
+        js1='onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'';        
+        for(var i in opos){
             if(i==25){
                 opossitesNodes += '<li>[...]</li>';
                 break;
             }
-            if(i==0) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');"><h2>' + nodes1[opos[i].key].label+  '</h2></li>';
-            }
-            
-            if(i==1) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');"><h3>' + nodes1[opos[i].key].label+  '<h3></li>';
-            }
-            
-            if(i==2) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');"><h4>' + nodes1[opos[i].key].label+  '<h4></li>';
-            }
-            
-            if(i>2) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');">' + nodes1[opos[i].key].label+  '</li>';
-            }
-        }
-        /*
-        for (var i = 0; i < nodes.length; i++) {
-            opossitesNodes += '<li onclick="graphDocs(\'' + nodes[i].id + '\');partialGraph.refresh();selections=[];opossites=[];">' + nodes[i].label+  '</li>';
-        }*/
-        opossitesNodes += '</ul>'
-    
-        information += '<br><h4>Links</h4>'; 
+            fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
+            opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer; border: 1px solid green; " '
+            +js1+opos[i].key+js2+'>' + nodes1[opos[i].key].label+  '</span>&nbsp;&nbsp;';
+
+        }   
     }
-    
     if(flag==2 && socsemFlag==true) {
-        opossitesNodes += '<h4>Neighbours</h4>';
-        opossitesNodes += '<ul>';
-        for (i=0;i<opos.length && typeof(nodes2[opos[i].key])!=="undefined";i++) {
-            if(i==25){
-                opossitesNodes += '<li>[...]</li>';
-                break;
-            }
-            if(i==0) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');"><h2>' + nodes2[opos[i].key].label+  '</h2></li>';
-            }
-            
-            if(i==1) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');"><h3>' + nodes2[opos[i].key].label+  '<h3></li>';
-            }
-            
-            if(i==2) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');"><h4>' + nodes2[opos[i].key].label+  '<h4></li>';
-            }
-            
-            if(i>2) {
-                opossitesNodes += '<li style="cursor: pointer" onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'' + opos[i].key + '\');">' + nodes2[opos[i].key].label+  '</li>';
-            }
-        }
-        /*
-        for (var i = 0; i < nodes.length; i++) {
-            opossitesNodes += '<li onclick="graphDocs(\'' + nodes[i].id + '\');partialGraph.refresh();selections=[];opossites=[];">' + nodes[i].label+  '</li>';
-        }*/
-        opossitesNodes += '</ul>'
-    
-        information += '<br><h4>Links</h4>'; 
+        opossitesNodes += '<h4>Neighbours</h4><div style="margin: 5px 5px;">';
+        opossitesNodes += 'en construcçao...aaaaaaaa ';
     }
+    
+    opossitesNodes += '</div>';
+    information += '<br><h4>Links</h4>'; 
+    
+    
+    
     
     $("#names").html(names); //Information extracted, just added
     $("#opossiteNodes").html(opossitesNodes); //Information extracted, just added
@@ -949,9 +888,11 @@ function hoverNodeEffectWhileFA2(flagEvent) {
     //overNodes=false;/**/
     }
     else {
+        pr("flagEvent: "+flagEvent);
         //If cursor_size>0 -> Multiple mouse-selection
-        //Event: I've clicked a the canvas (NOT A NODE) when the cursor_size is ON
+        //Event: I've clicked the canvas (NOT A NODE) when I've a selection radius ON'
         partialGraph.bind('downnodes', function (event) {
+            pr("I'm here");
             if(checkBox==false) cancelSelection();
             x1 = partialGraph._core.mousecaptor.mouseX;
             y1 = partialGraph._core.mousecaptor.mouseY;
@@ -1120,8 +1061,7 @@ function changeHoverActive(img) {
         if ( img.src==fullurl+"hover_scholars.png" ) {
             changeButton("active_scholars.png");
             if(document.getElementById("viewType").src==fullurl+"status_macro_view.png"){
-                changeToMacro("social");
-                
+                changeToMacro("social");                
             }
             if(document.getElementById("viewType").src==fullurl+"status_meso_view.png"){
                 changeToMeso("social");
@@ -1158,6 +1098,8 @@ function changeHoverActive(img) {
         if ( img.src==fullurl+"graph_meso.png"){
             changeButton("graph_macro.png");
             changeToMeso(swclick);
+            pr("showing the graph4:");
+            pr("nº nodos: "+partialGraph._core.graph.nodes.length+"\tnº edges: "+partialGraph._core.graph.edges.length);
             hasbeenclicked=true;
         }
         if ( img.src==fullurl+"graph_macro.png" && hasbeenclicked==false){
@@ -1171,7 +1113,14 @@ function changeToMeso(iwannagraph) {
     pr("changing to Meso-"+iwannagraph);     
     if(iwannagraph=="social") {
         if(!is_empty(selections)){
+            pr("my selected nodes: ");
+            pr(selections);
+            pr("showing the graph1:");
+            pr("nº nodos: "+partialGraph._core.graph.nodes.length+"\tnº edges: "+partialGraph._core.graph.edges.length);
+            pr("graph emptied. ");
             partialGraph.emptyGraph();
+            pr("showing the graph2:");
+            pr("nº nodos: "+partialGraph._core.graph.nodes.length+"\tnº edges: "+partialGraph._core.graph.edges.length);
             for(var i in selections) {
                 partialGraph.addNode(i,Nodes[i]);
                 for(var j in nodes1[i].neighbours) { 
@@ -1180,6 +1129,8 @@ function changeToMeso(iwannagraph) {
                 }
             }            
             createEdgesForExistingNodes("Scholars");/**/
+            pr("showing the graph3:");
+            pr("nº nodos: "+partialGraph._core.graph.nodes.length+"\tnº edges: "+partialGraph._core.graph.edges.length);
         }
     }
     if(iwannagraph=="sociosemantic") {
