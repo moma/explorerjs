@@ -76,8 +76,8 @@ function cancelSelection () {
     selections = [];
     partialGraph.refresh();
     
-    $("#names").html(""); //Information extracted, just added
-    $("#opossiteNodes").html(""); //Information extracted, just added
+    $("#names").html(""); 
+    $("#opossiteNodes").html("");
     $("#information").html("");
     
     //Nodes colors go back to normal
@@ -190,19 +190,6 @@ function changeButton(buttonClicked) {
     if(buttonClicked=="unselectNodes"){
         document.getElementById("switch").src=fullurl+"graph_meso_null.png";
     }
-//    if(!is_empty(selections)){
-//        //Something selected
-//        if(document.getElementById("switch").src==fullurl+"graph_meso_null.png"){
-//            if(document.getElementById("viewType").src==fullurl+"status_macro_view.png"){
-//                document.getElementById("switch").src=fullurl+"graph_meso.png";
-//            }
-//        }
-//    }
-//    else {//Nothing selected
-//        if(document.getElementById("viewType").src==fullurl+"status_meso_view.png"){
-//            
-//        }
-//    }
 }
 
 function selection(currentNode){
@@ -335,7 +322,6 @@ function selection(currentNode){
     }
     partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8);
     partialGraph.refresh();
-//changeNewButtons();/**/
 }
 
 function getOpossitesNodes(node_id, entireNode) {
@@ -903,8 +889,6 @@ function hoverNodeEffectWhileFA2(flagEvent) {
             }
             else changeButton("selectNode");
         });
-    //        partialGraph.draw(2,1,2);
-    //overNodes=false;/**/
     }
     else {
         pr("flagEvent: "+flagEvent);
@@ -1018,8 +1002,6 @@ function createEdgesForExistingNodes (typeOfNodes) {
             }  
         }  
     }
-//partialGraph.stopForceAtlas2();
-//partialGraph.draw(1,1,1);
 }
 
 function changeInactvHover(imgClicked) { 
@@ -1157,6 +1139,7 @@ function changeToMeso(iwannagraph) {
             partialGraph.startForceAtlas2();
             socsemFlag=true;
             updateBothEdgeFilters();
+            updateNodeFilter();
         }
     }
      
@@ -1168,6 +1151,7 @@ function changeToMeso(iwannagraph) {
             }
             createEdgesForExistingNodes("Keywords");
             updateEdgeFilter(iwannagraph);
+            updateNodeFilter();
         }
     }
     highlightSelectedNodes(true);  
@@ -1200,6 +1184,7 @@ function changeToMacro(iwannagraph) {
             break;
         }
         updateEdgeFilter(iwannagraph);
+        updateNodeFilter();
     }
     if(iwannagraph=="social") {
         partialGraph.emptyGraph();
@@ -1226,6 +1211,7 @@ function changeToMacro(iwannagraph) {
             partialGraph.addEdge(e,Edges[e].sourceID,Edges[e].targetID,Edges[e]);/*tofix*/
         }
         updateBothEdgeFilters();
+        updateNodeFilter();
     }
     highlightSelectedNodes(true);
     //partialGraph.stopForceAtlas2();
@@ -1351,7 +1337,6 @@ function updateBothEdgeFilters() {
         slide: function(event, ui) {
             $.doTimeout(300,function (){
                 //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-                //pr();
                 edgesTemp = partialGraph._core.graph.edgesIndex;
                 for(i=0;i<scholarsEdgesSortedByWeight.length;i++){
                     if(i>=ui.values[0] && i<=ui.values[1]){
@@ -1384,7 +1369,6 @@ function updateBothEdgeFilters() {
         slide: function(event, ui) {
             $.doTimeout(300,function (){
                 //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-                //pr();
                 edgesTemp = partialGraph._core.graph.edgesIndex;
                 for(i=0;i<keywordsEdgesSortedByWeight.length;i++){
                     if(i>=ui.values[0] && i<=ui.values[1]){
@@ -1408,87 +1392,52 @@ function updateBothEdgeFilters() {
     });
 }
 
-function updateBothEdgeFilters() {
-    updateEdgeFilter("social");
-    updateEdgeFilter("semantic");
-//    edges=partialGraph._core.graph.edges;
-//    edgesByWeight=[];
-//    pr(edges);
-//    for(var i in edges){
-//        pr(edges[i]);
-//        if(typeof(edgesByWeight[edges[i].weight])=="undefined"){
-//            edgesByWeight[edges[i].weight]=[];
-//        }
-//        edgesByWeight[edges[i].weight].push(edges[i].id);
-//    }
-//    edgesBySortedWeight = ArraySortByKey(edgesByWeight, function(a,b){
-//        return b-a
-//    });
-//    $("#sliderAEdgeWeight").slider({
-//        range: true,
-//        min: 0,
-//        max: edgesBySortedWeight.length-1,
-//        values: [0, edgesBySortedWeight.length-1],
-//        step: 1,
-//        animate: true,
-//        slide: function(event, ui) {
-//            $.doTimeout(300,function (){
-//                console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-//                pr();
-//                edgesTemp = partialGraph._core.graph.edgesIndex;
-//                for(i=0;i<edgesBySortedWeight.length;i++){
-//                    if(i>=ui.values[0] && i<=ui.values[1]){
-//                        for (var j in edgesBySortedWeight[i].value){
-//                            id=edgesBySortedWeight[i].value[j];
-//                            if(typeof(edgesTemp[id])=="undefined"){
-//                                source=Edges[id].sourceID;
-//                                target=Edges[id].targetID;
-//                                edge=Edges[id];
-//                                partialGraph.addEdge(id,source,target,edge);
-//                            }
-//                        }
-//                    }
-//                    else {
-//                        partialGraph.dropEdge(edgesBySortedWeight[i].value);
-//                    }
-//                }
-//                partialGraph.draw();
-//            });
-//        }
-//    });
-//    $("#sliderBEdgeWeight").slider({
-//        range: true,
-//        min: 0,
-//        max: edgesBySortedWeight.length-1,
-//        values: [0, edgesBySortedWeight.length-1],
-//        step: 1,
-//        animate: true,
-//        slide: function(event, ui) {
-//            $.doTimeout(300,function (){
-//                console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-//                pr();
-//                edgesTemp = partialGraph._core.graph.edgesIndex;
-//                for(i=0;i<edgesBySortedWeight.length;i++){
-//                    if(i>=ui.values[0] && i<=ui.values[1]){
-//                        for (var j in edgesBySortedWeight[i].value){
-//                            id=edgesBySortedWeight[i].value[j];
-//                            if(typeof(edgesTemp[id])=="undefined"){
-//                                source=Edges[id].sourceID;
-//                                target=Edges[id].targetID;
-//                                edge=Edges[id];
-//                                partialGraph.addEdge(id,source,target,edge);
-//                            }
-//                        }
-//                    }
-//                    else {
-//                        partialGraph.dropEdge(edgesBySortedWeight[i].value);
-//                    }
-//                }
-//                partialGraph.draw();
-//            });
-//        }
-//    });
+function updateNodeFilter() {
+    nodes=partialGraph._core.graph.nodes;
+    nodesBySize=[];
+    for(var i in nodes){
+        if(nodes[i].id.charAt(0)=="N"){
+            if(typeof(nodesBySize[nodes[i].size])=="undefined"){
+                nodesBySize[nodes[i].size]=[];
+            }
+            nodesBySize[nodes[i].size].push(nodes[i].id);
+        }
+    }
+    nodesSortedBySize = ArraySortByKey(nodesBySize, function(a,b){
+        return b-a
+    });
+    
+    $("#sliderBNodeWeight").slider({
+        range: true,
+        min: 0,
+        max: nodesSortedBySize.length-1,
+        values: [0, nodesSortedBySize.length-1],
+        step: 1,
+        animate: true,
+        slide: function(event, ui) {
+            $.doTimeout(300,function (){
+                //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+                nodesTemp = partialGraph._core.graph.nodesIndex;
+                for(i=0;i<nodesSortedBySize.length;i++){
+                    if(i>=ui.values[0] && i<=ui.values[1]){
+                        for (var j in nodesSortedBySize[i].value){
+                            id=nodesSortedBySize[i].value[j];
+                            nodesTemp[id].hidden=false;
+                        }
+                    }
+                    else {
+                        for (var j in nodesSortedBySize[i].value){
+                            id=nodesSortedBySize[i].value[j];
+                            nodesTemp[id].hidden=true;
+                        }
+                    }
+                }
+                partialGraph.draw();
+            });
+        }
+    });
 }
+
 
 $(document).ready(function () {
     partialGraph = sigma.init(document.getElementById('sigma-example'))
@@ -1736,99 +1685,7 @@ $(document).ready(function () {
             pr("second if: "+edgesTF);
         }
     });
-    //    
-    //    $("#sliderAEdgeWeight").slider({
-    //        range: true,
-    //        min: 0.00045,
-    //        max: 5.0,
-    //        values: [0.00045, 5.0],
-    //        step: 0.01,
-    //        animate: true,
-    //        slide: function(event, ui) {
-    //            pr("here");
-    //            console.log("Docs - Peso Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-    //            edges=partialGraph._core.graph.edges;
-    //            arreglo=[];
-    //            for(var i in edges){
-    //                if(typeof(arreglo[edges[i].weight])=="undefined"){
-    //                    arreglo[edges[i].weight]=[];
-    //                }
-    //                arreglo[edges[i].weight].push(edges[i].id);
-    //            }
-    //            arregloOrdenado = ArraySortByKey(arreglo, function(a,b){
-    //                return b-a
-    //            });
-    //        //pr(arreglo.sort());
-    //        //            $.doTimeout(300,function (){
-    //        //                var edgesTemp = partialGraph._core.graph.edges;
-    //        //                for(i=0;i<edgesTemp.length;i++){
-    //        //                    if(edgesTemp[i].attr.attributes[1].val=="nodes1"){
-    //        //                        if(edgesTemp[i].weight>=ui.values[ 0 ] && edgesTemp[i].weight<=ui.values[ 1 ]) {
-    //        //                            edgesTemp[i].hidden=false;
-    //        //                        }
-    //        //                        else edgesTemp[i].hidden=true;
-    //        //                    }
-    //        //                }
-    //        //                partialGraph.draw();
-    //        //            });
-    //        }
-    //    });
-    $("#sliderANodeWeight").slider({
-        range: true,
-        min: 1,
-        max: 100,
-        values: [a_node_filter_min * 100.0, a_node_filter_max * 100.0],
-        animate: true,
-        slide: function(event, ui) {
-        //console.log("Docs - Peso Nodo: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-        }
-    });
-    $("#sliderBEdgeWeight").slider({
-        range: true,
-        min: 0.00045,
-        max: 5.0,
-        values: [0.00045, 5.0],
-        step: 0.01,
-        animate: true,
-        slide: function(event, ui) {
-            //console.log("NGrams-keywords - Peso Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-            $.doTimeout(300,function (){
-                var edgesTemp = partialGraph._core.graph.edges;
-                for(i=0;i<edgesTemp.length;i++){
-                    if(edgesTemp[i].attr.attributes[1].val=="nodes2"){
-                        if(edgesTemp[i].weight>=ui.values[ 0 ] && edgesTemp[i].weight<=ui.values[ 1 ]) {
-                            edgesTemp[i].hidden=false;
-                        }
-                        else edgesTemp[i].hidden=true;
-                    }
-                }
-                partialGraph.draw();
-            });
-        }
-    });
-    $("#sliderBNodeWeight").slider({
-        range: true,
-        min: parseInt(minNodeSize),
-        max: parseInt(maxNodeSize),
-        values: [parseInt(minNodeSize), parseInt(maxNodeSize)],
-        animate: true,
-        slide: function(event, ui) {
-            //console.log("NGrams - Peso Nodo: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-            $.doTimeout(300,function (){
-                partialGraph.iterNodes(function (n){
-                    if(n.id.charAt(0)=="N"){
-                        if(n.size>=parseFloat(ui.values[ 0 ]) && n.size<=parseFloat(ui.values[ 1 ])) {
-                            n.hidden = false;
-                        }
-                        else {
-                            n.hidden=true;
-                        }
-                    }
-                });
-                partialGraph.draw();
-            });
-        }
-    });
+   
     $("#sliderANodeSize").slider({
         value: 1,
         min: 1,
