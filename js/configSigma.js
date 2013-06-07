@@ -83,8 +83,8 @@ var sigmaJsGraphProperties = {
     //maxNodeSize: 5,
     //minNodeSize: 2,
     //maxNodeSize: 5,
-    minEdgeSize: 1,
-    maxEdgeSize: 1
+    minEdgeSize: 2,
+    maxEdgeSize: 2
 };
 var sigmaJsMouseProperties = {
     minRatio:0.3,

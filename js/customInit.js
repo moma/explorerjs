@@ -796,7 +796,6 @@ function initializeMap() {
         height : overviewHeight
     });
 //partialGraph.timeRefresh = setInterval(traceMap,60);
-
 }
 
 function updateMap(){
@@ -896,6 +895,7 @@ function hoverNodeEffectWhileFA2(flagEvent) {
                 changeButton("unselectNodes");
             }
             else changeButton("selectNode");
+            //overNodes=false;
         });
     }
     else {
@@ -925,6 +925,7 @@ function hoverNodeEffectWhileFA2(flagEvent) {
                 changeButton("unselectNodes");
             }
             else changeButton("selectNode");
+            //overNodes=false;
         });
         
     }
