@@ -219,9 +219,9 @@ function fullExtract(){
             var source = edgeNode.getAttribute('source');
             var target = edgeNode.getAttribute('target');
             var indice=source.charAt(0)+source.substring(3,source.length)+";"+target.charAt(0)+target.substring(3,target.length);
-            
+            //console.log(indice);
             Edges[indice] = {
-                id:         j,
+                id:         indice,
                 sourceID:   source,
                 targetID:   target,
                 label:      "",
@@ -251,6 +251,7 @@ function fullExtract(){
                 if(k==1) {
                     kind=val;
                     edge.label=val;
+                    Edges[indice].label=val;
                 }
                 if(k==0) {
                     Edges[indice].weight = val;

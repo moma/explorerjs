@@ -28,14 +28,13 @@ function ArraySortByKey(array, sortFunc){
         if (array.hasOwnProperty(k)) {
             tmp.push({
                 key: k, 
-                value:  array[k],
-                weight: k
+                value:  array[k]
             });
         }
     }
 
     tmp.sort(function(o1, o2) {
-        return sortFunc(o1.weight, o2.weight);/*tofix*/
+        return sortFunc(o1.key, o2.key);
     });   
     return tmp;      
 }
@@ -158,19 +157,25 @@ function changeButton(buttonClicked) {
         document.getElementById("socio").src=fullurl+"active_scholars.png";
         document.getElementById("semantic").src=fullurl+"inactive_tags.png";
         document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
-        swclick="social";
+        swclick="social";        
+        $("#category-A").show();
+        $("#category-B").hide();
     }  
     if(buttonClicked=="active_tags.png"){
         document.getElementById("socio").src=fullurl+"inactive_scholars.png";
         document.getElementById("semantic").src=fullurl+"active_tags.png";
         document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
-        swclick="semantic";
+        swclick="semantic";        
+        $("#category-A").hide();
+        $("#category-B").show();
     }
     if(buttonClicked=="active_sociosem.png"){
         document.getElementById("socio").src=fullurl+"inactive_scholars.png";
         document.getElementById("semantic").src=fullurl+"inactive_tags.png";
         document.getElementById("sociosemantic").src=fullurl+"active_sociosem.png";
         swclick="sociosemantic";
+        $("#category-A").show();
+        $("#category-B").show();
     }
     if(buttonClicked=="selectNode"){
         if(document.getElementById("switch").src==fullurl+"graph_meso_null.png"){
@@ -374,8 +379,7 @@ function updateLeftPanel(){
     var names='';
     var opossitesNodes='';
     var information='';
-
-
+    
     counter=0;
     for(var i in selections){
         if(counter==4){
@@ -400,7 +404,16 @@ function updateLeftPanel(){
             opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer; border: 1px solid green; " '
             +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+  '</span>&nbsp;&nbsp;';
 
-        }  
+        }        
+        opossitesNodes += '</div>';
+        information += '<br><h4>Information:</h4>';
+        information += '<ul>';
+            
+        for(var i in selections){        
+            information += '<li><b>' + Nodes[i].label + '</b></li>';
+            information += '<li>' + Nodes[i].attributes[3].val + '</li>';
+            information += '</ul><br>';
+        }
     }
     
     if(flag==2 && socsemFlag==false) {
@@ -424,22 +437,6 @@ function updateLeftPanel(){
         opossitesNodes += 'en construcçao...aaaaaaaa ';
     }
     
-    opossitesNodes += '</div>';
-    information += '<br><h4>Information:</h4>';
-    information += '<ul>';
-            
-        
-    for(var i in selections){        
-        information += '<li><b>' + Nodes[i].label + '</b></li>';
-        information += '<li>' + Nodes[i].attributes[3].val + '</li>';
-        information += '</ul><br>';
-    }
-    
-    
-    
-    
-    
-    
     $("#names").html(names); //Information extracted, just added
     $("#opossiteNodes").html(opossitesNodes); //Information extracted, just added
     $("#information").html(information); //Information extracted, just added
@@ -453,10 +450,8 @@ function updateLeftPanel(){
         $("#zonecentre").css({
             left: _cG.width() + "px"
         });
-    });
-    
-        
-}   
+    });       
+}
 
 function pushLabel(node_id,node_label) {
     labels.push({
@@ -475,8 +470,6 @@ function graphNGrams(node_id){
     document.getElementById("switch").src=fullurl+"graph_macro.png";
     
     console.log("in graphNGrams, node_id: "+node_id);
-    $("#category-B").show();
-    $("#category-A").hide();
     if(node_id.charAt(0)=="N") {
         labels = [];
         
@@ -531,8 +524,6 @@ function graphDocs(node_id){
     document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
     document.getElementById("switch").src=fullurl+"graph_macro.png";
     
-    $("#category-A").show();
-    $("#category-B").hide();
     partialGraph.emptyGraph(); 
     //partialGraph.stopForceAtlas2();
     
@@ -920,7 +911,6 @@ function hoverNodeEffectWhileFA2(flagEvent) {
         //If cursor_size>0 -> Multiple mouse-selection
         //Event: I've clicked the canvas (NOT A NODE) when I've a selection radius ON'
         partialGraph.bind('downnodes', function (event) {
-            pr("I'm here");
             if(checkBox==false) cancelSelection();
             x1 = partialGraph._core.mousecaptor.mouseX;
             y1 = partialGraph._core.mousecaptor.mouseY;
@@ -1127,12 +1117,10 @@ function changeHoverActive(img) {
             changeButton("graph_macro.png");
             changeToMeso(swclick);
             hasbeenclicked=true;       
-            updateDocsEdgeFilter();
         }
         if ( img.src==fullurl+"graph_macro.png" && hasbeenclicked==false){
             changeButton("graph_meso.png");
             changeToMacro(swclick);
-            updateDocsEdgeFilter();
         }
     }
 }
@@ -1150,6 +1138,7 @@ function changeToMeso(iwannagraph) {
                 }
             }            
             createEdgesForExistingNodes("Scholars");/**/
+            updateEdgeFilter(iwannagraph);
         }
     }
     if(iwannagraph=="sociosemantic") {
@@ -1167,9 +1156,7 @@ function changeToMeso(iwannagraph) {
             
             partialGraph.startForceAtlas2();
             socsemFlag=true;
-            //changeNewButtons();
-            $("#category-A").show();
-            $("#category-B").show();
+            updateBothEdgeFilters();
         }
     }
      
@@ -1180,8 +1167,8 @@ function changeToMeso(iwannagraph) {
                 partialGraph.addNode(i,Nodes[i]);
             }
             createEdgesForExistingNodes("Keywords");
+            updateEdgeFilter(iwannagraph);
         }
-
     }
     highlightSelectedNodes(true);  
     partialGraph.draw();
@@ -1212,6 +1199,7 @@ function changeToMacro(iwannagraph) {
                 highlightOpossites(opossites);
             break;
         }
+        updateEdgeFilter(iwannagraph);
     }
     if(iwannagraph=="social") {
         partialGraph.emptyGraph();
@@ -1225,7 +1213,8 @@ function changeToMacro(iwannagraph) {
             if(n.charAt(0)=='N')
                 highlightOpossites(opossites);
             break;
-        }          
+        }
+        updateEdgeFilter(iwannagraph);
     }
     
     if(iwannagraph=="sociosemantic") {
@@ -1235,7 +1224,8 @@ function changeToMacro(iwannagraph) {
         }        
         for(var e in Edges) {     
             partialGraph.addEdge(e,Edges[e].sourceID,Edges[e].targetID,Edges[e]);/*tofix*/
-        }                  
+        }
+        updateBothEdgeFilters();
     }
     highlightSelectedNodes(true);
     //partialGraph.stopForceAtlas2();
@@ -1267,46 +1257,237 @@ function justhide(){
     $("#availableView").hide();  
 }
 
-function updateDocsEdgeFilter() {
-    edges=partialGraph._core.graph.edges;
-    arreglo=[];
-    for(var i in edges){
-        if(typeof(arreglo[edges[i].weight])=="undefined"){
-            arreglo[edges[i].weight]=[];
-        }
-        arreglo[edges[i].weight].push(edges[i].id);
+function updateEdgeFilter(edgeFilterName) {
+    thing="";
+    if(edgeFilterName=="social") {
+        edgeFilterName="#sliderAEdgeWeight";
+        thing="nodes1";
     }
-    arregloOrdenado = ArraySortByKey(arreglo, function(a,b){
+    if(edgeFilterName=="semantic") {
+        edgeFilterName="#sliderBEdgeWeight";
+        thing="nodes2";
+    }
+    edges=partialGraph._core.graph.edges;
+    edgesByWeight=[];
+    for(var i in edges){
+        if(edges[i].label==thing){
+            if(typeof(edgesByWeight[edges[i].weight])=="undefined"){
+                edgesByWeight[edges[i].weight]=[];
+            }
+            edgesByWeight[edges[i].weight].push(edges[i].id);
+        }
+    }
+    edgesSortedByWeight = ArraySortByKey(edgesByWeight, function(a,b){
         return b-a
     });
-    $("#sliderAEdgeWeight").slider({
+    
+    $(edgeFilterName).slider({
         range: true,
         min: 0,
-        max: arregloOrdenado.length-1,
-        values: [0, arregloOrdenado.length-1],
+        max: edgesSortedByWeight.length-1,
+        values: [0, edgesSortedByWeight.length-1],
         step: 1,
         animate: true,
         slide: function(event, ui) {
-            //console.log("Docs - Peso Arista: "+ui.values[0]+" , "+ui.values[1]);
-            //pr(arreglo.sort());
             $.doTimeout(300,function (){
+                //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+                //pr();
                 edgesTemp = partialGraph._core.graph.edgesIndex;
-                for(i=0;i<arregloOrdenado.length;i++){
+                for(i=0;i<edgesSortedByWeight.length;i++){
                     if(i>=ui.values[0] && i<=ui.values[1]){
-                        for (var j in arregloOrdenado[i].value){
-                            edgesTemp[arregloOrdenado[i].value[j]].hidden=0;
+                        for (var j in edgesSortedByWeight[i].value){
+                            id=edgesSortedByWeight[i].value[j];
+                            if(typeof(edgesTemp[id])=="undefined"){
+                                source=Edges[id].sourceID;
+                                target=Edges[id].targetID;
+                                edge=Edges[id];
+                                partialGraph.addEdge(id,source,target,edge);
+                            }
                         }
                     }
                     else {
-                        for (var j in arregloOrdenado[i].value){
-                            edgesTemp[arregloOrdenado[i].value[j]].hidden=1;
-                        }
+                        partialGraph.dropEdge(edgesSortedByWeight[i].value);
                     }
                 }
                 partialGraph.draw();
             });
         }
     });
+}
+
+function updateBothEdgeFilters() {
+    edges=partialGraph._core.graph.edges;
+    scholarsEdgesByWeight=[];
+    keywordsEdgesByWeight=[];
+    for(var i in edges){
+        if(edges[i].label=="nodes1"){
+            if(typeof(scholarsEdgesByWeight[edges[i].weight])=="undefined"){
+                scholarsEdgesByWeight[edges[i].weight]=[];
+            }
+            scholarsEdgesByWeight[edges[i].weight].push(edges[i].id);
+        }
+        if(edges[i].label=="nodes2"){
+            if(typeof(keywordsEdgesByWeight[edges[i].weight])=="undefined"){
+                keywordsEdgesByWeight[edges[i].weight]=[];
+            }
+            keywordsEdgesByWeight[edges[i].weight].push(edges[i].id);            
+        }
+    }
+    scholarsEdgesSortedByWeight = ArraySortByKey(scholarsEdgesByWeight, function(a,b){
+        return b-a
+    });
+    
+    keywordsEdgesSortedByWeight = ArraySortByKey(keywordsEdgesByWeight, function(a,b){
+        return b-a
+    });
+    
+    $("#sliderAEdgeWeight").slider({
+        range: true,
+        min: 0,
+        max: scholarsEdgesSortedByWeight.length-1,
+        values: [0, scholarsEdgesSortedByWeight.length-1],
+        step: 1,
+        animate: true,
+        slide: function(event, ui) {
+            $.doTimeout(300,function (){
+                //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+                //pr();
+                edgesTemp = partialGraph._core.graph.edgesIndex;
+                for(i=0;i<scholarsEdgesSortedByWeight.length;i++){
+                    if(i>=ui.values[0] && i<=ui.values[1]){
+                        for (var j in scholarsEdgesSortedByWeight[i].value){
+                            id=scholarsEdgesSortedByWeight[i].value[j];
+                            if(typeof(edgesTemp[id])=="undefined"){
+                                source=Edges[id].sourceID;
+                                target=Edges[id].targetID;
+                                edge=Edges[id];
+                                partialGraph.addEdge(id,source,target,edge);
+                            }
+                        }
+                    }
+                    else {
+                        partialGraph.dropEdge(scholarsEdgesSortedByWeight[i].value);
+                    }
+                }
+                partialGraph.draw();
+            });
+        }
+    });
+    
+        $("#sliderBEdgeWeight").slider({
+        range: true,
+        min: 0,
+        max: keywordsEdgesSortedByWeight.length-1,
+        values: [0, keywordsEdgesSortedByWeight.length-1],
+        step: 1,
+        animate: true,
+        slide: function(event, ui) {
+            $.doTimeout(300,function (){
+                //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+                //pr();
+                edgesTemp = partialGraph._core.graph.edgesIndex;
+                for(i=0;i<keywordsEdgesSortedByWeight.length;i++){
+                    if(i>=ui.values[0] && i<=ui.values[1]){
+                        for (var j in keywordsEdgesSortedByWeight[i].value){
+                            id=keywordsEdgesSortedByWeight[i].value[j];
+                            if(typeof(edgesTemp[id])=="undefined"){
+                                source=Edges[id].sourceID;
+                                target=Edges[id].targetID;
+                                edge=Edges[id];
+                                partialGraph.addEdge(id,source,target,edge);
+                            }
+                        }
+                    }
+                    else {
+                        partialGraph.dropEdge(keywordsEdgesSortedByWeight[i].value);
+                    }
+                }
+                partialGraph.draw();
+            });
+        }
+    });
+}
+
+function updateBothEdgeFilters() {
+    updateEdgeFilter("social");
+    updateEdgeFilter("semantic");
+//    edges=partialGraph._core.graph.edges;
+//    edgesByWeight=[];
+//    pr(edges);
+//    for(var i in edges){
+//        pr(edges[i]);
+//        if(typeof(edgesByWeight[edges[i].weight])=="undefined"){
+//            edgesByWeight[edges[i].weight]=[];
+//        }
+//        edgesByWeight[edges[i].weight].push(edges[i].id);
+//    }
+//    edgesBySortedWeight = ArraySortByKey(edgesByWeight, function(a,b){
+//        return b-a
+//    });
+//    $("#sliderAEdgeWeight").slider({
+//        range: true,
+//        min: 0,
+//        max: edgesBySortedWeight.length-1,
+//        values: [0, edgesBySortedWeight.length-1],
+//        step: 1,
+//        animate: true,
+//        slide: function(event, ui) {
+//            $.doTimeout(300,function (){
+//                console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+//                pr();
+//                edgesTemp = partialGraph._core.graph.edgesIndex;
+//                for(i=0;i<edgesBySortedWeight.length;i++){
+//                    if(i>=ui.values[0] && i<=ui.values[1]){
+//                        for (var j in edgesBySortedWeight[i].value){
+//                            id=edgesBySortedWeight[i].value[j];
+//                            if(typeof(edgesTemp[id])=="undefined"){
+//                                source=Edges[id].sourceID;
+//                                target=Edges[id].targetID;
+//                                edge=Edges[id];
+//                                partialGraph.addEdge(id,source,target,edge);
+//                            }
+//                        }
+//                    }
+//                    else {
+//                        partialGraph.dropEdge(edgesBySortedWeight[i].value);
+//                    }
+//                }
+//                partialGraph.draw();
+//            });
+//        }
+//    });
+//    $("#sliderBEdgeWeight").slider({
+//        range: true,
+//        min: 0,
+//        max: edgesBySortedWeight.length-1,
+//        values: [0, edgesBySortedWeight.length-1],
+//        step: 1,
+//        animate: true,
+//        slide: function(event, ui) {
+//            $.doTimeout(300,function (){
+//                console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+//                pr();
+//                edgesTemp = partialGraph._core.graph.edgesIndex;
+//                for(i=0;i<edgesBySortedWeight.length;i++){
+//                    if(i>=ui.values[0] && i<=ui.values[1]){
+//                        for (var j in edgesBySortedWeight[i].value){
+//                            id=edgesBySortedWeight[i].value[j];
+//                            if(typeof(edgesTemp[id])=="undefined"){
+//                                source=Edges[id].sourceID;
+//                                target=Edges[id].targetID;
+//                                edge=Edges[id];
+//                                partialGraph.addEdge(id,source,target,edge);
+//                            }
+//                        }
+//                    }
+//                    else {
+//                        partialGraph.dropEdge(edgesBySortedWeight[i].value);
+//                    }
+//                }
+//                partialGraph.draw();
+//            });
+//        }
+//    });
 }
 
 $(document).ready(function () {
@@ -1326,7 +1507,7 @@ $(document).ready(function () {
     console.log("parsing...");        
     parse(gexfLocation);
     fullExtract(); 
-    updateDocsEdgeFilter();
+    updateEdgeFilter("social");
     console.log("Parsing complete.");
     /*======= Show some labels at the beginning =======*/
     minIn=50,
