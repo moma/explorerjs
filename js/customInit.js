@@ -387,8 +387,8 @@ function updateLeftPanel(){
                 break;
             }
             fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
-            opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer; border: 1px solid green; " '
-            +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+  '</span>&nbsp;&nbsp;';
+            opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer;" '
+            +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+  '</span>,&nbsp;&nbsp;';
 
         }        
         opossitesNodes += '</div>';
@@ -413,8 +413,8 @@ function updateLeftPanel(){
                 break;
             }
             fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
-            opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer; border: 1px solid green; " '
-            +js1+opos[i].key+js2+'>' + nodes1[opos[i].key].label+  '</span>&nbsp;&nbsp;';
+            opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer;" '
+            +js1+opos[i].key+js2+'>' + nodes1[opos[i].key].label+  '</span>,&nbsp;&nbsp;';
 
         }   
     }
@@ -447,13 +447,14 @@ function pushLabel(node_id,node_label) {
 }
 
 function graphNGrams(node_id){   
-    pr("\tin graphNGrams");
+    pr("\tin graphNGrams");/**/
     fullurl = returnBaseUrl()+"img/trans/";
     document.getElementById("viewType").src=fullurl+"status_meso_view.png";
     document.getElementById("socio").src=fullurl+"inactive_scholars.png";
     document.getElementById("semantic").src=fullurl+"active_tags.png";
     document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
     document.getElementById("switch").src=fullurl+"graph_macro.png";
+    
     
     console.log("in graphNGrams, node_id: "+node_id);
     if(node_id.charAt(0)=="N") {
@@ -496,7 +497,11 @@ function graphNGrams(node_id){
         } 
         var node = partialGraph._core.graph.nodesIndex[node_id];
         selection(node);
-        partialGraph.startForceAtlas2();
+        partialGraph.startForceAtlas2();        
+        updateEdgeFilter("semantic");
+        updateNodeFilter();
+        $("#category-A").hide();
+        $("#category-B").show();
     }
 }
         
@@ -548,7 +553,10 @@ function graphDocs(node_id){
         }
         var node = partialGraph._core.graph.nodesIndex[node_id];
         selection(node);
-        partialGraph.startForceAtlas2();
+        partialGraph.startForceAtlas2();        
+        $("#category-A").show();
+        $("#category-B").hide();
+        updateEdgeFilter("social");
     }
 }
        
@@ -1277,7 +1285,6 @@ function updateEdgeFilter(edgeFilterName) {
         slide: function(event, ui) {
             $.doTimeout(300,function (){
                 //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-                //pr();
                 edgesTemp = partialGraph._core.graph.edgesIndex;
                 for(i=0;i<edgesSortedByWeight.length;i++){
                     if(i>=ui.values[0] && i<=ui.values[1]){
@@ -1359,7 +1366,7 @@ function updateBothEdgeFilters() {
         }
     });
     
-        $("#sliderBEdgeWeight").slider({
+    $("#sliderBEdgeWeight").slider({
         range: true,
         min: 0,
         max: keywordsEdgesSortedByWeight.length-1,
