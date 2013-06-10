@@ -895,7 +895,7 @@ function hoverNodeEffectWhileFA2(flagEvent) {
                 changeButton("unselectNodes");
             }
             else changeButton("selectNode");
-            //overNodes=false;
+        //overNodes=false;
         });
     }
     else {
@@ -925,7 +925,7 @@ function hoverNodeEffectWhileFA2(flagEvent) {
                 changeButton("unselectNodes");
             }
             else changeButton("selectNode");
-            //overNodes=false;
+        //overNodes=false;
         });
         
     }
@@ -1231,8 +1231,10 @@ function changeToMacro(iwannagraph) {
 }
 
 function neweffectshow(){
-    $("#labelchange").show();
-    $("#availableView").show();  
+    if(!is_empty(selections)){    
+        $("#labelchange").show();
+        $("#availableView").show();  
+    }
 }
 
 function neweffecthide(){
@@ -1273,7 +1275,7 @@ function updateEdgeFilter(edgeFilterName) {
         }
     }
     edgesSortedByWeight = ArraySortByKey(edgesByWeight, function(a,b){
-        return b-a
+        return a-b
     });
     
     $(edgeFilterName).slider({
@@ -1328,11 +1330,11 @@ function updateBothEdgeFilters() {
         }
     }
     scholarsEdgesSortedByWeight = ArraySortByKey(scholarsEdgesByWeight, function(a,b){
-        return b-a
+        return a-b
     });
     
     keywordsEdgesSortedByWeight = ArraySortByKey(keywordsEdgesByWeight, function(a,b){
-        return b-a
+        return a-b
     });
     
     $("#sliderAEdgeWeight").slider({
@@ -1412,7 +1414,7 @@ function updateNodeFilter() {
         }
     }
     nodesSortedBySize = ArraySortByKey(nodesBySize, function(a,b){
-        return b-a
+        return a-b
     });
     
     $("#sliderBNodeWeight").slider({
