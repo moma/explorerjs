@@ -113,7 +113,6 @@ function highlightSelectedNodes(flag){
                 node.active = flag;
             }
             else if(i.charAt(0)=="N" && document.getElementById("semantic").src==fullurl+"active_tags.png") {
-                pr("printing i: "+i+" - flag: "+flag);
                 node = partialGraph._core.graph.nodesIndex[i];
                 node.active = flag;
             }
@@ -1113,12 +1112,7 @@ function changeHoverActive(img) {
             hasbeenclicked=true;       
         }
         if ( img.src==fullurl+"graph_macro.png" && hasbeenclicked==false){
-            changeButton("graph_meso.png");
-            pr("printing swclick:"+swclick);
-            pr(document.getElementById("socio").src);
-            pr(document.getElementById("semantic").src);
-            pr(document.getElementById("sociosemantic").src);
-            
+            changeButton("graph_meso.png");            
             changeToMacro(swclick);
         }
     }
@@ -1169,8 +1163,6 @@ function changeToMeso(iwannagraph) {
     }
      
     if(iwannagraph=="semantic") {
-        pr("yeah, i'm here");
-        pr("I'm changing from Macro to Meso and it's selected a NGram");
         if(!is_empty(opossites)){
             partialGraph.emptyGraph();
             if(swclick=="semantic") {
@@ -1232,7 +1224,6 @@ function changeToMacro(iwannagraph) {
         for(var n in selections){
             if(n.charAt(0)=='N')
                 highlightOpossites(opossites);
-            pr("i'm here now - iwannagraph: "+iwannagraph);
             break;
         }
         updateEdgeFilter(iwannagraph);
@@ -1714,12 +1705,10 @@ $(document).ready(function () {
             partialGraph.stopForceAtlas2();
             partialGraph.draw();
             edgesTF=true;
-            pr("first if: "+edgesTF);
         }
         else {
             partialGraph.startForceAtlas2();
             edgesTF=false;
-            pr("second if: "+edgesTF);
         }
     });
    
