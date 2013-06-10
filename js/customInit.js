@@ -105,8 +105,7 @@ function returnBaseUrl(){
 }
 
 function highlightSelectedNodes(flag){  
-    if(!is_empty(selections)){    
-        
+    if(!is_empty(selections)){            
         fullurl = returnBaseUrl()+"img/trans/";                
         for(var i in selections) {
             if(i.charAt(0)=="D" && document.getElementById("socio").src==fullurl+"active_scholars.png"){
@@ -114,6 +113,7 @@ function highlightSelectedNodes(flag){
                 node.active = flag;
             }
             else if(i.charAt(0)=="N" && document.getElementById("semantic").src==fullurl+"active_tags.png") {
+                pr("printing i: "+i+" - flag: "+flag);
                 node = partialGraph._core.graph.nodesIndex[i];
                 node.active = flag;
             }
@@ -137,6 +137,7 @@ function search(string) {
     });
     getOpossitesNodes(id_node, false);
     updateLeftPanel();
+    changeButton("selectNode");
 }
 
 function changeButton(buttonClicked) {  
@@ -502,6 +503,7 @@ function graphNGrams(node_id){
         updateNodeFilter();
         $("#category-A").hide();
         $("#category-B").show();
+        changeButton("active_tags.png");
     }
 }
         
@@ -556,7 +558,8 @@ function graphDocs(node_id){
         partialGraph.startForceAtlas2();        
         $("#category-A").show();
         $("#category-B").hide();
-        updateEdgeFilter("social");
+        updateEdgeFilter("social");        
+        changeButton("active_scholars.png");
     }
 }
        
@@ -1111,6 +1114,11 @@ function changeHoverActive(img) {
         }
         if ( img.src==fullurl+"graph_macro.png" && hasbeenclicked==false){
             changeButton("graph_meso.png");
+            pr("printing swclick:"+swclick);
+            pr(document.getElementById("socio").src);
+            pr(document.getElementById("semantic").src);
+            pr(document.getElementById("sociosemantic").src);
+            
             changeToMacro(swclick);
         }
     }
@@ -1121,14 +1129,22 @@ function changeToMeso(iwannagraph) {
     if(iwannagraph=="social") {
         if(!is_empty(selections)){
             partialGraph.emptyGraph();
-            for(var i in selections) {
-                partialGraph.addNode(i,Nodes[i]);
-                for(var j in nodes1[i].neighbours) { 
-                    id=nodes1[i].neighbours[j];
-                    partialGraph.addNode(id,Nodes[id]);
+            if(swclick=="social") {
+                for(var i in selections) {
+                    partialGraph.addNode(i,Nodes[i]);
+                    for(var j in nodes1[i].neighbours) { 
+                        id=nodes1[i].neighbours[j];
+                        partialGraph.addNode(id,Nodes[id]);
+                    }
+                }            
+                createEdgesForExistingNodes("Scholars");/**/
+            }
+            if(swclick=="semantic") {
+                for(var i in opossites) {
+                    partialGraph.addNode(i,Nodes[i]);
                 }
-            }            
-            createEdgesForExistingNodes("Scholars");/**/
+                createEdgesForExistingNodes("Keywords");                
+            }
             updateEdgeFilter(iwannagraph);
         }
     }
@@ -1153,17 +1169,27 @@ function changeToMeso(iwannagraph) {
     }
      
     if(iwannagraph=="semantic") {
+        pr("yeah, i'm here");
+        pr("I'm changing from Macro to Meso and it's selected a NGram");
         if(!is_empty(opossites)){
             partialGraph.emptyGraph();
-            for(var i in opossites) {
-                partialGraph.addNode(i,Nodes[i]);
+            if(swclick=="semantic") {
+                for(var i in selections) {
+                    graphNGrams(i);
+                }
+                createEdgesForExistingNodes("Keywords");
             }
-            createEdgesForExistingNodes("Keywords");
+            if(swclick=="social") {
+                for(var i in opossites) {
+                    partialGraph.addNode(i,Nodes[i]);
+                }
+                createEdgesForExistingNodes("Keywords");
+            }
             updateEdgeFilter(iwannagraph);
             updateNodeFilter();
         }
     }
-    highlightSelectedNodes(true);  
+    highlightSelectedNodes(true); 
     partialGraph.draw();
     partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8);
     partialGraph.refresh();
@@ -1206,6 +1232,7 @@ function changeToMacro(iwannagraph) {
         for(var n in selections){
             if(n.charAt(0)=='N')
                 highlightOpossites(opossites);
+            pr("i'm here now - iwannagraph: "+iwannagraph);
             break;
         }
         updateEdgeFilter(iwannagraph);
