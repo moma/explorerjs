@@ -181,6 +181,11 @@ function search(string) {
     else changeButton("selectNode");
 }
 
+function pushSWClick(arg){
+    swclickPrev = swclickActual;
+    swclickActual = arg;
+}
+
 function changeButton(buttonClicked) {  
     pr("\tin changeNewButtons");
     fullurl = returnBaseUrl()+"img/trans/";
@@ -199,7 +204,8 @@ function changeButton(buttonClicked) {
         document.getElementById("socio").src=fullurl+"active_scholars.png";
         document.getElementById("semantic").src=fullurl+"inactive_tags.png";
         document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
-        swclick="social";        
+        pushSWClick("social"); 
+        pr("swclickPrev: "+swclickPrev+" - swclickActual: "+swclickActual);
         $("#category-A").show();
         $("#category-B").hide();
     }  
@@ -207,7 +213,8 @@ function changeButton(buttonClicked) {
         document.getElementById("socio").src=fullurl+"inactive_scholars.png";
         document.getElementById("semantic").src=fullurl+"active_tags.png";
         document.getElementById("sociosemantic").src=fullurl+"inactive_sociosem.png";
-        swclick="semantic";        
+        pushSWClick("semantic"); 
+        pr("swclickPrev: "+swclickPrev+" - swclickActual: "+swclickActual);     
         $("#category-A").hide();
         $("#category-B").show();
     }
@@ -215,7 +222,8 @@ function changeButton(buttonClicked) {
         document.getElementById("socio").src=fullurl+"inactive_scholars.png";
         document.getElementById("semantic").src=fullurl+"inactive_tags.png";
         document.getElementById("sociosemantic").src=fullurl+"active_sociosem.png";
-        swclick="sociosemantic";
+        pushSWClick("sociosemantic");
+        pr("swclickPrev: "+swclickPrev+" - swclickActual: "+swclickActual);
         $("#category-A").show();
         $("#category-B").show();
     }
@@ -501,10 +509,9 @@ function graphNGrams(node_id){
     document.getElementById("switch").src=fullurl+"graph_macro.png";
     
     
-    console.log("in graphNGrams, node_id: "+node_id);
+    console.log("in graphNGrams, nodae_id: "+node_id);
     if(node_id.charAt(0)=="N") {
         labels = [];
-        
         partialGraph.emptyGraph(); 
         //partialGraph.stopForceAtlas2();
         
@@ -1153,22 +1160,23 @@ function changeHoverActive(img) {
         hasbeenclicked=false;
         if ( img.src==fullurl+"graph_meso.png"){
             changeButton("graph_macro.png");
-            changeToMeso(swclick);
+            changeToMeso(swclickActual);
             hasbeenclicked=true;       
         }
         if ( img.src==fullurl+"graph_macro.png" && hasbeenclicked==false){
             changeButton("graph_meso.png");            
-            changeToMacro(swclick);
+            changeToMacro(swclickActual);
         }
     }
 }
 
 function changeToMeso(iwannagraph) {  
-    pr("changing to Meso-"+iwannagraph);     
+    pr("changing to Meso-"+iwannagraph);  
+    fullurl = returnBaseUrl()+"img/trans/";   
     if(iwannagraph=="social") {
         if(!is_empty(selections)){
             partialGraph.emptyGraph();
-            if(swclick=="social") {
+            if(swclickActual=="social") {
                 for(var i in selections) {
                     partialGraph.addNode(i,Nodes[i]);
                     for(var j in nodes1[i].neighbours) { 
@@ -1178,7 +1186,7 @@ function changeToMeso(iwannagraph) {
                 }            
                 createEdgesForExistingNodes("Scholars");/**/
             }
-            if(swclick=="semantic") {
+            if(swclickActual=="semantic") {
                 for(var i in opossites) {
                     partialGraph.addNode(i,Nodes[i]);
                 }
@@ -1210,13 +1218,14 @@ function changeToMeso(iwannagraph) {
     if(iwannagraph=="semantic") {
         if(!is_empty(opossites)){
             partialGraph.emptyGraph();
-            if(swclick=="semantic") {
+            if(swclickPrev=="semantic") {
                 for(var i in selections) {
+                    pr("uh?");
                     graphNGrams(i);
                 }
                 createEdgesForExistingNodes("Keywords");
             }
-            if(swclick=="social") {
+            if(swclickPrev=="social") {
                 for(var i in opossites) {
                     partialGraph.addNode(i,Nodes[i]);
                 }

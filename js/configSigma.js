@@ -24,7 +24,8 @@ var checkBox=false;
 var overNodes=false;
 
 var swclickFlag=false;
-var swclick="";
+var swclickActual="";
+var swclickPrev="";
 
 var swhover=false;
 var socsemFlag=false;
