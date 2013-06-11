@@ -472,7 +472,6 @@ function updateLeftPanel(){
     $("#opossiteNodes").html(opossitesNodes); //Information extracted, just added
     $("#information").html(information); //Information extracted, just added
     
-    pr(opos);
     
     /***** The animation *****/
     _cG = $("#leftcolumn");
