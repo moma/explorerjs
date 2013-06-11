@@ -136,7 +136,49 @@ function search(string) {
     });
     getOpossitesNodes(id_node, false);
     updateLeftPanel();
-    changeButton("selectNode");
+    
+    
+    var greyColor = '#9b9e9e';/**/
+    overNodes=true;
+    var nodes = id_node;
+    var neighbors = {};
+    var e = partialGraph._core.graph.edges; 
+    for(i=0;i<e.length;i++){
+        if(nodes.indexOf(e[i].source.id)<0 && nodes.indexOf(e[i].target.id)<0){
+            if(!e[i].attr['grey']){
+                e[i].attr['true_color'] = e[i].color;
+                e[i].color = greyColor;
+                e[i].attr['grey'] = 1;
+            }
+        }else{
+            e[i].color = e[i].attr['grey'] ? e[i].attr['true_color'] : e[i].color;
+            e[i].attr['grey'] = 0;
+
+            neighbors[e[i].source.id] = 1;
+            neighbors[e[i].target.id] = 1;
+        }
+    }
+            
+    partialGraph.iterNodes(function(n){
+        if(!neighbors[n.id]){
+            if(!n.attr['grey']){
+                n.attr['true_color'] = n.color;
+                n.color = greyColor;
+                n.attr['grey'] = 1;
+            }
+        }else{
+            n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
+            n.attr['grey'] = 0;
+        }
+    }).draw(2,1,2);
+            
+    if(is_empty(selections)==true){  
+        $("#names").html(""); //Information extracted, just added
+        $("#opossiteNodes").html(""); //Information extracted, just added
+        $("#information").html("");
+        changeButton("unselectNodes");
+    }
+    else changeButton("selectNode");
 }
 
 function changeButton(buttonClicked) {  
@@ -376,7 +418,8 @@ function updateLeftPanel(){
         counter++;
     }
     minFont=12;
-    maxFont=(minFont+oposMAX)-1;  
+    //maxFont=(minFont+oposMAX)-1;  
+    maxFont=20;
     js2='\');"';
     if(flag==1) {
         opossitesNodes += '<br><h4>Keywords: </h4><div style="margin: 5px 5px;">';
@@ -386,7 +429,8 @@ function updateLeftPanel(){
                 opossitesNodes += '<li>[...]</li>';
                 break;
             }
-            fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
+            //fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
+            fontSize=minFont+(opos[i].value-1)*((maxFont-minFont)/(oposMAX-1));
             opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer;" '
             +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+  '</span>,&nbsp;&nbsp;';
 
@@ -412,7 +456,8 @@ function updateLeftPanel(){
                 opossitesNodes += '<li>[...]</li>';
                 break;
             }
-            fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
+            //fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
+            fontSize=minFont+(opos[i].value-1)*((maxFont-minFont)/(oposMAX-1));
             opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer;" '
             +js1+opos[i].key+js2+'>' + nodes1[opos[i].key].label+  '</span>,&nbsp;&nbsp;';
 
@@ -426,6 +471,8 @@ function updateLeftPanel(){
     $("#names").html(names); //Information extracted, just added
     $("#opossiteNodes").html(opossitesNodes); //Information extracted, just added
     $("#information").html(information); //Information extracted, just added
+    
+    pr(opos);
     
     /***** The animation *****/
     _cG = $("#leftcolumn");
@@ -839,15 +886,15 @@ function traceMap() {
     partialGraph.ctxMini.strokeRect( _x, _y, _w, _h );
 }
 
-function updateDownNodeEvent(flagEvent){
+function updateDownNodeEvent(selectionRadius){
     partialGraph.unbind("downnodes");
     partialGraph.unbind("overnodes");
     partialGraph.unbind("outnodes");
-    hoverNodeEffectWhileFA2(flagEvent);
+    hoverNodeEffectWhileFA2(selectionRadius);
 }
 
-function hoverNodeEffectWhileFA2(flagEvent) {
-    if(flagEvent==false){
+function hoverNodeEffectWhileFA2(selectionRadius) {
+    if(selectionRadius==false){
         //If cursor_size=0 -> Normal and single mouse-selection
         alertCheckBox(checkBox);
         partialGraph.bind('downnodes', function (event) {
@@ -901,7 +948,7 @@ function hoverNodeEffectWhileFA2(flagEvent) {
         });
     }
     else {
-        pr("flagEvent: "+flagEvent);
+        pr("flagEvent: "+selectionRadius);
         //If cursor_size>0 -> Multiple mouse-selection
         //Event: I've clicked the canvas (NOT A NODE) when I've a selection radius ON'
         partialGraph.bind('downnodes', function (event) {
