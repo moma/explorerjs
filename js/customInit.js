@@ -184,6 +184,7 @@ function search(string) {
 function pushSWClick(arg){
     swclickPrev = swclickActual;
     swclickActual = arg;
+    pr("1. swclickPrev: "+swclickPrev+" - swclickActual: "+swclickActual);
 }
 
 function changeButton(buttonClicked) {  
@@ -1159,24 +1160,26 @@ function changeHoverActive(img) {
     if(img.id=="switch") { 
         hasbeenclicked=false;
         if ( img.src==fullurl+"graph_meso.png"){
-            changeButton("graph_macro.png");
+            changeButton("graph_macro.png");   
+            pushSWClick(swclickActual);
             changeToMeso(swclickActual);
             hasbeenclicked=true;       
         }
         if ( img.src==fullurl+"graph_macro.png" && hasbeenclicked==false){
-            changeButton("graph_meso.png");            
+            changeButton("graph_meso.png");    
+            pushSWClick(swclickActual);
             changeToMacro(swclickActual);
         }
     }
 }
 
-function changeToMeso(iwannagraph) {  
+function changeToMeso(iwannagraph) { 
     pr("changing to Meso-"+iwannagraph);  
     fullurl = returnBaseUrl()+"img/trans/";   
     if(iwannagraph=="social") {
         if(!is_empty(selections)){
             partialGraph.emptyGraph();
-            if(swclickActual=="social") {
+            if(swclickPrev=="social") {
                 for(var i in selections) {
                     partialGraph.addNode(i,Nodes[i]);
                     for(var j in nodes1[i].neighbours) { 
@@ -1186,11 +1189,19 @@ function changeToMeso(iwannagraph) {
                 }            
                 createEdgesForExistingNodes("Scholars");/**/
             }
-            if(swclickActual=="semantic") {
-                for(var i in opossites) {
-                    partialGraph.addNode(i,Nodes[i]);
-                }
-                createEdgesForExistingNodes("Keywords");                
+            if(swclickPrev=="semantic") {
+                for(var i in selections) {
+                    if(i.charAt(0)=="D"){
+                        graphDocs(i);
+                    }
+                    if(i.charAt(0)=="N"){
+                        for(var j in opossites) {
+                            partialGraph.addNode(j,Nodes[j]);                            
+                        }
+                        createEdgesForExistingNodes("Scholars");
+                        break;
+                    }
+                }                
             }
             updateEdgeFilter(iwannagraph);
         }
@@ -1218,18 +1229,26 @@ function changeToMeso(iwannagraph) {
     if(iwannagraph=="semantic") {
         if(!is_empty(opossites)){
             partialGraph.emptyGraph();
+            //pr("2. swclickPrev: "+swclickPrev+" - swclickActual: "+swclickActual);
             if(swclickPrev=="semantic") {
                 for(var i in selections) {
-                    pr("uh?");
                     graphNGrams(i);
                 }
                 createEdgesForExistingNodes("Keywords");
             }
             if(swclickPrev=="social") {
-                for(var i in opossites) {
-                    partialGraph.addNode(i,Nodes[i]);
-                }
-                createEdgesForExistingNodes("Keywords");
+                for(var i in selections) {
+                    if(i.charAt(0)=="N"){
+                        graphNGrams(i);
+                    }
+                    if(i.charAt(0)=="D"){
+                        for(var j in opossites) {
+                            partialGraph.addNode(j,Nodes[j]);                            
+                        }
+                        createEdgesForExistingNodes("Keywords");
+                        break;
+                    }
+                }    
             }
             updateEdgeFilter(iwannagraph);
             updateNodeFilter();
@@ -1248,7 +1267,7 @@ function highlightOpossites (list){/*tofix*/
     }
 }
 
-function changeToMacro(iwannagraph) {  
+function changeToMacro(iwannagraph) { 
     pr("changing to Macro-"+iwannagraph);
     fullurl = returnBaseUrl()+"img/trans/";
     if(iwannagraph=="semantic") {
@@ -1539,6 +1558,7 @@ $(document).ready(function () {
     parse(gexfLocation);
     fullExtract(); 
     updateEdgeFilter("social");
+    pushSWClick("social");
     console.log("Parsing complete.");
     /*======= Show some labels at the beginning =======*/
     minIn=50,
