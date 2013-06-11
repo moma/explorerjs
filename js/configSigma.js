@@ -51,6 +51,8 @@ var Edges = [];
 
 var numberOfDocs=0;
 var numberOfNGrams=0;
+var semanticConverged=0;
+var socialConverged=0;
 
 var selections = [];
 var opossites = {};

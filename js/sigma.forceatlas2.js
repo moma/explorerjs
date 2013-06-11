@@ -245,8 +245,14 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         
         var convg= ((Math.pow(nodes.length,2))/promdxdy);    /**/
         var swingingVSnodes_length = swingingSum/nodes.length;     /**/
-        if(convg > swingingVSnodes_length){          
-            partialGraph.stopForceAtlas2();     
+        if(convg > swingingVSnodes_length){ 
+            if(numberOfDocs==nodes.length){
+                socialConverged++;
+            }
+            if(numberOfNGrams==nodes.length ){
+                semanticConverged++;
+            }
+            partialGraph.stopForceAtlas2(); 
         }
         
         self.p.totalEffectiveTraction = totalEffectiveTraction;
