@@ -95,6 +95,8 @@ function fullExtract(){
     labels = [];
     minNodeSize=5.00;
     maxNodeSize=5.00;
+    numberOfDocs=0;
+    numberOfNGrams=0;
     for(i=0; i<nodesNodes.length; i++){
         var nodesNode = nodesNodes[i];  // Each xml node 'nodes' (plural)
         var nodeNodes = nodesNode.getElementsByTagName('node'); // The list of xml nodes 'node' (no 's')
@@ -185,6 +187,7 @@ function fullExtract(){
             }
                 
             if(node.attributes[0].val=="Document"){
+                numberOfDocs++;
                 node.size=5.0;
                 partialGraph.addNode(id,node);
                 labels.push({
@@ -193,6 +196,7 @@ function fullExtract(){
                 });
             }
             else {
+                numberOfNGrams++;
                 if(parseInt(node.size) < parseInt(minNodeSize)) minNodeSize= node.size;
                 if(parseInt(node.size) > parseInt(maxNodeSize)) maxNodeSize= node.size;
             }

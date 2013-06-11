@@ -49,6 +49,9 @@ var labels = [];
 var Nodes = []; 
 var Edges = [];
 
+var numberOfDocs=0;
+var numberOfNGrams=0;
+
 var selections = [];
 var opossites = {};
 var opos=[];

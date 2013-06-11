@@ -471,8 +471,7 @@ function updateLeftPanel(){
     $("#names").html(names); //Information extracted, just added
     $("#opossiteNodes").html(opossitesNodes); //Information extracted, just added
     $("#information").html(information); //Information extracted, just added
-    
-    
+        
     /***** The animation *****/
     _cG = $("#leftcolumn");
     _cG.animate({
