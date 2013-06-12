@@ -418,14 +418,18 @@ function updateLeftPanel(){
     var information='';
     
     counter=0;
+    names += '<h4>';
     for(var i in selections){
         if(counter==4){
-            names += '<h3><div class="largepill"></div>[...]</h3>';
+            names += '<h4>[...]</h4>';
             break;
         }
-        names += '<h3><div class="largepill"></div>' + Nodes[i].label + ', </h3>';
+        names += Nodes[i].label+', ';
         counter++;
     }
+    names += '</h4>';
+    
+    
     minFont=12;
     //maxFont=(minFont+oposMAX)-1;  
     maxFont=20;
