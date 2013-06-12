@@ -958,7 +958,7 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
         });
     }
     else {
-        pr("flagEvent: "+selectionRadius);
+        pr("selectionRadius?: "+selectionRadius);
         //If cursor_size>0 -> Multiple mouse-selection
         //Event: I've clicked the canvas (NOT A NODE) when I've a selection radius ON'
         partialGraph.bind('downnodes', function (event) {
@@ -1311,8 +1311,41 @@ function changeToMacro(iwannagraph) {
         for(var n in Nodes) {  
             partialGraph.addNode(n,Nodes[n]);          
         }        
-        for(var e in Edges) {     
-            partialGraph.addEdge(e,Edges[e].sourceID,Edges[e].targetID,Edges[e]);/*tofix*/
+        for(var e in Edges) {  
+            if(Edges[e].label=="nodes1" || Edges[e].label=="nodes2"){
+                st=e.split(";");
+                index = partialGraph._core.graph.edgesIndex;
+                if(typeof(index[st[0]+";"+st[1]])=="undefined" &&
+                   typeof(index[st[1]+";"+st[0]])=="undefined"
+                  ){
+                          if(Edges[st[0]+";"+st[1]].weight == Edges[st[1]+";"+st[0]].weight){
+                              partialGraph.addEdge(
+                                st[0]+";"+st[1],
+                                Edges[st[0]+";"+st[1]].sourceID,
+                                Edges[st[0]+";"+st[1]].targetID,
+                                Edges[st[0]+";"+st[1]]);
+                          }
+                          else {
+                              if(Edges[st[0]+";"+st[1]].weight > Edges[st[1]+";"+st[0]].weight){
+                                partialGraph.addEdge(
+                                  st[0]+";"+st[1],
+                                  Edges[st[0]+";"+st[1]].sourceID,
+                                  Edges[st[0]+";"+st[1]].targetID,
+                                  Edges[st[0]+";"+st[1]]);
+                              }
+                              else {
+                                partialGraph.addEdge(
+                                  st[1]+";"+st[0],
+                                  Edges[st[1]+";"+st[0]].sourceID,
+                                  Edges[st[1]+";"+st[0]].targetID,
+                                  Edges[st[1]+";"+st[0]]);                                  
+                              }
+                          }
+                }                
+            }
+            if(Edges[e].label=="bipartite"){
+                partialGraph.addEdge(e,Edges[e].sourceID,Edges[e].targetID,Edges[e]);
+            }
         }
         updateBothEdgeFilters();
         updateNodeFilter();
