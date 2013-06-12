@@ -1207,6 +1207,25 @@ function changeToMeso(iwannagraph) {
                     }
                 }                
             }
+            if(swclickPrev=="sociosemantic") {      
+                for(var i in selections) {
+                    if(i.charAt(0)=="D"){
+                        partialGraph.addNode(i,Nodes[i]);
+                        for(var j in nodes1[i].neighbours) { 
+                            id=nodes1[i].neighbours[j];
+                            partialGraph.addNode(id,Nodes[id]);
+                        }
+                        createEdgesForExistingNodes("Scholars");
+                    }
+                    if(i.charAt(0)=="N"){
+                        for(var j in opossites) {
+                            partialGraph.addNode(j,Nodes[j]);                            
+                        }
+                        createEdgesForExistingNodes("Scholars");
+                        break;
+                    }
+                }                
+            }
             updateEdgeFilter(iwannagraph);
         }
     }
@@ -1252,9 +1271,28 @@ function changeToMeso(iwannagraph) {
                         createEdgesForExistingNodes("Keywords");
                         break;
                     }
-                }    
+                } 
             }
-            updateEdgeFilter(iwannagraph);
+            if(swclickPrev=="sociosemantic") {                     
+                for(var i in selections) {
+                    if(i.charAt(0)=="D"){                        
+                        for(var j in opossites) {
+                            partialGraph.addNode(j,Nodes[j]);                            
+                        }
+                        createEdgesForExistingNodes("Keywords");
+                        break;
+                    }
+                    if(i.charAt(0)=="N"){                        
+                        partialGraph.addNode(i,Nodes[i]);
+                        for(var j in nodes2[i].neighbours) { 
+                            id=nodes2[i].neighbours[j];
+                            partialGraph.addNode(id,Nodes[id]);
+                        }
+                        createEdgesForExistingNodes("Keywords");
+                    }
+                }                
+            }
+            updateEdgeFilter(iwannagraph);  
             updateNodeFilter();
         }
     }
@@ -1316,31 +1354,31 @@ function changeToMacro(iwannagraph) {
                 st=e.split(";");
                 index = partialGraph._core.graph.edgesIndex;
                 if(typeof(index[st[0]+";"+st[1]])=="undefined" &&
-                   typeof(index[st[1]+";"+st[0]])=="undefined"
-                  ){
-                          if(Edges[st[0]+";"+st[1]].weight == Edges[st[1]+";"+st[0]].weight){
-                              partialGraph.addEdge(
+                    typeof(index[st[1]+";"+st[0]])=="undefined"
+                    ){
+                    if(Edges[st[0]+";"+st[1]].weight == Edges[st[1]+";"+st[0]].weight){
+                        partialGraph.addEdge(
+                            st[0]+";"+st[1],
+                            Edges[st[0]+";"+st[1]].sourceID,
+                            Edges[st[0]+";"+st[1]].targetID,
+                            Edges[st[0]+";"+st[1]]);
+                    }
+                    else {
+                        if(Edges[st[0]+";"+st[1]].weight > Edges[st[1]+";"+st[0]].weight){
+                            partialGraph.addEdge(
                                 st[0]+";"+st[1],
                                 Edges[st[0]+";"+st[1]].sourceID,
                                 Edges[st[0]+";"+st[1]].targetID,
                                 Edges[st[0]+";"+st[1]]);
-                          }
-                          else {
-                              if(Edges[st[0]+";"+st[1]].weight > Edges[st[1]+";"+st[0]].weight){
-                                partialGraph.addEdge(
-                                  st[0]+";"+st[1],
-                                  Edges[st[0]+";"+st[1]].sourceID,
-                                  Edges[st[0]+";"+st[1]].targetID,
-                                  Edges[st[0]+";"+st[1]]);
-                              }
-                              else {
-                                partialGraph.addEdge(
-                                  st[1]+";"+st[0],
-                                  Edges[st[1]+";"+st[0]].sourceID,
-                                  Edges[st[1]+";"+st[0]].targetID,
-                                  Edges[st[1]+";"+st[0]]);                                  
-                              }
-                          }
+                        }
+                        else {
+                            partialGraph.addEdge(
+                                st[1]+";"+st[0],
+                                Edges[st[1]+";"+st[0]].sourceID,
+                                Edges[st[1]+";"+st[0]].targetID,
+                                Edges[st[1]+";"+st[0]]);                                  
+                        }
+                    }
                 }                
             }
             if(Edges[e].label=="bipartite"){
