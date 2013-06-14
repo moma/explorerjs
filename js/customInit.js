@@ -735,167 +735,6 @@ function alertCheckBox(eventCheck){
     
 }
 
-function trackMouse() {
-    var ctx = partialGraph._core.domElements.mouse.getContext('2d');
-    ctx.globalCompositeOperation = "source-over";
-    ctx.clearRect(0, 0, partialGraph._core.domElements.nodes.width, partialGraph._core.domElements.nodes.height);
-
-    var x;
-    var y;
-
-    x = partialGraph._core.mousecaptor.mouseX;
-    y = partialGraph._core.mousecaptor.mouseY;
-    
-    ctx.strokeStyle = '#000';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(x, y, cursor_size, 0, Math.PI * 2, true);
-    ctx.closePath();
-    ctx.stroke();
-};
-
-function changeGraphPosition(evt, echelle) {
-    document.body.style.cursor = "move";
-    var _coord = {
-        x : evt.pageX,
-        y : evt.pageY
-    };
-    console.log("changeGraphPosition... cordx: "+_coord.x+" - cordy: "+_coord.y);
-    partialGraph.centreX += ( partialGraph.lastMouse.x - _coord.x ) / echelle;
-    partialGraph.centreY += ( partialGraph.lastMouse.y - _coord.y ) / echelle;
-    partialGraph.lastMouse = _coord;
-}
-
-function onOverviewMove(evt) {
-    console.log("onOverViewMove"); 
-    /*
-     pageX: 1247   pageY: 216
-     screenX: 1188  screenY: 307
-    
-     pageX: 1444    pageY: 216
-     screenX: 1365  screenY: 307
-     */
-    
-    if (partialGraph.dragOn) {
-        changeGraphPosition(evt,-overviewScale);
-    }
-}
-
-function startMove(evt){
-    console.log("startMove");
-    evt.preventDefault();
-    partialGraph.dragOn = true;
-    partialGraph.lastMouse = {
-        x : evt.pageX,
-        y : evt.pageY
-    }
-    partialGraph.mouseHasMoved = false;
-}
-
-function endMove(evt){
-    console.log("endMove");
-    document.body.style.cursor = "default";
-    partialGraph.dragOn = false;
-    partialGraph.mouseHasMoved = false;
-}
-
-function onGraphScroll(evt, delta) {
-    partialGraph.totalScroll += delta;
-    if (Math.abs(partialGraph.totalScroll) >= 1) {
-        if (partialGraph.totalScroll < 0) {
-            if (partialGraph.position().ratio > minZoom) {
-                partialGraph.position().ratio--;
-                var _el = $(this),
-                _off = $(this).offset(),
-                _deltaX = evt.pageX - _el.width() / 2 - _off.left,
-                _deltaY = evt.pageY - _el.height() / 2 - _off.top;
-                partialGraph.centreX -= ( Math.SQRT2 - 1 ) * _deltaX / partialGraph.echelleGenerale;
-                partialGraph.centreY -= ( Math.SQRT2 - 1 ) * _deltaY / partialGraph.echelleGenerale;
-                $("#zoomSlider").slider("value",partialGraph.position().ratio);
-            }
-        } else {
-            if (partialGraph.position().ratio < maxZoom) {
-                partialGraph.position().ratio++;
-                partialGraph.echelleGenerale = Math.pow( Math.SQRT2, partialGraph.position().ratio );
-                var _el = $(this),
-                _off = $(this).offset(),
-                _deltaX = evt.pageX - _el.width() / 2 - _off.left,
-                _deltaY = evt.pageY - _el.height() / 2 - _off.top;
-                partialGraph.centreX += ( Math.SQRT2 - 1 ) * _deltaX / partialGraph.echelleGenerale;
-                partialGraph.centreY += ( Math.SQRT2 - 1 ) * _deltaY / partialGraph.echelleGenerale;
-                $("#zoomSlider").slider("value",partialGraph.position().ratio);
-            }
-        }
-        partialGraph.totalScroll = 0;
-    }
-}
-
-function initializeMap() {
-    //clearInterval(partialGraph.timeRefresh);
-    $("#zoomSlider").slider({
-        orientation: "vertical",
-        value: 1,//partialGraph.position().ratio,
-        min: minZoom,
-        max: maxZoom,
-        range: "min",
-        step: 0.1,
-        slide: function( event, ui ) {
-            partialGraph.zoomTo(
-                partialGraph._core.domElements.nodes.width / 2, 
-                partialGraph._core.domElements.nodes.height / 2, 
-                ui.value);
-        }
-    });
-    $("#overviewzone").css({
-        width : overviewWidth + "px",
-        height : overviewHeight + "px"
-    });
-    $("#overview").attr({
-        width : overviewWidth,
-        height : overviewHeight
-    });
-//partialGraph.timeRefresh = setInterval(traceMap,60);
-}
-
-function updateMap(){
-//    console.log("updating MiniMap");
-//    partialGraph.iterNodes(function(n){
-//        partialGraph.ctxMini.fillStyle = n.color;
-//        partialGraph.ctxMini.beginPath();
-//        numPosibilidades = 2.5 - 0.9;
-//        aleat = Math.random() * numPosibilidades;
-//        partialGraph.ctxMini.arc(((n.displayX/1.2)-200)*0.25 , ((n.displayY/1.2)+110)*0.25 , (0.9 + aleat)*0.25+1 , 0 , Math.PI*2 , true);
-//        //console.log(n.x*1000 +" * 0.25"+" _ "+ n.y*1000 +" * 0.25"+" _ "+ (0.9 + aleat) +" * 0.25 + 1");
-//        
-//        partialGraph.ctxMini.closePath();
-//        partialGraph.ctxMini.fill();
-//        
-//    });
-//    partialGraph.imageMini = partialGraph.ctxMini.getImageData(0, 0, 200, 175);
-}
-
-function traceMap() {
-    pr("\ttracingmap");
-    partialGraph.echelleGenerale = Math.pow( Math.SQRT2, partialGraph.position().ratio );
-    partialGraph.decalageX = ( partialGraph._core.width / 2 ) - ( partialGraph.centreX * partialGraph.echelleGenerale );
-    partialGraph.decalageY = ( partialGraph._core.height / 2 ) - ( partialGraph.centreY * partialGraph.echelleGenerale );
-    
-    
-    partialGraph.ctxMini.putImageData(partialGraph.imageMini, 0, 0);
-    
-    var _r = 0.25 / partialGraph.echelleGenerale,
-    _x = - _r * partialGraph.decalageX,
-    _y = - _r * partialGraph.decalageY,
-    _w = _r * partialGraph._core.width,
-    _h = _r * partialGraph._core.height;
-    partialGraph.ctxMini.strokeStyle = "rgb(220,0,0)";
-    partialGraph.ctxMini.lineWidth = 3;
-    partialGraph.ctxMini.fillStyle = "rgba(120,120,120,0.2)";
-    partialGraph.ctxMini.beginPath();
-    partialGraph.ctxMini.fillRect( _x, _y, _w, _h );
-    partialGraph.ctxMini.strokeRect( _x, _y, _w, _h );
-}
-
 function updateDownNodeEvent(selectionRadius){
     partialGraph.unbind("downnodes");
     partialGraph.unbind("overnodes");
@@ -1614,6 +1453,175 @@ function updateNodeFilter() {
     });
 }
 
+function trackMouse() {
+    var ctx = partialGraph._core.domElements.mouse.getContext('2d');
+    ctx.globalCompositeOperation = "source-over";
+    ctx.clearRect(0, 0, partialGraph._core.domElements.nodes.width, partialGraph._core.domElements.nodes.height);
+
+    var x;
+    var y;
+
+    x = partialGraph._core.mousecaptor.mouseX;
+    y = partialGraph._core.mousecaptor.mouseY;
+    
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(x, y, cursor_size, 0, Math.PI * 2, true);
+    ctx.closePath();
+    ctx.stroke();
+};
+
+function changeGraphPosition(evt, echelle) {
+    document.body.style.cursor = "move";
+    var _coord = {
+        x : evt.pageX,
+        y : evt.pageY
+    };
+    console.log("changeGraphPosition... cordx: "+_coord.x+" - cordy: "+_coord.y);
+    partialGraph.centreX += ( partialGraph.lastMouse.x - _coord.x ) / echelle;
+    partialGraph.centreY += ( partialGraph.lastMouse.y - _coord.y ) / echelle;
+    partialGraph.lastMouse = _coord;
+}
+
+function onOverviewMove(evt) {
+    console.log("onOverViewMove"); 
+    /*
+     pageX: 1247   pageY: 216
+     screenX: 1188  screenY: 307
+    
+     pageX: 1444    pageY: 216
+     screenX: 1365  screenY: 307
+     */
+    
+    if (partialGraph.dragOn) {
+        changeGraphPosition(evt,-overviewScale);
+    }
+}
+
+function startMove(evt){
+    console.log("startMove");
+    evt.preventDefault();
+    partialGraph.dragOn = true;
+    partialGraph.lastMouse = {
+        x : evt.pageX,
+        y : evt.pageY
+    }
+    partialGraph.mouseHasMoved = false;
+}
+
+function endMove(evt){
+    console.log("endMove");
+    document.body.style.cursor = "default";
+    partialGraph.dragOn = false;
+    partialGraph.mouseHasMoved = false;
+}
+
+function onGraphScroll(evt, delta) {
+    partialGraph.totalScroll += delta;
+    if (Math.abs(partialGraph.totalScroll) >= 1) {
+        if (partialGraph.totalScroll < 0) {
+            //ZoomOUT
+            if (partialGraph.position().ratio > sigmaJsMouseProperties.minRatio) {
+                partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, partialGraph._core.mousecaptor.ratio * 0.5);
+                var _el = $(this),
+                _off = $(this).offset(),
+                _deltaX = evt.pageX - _el.width() / 2 - _off.left,
+                _deltaY = evt.pageY - _el.height() / 2 - _off.top;
+                partialGraph.centreX -= ( Math.SQRT2 - 1 ) * _deltaX / partialGraph.echelleGenerale;
+                partialGraph.centreY -= ( Math.SQRT2 - 1 ) * _deltaY / partialGraph.echelleGenerale;
+                $("#zoomSlider").slider("value",partialGraph.position().ratio);
+            }
+        } else {
+            //ZoomIN
+            if (partialGraph.position().ratio < sigmaJsMouseProperties.maxRatio) {
+                partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, partialGraph._core.mousecaptor.ratio * 1.5);
+                partialGraph.echelleGenerale = Math.pow( Math.SQRT2, partialGraph.position().ratio );
+                var _el = $(this),
+                _off = $(this).offset(),
+                _deltaX = evt.pageX - _el.width() / 2 - _off.left,
+                _deltaY = evt.pageY - _el.height() / 2 - _off.top;
+                partialGraph.centreX += ( Math.SQRT2 - 1 ) * _deltaX / partialGraph.echelleGenerale;
+                partialGraph.centreY += ( Math.SQRT2 - 1 ) * _deltaY / partialGraph.echelleGenerale;
+                $("#zoomSlider").slider("value",partialGraph.position().ratio);
+            }
+        }
+        partialGraph.totalScroll = 0;
+    }
+}
+
+function initializeMap() {
+    clearInterval(partialGraph.timeRefresh);
+    partialGraph.oldParams = {};
+    $("#zoomSlider").slider({
+        orientation: "vertical",
+        value: partialGraph.position().ratio,
+        min: sigmaJsMouseProperties.minRatio,
+        max: sigmaJsMouseProperties.maxRatio,
+        range: "min",
+        step: 0.1,
+        slide: function( event, ui ) {
+            partialGraph.zoomTo(
+                partialGraph._core.domElements.nodes.width / 2, 
+                partialGraph._core.domElements.nodes.height / 2, 
+                ui.value);
+        }
+    });
+    $("#overviewzone").css({
+        width : overviewWidth + "px",
+        height : overviewHeight + "px"
+    });
+    $("#overview").attr({
+        width : overviewWidth,
+        height : overviewHeight
+    });
+    partialGraph.timeRefresh = setInterval(traceMap,1000);
+}
+
+function updateMap(){
+    console.log("updating MiniMap");
+    
+    partialGraph.imageMini="";
+    partialGraph.ctxMini="";
+    partialGraph.ctxMini = document.getElementById('overview').getContext('2d');
+    partialGraph.ctxMini.clearRect(0, 0, 200, 175);
+    
+    partialGraph.iterNodes(function(n){
+        partialGraph.ctxMini.fillStyle = n.color;
+        partialGraph.ctxMini.beginPath();
+        numPosibilidades = 2.5 - 0.9;
+        aleat = Math.random() * numPosibilidades;
+        partialGraph.ctxMini.arc(((n.displayX/1.2)-200)*0.25 , ((n.displayY/1.2)+110)*0.25 , (0.9 + aleat)*0.25+1 , 0 , Math.PI*2 , true);
+        //        //console.log(n.x*1000 +" * 0.25"+" _ "+ n.y*1000 +" * 0.25"+" _ "+ (0.9 + aleat) +" * 0.25 + 1");
+        //        
+        partialGraph.ctxMini.closePath();
+        partialGraph.ctxMini.fill();
+    //        
+    });
+    partialGraph.imageMini = partialGraph.ctxMini.getImageData(0, 0, 200, 175);
+}
+
+function traceMap() {
+    pr("\ttracingmap");
+    partialGraph.echelleGenerale = Math.pow( Math.SQRT2, partialGraph.position().ratio );
+    partialGraph.decalageX = ( partialGraph._core.width / 2 ) - ( partialGraph.centreX * partialGraph.echelleGenerale );
+    partialGraph.decalageY = ( partialGraph._core.height / 2 ) - ( partialGraph.centreY * partialGraph.echelleGenerale );
+    
+    
+    partialGraph.ctxMini.putImageData(partialGraph.imageMini, 0, 0);
+    
+    var _r = 0.25 / partialGraph.echelleGenerale,
+    _x = - _r * partialGraph.decalageX,
+    _y = - _r * partialGraph.decalageY,
+    _w = _r * partialGraph._core.width,
+    _h = _r * partialGraph._core.height;
+    partialGraph.ctxMini.strokeStyle = "rgb(220,0,0)";
+    partialGraph.ctxMini.lineWidth = 3;
+    partialGraph.ctxMini.fillStyle = "rgba(120,120,120,0.2)";
+    partialGraph.ctxMini.beginPath();
+    partialGraph.ctxMini.fillRect( _x, _y, _w, _h );
+    partialGraph.ctxMini.strokeRect( _x, _y, _w, _h );
+}
 
 $(document).ready(function () {
     partialGraph = sigma.init(document.getElementById('sigma-example'))
@@ -1621,8 +1629,14 @@ $(document).ready(function () {
     .graphProperties(sigmaJsGraphProperties)
     .mouseProperties(sigmaJsMouseProperties);
     
-    partialGraph.ctxMini = document.getElementById('overview').getContext('2d');
+    partialGraph.ctxMini = document.getElementById('overview').getContext('2d'); 
     partialGraph.ctxMini.clearRect(0, 0, 200, 175);
+    partialGraph.totalScroll=0;    
+    partialGraph.centreX = 400;
+    partialGraph.centreY = 350;
+    
+    pr("sigma canvas??");
+    pr(document.getElementById('sigma_nodes_1'));
     
     $('#sigma-example').css('background-color','white');
     $("#category-B").hide();
@@ -1661,7 +1675,7 @@ $(document).ready(function () {
     initializeMap();
     updateMap();
         
-    window.onhashchange = updateMap;
+    //window.onhashchange = updateMap;
     
     updateDownNodeEvent(false);
         
@@ -1831,11 +1845,11 @@ $(document).ready(function () {
     });
     
     $("#overview")
-    .mousemove(onOverviewMove)
-    .mousedown(startMove)
-    .mouseup(endMove)
-    .mouseout(endMove)
-    ;//.mousewheel(onGraphScroll);
+//    .mousemove(onOverviewMove)
+//    .mousedown(startMove)
+//    .mouseup(endMove)
+//    .mouseout(endMove)
+    .mousewheel(onGraphScroll);
     
     
     $("#zoomPlusButton").click(function () {

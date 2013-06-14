@@ -41,8 +41,6 @@ var minEdgeWeight;
 var overviewWidth = 200;
 var overviewHeight = 175;
 var overviewScale = 0.25;
-var minZoom = 1;
-var maxZoom = 7;
 var moveDelay = 80, zoomDelay = 2;
 //var Vecindad;
 var partialGraph;
@@ -94,5 +92,5 @@ var sigmaJsGraphProperties = {
 };
 var sigmaJsMouseProperties = {
     minRatio:0.3,
-    maxRatio: 32
+    maxRatio: 10
 };

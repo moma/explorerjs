@@ -957,9 +957,6 @@ sigma.publicPrototype.startForceAtlas2 = function() {
     this.forceatlas2.init();
   //}
   $("#overviewzone").hide();
-//  node = partialGraph._core.graph.nodesIndex["D::Arnaud__Banos"];
-//  node.forceLabel=true;
-//  console.log(partialGraph._core.graph.nodesIndex["D::Arnaud__Banos"]);
   this.addGenerator('forceatlas2', this.forceatlas2.atomicGo, function(){
     return true;
   });
@@ -967,10 +964,6 @@ sigma.publicPrototype.startForceAtlas2 = function() {
 
 sigma.publicPrototype.stopForceAtlas2 = function() {
   this.removeGenerator('forceatlas2');
-  partialGraph.imageMini="";
-  partialGraph.ctxMini="";
-  partialGraph.ctxMini = document.getElementById('overview').getContext('2d');
-  partialGraph.ctxMini.clearRect(0, 0, 200, 175);
   updateMap();
   partialGraph.refresh();
   $("#overviewzone").show();
