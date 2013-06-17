@@ -1575,7 +1575,7 @@ function initializeMap() {
         width : overviewWidth,
         height : overviewHeight
     });
-    partialGraph.timeRefresh = setInterval(traceMap,1000);
+    partialGraph.timeRefresh = setInterval(traceMap,60);
 }
 
 function updateMap(){
@@ -1584,7 +1584,7 @@ function updateMap(){
     partialGraph.imageMini="";
     partialGraph.ctxMini="";
     partialGraph.ctxMini = document.getElementById('overview').getContext('2d');
-    partialGraph.ctxMini.clearRect(0, 0, 200, 175);
+    partialGraph.ctxMini.clearRect(0, 0, overviewWidth, overviewHeight);
     
     partialGraph.iterNodes(function(n){
         partialGraph.ctxMini.fillStyle = n.color;
@@ -1598,7 +1598,7 @@ function updateMap(){
         partialGraph.ctxMini.fill();
     //        
     });
-    partialGraph.imageMini = partialGraph.ctxMini.getImageData(0, 0, 200, 175);
+    partialGraph.imageMini = partialGraph.ctxMini.getImageData(0, 0, overviewWidth, overviewHeight);
 }
 
 function traceMap() {
@@ -1630,13 +1630,13 @@ $(document).ready(function () {
     .mouseProperties(sigmaJsMouseProperties);
     
     partialGraph.ctxMini = document.getElementById('overview').getContext('2d'); 
-    partialGraph.ctxMini.clearRect(0, 0, 200, 175);
+    partialGraph.ctxMini.clearRect(0, 0, overviewWidth, overviewHeight);
     partialGraph.totalScroll=0;    
     partialGraph.centreX = 400;
     partialGraph.centreY = 350;
     
     pr("sigma canvas??");
-    pr(document.getElementById('sigma_nodes_1'));
+    pr(document.getElementById('sigma-example'));
     
     $('#sigma-example').css('background-color','white');
     $("#category-B").hide();
@@ -1845,6 +1845,13 @@ $(document).ready(function () {
     });
     
     $("#overview")
+//    .mousemove(onOverviewMove)
+//    .mousedown(startMove)
+//    .mouseup(endMove)
+//    .mouseout(endMove)
+    .mousewheel(onGraphScroll);
+    
+    $("sigma-example")
 //    .mousemove(onOverviewMove)
 //    .mousedown(startMove)
 //    .mouseup(endMove)
