@@ -37,26 +37,26 @@
                          id="sociosemantic" class="fg-button toolbar-left"
                          onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
                          onClick='changeHoverActive(this)'                         
-                    ></img>
+                         ></img>
 
                     <img style="cursor: pointer" title="Keywords" 
                          src="img/trans/inactive_tags.png" 
                          width="50" id="semantic" class="fg-button toolbar-left"
                          onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
                          onClick='changeHoverActive(this)'
-                    ></img> 
+                         ></img> 
 
                     <div id="cursor-size-block" class="toolbar-left" style="width: 100px; margin-left: 15px; margin-right: 20px;">
                         <span class="sliderLabel"> &nbsp;&nbsp;&nbsp;&nbsp;cursor size</span>
                         <div id="sliderSelectionZone"></div>
                     </div>
-<!--
-                    <img style="cursor: pointer" title="Switch" 
-                         src="img/trans/graph_meso_null.png" width="30"
-                         id="switch" class="fg-button toolbar-left"
-                         onClick='if(swclick=="") {swclick="social";} changeHoverActive(this)'
-                         ></img>    
--->
+                    <!--
+                                        <img style="cursor: pointer" title="Switch" 
+                                             src="img/trans/graph_meso_null.png" width="30"
+                                             id="switch" class="fg-button toolbar-left"
+                                             onClick='if(swclick=="") {swclick="social";} changeHoverActive(this)'
+                                             ></img>    
+                    -->
                     <div>
                         <input id="searchinput"  autocomplete="off" />
                         <input id="searchsubmit" type="submit" />
@@ -159,7 +159,6 @@
             <canvas id="overview" width="0" height="0"></canvas>
         </div>
 
-
         <div id="leftcolumn">
             <div id="unfold">
                 <a href="#arrow" id="aUnfold" class="rightarrow"> </a>
@@ -173,20 +172,23 @@
                             </td>
                             <td id="labelchange" onmouseover="neweffectshow();" onmouseout="justhide();">
                                 <img width="60" src="img/trans/status_title_change.png"></img></td>
-                             <td id="availableView" onmouseover="neweffectshow();" onmouseout="justhide();">
-                                 <img id="switch" width="60" src="img/trans/graph_meso_null.png"
-                                        onClick='if(swclickActual=="") {swclick="social";} changeHoverActive(this)'>
-                                 </img>
-                             </td>
+                            <td id="availableView" onmouseover="neweffectshow();" onmouseout="justhide();">
+                                <img id="switch" width="60" src="img/trans/graph_meso_null.png"
+                                     onClick='if(swclickActual=="") {swclick="social";} changeHoverActive(this)'>
+                                </img>
+                            </td>
                         </tr>
                     </table>
                 </div>
 
                 <!--<a href="#" title="Status"><img  width="60" src="img/trans/status_title.png"></img></a>
                 <img width="60" onmouseover="neweffectshow();" onmouseout="neweffecthide();" id="viewType" title="Social" src="img/trans/status_macro_view.png"></img>
--->
+                -->
             </div>
             <div id="leftcontent">
+                <button style="color: #900;font-weight: bold;font-size: 70%;text-transform: uppercase;float:right;" 
+                               onClick='cancelSelection();'
+                >X</button>
                 <div id="names"></div>
                 <div id="opossiteNodes"></div>
                 <div id="information"></div>

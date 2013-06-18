@@ -95,6 +95,7 @@ function cancelSelection () {
     }).draw(2,1,2);
     //Nodes colors go back to normal
     changeButton("unselectNodes");
+    $("#aUnfold").click();
 }
 
 function returnBaseUrl(){
@@ -1738,6 +1739,7 @@ $(document).ready(function () {
     $("#loading").remove();
     
     $("#aUnfold").click(function() {
+        pr("heeere");
         var _cG = $("#leftcolumn");
         if (_cG.offset().left < 0) {
             _cG.animate({
@@ -1760,6 +1762,7 @@ $(document).ready(function () {
         }
         return false;
     });
+    
         
     
     /******************* /SEARCH ***********************/
@@ -1873,6 +1876,10 @@ $(document).ready(function () {
     //    .mouseout(endMove)
     //    .mousewheel(onGraphScroll); -> it doesn't answer!
     
+//    $("#cancelselection").click(function (){
+//        pr("heeeeree");
+//        cancelSelection();
+//    });
     
     $("#zoomPlusButton").click(function () {
         partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, partialGraph._core.mousecaptor.ratio * 1.5);
