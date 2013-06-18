@@ -184,7 +184,7 @@ function search(string) {
 function pushSWClick(arg){
     swclickPrev = swclickActual;
     swclickActual = arg;
-    pr("1. swclickPrev: "+swclickPrev+" - swclickActual: "+swclickActual);
+//pr("1. swclickPrev: "+swclickPrev+" - swclickActual: "+swclickActual);
 }
 
 function changeButton(buttonClicked) {  
@@ -632,7 +632,7 @@ function is_empty(obj) {
 }
 
 function alertCheckBox(eventCheck){
-    pr("\tin alertCheckbox");
+    //pr("\tin alertCheckbox");
     //De-activate previous Binds
     //partialGraph.unbind("overnodes");
     //partialGraph.unbind("outnodes");
@@ -793,10 +793,10 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
                 changeButton("unselectNodes");
             }
             else changeButton("selectNode");
-        //overNodes=false;
-        });
-    }
-    else {
+            //overNodes=false;
+            });
+        }
+        else {
         pr("selectionRadius?: "+selectionRadius);
         //If cursor_size>0 -> Multiple mouse-selection
         //Event: I've clicked the canvas (NOT A NODE) when I've a selection radius ON'
@@ -1468,8 +1468,10 @@ function trackMouse() {
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.arc(x, y, cursor_size, 0, Math.PI * 2, true);
+    ctx.arc(partialGraph._core.width/2, partialGraph._core.height/2, 4, 0, 2 * Math.PI, true);/*todel*/
     ctx.closePath();
     ctx.stroke();
+    
 };
 
 function changeGraphPosition(evt, echelle) {
@@ -1523,26 +1525,47 @@ function onGraphScroll(evt, delta) {
         if (partialGraph.totalScroll < 0) {
             //ZoomOUT
             if (partialGraph.position().ratio > sigmaJsMouseProperties.minRatio) {
-                partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, partialGraph._core.mousecaptor.ratio * 0.5);
-                var _el = $(this),
-                _off = $(this).offset(),
-                _deltaX = evt.pageX - _el.width() / 2 - _off.left,
-                _deltaY = evt.pageY - _el.height() / 2 - _off.top;
-                partialGraph.centreX -= ( Math.SQRT2 - 1 ) * _deltaX / partialGraph.echelleGenerale;
-                partialGraph.centreY -= ( Math.SQRT2 - 1 ) * _deltaY / partialGraph.echelleGenerale;
+                //partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, partialGraph._core.mousecaptor.ratio * 0.5);
+                //var _el = $(this),
+                //_off = $(this).offset(),
+                //_deltaX = evt.pageX - _el.width() / 2 - _off.left,
+                //_deltaY = evt.pageY - _el.height() / 2 - _off.top;
+                var 
+                mx=evt.offsetX,
+                my=evt.offsetY;
+                partialGraph.centreX=mx*((partialGraph._core.width-1)/(overviewWidth)),
+                partialGraph.centreY=my*((partialGraph._core.height-1)/(overviewHeight));               
+                
+//                console.log("mx: "+mx+" - my: "+ my);                
+//                console.log("cx: "+cx+" - cy: "+ cy);
+//                partialGraph.centreX =cx;
+//                partialGraph.centreY =cy;
+                partialGraph.zoomTo(partialGraph.centreX, partialGraph.centreY, partialGraph._core.mousecaptor.ratio * 0.5);
+//                partialGraph.centreX -= ( Math.SQRT2 - 1 ) * _deltaX / partialGraph.echelleGenerale;
+//                partialGraph.centreY -= ( Math.SQRT2 - 1 ) * _deltaY / partialGraph.echelleGenerale;
+//                partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, partialGraph._core.mousecaptor.ratio * 0.5);
                 $("#zoomSlider").slider("value",partialGraph.position().ratio);
             }
         } else {
             //ZoomIN
             if (partialGraph.position().ratio < sigmaJsMouseProperties.maxRatio) {
-                partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, partialGraph._core.mousecaptor.ratio * 1.5);
-                partialGraph.echelleGenerale = Math.pow( Math.SQRT2, partialGraph.position().ratio );
-                var _el = $(this),
-                _off = $(this).offset(),
-                _deltaX = evt.pageX - _el.width() / 2 - _off.left,
-                _deltaY = evt.pageY - _el.height() / 2 - _off.top;
-                partialGraph.centreX += ( Math.SQRT2 - 1 ) * _deltaX / partialGraph.echelleGenerale;
-                partialGraph.centreY += ( Math.SQRT2 - 1 ) * _deltaY / partialGraph.echelleGenerale;
+                //                partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, partialGraph._core.mousecaptor.ratio * 1.5);
+//                partialGraph.echelleGenerale = Math.pow( Math.SQRT2, partialGraph.position().ratio );
+                //var _el = $(this),
+                //_off = $(this).offset(),
+                //_deltaX = evt.pageX - _el.width() / 2 - _off.left,
+                //_deltaY = evt.pageY - _el.height() / 2 - _off.top;
+                var 
+                mx=evt.offsetX,
+                my=evt.offsetY;
+                partialGraph.centreX=mx*((partialGraph._core.width-1)/(overviewWidth)),
+                partialGraph.centreY=my*((partialGraph._core.height-1)/(overviewHeight));               
+                
+//                console.log("mx: "+mx+" - my: "+ my);                
+//                console.log("cx: "+cx+" - cy: "+ cy);
+//                partialGraph.centreX =cx;
+//                partialGraph.centreY =cy;
+                partialGraph.zoomTo(partialGraph.centreX, partialGraph.centreY, partialGraph._core.mousecaptor.ratio * 1.5);
                 $("#zoomSlider").slider("value",partialGraph.position().ratio);
             }
         }
@@ -1562,8 +1585,8 @@ function initializeMap() {
         step: 0.1,
         slide: function( event, ui ) {
             partialGraph.zoomTo(
-                partialGraph._core.domElements.nodes.width / 2, 
-                partialGraph._core.domElements.nodes.height / 2, 
+                partialGraph._core.width / 2, 
+                partialGraph._core.height / 2, 
                 ui.value);
         }
     });
@@ -1602,25 +1625,22 @@ function updateMap(){
 }
 
 function traceMap() {
-    pr("\ttracingmap");
+    //pr("\ttracingmap");
     partialGraph.echelleGenerale = Math.pow( Math.SQRT2, partialGraph.position().ratio );
-    partialGraph.decalageX = ( partialGraph._core.width / 2 ) - ( partialGraph.centreX * partialGraph.echelleGenerale );
-    partialGraph.decalageY = ( partialGraph._core.height / 2 ) - ( partialGraph.centreY * partialGraph.echelleGenerale );
-    
-    
     partialGraph.ctxMini.putImageData(partialGraph.imageMini, 0, 0);
     
     var _r = 0.25 / partialGraph.echelleGenerale,
-    _x = - _r * partialGraph.decalageX,
-    _y = - _r * partialGraph.decalageY,
+    cx =  partialGraph.centreX,
+    cy =  partialGraph.centreY,
     _w = _r * partialGraph._core.width,
     _h = _r * partialGraph._core.height;
     partialGraph.ctxMini.strokeStyle = "rgb(220,0,0)";
     partialGraph.ctxMini.lineWidth = 3;
     partialGraph.ctxMini.fillStyle = "rgba(120,120,120,0.2)";
     partialGraph.ctxMini.beginPath();
-    partialGraph.ctxMini.fillRect( _x, _y, _w, _h );
-    partialGraph.ctxMini.strokeRect( _x, _y, _w, _h );
+    partialGraph.ctxMini.fillRect( cx-_w/2, cy-_h/2, _w, _h );
+    partialGraph.ctxMini.strokeRect( cx-_w/2, cy-_h/2, _w, _h );
+    partialGraph.ctxMini.closePath();
 }
 
 $(document).ready(function () {
@@ -1632,12 +1652,9 @@ $(document).ready(function () {
     partialGraph.ctxMini = document.getElementById('overview').getContext('2d'); 
     partialGraph.ctxMini.clearRect(0, 0, overviewWidth, overviewHeight);
     partialGraph.totalScroll=0;    
-    partialGraph.centreX = 400;
-    partialGraph.centreY = 350;
-    
-    pr("sigma canvas??");
-    pr(document.getElementById('sigma-example'));
-    
+    partialGraph.centreX = partialGraph._core.width/2;
+    partialGraph.centreY = partialGraph._core.heigth/2;
+       
     $('#sigma-example').css('background-color','white');
     $("#category-B").hide();
     $("#labelchange").hide();
@@ -1668,8 +1685,6 @@ $(document).ready(function () {
     });
     /*======= Show some labels at the beginning =======*/
     
-    pr("minEdgeWeight: "+minEdgeWeight);
-    pr("maxEdgeWeight: "+maxEdgeWeight);
     
     partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8).draw();
     initializeMap();
@@ -1845,18 +1860,18 @@ $(document).ready(function () {
     });
     
     $("#overview")
-//    .mousemove(onOverviewMove)
-//    .mousedown(startMove)
-//    .mouseup(endMove)
-//    .mouseout(endMove)
+    //    .mousemove(onOverviewMove)
+    //    .mousedown(startMove)
+    //    .mouseup(endMove)
+    //    .mouseout(endMove)
     .mousewheel(onGraphScroll);
     
     $("sigma-example")
-//    .mousemove(onOverviewMove)
-//    .mousedown(startMove)
-//    .mouseup(endMove)
-//    .mouseout(endMove)
-    .mousewheel(onGraphScroll);
+    //    .mousemove(onOverviewMove)
+    //    .mousedown(startMove)
+    //    .mouseup(endMove)
+    //    .mouseout(endMove)
+    //    .mousewheel(onGraphScroll); -> it doesn't answer!
     
     
     $("#zoomPlusButton").click(function () {
