@@ -95,7 +95,6 @@ function cancelSelection () {
     }).draw(2,1,2);
     //Nodes colors go back to normal
     changeButton("unselectNodes");
-    $("#aUnfold").click();
 }
 
 function returnBaseUrl(){
@@ -266,12 +265,14 @@ function selection(currentNode){
                 }
             }  
             if(currentNode.id.charAt(0)=="N"){
-                for(i=0;i<bipartiteN2D[currentNode.id].neighbours.length;i++) {
-                    if((typeof opossites[bipartiteN2D[currentNode.id].neighbours[i]])=="undefined"){
-                        opossites[bipartiteN2D[currentNode.id].neighbours[i]]=1;
-                    }
-                    else opossites[bipartiteN2D[currentNode.id].neighbours[i]]++;
+                if((typeof bipartiteN2D[currentNode.id])!="undefined"){
+                    for(i=0;i<bipartiteN2D[currentNode.id].neighbours.length;i++) {
+                        if((typeof opossites[bipartiteN2D[currentNode.id].neighbours[i]])=="undefined"){
+                            opossites[bipartiteN2D[currentNode.id].neighbours[i]]=1;
+                        }
+                        else opossites[bipartiteN2D[currentNode.id].neighbours[i]]++;
                 
+                    }
                 }
             }
             currentNode.active=true; 
@@ -794,10 +795,10 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
                 changeButton("unselectNodes");
             }
             else changeButton("selectNode");
-            //overNodes=false;
-            });
-        }
-        else {
+        //overNodes=false;
+        });
+    }
+    else {
         pr("selectionRadius?: "+selectionRadius);
         //If cursor_size>0 -> Multiple mouse-selection
         //Event: I've clicked the canvas (NOT A NODE) when I've a selection radius ON'
@@ -1537,21 +1538,21 @@ function onGraphScroll(evt, delta) {
                 partialGraph.centreX=mx*((partialGraph._core.width-1)/(overviewWidth)),
                 partialGraph.centreY=my*((partialGraph._core.height-1)/(overviewHeight));               
                 
-//                console.log("mx: "+mx+" - my: "+ my);                
-//                console.log("cx: "+cx+" - cy: "+ cy);
-//                partialGraph.centreX =cx;
-//                partialGraph.centreY =cy;
+                //                console.log("mx: "+mx+" - my: "+ my);                
+                //                console.log("cx: "+cx+" - cy: "+ cy);
+                //                partialGraph.centreX =cx;
+                //                partialGraph.centreY =cy;
                 partialGraph.zoomTo(partialGraph.centreX, partialGraph.centreY, partialGraph._core.mousecaptor.ratio * 0.5);
-//                partialGraph.centreX -= ( Math.SQRT2 - 1 ) * _deltaX / partialGraph.echelleGenerale;
-//                partialGraph.centreY -= ( Math.SQRT2 - 1 ) * _deltaY / partialGraph.echelleGenerale;
-//                partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, partialGraph._core.mousecaptor.ratio * 0.5);
+                //                partialGraph.centreX -= ( Math.SQRT2 - 1 ) * _deltaX / partialGraph.echelleGenerale;
+                //                partialGraph.centreY -= ( Math.SQRT2 - 1 ) * _deltaY / partialGraph.echelleGenerale;
+                //                partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, partialGraph._core.mousecaptor.ratio * 0.5);
                 $("#zoomSlider").slider("value",partialGraph.position().ratio);
             }
         } else {
             //ZoomIN
             if (partialGraph.position().ratio < sigmaJsMouseProperties.maxRatio) {
                 //                partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, partialGraph._core.mousecaptor.ratio * 1.5);
-//                partialGraph.echelleGenerale = Math.pow( Math.SQRT2, partialGraph.position().ratio );
+                //                partialGraph.echelleGenerale = Math.pow( Math.SQRT2, partialGraph.position().ratio );
                 //var _el = $(this),
                 //_off = $(this).offset(),
                 //_deltaX = evt.pageX - _el.width() / 2 - _off.left,
@@ -1562,10 +1563,10 @@ function onGraphScroll(evt, delta) {
                 partialGraph.centreX=mx*((partialGraph._core.width-1)/(overviewWidth)),
                 partialGraph.centreY=my*((partialGraph._core.height-1)/(overviewHeight));               
                 
-//                console.log("mx: "+mx+" - my: "+ my);                
-//                console.log("cx: "+cx+" - cy: "+ cy);
-//                partialGraph.centreX =cx;
-//                partialGraph.centreY =cy;
+                //                console.log("mx: "+mx+" - my: "+ my);                
+                //                console.log("cx: "+cx+" - cy: "+ cy);
+                //                partialGraph.centreX =cx;
+                //                partialGraph.centreY =cy;
                 partialGraph.zoomTo(partialGraph.centreX, partialGraph.centreY, partialGraph._core.mousecaptor.ratio * 1.5);
                 $("#zoomSlider").slider("value",partialGraph.position().ratio);
             }
@@ -1876,10 +1877,10 @@ $(document).ready(function () {
     //    .mouseout(endMove)
     //    .mousewheel(onGraphScroll); -> it doesn't answer!
     
-//    $("#cancelselection").click(function (){
-//        pr("heeeeree");
-//        cancelSelection();
-//    });
+    //    $("#cancelselection").click(function (){
+    //        pr("heeeeree");
+    //        cancelSelection();
+    //    });
     
     $("#zoomPlusButton").click(function () {
         partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, partialGraph._core.mousecaptor.ratio * 1.5);
