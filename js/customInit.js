@@ -1769,10 +1769,10 @@ $(document).ready(function () {
     /******************* /SEARCH ***********************/
     $.ui.autocomplete.prototype._renderItem = function(ul, item) {
         var searchVal = $("#searchinput").val();
-        var desc = extractContext(item.desc, searchVal);
+        //var desc = extractContext(item.desc, searchVal);
         return $('<li onclick=\'var s = "'+item.label+'"; search(s);$("#searchinput").val(strSearchBar);\'></li>')
         .data('item.autocomplete', item)
-        .append("<a><span class=\"labelresult\">" + item.label + "</span><br ><small>" + desc + "<small></a>" )
+        .append("<a><span class=\"labelresult\">" + item.label + "</span><br><br></a>" )
         .appendTo(ul);
     };
 
