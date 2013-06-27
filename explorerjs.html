@@ -28,6 +28,26 @@
             <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
                 <div id="title" class="unselectable toolbar-left">
 
+                    <img style="cursor: pointer" title="Scholars" 
+                         src="img/trans/active_scholars.png" 
+                         width="50" id="socio" class="fg-button toolbar-left"
+                         onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
+                         onClick='changeHoverActive(this)'
+                         ></img>
+
+                    <img style="cursor: pointer" title="Mixed" src="img/trans/inactive_sociosem.png" width="50" 
+                         id="sociosemantic" class="fg-button toolbar-left"
+                         onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
+                         onClick='changeHoverActive(this)'                         
+                         ></img>
+
+                    <img style="cursor: pointer" title="Keywords" 
+                         src="img/trans/inactive_tags.png" 
+                         width="50" id="semantic" class="fg-button toolbar-left"
+                         onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
+                         onClick='changeHoverActive(this)'
+                         ></img> 
+
                     <div id="cursor-size-block" class="toolbar-left" style="width: 100px; margin-left: 15px; margin-right: 20px;">
                         <span class="sliderLabel"> &nbsp;&nbsp;&nbsp;&nbsp;cursor size</span>
                         <div id="sliderSelectionZone"></div>
@@ -79,6 +99,26 @@
                     </div>
                     <div style="height: 16px;">
                         Node Size
+                    </div>
+                </div>
+
+                <!-- block for Category B Filter -->
+                <div id="category-B" class="unselectable toolbar-middle" style="width: 120px;">
+                    <div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keywords
+                    </div>
+                    <div style="height: 16px; width: 100px;">
+                        <div id="nodeBFilterMinValue"></div>
+                        <div id="sliderBNodeWeight" class="redstart"></div>
+                        <div id="nodeBFilterMaxValue"></div>
+                    </div>
+                    <div style="height: 16px; width: 100px;">
+                        <div id="edgeBFilterMinValue"></div>
+                        <div id="sliderBEdgeWeight" class="redstart"></div>
+                        <div id="edgeBFilterMaxValue"></div>
+                    </div>
+                    <div style="height: 16px; width: 100px;">
+                        <div id="sliderBNodeSize" class="redstart"></div>
                     </div>
                 </div>
 
