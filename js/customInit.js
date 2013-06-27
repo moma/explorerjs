@@ -39,36 +39,6 @@ function ArraySortByKey(array, sortFunc){
     return tmp;      
 }
     
-function extractContext(string, context) {
-    var matched = string.toLowerCase().indexOf(context.toLowerCase());
-
-    if (matched == -1) 
-        return string.slice(0, 20) + '...';
-
-    var begin_pts = '...', end_pts = '...';
-
-    if (matched - 20 > 0) {
-        var begin = matched - 20;
-    } else {
-        var begin = 0;
-        begin_pts = '';
-    }
-
-    if (matched + context.length + 20 < string.length) {
-        var end = matched + context.length + 20;
-    } else {
-        var end = string.length;
-        end_pts = '';
-    }
-
-    str = string.slice(begin, end);
-
-    if (str.indexOf(" ") != Math.max(str.lastIndexOf(" "), str.lastIndexOf(".")))
-        str = str.slice(str.indexOf(" "), Math.max(str.lastIndexOf(" "), str.lastIndexOf(".")));
-
-    return begin_pts + str + end_pts;
-}
-  
 function cancelSelection () {
     pr("\tin cancelSelection");
     highlightSelectedNodes(false); //Unselect the selected ones :D
@@ -124,6 +94,37 @@ function highlightSelectedNodes(flag){
         }
         
     }
+}
+
+function extractContext(string, context) {
+    pr("string: "+string+", context: "+context);
+    var matched = string.toLowerCase().indexOf(context.toLowerCase());
+
+    if (matched == -1) 
+        return string.slice(0, 20) + '...';
+
+    var begin_pts = '...', end_pts = '...';
+
+    if (matched - 20 > 0) {
+        var begin = matched - 20;
+    } else {
+        var begin = 0;
+        begin_pts = '';
+    }
+
+    if (matched + context.length + 20 < string.length) {
+        var end = matched + context.length + 20;
+    } else {
+        var end = string.length;
+        end_pts = '';
+    }
+
+    str = string.slice(begin, end);
+
+    if (str.indexOf(" ") != Math.max(str.lastIndexOf(" "), str.lastIndexOf(".")))
+        str = str.slice(str.indexOf(" "), Math.max(str.lastIndexOf(" "), str.lastIndexOf(".")));
+
+    return begin_pts + str + end_pts;
 }
 
 function search(string) {
@@ -1769,6 +1770,8 @@ $(document).ready(function () {
     /******************* /SEARCH ***********************/
     $.ui.autocomplete.prototype._renderItem = function(ul, item) {
         var searchVal = $("#searchinput").val();
+        pr("item-desc: "+item.desc);
+        pr("searchVal: "+searchVal);
         var desc = extractContext(item.desc, searchVal);
         return $('<li onclick=\'var s = "'+item.label+'"; search(s);$("#searchinput").val(strSearchBar);\'></li>')
         .data('item.autocomplete', item)
@@ -1823,10 +1826,12 @@ $(document).ready(function () {
     
     $("#searchinput").keydown(function (e) {
         if (e.keyCode == 13 && $("input#searchinput").data('is_open') === true) {
+            pr("holaaaaaaa");
             
             if(!is_empty(matches)) {
                 for(j=0;j<matches.length;j++){
                     search(matches[j].label);
+                    alert("jaja");
                 }
             }
         }
