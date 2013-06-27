@@ -485,7 +485,7 @@ function fullExtract(){
             idT=Nodes[edge.targetID].type.charAt(0);
             //pr(idS+";"+idT);
             if(idS=="D" && idT=="D"){
-                Edges[edge.sourceID+";"+edge.targetID].label="nodes1";
+                edge.label="nodes1";
                 if((typeof nodes1[source])=="undefined"){
                     nodes1[source] = {
                         label: Nodes[source].label,
@@ -498,7 +498,7 @@ function fullExtract(){
             
             
             if(idS=="N" && idT=="N"){
-                Edges[edge.sourceID+";"+edge.targetID].label="nodes2";
+                edge.label="nodes2";
                 if((typeof nodes2[source])=="undefined"){                    
                     nodes2[source] = {
                         label: Nodes[source].label,
@@ -511,7 +511,7 @@ function fullExtract(){
             
             
             if((idS=="D" && idT=="N")||(idS=="N" && idT=="D")){                 
-                Edges[edge.sourceID+";"+edge.targetID].label="bipartite";
+                edge.label="bipartite";
                 // Document to NGram 
                 if((typeof bipartiteD2N[source])=="undefined"){   
                     bipartiteD2N[source] = {
