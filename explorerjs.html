@@ -15,36 +15,18 @@
 
         <script src="js/sigma.min.js" type="text/javascript" language="javascript"></script>
         <script src="js/sigma.forceatlas2.js" type="text/javascript" language="javascript"></script>
-        <script src="js/configSigma.js" type="text/javascript" language="javascript"></script>
+        <script src="js/variables.js" type="text/javascript" language="javascript"></script>
         <script src="js/sigma.parseCustom.js" type="text/javascript" language="javascript"></script>
-        <script src="js/customInit.js" type="text/javascript" language="javascript"></script>
+        <script src="js/methods.js" type="text/javascript" language="javascript"></script>
+        <script src="js/main.js" type="text/javascript" language="javascript"></script>
 
     </head>
     <body>
 
         <div id="hdb">
+        <div id="gexfs"></div>
             <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
                 <div id="title" class="unselectable toolbar-left">
-
-                    <img style="cursor: pointer" title="Scholars" 
-                         src="img/trans/active_scholars.png" 
-                         width="50" id="socio" class="fg-button toolbar-left"
-                         onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
-                         onClick='changeHoverActive(this)'
-                         ></img>
-
-                    <img style="cursor: pointer" title="Mixed" src="img/trans/inactive_sociosem.png" width="50" 
-                         id="sociosemantic" class="fg-button toolbar-left"
-                         onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
-                         onClick='changeHoverActive(this)'                         
-                         ></img>
-
-                    <img style="cursor: pointer" title="Keywords" 
-                         src="img/trans/inactive_tags.png" 
-                         width="50" id="semantic" class="fg-button toolbar-left"
-                         onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
-                         onClick='changeHoverActive(this)'
-                         ></img> 
 
                     <div id="cursor-size-block" class="toolbar-left" style="width: 100px; margin-left: 15px; margin-right: 20px;">
                         <span class="sliderLabel"> &nbsp;&nbsp;&nbsp;&nbsp;cursor size</span>
@@ -100,26 +82,6 @@
                     </div>
                 </div>
 
-                <!-- block for Category B Filter -->
-                <div id="category-B" class="unselectable toolbar-middle" style="width: 120px;">
-                    <div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keywords
-                    </div>
-                    <div style="height: 16px; width: 100px;">
-                        <div id="nodeBFilterMinValue"></div>
-                        <div id="sliderBNodeWeight" class="redstart"></div>
-                        <div id="nodeBFilterMaxValue"></div>
-                    </div>
-                    <div style="height: 16px; width: 100px;">
-                        <div id="edgeBFilterMinValue"></div>
-                        <div id="sliderBEdgeWeight" class="redstart"></div>
-                        <div id="edgeBFilterMaxValue"></div>
-                    </div>
-                    <div style="height: 16px; width: 100px;">
-                        <div id="sliderBNodeSize" class="redstart"></div>
-                    </div>
-                </div>
-
             </div>
             <!-- End of htoolbar -->
         </div>
@@ -128,7 +90,8 @@
 
         <div id="zonecentre" class="gradient">
 
-            <div onmousemove="trackMouse();" class="sigma-expand" id="sigma-example"></div>
+            <div onmousemove='if(typeof(partialGraph)!=="undefined") {trackMouse();}' 
+                 class="sigma-expand" id="sigma-example"></div>
 
             <ul id="ctlzoom">
                 <li>

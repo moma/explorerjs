@@ -7,19 +7,7 @@ header ("Content-Type:text/xml");
 include ("parametres.php");
 include ("normalize.php");
 //include("../common/library/fonctions_php.php");
-/*
-$gexf="";
 
-$login=$_GET['login'];
-$variable = include("get_scholar_layout.php");
-
-$argss = "/usr/bin/java -version  2>&1";
-exec($argss, $output);
-print_r($output);
-
-//exec('/usr/bin/java -jar tinaviz-2.0-SNAPSHOT.jar '.$variable.' 2>&1', $outputu);
-//var_dump($outputu);
-*/
 
 define('_is_utf8_split', 5000);
 
@@ -110,7 +98,6 @@ if ($login) {
 
 // génère le gexf
 include('gexf_generator.php');
-echo $gexf;
 
 function pt($string){
     echo $string.'<br/>';
@@ -130,5 +117,8 @@ function scholarlink($term_occurrences,$scholars1_nb_keywords,$scholars2nb_keywo
         return 0;
     }
     
-    }    
+    }     
+
+echo $gexf;
+
 ?>
