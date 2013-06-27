@@ -430,15 +430,6 @@ function fullExtract(){
             var source = edgeNode.getAttribute('source');
             var target = edgeNode.getAttribute('target');
             var indice=source+";"+target;
-            
-            Edges[indice] = {
-                id:         indice,
-                sourceID:   source,
-                targetID:   target,
-                label:      "",
-                weight: 1,
-                attributes: []
-            };
                 
             var edge = {
                 id:         j,
@@ -451,7 +442,7 @@ function fullExtract(){
 
             var weight = edgeNode.getAttribute('weight');
             if(weight!=undefined){
-                Edges[indice]['weight'] = weight;
+                edge['weight'] = weight;
             }
             var kind;
             var attvalueNodes = edgeNode.getElementsByTagName('attvalue');
@@ -462,18 +453,12 @@ function fullExtract(){
                 if(k==1) {
                     kind=val;
                     edge.label=val;
-                    Edges[indice].label=val;
                 }
                 if(k==3) {
-                    Edges[indice].weight = val;
                     edge.weight = val;
                     if(edge.weight < minEdgeWeight) minEdgeWeight= edge.weight;
                     if(edge.weight > maxEdgeWeight) maxEdgeWeight= edge.weight;
                 }
-                Edges[indice].attributes.push({
-                    attr:attr, 
-                    val:val
-                });
                 edge.attributes.push({
                     attr:attr, 
                     val:val
@@ -532,6 +517,7 @@ function fullExtract(){
                 }
                 else bipartiteN2D[target].neighbours.push(source);
             }
+            Edges[indice]=edge;
             if(idS=="D" && idT=="D"){               
                 if( (typeof partialGraph._core.graph.edgesIndex[target+";"+source])=="undefined" ){
                     partialGraph.addEdge(indice,source,target,edge);

@@ -489,8 +489,8 @@ function updateLeftPanel(){
             information += '<li><b>' + Nodes[i].label + '</b></li>';
             for(var j in Nodes[i].attributes){ 
                 information += 
-                    '<li><b>' + Nodes[i].attributes[j].attr + 
-                    '</b>:&nbsp;'+Nodes[i].attributes[j].val+'</li>';
+                '<li><b>' + Nodes[i].attributes[j].attr + 
+                '</b>:&nbsp;'+Nodes[i].attributes[j].val+'</li>';
             }            
             information += '</ul><br>';
         }
@@ -501,7 +501,6 @@ function updateLeftPanel(){
         pr("max from opos: ");
         pr(oposMAX);    
         js1='onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\''; 
-        pr(opos);
         for(var i in opos){
             if(i==25){
                 opossitesNodes += '<li>[...]</li>';
@@ -923,10 +922,10 @@ function createEdgesForExistingNodes (typeOfNodes) {
             for(j=(i+1); j < existingNodes.length ; j++){
                     
                 i1=existingNodes[i].id+";"+
-                   existingNodes[j].id; 
+                existingNodes[j].id; 
                 
                 i2=existingNodes[j].id+";"+
-                   existingNodes[i].id;
+                existingNodes[i].id;
                             
                 if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined" && i1!=i2){
                     if(Edges[i1].weight > Edges[i2].weight){
@@ -1221,12 +1220,15 @@ function changeToMacro(iwannagraph) {
         for(var n in Nodes) {  
             partialGraph.addNode(n,Nodes[n]);          
         }
-        for(var e in Edges) {  
-            if(Edges[e].label=="nodes1" || Edges[e].label=="nodes2"){
-                st=e.split(";");
-                index = partialGraph._core.graph.edgesIndex;
-                if(typeof(index[st[0]+";"+st[1]])!=="undefined" &&
-                    typeof(index[st[1]+";"+st[0]])!=="undefined"
+        for(var e in Edges) {
+            st=e.split(";");
+            index = partialGraph._core.graph.edgesIndex;
+            if(typeof(index[st[0]+";"+st[1]])==="undefined" &&
+                typeof(index[st[1]+";"+st[0]])==="undefined"
+                ){                           
+                            
+                if(typeof(Edges[st[0]+";"+st[1]])!=="undefined" &&
+                    typeof(Edges[st[1]+";"+st[0]])!=="undefined"
                     ){
                     if(Edges[st[0]+";"+st[1]].weight == Edges[st[1]+";"+st[0]].weight){
                         partialGraph.addEdge(
@@ -1251,11 +1253,25 @@ function changeToMacro(iwannagraph) {
                                 Edges[st[1]+";"+st[0]]);                                  
                         }
                     }
-                }                
-            }
-            if(Edges[e].label=="bipartite"){
-                partialGraph.addEdge(e,Edges[e].sourceID,Edges[e].targetID,Edges[e]);
-            }
+                }
+                else {
+                    if(typeof(Edges[st[0]+";"+st[1]])!=="undefined"){
+                        partialGraph.addEdge(
+                            st[0]+";"+st[1],
+                            Edges[st[0]+";"+st[1]].sourceID,
+                            Edges[st[0]+";"+st[1]].targetID,
+                            Edges[st[0]+";"+st[1]]);                            
+                    }
+                    else {
+                        partialGraph.addEdge(
+                            st[1]+";"+st[0],
+                            Edges[st[1]+";"+st[0]].sourceID,
+                            Edges[st[1]+";"+st[0]].targetID,
+                            Edges[st[1]+";"+st[0]]);                                            
+                    }
+                }
+                    
+            }  
         }
         updateBothEdgeFilters();
         updateNodeFilter();
@@ -1353,8 +1369,8 @@ function updateBothEdgeFilters() {
     edges=partialGraph._core.graph.edges;
     scholarsEdgesByWeight=[];
     keywordsEdgesByWeight=[];
+    
     for(var i in edges){
-        pr(edges[i]);
         if(edges[i].label=="nodes1"){
             if(typeof(scholarsEdgesByWeight[edges[i].weight])=="undefined"){
                 scholarsEdgesByWeight[edges[i].weight]=[];
@@ -1445,9 +1461,6 @@ function updateNodeFilter() {
     nodes=partialGraph._core.graph.nodes;
     nodesBySize=[];
     for(var i in nodes){
-//        pr(i);
-//        pr(nodes);
-//        pr(Nodes);
         if(Nodes[nodes[i].id].type=="NGram"){
             if(typeof(nodesBySize[nodes[i].size])=="undefined"){
                 nodesBySize[nodes[i].size]=[];
