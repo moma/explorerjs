@@ -502,8 +502,8 @@ function updateLeftPanel(){
 
 function pushLabel(node_id,node_label) {
     labels.push({
-        'label' : node_label, 
-        'desc': Nodes[node_id].attributes[0].val
+        'label' : node_label//, 
+        //'desc': Nodes[node_id].attributes[0].val
     });
 }
 
@@ -1773,9 +1773,11 @@ $(document).ready(function () {
         pr("item-desc: "+item.desc);
         pr("searchVal: "+searchVal);
         var desc = extractContext(item.desc, searchVal);
+        //var searchVal = $("#searchinput").val();
+        //var desc = extractContext(item.desc, searchVal);
         return $('<li onclick=\'var s = "'+item.label+'"; search(s);$("#searchinput").val(strSearchBar);\'></li>')
-        .data('item.autocomplete', item)
-        .append("<a><span class=\"labelresult\">" + item.label + "</span><br ><small>" + desc + "<small></a>" )
+        //.data('item.autocomplete', item)
+        .append("<a><span class=\"labelresult\">" + item.label + "</span></a><br><br>" )
         .appendTo(ul);
     };
 
@@ -1784,7 +1786,7 @@ $(document).ready(function () {
             matches = [];
             var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
             var results = $.grep(labels, function(e) {
-                return matcher.test(e.label) || matcher.test(e.desc);
+                return matcher.test(e.label);
             });
             
             if (!results.length) {

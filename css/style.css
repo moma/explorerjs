@@ -209,6 +209,7 @@ body {
 
 .labelresult {
     font-weight: bold;
+    font-size: xx-large;
 }
 
 .ui-autocomplete {
