@@ -485,9 +485,13 @@ function updateLeftPanel(){
         information += '<br><h4>Information:</h4>';
         information += '<ul>';
             
-        for(var i in selections){        
+        for(var i in selections){
             information += '<li><b>' + Nodes[i].label + '</b></li>';
-            information += '<li>' + Nodes[i].attributes[3].val + '</li>';
+            for(var j in Nodes[i].attributes){ 
+                information += 
+                    '<li><b>' + Nodes[i].attributes[j].attr + 
+                    '</b>:&nbsp;'+Nodes[i].attributes[j].val+'</li>';
+            }            
             information += '</ul><br>';
         }
     }

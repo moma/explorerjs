@@ -580,7 +580,7 @@ function startBipartite(pathfile) {
         slide: function(event, ui) {
             $.doTimeout(300,function (){
                 partialGraph.iterNodes(function (n) {
-                    if(n.id.charAt(0)=="D") {
+                    if(Nodes[n.id].type=="Document") {
                         n.size = parseFloat(Nodes[n.id].size) + parseFloat((ui.value-1))*0.3;
                     }
                 });
@@ -596,7 +596,7 @@ function startBipartite(pathfile) {
         slide: function(event, ui) {
             $.doTimeout(300,function (){
                 partialGraph.iterNodes(function (n) {
-                    if(n.id.charAt(0)=="N") {
+                    if(Nodes[n.id].type=="NGram") {
                         n.size = parseFloat(Nodes[n.id].size) + parseFloat((ui.value-1))*0.3;
                     }
                 });
