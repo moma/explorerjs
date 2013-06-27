@@ -1,34 +1,42 @@
-$.ajax({
-    type: 'GET',
-    url: 'php/listFiles.php',
-    data: "url=nothing",
-    //contentType: "application/json",
-    //dataType: 'json',
-    success : function(data){ 
-        $("#gexfs").html(data);
-    },
-    error: function(){ 
-        console.log("Page Not found.");
-    }
-});
+listGexfs();
 
 if(typeof(getUrlParam.file)!=="undefined"){
     //Do something to change de selector value
     if(typeof(isBipartite[getUrlParam.file])!=="undefined"){
-        alert("is Bipartite");
         $.doTimeout(30,function (){
+            listGexfs();
             startBipartite(getUrlParam.file);
         });
     }
     else {
-        alert("is not Bipartite");
         $.doTimeout(30,function (){
+            listGexfs();
             startOnePartite(getUrlParam.file);
         });
     }
 }
+function listGexfs(){
+    $.ajax({
+        type: 'GET',
+        url: 'php/listFiles.php',
+        data: "url=nothing",
+        //contentType: "application/json",
+        //dataType: 'json',
+        success : function(data){ 
+            $("#gexfs").html(data);
+        },
+        error: function(){ 
+            console.log("Page Not found.");
+        }
+    });
+}
 
 function startOnePartite(pathfile) {
+    $("#labelchange").hide();
+    $("#availableView").hide(); 
+    $("#category-B").hide();
+    $("#images").hide();
+    
     pr("pathfile: "+pathfile);
     partialGraph = sigma.init(document.getElementById('sigma-example'))
     .drawingProperties(sigmaJsDrawingProperties)
@@ -42,8 +50,7 @@ function startOnePartite(pathfile) {
     partialGraph.centreY = partialGraph._core.heigth/2;
        
     $('#sigma-example').css('background-color','white');
-    $("#labelchange").hide();
-    $("#availableView").hide();    
+    
     console.log("parsing...");        
     parse(pathfile);
     onepartiteExtract();
@@ -69,6 +76,72 @@ function startOnePartite(pathfile) {
     /*======= Show some labels at the beginning =======*/
     
     partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8).draw();
+    initializeMap();
+    updateMap();
+    updateDownNodeEvent(false);
+        /* Initial Effect (Add: unchecked) HIDE */
+    partialGraph.bind('overnodes',function(event){ 
+        var nodes = event.content;
+        var neighbors = {};
+        var nrEdges = 0;
+        var e = partialGraph._core.graph.edges;
+        for(i=0;i<e.length;i++){
+            if(nodes.indexOf(e[i].source.id)>=0 || nodes.indexOf(e[i].target.id)>=0){
+                neighbors[e[i].source.id] = 1;
+                neighbors[e[i].target.id] = 1;
+                nrEdges++;//github.com/jacomyal/sigma.js/issues/62
+            }
+        }
+        //partialGraph.draw(2,1,2);
+        partialGraph.iterNodes(function(n){
+            if(nrEdges>0) {
+                if(!neighbors[n.id]){
+                    n.hidden = 1;
+                }else{
+                    n.hidden = 0;
+                }
+            }
+        }).draw(2,1,2);
+    });
+  
+    partialGraph.bind('outnodes',function(){
+        var e = partialGraph._core.graph.edges;
+        for(i=0;i<e.length;i++){
+            e[i].hidden = 0;
+        }
+        partialGraph.draw(2,1,2);
+            
+        partialGraph.iterNodes(function(n){
+            n.hidden = 0;
+        }).draw(2,1,2);
+    });
+    /* Initial Effect (Add: unchecked) HIDE */
+    
+    partialGraph.startForceAtlas2();
+    
+    $("#aUnfold").click(function() {
+        var _cG = $("#leftcolumn");
+        if (_cG.offset().left < 0) {
+            _cG.animate({
+                "left" : "0px"
+            }, function() {
+                $("#aUnfold").attr("class","leftarrow");
+                $("#zonecentre").css({
+                    left: _cG.width() + "px"
+                });
+            }); 
+        } else {
+            _cG.animate({
+                "left" : "-" + _cG.width() + "px"
+            }, function() {
+                $("#aUnfold").attr("class","rightarrow");
+                $("#zonecentre").css({
+                    left: "0"
+                });
+            });
+        }
+        return false;
+    });
     
 }
 
@@ -169,7 +242,6 @@ function startBipartite(pathfile) {
     $("#loading").remove();
     
     $("#aUnfold").click(function() {
-        pr("heeere");
         var _cG = $("#leftcolumn");
         if (_cG.offset().left < 0) {
             _cG.animate({
