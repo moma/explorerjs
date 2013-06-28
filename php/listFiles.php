@@ -7,11 +7,11 @@ $string = str_replace("/php","",$string);
 $files = getDirectoryList($string."/data");
 
 //$html = "<select onchange='start(this.value);'>";
-$html = "<select onchange='
+$html = "<select style='width:150px;' onchange='
                 currentUrl=window.location.origin+window.location.pathname;
                 window.location=currentUrl+\"?file=\"+this.value;           
         '>";
-$html.="<option selected></option>";
+$html.="<option selected>[Select your Graph]</option>";
 foreach($files as $file){
 	$html.="<option>$file</option>";
 }

@@ -83,35 +83,6 @@ body {
     text-align: left;
 }
 
-/* each sliders positioned relatively to their parent */
-.slider {
-    float: left;
-    width: 100px;
-    padding: 0px 20px 0px 0px;
-    margin-top: -5px;
-}
-
-.smallslider {
-    width: 80px;
-}
-
-.sliderLabel {
-    font-size: 11px;
-}
-
-.toolbar-left {
-    margin-top: 15px;
-    float: left;
-}
-
-.toolbar-middle {
-    float: right;
-}
-.toolbar-right {
-    margin-top: 5px;
-    float: right;
-}
-
 .appletInfo {
     font-size: 18px;
 }

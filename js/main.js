@@ -329,6 +329,7 @@ function startBipartite(pathfile) {
     parse(pathfile);
     fullExtract(); 
     updateEdgeFilter("social");
+    updateNodeFilter("social");
     pushSWClick("social");
     console.log("Parsing complete.");
     /*======= Show some labels at the beginning =======*/

@@ -41,15 +41,79 @@ h1 a {
     width: 195px;
 }
 
+
+#container {
+    width:100%;
+    text-align:center;
+}
+
+#left {
+    position:relative;
+    text-align:center;
+    float:left;
+    width:20%;
+    
+    height: 80px;
+}
+
+#right {
+    float:right;
+    width:30%;
+    
+    height: 80px;
+}
+
+#center {
+    text-align:center;
+    float:right;
+    width:50%;
+    
+    height: 80px;
+}
+
+
+
+
+
+
+/* each sliders positioned relatively to their parent */
+.slider {
+    float: left;
+    width: 100px;
+    padding: 0px 20px 0px 0px;
+    margin-top: -5px;
+}
+
+.smallslider {
+    width: 80px;
+}
+
+.sliderLabel {
+    font-size: 11px;
+}
+
+.toolbar-left {
+    margin-top: 15px;
+    float: left;
+}
+
+.toolbar-middle {
+    float: right;
+}
+.toolbar-right {
+    margin-top: 5px;
+    float: right;
+}
+
+
+
+
 #searchinput {
     background: #fff url(../img/search.gif) no-repeat right;
     border: 1px solid #DDD;
-    font-size: 14px; line-height: 14px, height: 14px;
-    left: 420px;
-    padding: 1px 4px; margin: 0;
-    position: absolute;
+    font-size: 14px; 
     top: 25px;
-    width: 220px;
+    width: 170px;
 }
 
 #searchinput:focus, #searchinput:active {
@@ -67,7 +131,7 @@ h1 a {
 /* AU CENTRE */
 
 #zonecentre {
-    position: fixed; top: 95px; bottom: 0; left: 0; right: 0; overflow: hidden;
+    position: fixed; top: 80px; bottom: 0; left: 0; right: 0; overflow: hidden;
 }
 
 
@@ -167,9 +231,18 @@ h1 a {
 }
 
 /* COLONNE DE GAUCHE */
+#rightcolumn {
+    position:absolute; top:0; left:0;border-style:solid; top: 80px; bottom: 0px; 
+    left: 100%; width: 400px; height:300px; background-color: rgb(250, 250, 252); 
+    box-shadow: 2px 0 2px #808090; padding: 0;
+}
+
+#rightcontent {
+    position: absolute; left: 0; top: 0; bottom: 0; right: 0; overflow: auto; list-style: none; margin: 0; padding: 0; border-top: 1px solid #cccccc;
+}
 
 #leftcolumn {
-    position: absolute; top: 95px; bottom: 0px; left: -250px; width: 250px; background-color: rgb(250, 250, 252); box-shadow: 2px 0 2px #808090; padding: 0;
+    position: absolute; top: 80px; bottom: 0px; left: -250px; width: 250px; background-color: rgb(250, 250, 252); box-shadow: 2px 0 2px #808090; padding: 0;
 }
 
 

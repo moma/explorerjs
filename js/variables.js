@@ -2,7 +2,6 @@ var isBipartite = [];
 isBipartite["hnetwork-1982_2013hn-homework1982_2013top200-Author-ISItermsAlexandrePartCountry-distributionalcooc-10000-oT0.19-10-louTrue.gexf"]=1;
 
 var inactiveColor = '#666';
-var gexfLocation = "data/teste.gexf";
 var startingNodeId = "1";
 var minLengthAutoComplete = 1;
 var maxSearchResults = 10;
