@@ -136,7 +136,12 @@ function onepartiteExtract(){
             }
             node.id=id;
             node.type = "Document";
-            node.size=node.attributes[1].val;
+            if(node.attributes[0].attr=="weight"){
+                node.size=node.attributes[0].val;
+            }
+            if(node.attributes[1].attr=="weight"){
+                node.size=node.attributes[1].val;
+            }
                 
             partialGraph.addNode(id,node);
             labels.push({
@@ -148,6 +153,7 @@ function onepartiteExtract(){
             if(parseInt(node.size) > parseInt(maxNodeSize)) maxNodeSize= node.size;
             // Create Node
             Nodes[id] = node  // The graph node
+            //pr(node);
         }
     }    
     

@@ -13,14 +13,6 @@ var zoom=0;
 var a_node_size= 0.50;
 var b_node_size= 0.50;
 var cursor_size= 0.00;
-var a_edge_filter_min= 0.0;
-var a_edge_filter_max= 1.0;
-var a_node_filter_min= 0.0;
-var a_node_filter_max= 1.0;
-var b_edge_filter_min= 0.0;
-var b_edge_filter_max= 1.0;
-var b_node_filter_min= 0.0;
-var b_node_filter_max= 1.0;
 
 var checkBox=false;
 var overNodes=false;
