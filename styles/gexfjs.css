@@ -230,18 +230,16 @@ h1 a {
     position: fixed; right: 0; bottom: 0;
     border-style: solid none none solid; border-width: 5px; border-color: #ffffff;
 }
-
-/* COLONNE DE GAUCHE */
+/* COLONNE DE GAUCHE 
 #rightcolumn {
-    position:absolute; top:0; left:0;border-style:solid; top: 80px; bottom: 0px; 
-    left: 100%; width: 400px; height:300px; background-color: rgb(250, 250, 252); 
-    box-shadow: 2px 0 2px #808090; padding: 0;
+    position:fixed; border-style:solid;left:900px;top:80px;
 }
+
 
 #rightcontent {
     position: absolute; left: 0; top: 0; bottom: 0; right: 0; overflow: auto; list-style: none; margin: 0; padding: 0; border-top: 1px solid #cccccc;
 }
-
+*/
 #leftcolumn {
     position: absolute; top: 80px; bottom: 0px; left: -250px; width: 250px; background-color: rgb(250, 250, 252); box-shadow: 2px 0 2px #808090; padding: 0;
 }
