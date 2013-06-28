@@ -9,7 +9,7 @@ $files = getDirectoryList($string."/data");
 //$html = "<select onchange='start(this.value);'>";
 $html = "<select style='width:150px;' onchange='
                 currentUrl=window.location.origin+window.location.pathname;
-                window.location=currentUrl+\"?file=\"+this.value;           
+                window.location=window.location.origin+window.location.pathname+\"?file=\"+this.value;           
         '>";
 $html.="<option selected>[Select your Graph]</option>";
 foreach($files as $file){
