@@ -1310,6 +1310,7 @@ function justhide(){
 }
 
 function updateEdgeFilter(edgeFilterName) {
+    pr("Updating filter "+edgeFilterName);
     thing="";
     if(edgeFilterName=="social") {
         edgeFilterName="#sliderAEdgeWeight";
@@ -1320,6 +1321,7 @@ function updateEdgeFilter(edgeFilterName) {
         thing="nodes2";
     }
     edges=partialGraph._core.graph.edges;
+    //pr(edges);
     edgesByWeight=[];
     for(var i in edges){
         if(edges[i].label==thing){
@@ -1332,6 +1334,7 @@ function updateEdgeFilter(edgeFilterName) {
     edgesSortedByWeight = ArraySortByKey(edgesByWeight, function(a,b){
         return a-b
     });
+    //pr(edgesSortedByWeight);
     
     $(edgeFilterName).slider({
         range: true,
