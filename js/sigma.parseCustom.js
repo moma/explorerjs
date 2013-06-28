@@ -181,15 +181,6 @@ function onepartiteExtract(){
             var target = edgeNode.getAttribute('target');
             var indice=source+";"+target;
             
-            Edges[indice] = {
-                id:         indice,
-                sourceID:   source,
-                targetID:   target,
-                label:      "",
-                weight: 1,
-                attributes: []
-            };
-                
             var edge = {
                 id:         j,
                 sourceID:   source,
@@ -201,7 +192,7 @@ function onepartiteExtract(){
 
             var weight = edgeNode.getAttribute('weight');
             if(weight!=undefined){
-                Edges[indice]['weight'] = weight;
+                edge['weight'] = weight;
             }
             var kind;
             var attvalueNodes = edgeNode.getElementsByTagName('attvalue');
@@ -212,27 +203,18 @@ function onepartiteExtract(){
                 if(k==1) {
                     kind=val;
                     edge.label=val;
-                    Edges[indice].label=val;
                 }
                 if(k==3) {
-                    Edges[indice].weight = val;
                     edge.weight = val;
                     if(edge.weight < minEdgeWeight) minEdgeWeight= edge.weight;
                     if(edge.weight > maxEdgeWeight) maxEdgeWeight= edge.weight;
                 }
-                Edges[indice].attributes.push({
-                    attr:attr, 
-                    val:val
-                });
                 edge.attributes.push({
                     attr:attr, 
                     val:val
                 });
             }
-            //console.log(edge);
-            
-            idS=Nodes[edge.sourceID].type.charAt(0);
-            idT=Nodes[edge.targetID].type.charAt(0);
+            edge.label="nodes1";            
             if((typeof nodes1[source])=="undefined"){
                 nodes1[source] = {
                     label: Nodes[source].label,
@@ -241,8 +223,7 @@ function onepartiteExtract(){
                 nodes1[source].neighbours.push(target);
             }
             else nodes1[source].neighbours.push(target);
-            
-                          
+            Edges[indice] = edge;
             if( (typeof partialGraph._core.graph.edgesIndex[target+";"+source])=="undefined" ){
                 partialGraph.addEdge(indice,source,target,edge);
             }

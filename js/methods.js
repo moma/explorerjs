@@ -31,6 +31,17 @@ getUrlParam = (function () {
     return get;
 })();
 
+function showhideChat(){
+    
+    cg = document.getElementById("rightcolumn");
+    if(cg){
+        if(cg.style.right=="-400px"){
+            cg.style.right="0px";
+        }
+        else cg.style.right="-400px";
+    }
+}
+
 var oposMAX;
 function ArraySortByValue(array, sortFunc){
     var tmp = [];
@@ -1310,6 +1321,7 @@ function justhide(){
 }
 
 function updateEdgeFilter(edgeFilterName) {
+    pr("Updating filter "+edgeFilterName);
     thing="";
     if(edgeFilterName=="social") {
         edgeFilterName="#sliderAEdgeWeight";
@@ -1320,6 +1332,7 @@ function updateEdgeFilter(edgeFilterName) {
         thing="nodes2";
     }
     edges=partialGraph._core.graph.edges;
+    //pr(edges);
     edgesByWeight=[];
     for(var i in edges){
         if(edges[i].label==thing){
@@ -1332,6 +1345,7 @@ function updateEdgeFilter(edgeFilterName) {
     edgesSortedByWeight = ArraySortByKey(edgesByWeight, function(a,b){
         return a-b
     });
+    //pr(edgesSortedByWeight);
     
     $(edgeFilterName).slider({
         range: true,

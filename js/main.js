@@ -1,13 +1,6 @@
 listGexfs();
 
 if(typeof(getUrlParam.file)!=="undefined"){
-//    if (_cG.offset().left == 900) {
-//        _cG.animate({
-//            "left" : "1900px"
-//        });
-//    }
-//    $("#rightcolumn").hide();
-    //Do something to change de selector value
     if(typeof(isBipartite[getUrlParam.file])!=="undefined"){
         $.doTimeout(30,function (){
             listGexfs();
@@ -35,12 +28,6 @@ function listGexfs(){
             console.log("Page Not found.");
         }
     });    
-    cg = document.getElementById("rightcolumn");
-    if(cg){
-        if(cg.style.left=="900px");{
-            cg.style.left="1900px";
-        }
-    }
 }
 
 function startOnePartite(pathfile) {
