@@ -21,6 +21,7 @@ if(typeof(getUrlParam.file)!=="undefined"){
         });
     }
 }
+//else document.getElementById("rightcolumn").style.right=0
 function listGexfs(){
     $.ajax({
         type: 'GET',
@@ -36,11 +37,11 @@ function listGexfs(){
         }
     });    
     cg = document.getElementById("rightcolumn");
-    if(cg){
-        if(cg.style.left=="900px");{
-            cg.style.left="1900px";
-        }
-    }
+//    if(cg){
+//        if(cg.style.left=="900px");{
+//            cg.style.left="1900px";
+//        }
+//    }
 }
 
 function startOnePartite(pathfile) {
