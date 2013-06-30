@@ -1,8 +1,8 @@
 var isBipartite = [];
 isBipartite["hnetwork-1982_2013hn-homework1982_2013top200-Author-ISItermsAlexandrePartCountry-distributionalcooc-10000-oT0.19-10-louTrue.gexf"]=1;
-
+isBipartite["Biparti_AuteurTermes.gexf"]=1;
+isBipartite["2-Terms-Authors.gexf"]=1;
 var inactiveColor = '#666';
-var gexfLocation = "data/teste.gexf";
 var startingNodeId = "1";
 var minLengthAutoComplete = 1;
 var maxSearchResults = 10;
@@ -14,14 +14,6 @@ var zoom=0;
 var a_node_size= 0.50;
 var b_node_size= 0.50;
 var cursor_size= 0.00;
-var a_edge_filter_min= 0.0;
-var a_edge_filter_max= 1.0;
-var a_node_filter_min= 0.0;
-var a_node_filter_max= 1.0;
-var b_edge_filter_min= 0.0;
-var b_edge_filter_max= 1.0;
-var b_node_filter_min= 0.0;
-var b_node_filter_max= 1.0;
 
 var checkBox=false;
 var overNodes=false;
@@ -90,10 +82,6 @@ var sigmaJsDrawingProperties = {
     //defaultBorderView: "always"
 };
 var sigmaJsGraphProperties = {
-    //minNodeSize: 0.5,
-    //maxNodeSize: 5,
-    //minNodeSize: 2,
-    //maxNodeSize: 5,
     minEdgeSize: 2,
     maxEdgeSize: 2
 };

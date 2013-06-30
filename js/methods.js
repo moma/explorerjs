@@ -31,6 +31,17 @@ getUrlParam = (function () {
     return get;
 })();
 
+function showhideChat(){
+    
+    cg = document.getElementById("rightcolumn");
+    if(cg){
+        if(cg.style.right=="-400px"){
+            cg.style.right="0px";
+        }
+        else cg.style.right="-400px";
+    }
+}
+
 var oposMAX;
 function ArraySortByValue(array, sortFunc){
     var tmp = [];
@@ -489,8 +500,8 @@ function updateLeftPanel(){
             information += '<li><b>' + Nodes[i].label + '</b></li>';
             for(var j in Nodes[i].attributes){ 
                 information += 
-                    '<li><b>' + Nodes[i].attributes[j].attr + 
-                    '</b>:&nbsp;'+Nodes[i].attributes[j].val+'</li>';
+                '<li><b>' + Nodes[i].attributes[j].attr + 
+                '</b>:&nbsp;'+Nodes[i].attributes[j].val+'</li>';
             }            
             information += '</ul><br>';
         }
@@ -501,7 +512,6 @@ function updateLeftPanel(){
         pr("max from opos: ");
         pr(oposMAX);    
         js1='onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\''; 
-        pr(opos);
         for(var i in opos){
             if(i==25){
                 opossitesNodes += '<li>[...]</li>';
@@ -596,7 +606,7 @@ function graphNGrams(node_id){
         selection(node);
         partialGraph.startForceAtlas2();        
         updateEdgeFilter("semantic");
-        updateNodeFilter();
+        updateNodeFilter("semantic");
         $("#category-A").hide();
         $("#category-B").show();
         changeButton("active_tags.png");
@@ -923,10 +933,10 @@ function createEdgesForExistingNodes (typeOfNodes) {
             for(j=(i+1); j < existingNodes.length ; j++){
                     
                 i1=existingNodes[i].id+";"+
-                   existingNodes[j].id; 
+                existingNodes[j].id; 
                 
                 i2=existingNodes[j].id+";"+
-                   existingNodes[i].id;
+                existingNodes[i].id;
                             
                 if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined" && i1!=i2){
                     if(Edges[i1].weight > Edges[i2].weight){
@@ -1117,7 +1127,7 @@ function changeToMeso(iwannagraph) {
             partialGraph.startForceAtlas2();
             socsemFlag=true;
             updateBothEdgeFilters();
-            updateNodeFilter();
+            updateBothNodeFilters();
         }
     }
      
@@ -1165,7 +1175,7 @@ function changeToMeso(iwannagraph) {
                 }                
             }
             updateEdgeFilter(iwannagraph);  
-            updateNodeFilter();
+            updateNodeFilter("semantic");
         }
     }
     highlightSelectedNodes(true); 
@@ -1198,7 +1208,7 @@ function changeToMacro(iwannagraph) {
             break;
         }
         updateEdgeFilter(iwannagraph);
-        updateNodeFilter();
+        updateNodeFilter("semantic");
     }
     if(iwannagraph=="social") {
         partialGraph.emptyGraph();
@@ -1214,6 +1224,7 @@ function changeToMacro(iwannagraph) {
             break;
         }
         updateEdgeFilter(iwannagraph);
+        updateNodeFilter("social");
     }
     
     if(iwannagraph=="sociosemantic") {
@@ -1221,12 +1232,15 @@ function changeToMacro(iwannagraph) {
         for(var n in Nodes) {  
             partialGraph.addNode(n,Nodes[n]);          
         }
-        for(var e in Edges) {  
-            if(Edges[e].label=="nodes1" || Edges[e].label=="nodes2"){
-                st=e.split(";");
-                index = partialGraph._core.graph.edgesIndex;
-                if(typeof(index[st[0]+";"+st[1]])!=="undefined" &&
-                    typeof(index[st[1]+";"+st[0]])!=="undefined"
+        for(var e in Edges) {
+            st=e.split(";");
+            index = partialGraph._core.graph.edgesIndex;
+            if(typeof(index[st[0]+";"+st[1]])==="undefined" &&
+                typeof(index[st[1]+";"+st[0]])==="undefined"
+                ){                           
+                            
+                if(typeof(Edges[st[0]+";"+st[1]])!=="undefined" &&
+                    typeof(Edges[st[1]+";"+st[0]])!=="undefined"
                     ){
                     if(Edges[st[0]+";"+st[1]].weight == Edges[st[1]+";"+st[0]].weight){
                         partialGraph.addEdge(
@@ -1251,14 +1265,28 @@ function changeToMacro(iwannagraph) {
                                 Edges[st[1]+";"+st[0]]);                                  
                         }
                     }
-                }                
-            }
-            if(Edges[e].label=="bipartite"){
-                partialGraph.addEdge(e,Edges[e].sourceID,Edges[e].targetID,Edges[e]);
-            }
+                }
+                else {
+                    if(typeof(Edges[st[0]+";"+st[1]])!=="undefined"){
+                        partialGraph.addEdge(
+                            st[0]+";"+st[1],
+                            Edges[st[0]+";"+st[1]].sourceID,
+                            Edges[st[0]+";"+st[1]].targetID,
+                            Edges[st[0]+";"+st[1]]);                            
+                    }
+                    else {
+                        partialGraph.addEdge(
+                            st[1]+";"+st[0],
+                            Edges[st[1]+";"+st[0]].sourceID,
+                            Edges[st[1]+";"+st[0]].targetID,
+                            Edges[st[1]+";"+st[0]]);                                            
+                    }
+                }
+                    
+            }  
         }
         updateBothEdgeFilters();
-        updateNodeFilter();
+        updateBothNodeFilters();
     }
     highlightSelectedNodes(true);
     //partialGraph.stopForceAtlas2();
@@ -1293,6 +1321,7 @@ function justhide(){
 }
 
 function updateEdgeFilter(edgeFilterName) {
+    pr("Updating filter "+edgeFilterName);
     thing="";
     if(edgeFilterName=="social") {
         edgeFilterName="#sliderAEdgeWeight";
@@ -1303,6 +1332,7 @@ function updateEdgeFilter(edgeFilterName) {
         thing="nodes2";
     }
     edges=partialGraph._core.graph.edges;
+    //pr(edges);
     edgesByWeight=[];
     for(var i in edges){
         if(edges[i].label==thing){
@@ -1315,6 +1345,7 @@ function updateEdgeFilter(edgeFilterName) {
     edgesSortedByWeight = ArraySortByKey(edgesByWeight, function(a,b){
         return a-b
     });
+    //pr(edgesSortedByWeight);
     
     $(edgeFilterName).slider({
         range: true,
@@ -1349,12 +1380,99 @@ function updateEdgeFilter(edgeFilterName) {
     });
 }
 
+
+function updateBothNodeFilters() {
+    nodes=partialGraph._core.graph.nodes;    
+    scholarsNodesBySize=[];
+    keywordsNodesBySize=[];
+    
+    for(var i in nodes){
+        if(Nodes[nodes[i].id].type=="Document"){
+            if(typeof(scholarsNodesBySize[nodes[i].size])=="undefined"){
+                scholarsNodesBySize[nodes[i].size]=[];
+            }
+            scholarsNodesBySize[nodes[i].size].push(nodes[i].id);
+        }
+        if(Nodes[nodes[i].id].type=="NGram"){
+            if(typeof(keywordsNodesBySize[nodes[i].size])=="undefined"){
+                keywordsNodesBySize[nodes[i].size]=[];
+            }
+            keywordsNodesBySize[nodes[i].size].push(nodes[i].id);
+        }
+    }
+    scholarsSortedBySize = ArraySortByKey(scholarsNodesBySize, function(a,b){
+        return a-b
+    });    
+    keywordsSortedBySize = ArraySortByKey(keywordsNodesBySize, function(a,b){
+        return a-b
+    });
+    
+    $("#sliderANodeWeight").slider({
+        range: true,
+        min: 0,
+        max: scholarsSortedBySize.length-1,
+        values: [0, scholarsSortedBySize.length-1],
+        step: 1,
+        animate: true,
+        slide: function(event, ui) {
+            $.doTimeout(300,function (){
+                //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+                nodesTemp = partialGraph._core.graph.nodesIndex;
+                for(i=0;i<scholarsSortedBySize.length;i++){
+                    if(i>=ui.values[0] && i<=ui.values[1]){
+                        for (var j in scholarsSortedBySize[i].value){
+                            id=scholarsSortedBySize[i].value[j];
+                            nodesTemp[id].hidden=false;
+                        }
+                    }
+                    else {
+                        for (var j in scholarsSortedBySize[i].value){
+                            id=scholarsSortedBySize[i].value[j];
+                            nodesTemp[id].hidden=true;
+                        }
+                    }
+                }
+                partialGraph.draw();
+            });
+        }
+    });
+    $("#sliderBNodeWeight").slider({
+        range: true,
+        min: 0,
+        max: keywordsSortedBySize.length-1,
+        values: [0, keywordsSortedBySize.length-1],
+        step: 1,
+        animate: true,
+        slide: function(event, ui) {
+            $.doTimeout(300,function (){
+                //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+                nodesTemp = partialGraph._core.graph.nodesIndex;
+                for(i=0;i<keywordsSortedBySize.length;i++){
+                    if(i>=ui.values[0] && i<=ui.values[1]){
+                        for (var j in keywordsSortedBySize[i].value){
+                            id=keywordsSortedBySize[i].value[j];
+                            nodesTemp[id].hidden=false;
+                        }
+                    }
+                    else {
+                        for (var j in keywordsSortedBySize[i].value){
+                            id=keywordsSortedBySize[i].value[j];
+                            nodesTemp[id].hidden=true;
+                        }
+                    }
+                }
+                partialGraph.draw();
+            });
+        }
+    });
+}
+
 function updateBothEdgeFilters() {
     edges=partialGraph._core.graph.edges;
     scholarsEdgesByWeight=[];
     keywordsEdgesByWeight=[];
+    
     for(var i in edges){
-        pr(edges[i]);
         if(edges[i].label=="nodes1"){
             if(typeof(scholarsEdgesByWeight[edges[i].weight])=="undefined"){
                 scholarsEdgesByWeight[edges[i].weight]=[];
@@ -1441,14 +1559,21 @@ function updateBothEdgeFilters() {
     });
 }
 
-function updateNodeFilter() {
+function updateNodeFilter(nodeFilterName) {
+    nodeType="";
+    divName="";
+    if(nodeFilterName=="social"){
+        nodeType="Document";
+        divName="#sliderANodeWeight";
+    }
+    else {
+        nodeType="NGram";
+        divName="#sliderBNodeWeight";
+    }
     nodes=partialGraph._core.graph.nodes;
     nodesBySize=[];
     for(var i in nodes){
-//        pr(i);
-//        pr(nodes);
-//        pr(Nodes);
-        if(Nodes[nodes[i].id].type=="NGram"){
+        if(Nodes[nodes[i].id].type==nodeType){
             if(typeof(nodesBySize[nodes[i].size])=="undefined"){
                 nodesBySize[nodes[i].size]=[];
             }
@@ -1459,7 +1584,7 @@ function updateNodeFilter() {
         return a-b
     });
     
-    $("#sliderBNodeWeight").slider({
+    $(divName).slider({
         range: true,
         min: 0,
         max: nodesSortedBySize.length-1,

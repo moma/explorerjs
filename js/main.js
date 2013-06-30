@@ -1,7 +1,6 @@
 listGexfs();
 
 if(typeof(getUrlParam.file)!=="undefined"){
-    //Do something to change de selector value
     if(typeof(isBipartite[getUrlParam.file])!=="undefined"){
         $.doTimeout(30,function (){
             listGexfs();
@@ -28,7 +27,7 @@ function listGexfs(){
         error: function(){ 
             console.log("Page Not found.");
         }
-    });
+    });    
 }
 
 function startOnePartite(pathfile) {
@@ -54,26 +53,28 @@ function startOnePartite(pathfile) {
     
     console.log("parsing...");        
     parse(pathfile);
-    onepartiteExtract();
+    onepartiteExtract();    
+    updateEdgeFilter("social");
+    updateNodeFilter("social");
     console.log("Parsing complete.");
     
     /*======= Show some labels at the beginning =======*/
-    minIn=50,
-    maxIn=0,
-    minOut=50,
-    maxOut=0;        
-    partialGraph.iterNodes(function(n){
-        if(parseInt(n.inDegree) < minIn) minIn= n.inDegree;
-        if(parseInt(n.inDegree) > maxIn) maxIn= n.inDegree;
-        if(parseInt(n.outDegree) < minOut) minOut= n.outDegree;
-        if(parseInt(n.outDegree) > maxOut) maxOut= n.outDegree;
-    });
-    partialGraph.iterNodes(function(n){
-        if(n.inDegree==minIn) n.forceLabel=true;
-        if(n.inDegree==maxIn) n.forceLabel=true;
-        if(n.outDegree==minOut) n.forceLabel=true;
-        if(n.outDegree==maxOut) n.forceLabel=true;
-    });
+//    minIn=50,
+//    maxIn=0,
+//    minOut=50,
+//    maxOut=0;        
+//    partialGraph.iterNodes(function(n){
+//        if(parseInt(n.inDegree) < minIn) minIn= n.inDegree;
+//        if(parseInt(n.inDegree) > maxIn) maxIn= n.inDegree;
+//        if(parseInt(n.outDegree) < minOut) minOut= n.outDegree;
+//        if(parseInt(n.outDegree) > maxOut) maxOut= n.outDegree;
+//    });
+//    partialGraph.iterNodes(function(n){
+//        if(n.inDegree==minIn) n.forceLabel=true;
+//        if(n.inDegree==maxIn) n.forceLabel=true;
+//        if(n.outDegree==minOut) n.forceLabel=true;
+//        if(n.outDegree==maxOut) n.forceLabel=true;
+//    });
     /*======= Show some labels at the beginning =======*/
     
     partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8).draw();
@@ -329,6 +330,7 @@ function startBipartite(pathfile) {
     parse(pathfile);
     fullExtract(); 
     updateEdgeFilter("social");
+    updateNodeFilter("social");
     pushSWClick("social");
     console.log("Parsing complete.");
     /*======= Show some labels at the beginning =======*/
@@ -342,12 +344,14 @@ function startBipartite(pathfile) {
         if(parseInt(n.outDegree) < minOut) minOut= n.outDegree;
         if(parseInt(n.outDegree) > maxOut) maxOut= n.outDegree;
     });
-    partialGraph.iterNodes(function(n){
-        if(n.inDegree==minIn) n.forceLabel=true;
-        if(n.inDegree==maxIn) n.forceLabel=true;
-        if(n.outDegree==minOut) n.forceLabel=true;
-        if(n.outDegree==maxOut) n.forceLabel=true;
-    });
+    n=partialGraph._core.graph.nodes;
+    for(var i in n){
+        if(n[i].inDegree==minIn) n[i].forceLabel=true;
+        if(n[i].inDegree==maxIn) n[i].forceLabel=true;
+        if(n[i].outDegree==minOut) n[i].forceLabel=true;
+        if(n[i].outDegree==maxOut) n[i].forceLabel=true;
+        if(i==4) break;
+    }
     /*======= Show some labels at the beginning =======*/
     
     
