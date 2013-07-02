@@ -7,8 +7,11 @@ $string = str_replace("/php","",$string);
 $files = getDirectoryList($string."/data");
 
 //$html = "<select onchange='start(this.value);'>";
+$scriptname=end(explode('/',$_SERVER['PHP_SELF']));
+$scriptpath=str_replace($scriptname,'',$_SERVER['PHP_SELF']);
+$scriptpath=str_replace('php/','',$scriptpath);
 $html = "<select style='width:150px;' onchange='
-                window.location=window.location.origin+window.location.pathname+\"?file=\"+this.value;           
+                window.location=\"http://$_SERVER[SERVER_NAME]$scriptpath\"+\"?file=\"+this.value;
         '>";
 $html.="<option selected>[Select your Graph]</option>";
 $filesSorted=array();
