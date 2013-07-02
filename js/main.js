@@ -5,7 +5,7 @@ if(typeof(getUrlParam.file)!=="undefined"){
         $.doTimeout(30,function (){
             listGexfs();
             startBipartite(getUrlParam.file);
-            $.doTimeout(70,function (){
+            $.doTimeout(30,function (){
                 $("#currentGraph").html(getUrlParam.file);
             });
             
@@ -23,7 +23,7 @@ if(typeof(getUrlParam.file)!=="undefined"){
     
 }
 else {
-    window.location.href=window.location.origin+window.location.pathname+"?file=1-Terms-As-Networks.gexf";
+    window.location.href=window.location.origin+window.location.pathname+"?file=1-Specific-Terms-In-The-Corpus-Proximity-In-Papers.gexf";
 }
 
 
