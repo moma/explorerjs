@@ -473,7 +473,7 @@ function updateLeftPanel(){
     
     
     minFont=12;
-    //maxFont=(minFont+oposMAX)-1;  
+    //maxFont=(minFont+oposMAX)-1;
     maxFont=20;
     js2='\');"';
     if(flag==1) {
@@ -484,25 +484,19 @@ function updateLeftPanel(){
                 opossitesNodes += '<li>[...]</li>';
                 break;
             }
-            if(typeof(nodes2[opos[i].key])!=="undefined"){
-                //fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
-                fontSize=minFont+(opos[i].value-1)*((maxFont-minFont)/(oposMAX-1));
-                opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer;" '
-                +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+  '</span>,&nbsp;&nbsp;';
-            }
+            //fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
+            fontSize=minFont+(opos[i].value-1)*((maxFont-minFont)/(oposMAX-1));
+            opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer;" '
+            +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+ '</span>,&nbsp;&nbsp;';
 
-        }        
+        }
         opossitesNodes += '</div>';
         information += '<br><h4>Information:</h4>';
         information += '<ul>';
             
         for(var i in selections){
             information += '<li><b>' + Nodes[i].label + '</b></li>';
-            for(var j in Nodes[i].attributes){ 
-                information += 
-                '<li><b>' + Nodes[i].attributes[j].attr + 
-                '</b>:&nbsp;'+Nodes[i].attributes[j].val+'</li>';
-            }            
+            information += '<li>' + Nodes[i].attributes[3].val + '</li>';
             information += '</ul><br>';
         }
     }
@@ -510,21 +504,19 @@ function updateLeftPanel(){
     if(flag==2 && socsemFlag==false) {
         opossitesNodes += '<h4>Scholars: </h4><div style="margin: 5px 5px;">';
         pr("max from opos: ");
-        pr(oposMAX);    
-        js1='onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\''; 
+        pr(oposMAX);
+        js1='onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'';
         for(var i in opos){
             if(i==25){
                 opossitesNodes += '<li>[...]</li>';
                 break;
             }
-            if(typeof(nodes1[opos[i].key])!=="undefined"){
-                //fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
-                fontSize=minFont+(opos[i].value-1)*((maxFont-minFont)/(oposMAX-1));
-                opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer;" '
-                +js1+opos[i].key+js2+'>' + nodes1[opos[i].key].label+  '</span>,&nbsp;&nbsp;';
-            }
+            //fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
+            fontSize=minFont+(opos[i].value-1)*((maxFont-minFont)/(oposMAX-1));
+            opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer;" '
+            +js1+opos[i].key+js2+'>' + nodes1[opos[i].key].label+ '</span>,&nbsp;&nbsp;';
 
-        }   
+        }
     }
     if(flag==2 && socsemFlag==true) {
         opossitesNodes += '<h4>Neighbours</h4><div style="margin: 5px 5px;">';
@@ -544,7 +536,7 @@ function updateLeftPanel(){
         $("#zonecentre").css({
             left: _cG.width() + "px"
         });
-    });       
+    });
 }
 
 function pushLabel(node_id,node_label) {
