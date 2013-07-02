@@ -15,120 +15,127 @@
 
         <script src="js/sigma.min.js" type="text/javascript" language="javascript"></script>
         <script src="js/sigma.forceatlas2.js" type="text/javascript" language="javascript"></script>
-        <script src="js/configSigma.js" type="text/javascript" language="javascript"></script>
+        <script src="js/variables.js" type="text/javascript" language="javascript"></script>
         <script src="js/sigma.parseCustom.js" type="text/javascript" language="javascript"></script>
-        <script src="js/customInit.js" type="text/javascript" language="javascript"></script>
+        <script src="js/methods.js" type="text/javascript" language="javascript"></script>
+        <script src="js/main.js" type="text/javascript" language="javascript"></script>
 
     </head>
     <body>
+        <div class="container">
+            <div id="left">
+                <div id="images" style="margin-top:10px;">
+                        <img style="cursor: pointer" title="Scholars" 
+                             src="img/trans/active_scholars.png" 
+                             width="50" id="socio"
+                             onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
+                             onClick='changeHoverActive(this)'
+                             ></img>
 
-        <div id="hdb">
-            <div id="htoolbar" class="toolbardiv fg-toolbar ui-widget-header ui-corner-all ui-helper-clearfix">
-                <div id="title" class="unselectable toolbar-left">
+                        <img style="cursor: pointer" title="Mixed" 
+                             src="img/trans/inactive_sociosem.png" 
+                             width="50" id="sociosemantic"
+                             onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
+                             onClick='changeHoverActive(this)'                         
+                             ></img>
 
-                    <img style="cursor: pointer" title="Scholars" 
-                         src="img/trans/active_scholars.png" 
-                         width="50" id="socio" class="fg-button toolbar-left"
-                         onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
-                         onClick='changeHoverActive(this)'
-                         ></img>
-
-                    <img style="cursor: pointer" title="Mixed" src="img/trans/inactive_sociosem.png" width="50" 
-                         id="sociosemantic" class="fg-button toolbar-left"
-                         onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
-                         onClick='changeHoverActive(this)'                         
-                         ></img>
-
-                    <img style="cursor: pointer" title="Keywords" 
-                         src="img/trans/inactive_tags.png" 
-                         width="50" id="semantic" class="fg-button toolbar-left"
-                         onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
-                         onClick='changeHoverActive(this)'
-                         ></img> 
-
-                    <div id="cursor-size-block" class="toolbar-left" style="width: 100px; margin-left: 15px; margin-right: 20px;">
-                        <span class="sliderLabel"> &nbsp;&nbsp;&nbsp;&nbsp;cursor size</span>
-                        <div id="sliderSelectionZone"></div>
-                    </div>
-                    <!--
-                                        <img style="cursor: pointer" title="Switch" 
-                                             src="img/trans/graph_meso_null.png" width="30"
-                                             id="switch" class="fg-button toolbar-left"
-                                             onClick='if(swclick=="") {swclick="social";} changeHoverActive(this)'
-                                             ></img>    
-                    -->
-                    <div>
-                        <input id="searchinput"  autocomplete="off" />
-                        <input id="searchsubmit" type="submit" />
-                        <input type="checkbox" id="checkbox" style="position: absolute; left: 670px; top: 28px; width: 15px; height: 15px; margin: 0; padding: 0;" onclick="alertCheckBox(this);"> 
-                        <label style="position: absolute; left: 690px; top: 30px; width: 15px; height: 15px; margin: 0; padding: 0;">Add</label>
-                    </div>
+                        <img style="cursor: pointer" title="Keywords" 
+                             src="img/trans/inactive_tags.png" 
+                             width="50" id="semantic"
+                             onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
+                             onClick='changeHoverActive(this)'
+                             ></img> 
                 </div>
-
-
-                <!-- block for Category A Filter -->
-                <div id="category-A" class="unselectable toolbar-middle" style="width: 120px;">
-                    <div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;Scholars
-                    </div>
-                    <div style="height: 16px; width: 100px;border-width: 2px; border-style: dotted; border-color: black">
-                        <div id="nodeAFilterMinValue"></div>                        
-                        <div id="sliderANodeWeight" class="greenstart"></div>
-                        <div id="nodeAFilterMaxValue"></div>
-                    </div>
-                    <div style="height: 16px; width: 100px;border-width: 2px; border-style: dotted; border-color: red">
-                        <div id="edgeAFilterMinValue"></div>
-                        <div id="sliderAEdgeWeight" class="greenstart"></div>
-                        <div id="edgeAFilterMaxValue"></div>
-                    </div>
-                    <div style="height: 16px; width: 100px;border-width: 2px; border-style: dotted; border-color: green">
-                        <div id="sliderANodeSize" class="greenstart"></div>
-                    </div>
-                </div>
-
-                <!-- block for Document/NGram label -->
-                <div  id="category-legend" class="unselectable toolbar-middle" style="width: 80px;">
-                    <div>&nbsp;</div>
-                    <div style="height: 16px;">
-                        Node Filter
-                    </div>
-                    <div style="height: 16px;">
-                        Edge Filter
-                    </div>
-                    <div style="height: 16px;">
-                        Node Size
-                    </div>
-                </div>
-
-                <!-- block for Category B Filter -->
-                <div id="category-B" class="unselectable toolbar-middle" style="width: 120px;">
-                    <div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keywords
-                    </div>
-                    <div style="height: 16px; width: 100px;">
-                        <div id="nodeBFilterMinValue"></div>
-                        <div id="sliderBNodeWeight" class="redstart"></div>
-                        <div id="nodeBFilterMaxValue"></div>
-                    </div>
-                    <div style="height: 16px; width: 100px;">
-                        <div id="edgeBFilterMinValue"></div>
-                        <div id="sliderBEdgeWeight" class="redstart"></div>
-                        <div id="edgeBFilterMaxValue"></div>
-                    </div>
-                    <div style="height: 16px; width: 100px;">
-                        <div id="sliderBNodeSize" class="redstart"></div>
-                    </div>
-                </div>
-
+                
             </div>
-            <!-- End of htoolbar -->
+            
+            <div id="right">
+                    <div id="sliders" style="margin-top:10px;">
+                        
+                        <div id="category-A" class="unselectable toolbar-middle" style="width: 120px;">
+                            <div>
+                                &nbsp;&nbsp;&nbsp;&nbsp;Scholars
+                            </div>
+                            <div style="height: 16px; width: 100px;">
+                                <div id="nodeAFilterMinValue"></div>                        
+                                <div id="sliderANodeWeight"></div>
+                                <div id="nodeAFilterMaxValue"></div>
+                            </div>
+                            <div style="height: 16px; width: 100px;">
+                                <div id="edgeAFilterMinValue"></div>
+                                <div id="sliderAEdgeWeight"></div>
+                                <div id="edgeAFilterMaxValue"></div>
+                            </div>
+                            <div style="height: 16px; width: 100px;">
+                                <div id="sliderANodeSize"></div>
+                            </div>
+                        </div>
+
+                        
+                        <div  id="category-legend" class="unselectable toolbar-middle" style="width: 80px;">
+                            <div>&nbsp;</div>
+                            <center>
+                            <div style="height: 16px;">
+                                Node Filter
+                            </div>
+                            <div style="height: 16px;">
+                                Edge Filter
+                            </div>
+                            <div style="height: 16px;">
+                                Node Size
+                            </div>
+                            </center>
+                        </div>
+
+                        
+                        <div id="category-B" class="unselectable toolbar-middle" style="width: 120px;">
+                            <div>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keywords
+                            </div>
+                            <div style="height: 16px; width: 100px;">
+                                <div id="nodeBFilterMinValue"></div>
+                                <div id="sliderBNodeWeight"></div>
+                                <div id="nodeBFilterMaxValue"></div>
+                            </div>
+                            <div style="height: 16px; width: 100px;">
+                                <div id="edgeBFilterMinValue"></div>
+                                <div id="sliderBEdgeWeight"></div>
+                                <div id="edgeBFilterMaxValue"></div>
+                            </div>
+                            <div style="height: 16px; width: 100px;">
+                                <div id="sliderBNodeSize"></div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+            
+            <div id="center">
+                
+                    <div id="ofthemiddle" style="border-width: 0px;margin-top:20px;">
+                        
+                        <div id="cursor-size-block" style="width: 100px; float: left;">
+                            <label for="sliderSelectionZone" class="sliderLabel">cursor size</label>
+                            <div id="sliderSelectionZone"></div>
+                        </div>
+                        
+                        
+                        <div style="float: right;">
+                            <input id="searchinput"  autocomplete="off" />
+                            <input id="searchsubmit" type="submit" />
+                            <input type="checkbox" id="checkbox" style="" onclick="alertCheckBox(this);"> 
+                            <label for="checkbox" >Add</label>
+                        </div>
+                    </div>
+                
+            </div>
         </div>
-        <!-- End of hdb -->
 
 
         <div id="zonecentre" class="gradient">
 
-            <div onmousemove="trackMouse();" class="sigma-expand" id="sigma-example"></div>
+            <div onmousemove='if(typeof(partialGraph)!=="undefined") {trackMouse();}' 
+                 class="sigma-expand" id="sigma-example"></div>
 
             <ul id="ctlzoom">
                 <li>
@@ -158,10 +165,10 @@
         <div id="overviewzone" class="gradient" onmouseover="overviewHover=true;" onmouseout="overviewHover=false;">
             <canvas id="overview" width="0" height="0"></canvas>
         </div>
-
+        
         <div id="leftcolumn">
             <div id="unfold">
-                <a href="#arrow" id="aUnfold" class="rightarrow"> </a>
+                <a href="#" id="aUnfold" class="rightarrow"> </a>
                 <a href="#" title="Status"><img  width="60" src="img/trans/status_title.png"></img></a>
                 <div align="center" style="left: -250px">
                     <table cellpadding="0" cellspacing="0">

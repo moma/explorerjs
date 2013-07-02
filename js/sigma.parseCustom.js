@@ -137,23 +137,13 @@ function fullExtract(){
                     parseFloat(colorNode.getAttribute('g')),
                     parseFloat(colorNode.getAttribute('b')));
             }
-            // Create Node
-            Nodes[id] = ({
-                id:id,
-                label:label, 
-                size:size, 
-                x:x, 
-                y:y, 
-                attributes:[], 
-                color:color
-            });  // The graph node
-            
             var node = ({
                 id:id,
                 label:label, 
                 size:size, 
                 x:x, 
                 y:y, 
+                type:"",
                 attributes:[], 
                 color:color
             });  // The graph node
@@ -164,10 +154,6 @@ function fullExtract(){
                 var attvalueNode = attvalueNodes[k];
                 var attr = attvalueNode.getAttribute('for');
                 var val = attvalueNode.getAttribute('value');
-                Nodes[id].attributes.push({
-                    attr:attr, 
-                    val:val
-                });
                 node.attributes.push({
                     attr:attr, 
                     val:val
@@ -176,10 +162,8 @@ function fullExtract(){
                 if(attr==4) {
                     //if(val<30) val=30;
                     //Nodes[id].size=(parseInt(val).toFixed(2)*5)/70;
-                    Nodes[id].size=parseInt(val).toFixed(2);
-                    node.size=Nodes[id].size;
+                    node.size=parseInt(val).toFixed(2);
                     if(id.charAt(0)=="D") {
-                        Nodes[id].size = "5";
                         node.size = "5";
                     }
                 }
@@ -187,19 +171,22 @@ function fullExtract(){
             }
                 
             if(node.attributes[0].val=="Document"){
+                node.type="Document";
                 numberOfDocs++;
                 node.size=5.0;
                 partialGraph.addNode(id,node);
                 labels.push({
                     'label' : label, 
-                    'desc': Nodes[id].attributes[0].val
+                    'desc': "Document"
                 });
             }
             else {
+                node.type="NGram";
                 numberOfNGrams++;
                 if(parseInt(node.size) < parseInt(minNodeSize)) minNodeSize= node.size;
                 if(parseInt(node.size) > parseInt(maxNodeSize)) maxNodeSize= node.size;
             }
+            Nodes[id] = node;
         }
     }    
     constantNGramFilter= ((parseInt(maxNodeSize)*(5-2+0.1))/(5))*0.001;
@@ -210,7 +197,6 @@ function fullExtract(){
         }
         
     }
-    
     var edgeId = 0;
     var edgesNodes = gexf.getElementsByTagName('edges');
     minEdgeWeight=5.0;
