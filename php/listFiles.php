@@ -11,7 +11,12 @@ $html = "<select style='width:150px;' onchange='
                 window.location=window.location.origin+window.location.pathname+\"?file=\"+this.value;           
         '>";
 $html.="<option selected>[Select your Graph]</option>";
+$filesSorted=array();
 foreach($files as $file){
+	array_push($filesSorted,$file);
+}
+sort($filesSorted);
+foreach($filesSorted as $file){
 	$html.="<option>$file</option>";
 }
 $html.="</select>";

@@ -5,15 +5,29 @@ if(typeof(getUrlParam.file)!=="undefined"){
         $.doTimeout(30,function (){
             listGexfs();
             startBipartite(getUrlParam.file);
+            $.doTimeout(70,function (){
+                $("#currentGraph").html(getUrlParam.file);
+            });
+            
         });
     }
     else {
         $.doTimeout(30,function (){
             listGexfs();
-            startOnePartite(getUrlParam.file);
+            startOnePartite(getUrlParam.file);            
+            $.doTimeout(30,function (){
+                $("#currentGraph").html(getUrlParam.file);
+            });            
         });
     }
+    
 }
+else {
+    window.location.href=window.location.origin+window.location.pathname+"?file=1-Terms-As-Networks.gexf";
+}
+
+
+
 function listGexfs(){
     $.ajax({
         type: 'GET',
