@@ -37,10 +37,14 @@ var overviewScale = 0.25;
 var overviewHover=false;
 var moveDelay = 80, zoomDelay = 2;
 //var Vecindad;
-var partialGraph;
-var labels = [];    
+var partialGraph; 
 var Nodes = []; 
 var Edges = [];
+
+var scholarsSortedBySize=[];
+var keywordsSortedBySize=[];
+var nodesSortedBySize=[];
+var labels = [];   
 
 var numberOfDocs=0;
 var numberOfNGrams=0;

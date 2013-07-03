@@ -1138,7 +1138,7 @@ function changeToMeso(iwannagraph) {
             partialGraph.startForceAtlas2();
             socsemFlag=true;
             updateBothEdgeFilters();
-            updateNodeFilter("semantic");
+            updateBothNodeFilters();
         }
     }
      
@@ -1213,11 +1213,11 @@ function changeToMacro(iwannagraph) {
             }                
         }  
         createEdgesForExistingNodes("Keywords");
-        for(var n in selections){
-            if(Nodes[n].type=="Document")
-                highlightOpossites(opossites);
-            break;
-        }
+//        for(var n in selections){
+//            if(Nodes[n].type=="Document")
+//                highlightOpossites(opossites);
+//            break;
+//        }
         updateEdgeFilter(iwannagraph);
         updateNodeFilter("semantic");
     }
@@ -1229,11 +1229,11 @@ function changeToMacro(iwannagraph) {
             }                
         }
         createEdgesForExistingNodes("Scholars");
-        for(var n in selections){
-            if(Nodes[n].type=="NGram")
-                highlightOpossites(opossites);
-            break;
-        }
+//        for(var n in selections){
+//            if(Nodes[n].type=="NGram")
+//                highlightOpossites(opossites);
+//            break;
+//        }
         updateEdgeFilter(iwannagraph);
     }
     
@@ -1280,7 +1280,7 @@ function changeToMacro(iwannagraph) {
             }
         }
         updateBothEdgeFilters();
-        updateNodeFilter("semantic");
+        updateBothNodeFilters();
     }
     highlightSelectedNodes(true);
     //partialGraph.stopForceAtlas2();
@@ -1379,13 +1379,14 @@ function updateBothNodeFilters() {
     nodes=partialGraph._core.graph.nodes;    
     scholarsNodesBySize=[];
     keywordsNodesBySize=[];
+    nodesSortedBySize=[];
     
     for(var i in nodes){
         if(Nodes[nodes[i].id].type=="Document"){
-            if(typeof(scholarsNodesBySize[nodes[i].size])=="undefined"){
-                scholarsNodesBySize[nodes[i].size]=[];
+            if(typeof(scholarsNodesBySize[nodes[i].degree])=="undefined"){
+                scholarsNodesBySize[nodes[i].degree]=[];
             }
-            scholarsNodesBySize[nodes[i].size].push(nodes[i].id);
+            scholarsNodesBySize[nodes[i].degree].push(nodes[i].id);
         }
         if(Nodes[nodes[i].id].type=="NGram"){
             if(typeof(keywordsNodesBySize[nodes[i].size])=="undefined"){
@@ -1401,35 +1402,35 @@ function updateBothNodeFilters() {
         return a-b
     });
     
-    $("#sliderANodeWeight").slider({
-        range: true,
-        min: 0,
-        max: scholarsSortedBySize.length-1,
-        values: [0, scholarsSortedBySize.length-1],
-        step: 1,
-        animate: true,
-        slide: function(event, ui) {
-            $.doTimeout(300,function (){
-                //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-                nodesTemp = partialGraph._core.graph.nodesIndex;
-                for(i=0;i<scholarsSortedBySize.length;i++){
-                    if(i>=ui.values[0] && i<=ui.values[1]){
-                        for (var j in scholarsSortedBySize[i].value){
-                            id=scholarsSortedBySize[i].value[j];
-                            nodesTemp[id].hidden=false;
-                        }
-                    }
-                    else {
-                        for (var j in scholarsSortedBySize[i].value){
-                            id=scholarsSortedBySize[i].value[j];
-                            nodesTemp[id].hidden=true;
-                        }
-                    }
-                }
-                partialGraph.draw();
-            });
-        }
-    });
+//    $("#sliderANodeWeight").slider({
+//        range: true,
+//        min: 0,
+//        max: scholarsSortedBySize.length-1,
+//        values: [0, scholarsSortedBySize.length-1],
+//        step: 1,
+//        animate: true,
+//        slide: function(event, ui) {
+//            $.doTimeout(300,function (){
+//                //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+//                nodesTemp = partialGraph._core.graph.nodesIndex;
+//                for(i=0;i<scholarsSortedBySize.length;i++){
+//                    if(i>=ui.values[0] && i<=ui.values[1]){
+//                        for (var j in scholarsSortedBySize[i].value){
+//                            id=scholarsSortedBySize[i].value[j];
+//                            nodesTemp[id].hidden=false;
+//                        }
+//                    }
+//                    else {
+//                        for (var j in scholarsSortedBySize[i].value){
+//                            id=scholarsSortedBySize[i].value[j];
+//                            nodesTemp[id].hidden=true;
+//                        }
+//                    }
+//                }
+//                partialGraph.draw();
+//            });
+//        }
+//    });
     $("#sliderBNodeWeight").slider({
         range: true,
         min: 0,
@@ -1554,6 +1555,11 @@ function updateBothEdgeFilters() {
 }
 
 function updateNodeFilter(nodeFilterName) {
+        
+    scholarsNodesBySize=[];
+    keywordsNodesBySize=[];
+    nodesSortedBySize=[];
+    
     nodeType="";
     divName="";
     if(nodeFilterName=="social"){
@@ -1567,7 +1573,13 @@ function updateNodeFilter(nodeFilterName) {
     nodes=partialGraph._core.graph.nodes;
     nodesBySize=[];
     for(var i in nodes){
-        if(Nodes[nodes[i].id].type==nodeType){
+        if(Nodes[nodes[i].id].type=="Document"){
+            if(typeof(nodesBySize[nodes[i].degree])=="undefined"){
+                nodesBySize[nodes[i].degree]=[];
+            }
+            nodesBySize[nodes[i].degree].push(nodes[i].id);
+        }
+        if(Nodes[nodes[i].id].type=="NGram"){
             if(typeof(nodesBySize[nodes[i].size])=="undefined"){
                 nodesBySize[nodes[i].size]=[];
             }
@@ -1577,7 +1589,9 @@ function updateNodeFilter(nodeFilterName) {
     nodesSortedBySize = ArraySortByKey(nodesBySize, function(a,b){
         return a-b
     });
-    
+    if(nodeFilterName=="social"){
+        return null;
+    }
     $(divName).slider({
         range: true,
         min: 0,
