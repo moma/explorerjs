@@ -93,8 +93,6 @@ function fullExtract(){
     var nodesNodes = gexf.getElementsByTagName('nodes') // The list of xml nodes 'nodes' (plural)
   
     labels = [];
-    minNodeSize=5.00;
-    maxNodeSize=5.00;
     numberOfDocs=0;
     numberOfNGrams=0;
     for(i=0; i<nodesNodes.length; i++){
@@ -199,8 +197,6 @@ function fullExtract(){
     }
     var edgeId = 0;
     var edgesNodes = gexf.getElementsByTagName('edges');
-    minEdgeWeight=5.0;
-    maxEdgeWeight=0.0;
     for(i=0; i<edgesNodes.length; i++){
         var edgesNode = edgesNodes[i];
         var edgeNodes = edgesNode.getElementsByTagName('edge');

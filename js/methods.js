@@ -460,6 +460,7 @@ function updateLeftPanel(){
     var information='';
     
     counter=0;
+    names+='<div id="selectionsBox">';
     names += '<h4>';
     for(var i in selections){
         if(counter==4){
@@ -469,15 +470,16 @@ function updateLeftPanel(){
         names += Nodes[i].label+', ';
         counter++;
     }
+    pr(names);
     names += '</h4>';
+    names=names.replace(", </h4>","</h4>");
+    names=names.replace(", <h4>","<h4>");
+    names+='</div>';
     
-    
-    minFont=12;
-    //maxFont=(minFont+oposMAX)-1;
-    maxFont=20;
     js2='\');"';
     if(flag==1) {
-        opossitesNodes += '<br><h4>Keywords: </h4><div style="margin: 5px 5px;">';
+        opossitesNodes+= '<br><h4>Keywords: </h4>';
+        opossitesNodes+='<div id="opossitesBox">';
         js1='onclick="edgesTF=false;selections=[];opossites=[];graphNGrams(\'';
         for(var i in opos){
             if(i==25){
@@ -485,12 +487,13 @@ function updateLeftPanel(){
                 break;
             }
             //fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
-            fontSize=minFont+(opos[i].value-1)*((maxFont-minFont)/(oposMAX-1));
+            fontSize=desirableTagCloudFont_MIN+(opos[i].value-1)*((desirableTagCloudFont_MAX-desirableTagCloudFont_MIN)/(oposMAX-1));
             opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer;" '
             +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+ '</span>,&nbsp;&nbsp;';
 
         }
         opossitesNodes += '</div>';
+        
         information += '<br><h4>Information:</h4>';
         information += '<ul>';
             
@@ -502,9 +505,8 @@ function updateLeftPanel(){
     }
     
     if(flag==2 && socsemFlag==false) {
-        opossitesNodes += '<h4>Scholars: </h4><div style="margin: 5px 5px;">';
-        pr("max from opos: ");
-        pr(oposMAX);
+        opossitesNodes+= '<br><h4>Scholars: </h4>';
+        opossitesNodes+='<div id="opossitesBox">';
         js1='onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'';
         for(var i in opos){
             if(i==25){
@@ -512,7 +514,7 @@ function updateLeftPanel(){
                 break;
             }
             //fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
-            fontSize=minFont+(opos[i].value-1)*((maxFont-minFont)/(oposMAX-1));
+            fontSize=desirableTagCloudFont_MIN+(opos[i].value-1)*((desirableTagCloudFont_MAX-desirableTagCloudFont_MIN)/(oposMAX-1));
             opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer;" '
             +js1+opos[i].key+js2+'>' + nodes1[opos[i].key].label+ '</span>,&nbsp;&nbsp;';
 

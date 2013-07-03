@@ -1,7 +1,4 @@
-var isBipartite = [];
-isBipartite["hnetwork-1982_2013hn-homework1982_2013top200-Author-ISItermsAlexandrePartCountry-distributionalcooc-10000-oT0.19-10-louTrue.gexf"]=1;
-isBipartite["Biparti_AuteurTermes.gexf"]=1;
-isBipartite["2-Terms-Authors.gexf"]=1;
+
 var inactiveColor = '#666';
 var startingNodeId = "1";
 var minLengthAutoComplete = 1;
@@ -10,29 +7,27 @@ var strSearchBar = "Search";
 
 
 var gexf;
-var zoom=0;
-var a_node_size= 0.50;
-var b_node_size= 0.50;
+//var zoom=0;
 var cursor_size= 0.00;
 
 var checkBox=false;
 var overNodes=false;
 
-var swclickFlag=false;
 var swclickActual="";
 var swclickPrev="";
 
-var swhover=false;
 var socsemFlag=false;
 var constantNGramFilter;
-var socialFlag=true;
-var semanticFlag=false;
-var maxNodeSize;
-var minNodeSize;
-var sliderNodeWeight;
-var maxEdgeWeight;
-var minEdgeWeight;
 
+//This variables will be updated in sigma.parseCustom.js
+var minNodeSize=5.00;
+var maxNodeSize=5.00;
+var minEdgeWeight=5.0;
+var maxEdgeWeight=0.0;
+//---------------------------------------------------
+
+var desirableTagCloudFont_MIN=12;
+var desirableTagCloudFont_MAX=20;
 var desirableNodeSizeMIN=2;
 var desirableNodeSizeMAX=10;
 
