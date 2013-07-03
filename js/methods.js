@@ -488,8 +488,8 @@ function updateLeftPanel(){
             }
             //fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
             fontSize=desirableTagCloudFont_MIN+(opos[i].value-1)*((desirableTagCloudFont_MAX-desirableTagCloudFont_MIN)/(oposMAX-1));
-            opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer;" '
-            +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+ '</span>,&nbsp;&nbsp;';
+            opossitesNodes += '<a href="#" style="color:#5C5C5C;font-size:'+fontSize+'px;" '
+            +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+ '</a>,&nbsp;&nbsp;';
 
         }
         opossitesNodes += '</div>';
@@ -876,6 +876,7 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
 function createEdgesForExistingNodes (typeOfNodes) {
     if(typeOfNodes=="Bipartite"){
         var existingNodes = partialGraph._core.graph.nodes;
+        pr(existingNodes);
         var edgesFound = [];
         for(i=0; i < existingNodes.length ; i++){
             for(j=0; j < existingNodes.length ; j++){
