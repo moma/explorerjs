@@ -470,26 +470,29 @@ function updateLeftPanel(){
         names += Nodes[i].label+', ';
         counter++;
     }
-    pr(names);
     names += '</h4>';
     names=names.replace(", </h4>","</h4>");
     names=names.replace(", <h4>","<h4>");
     names+='</div>';
-    
     js2='\');"';
     if(flag==1) {
         opossitesNodes+= '<br><h4>Keywords: </h4>';
         opossitesNodes+='<div id="opossitesBox">';
         js1='onclick="edgesTF=false;selections=[];opossites=[];graphNGrams(\'';
         for(var i in opos){
-            if(i==25){
+            if(i==22){
                 opossitesNodes += '<li>[...]</li>';
                 break;
             }
             //fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
-            fontSize=desirableTagCloudFont_MIN+(opos[i].value-1)*((desirableTagCloudFont_MAX-desirableTagCloudFont_MIN)/(oposMAX-1));
-            opossitesNodes += '<a href="#" style="color:#5C5C5C;font-size:'+fontSize+'px;" '
-            +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+ '</a>,&nbsp;&nbsp;';
+            if(oposMAX==1){
+                fontSize=desirableTagCloudFont_MIN;
+            }
+            else {
+                fontSize=desirableTagCloudFont_MIN+(opos[i].value-1)*((desirableTagCloudFont_MAX-desirableTagCloudFont_MIN)/(oposMAX-1));
+            }
+            opossitesNodes += '<span style="font-size:'+fontSize+'px;cursor: pointer;" '
+            +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+ '</span><br>';
 
         }
         opossitesNodes += '</div>';
@@ -508,15 +511,21 @@ function updateLeftPanel(){
         opossitesNodes+= '<br><h4>Scholars: </h4>';
         opossitesNodes+='<div id="opossitesBox">';
         js1='onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'';
+        
         for(var i in opos){
-            if(i==25){
+            if(i==22){
                 opossitesNodes += '<li>[...]</li>';
                 break;
             }
             //fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
-            fontSize=desirableTagCloudFont_MIN+(opos[i].value-1)*((desirableTagCloudFont_MAX-desirableTagCloudFont_MIN)/(oposMAX-1));
+            if(oposMAX==1){
+                fontSize=desirableTagCloudFont_MIN;
+            }
+            else {
+                fontSize=desirableTagCloudFont_MIN+(opos[i].value-1)*((desirableTagCloudFont_MAX-desirableTagCloudFont_MIN)/(oposMAX-1));
+            }
             opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer;" '
-            +js1+opos[i].key+js2+'>' + nodes1[opos[i].key].label+ '</span>,&nbsp;&nbsp;';
+            +js1+opos[i].key+js2+'>' + nodes1[opos[i].key].label+ '</span><br>';
 
         }
     }
@@ -559,7 +568,7 @@ function graphNGrams(node_id){
     
     
     console.log("in graphNGrams, nodae_id: "+node_id);
-    if(Nodes[node_id].type=="NGram") {
+    if(node_id.charAt(0)=="N") {
         labels = [];
         partialGraph.emptyGraph(); 
         //partialGraph.stopForceAtlas2();
@@ -579,8 +588,8 @@ function graphNGrams(node_id){
             if(existingNodes[i].id==node_id) i++;
             for(j=0; j < existingNodes.length ; j++){
                 
-                i1=existingNodes[i].id+";"+existingNodes[j].id;                    
-                i2=existingNodes[j].id+";"+existingNodes[i].id;                    
+                i1="N"+existingNodes[i].id.substring(3,existingNodes[i].id.length)+";"+"N"+existingNodes[j].id.substring(3,existingNodes[j].id.length);                    
+                i2="N"+existingNodes[j].id.substring(3,existingNodes[j].id.length)+";"+"N"+existingNodes[i].id.substring(3,existingNodes[i].id.length);                    
                       
                 if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined"){
                     
@@ -620,7 +629,7 @@ function graphDocs(node_id){
     partialGraph.emptyGraph(); 
     //partialGraph.stopForceAtlas2();
     
-    if(Nodes[node_id].type=="Document") {
+    if(node_id.charAt(0)=="D") {
         labels = [];
         partialGraph.emptyGraph(); 
         
@@ -636,8 +645,8 @@ function graphDocs(node_id){
             if(existingNodes[i].id==node_id) i++;
             for(j=0; j < existingNodes.length ; j++){
                 
-                i1=existingNodes[i].id+";"+existingNodes[j].id;                    
-                i2=existingNodes[j].id+";"+existingNodes[i].id;                    
+                i1="D"+existingNodes[i].id.substring(3,existingNodes[i].id.length)+";"+"D"+existingNodes[j].id.substring(3,existingNodes[j].id.length);                    
+                i2="D"+existingNodes[j].id.substring(3,existingNodes[j].id.length)+";"+"D"+existingNodes[i].id.substring(3,existingNodes[i].id.length);                    
                       
                 if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined"){
                     
