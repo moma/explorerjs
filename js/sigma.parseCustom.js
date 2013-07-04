@@ -162,8 +162,9 @@ function fullExtract(){
                     //Nodes[id].size=(parseInt(val).toFixed(2)*5)/70;
                     node.size=parseInt(val).toFixed(2);
                     if(id.charAt(0)=="D") {
-                        node.size = "5";
+                        node.size = ""+desirableScholarSize;
                     }
+                    
                 }
             /*      Para asignar tamaño a los NGrams    */
             }
@@ -171,7 +172,7 @@ function fullExtract(){
             if(node.attributes[0].val=="Document"){
                 node.type="Document";
                 numberOfDocs++;
-                node.size=5.0;
+                node.size=desirableScholarSize;
                 partialGraph.addNode(id,node);
                 labels.push({
                     'label' : label, 
@@ -183,15 +184,18 @@ function fullExtract(){
                 numberOfNGrams++;
                 if(parseInt(node.size) < parseInt(minNodeSize)) minNodeSize= node.size;
                 if(parseInt(node.size) > parseInt(maxNodeSize)) maxNodeSize= node.size;
+                
             }
             Nodes[id] = node;
+            //if(Nodes[id].type=="NGram")pr(Nodes[id].size);
         }
-    }    
-    constantNGramFilter= ((parseInt(maxNodeSize)*(5-2+0.1))/(5))*0.001;
+    }  
+    //constantNGramFilter= ((parseInt(maxNodeSize)*(5-2+0.1))/(5))*0.001;
     //New scale for node size: now, between 2 and 5 instead [1,70]
     for(var it in Nodes){
-        if(it.charAt(0)=="N") {
-            Nodes[it].size = ""+(3+(parseInt(Nodes[it].size)-1)*constantNGramFilter);
+        if(Nodes[it].type=="NGram") {
+            normalizedSize=desirableNodeSizeMIN+(Nodes[it].size-1)*((desirableNodeSizeMAX-desirableNodeSizeMIN)/(parseInt(maxNodeSize)-parseInt(minNodeSize)));
+            Nodes[it].size = ""+normalizedSize;
         }
         
     }

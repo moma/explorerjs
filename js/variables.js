@@ -29,7 +29,8 @@ var maxEdgeWeight=0.0;
 var desirableTagCloudFont_MIN=12;
 var desirableTagCloudFont_MAX=20;
 var desirableNodeSizeMIN=2;
-var desirableNodeSizeMAX=10;
+var desirableNodeSizeMAX=9;
+var desirableScholarSize=6; //Remember that all scholars have the same size!
 
 var overviewWidth = 200;
 var overviewHeight = 175;
