@@ -164,6 +164,7 @@ foreach ($scholars as $scholar) {
         $theID = $scholar['id'];
         $nodeLabel = $scholar['title'] . ' ' . $scholar['first_name'] . ' ' . $scholar['initials'] . ' ' . $scholar['last_name'];
         $nodePositionY = rand(0, 100) / 100;
+        /*
         $content = '';        
         if ($scholar['photo_url'] != null) {
             $content .= '<img  src=http://main.csregistry.org/' . $scholar['photo_url'] . ' width=' . $imsize . 'px  style=float:left;margin:5px>';
@@ -199,6 +200,7 @@ foreach ($scholars as $scholar) {
 		} elseif (substr($scholar['homepage'], 0, 4) === 'http') {
 			$content .= '[ <a href=' . str_replace('&', ' and ', $scholar['homepage']) . ' target=blank > View homepage </a >]<br/>';
 		}
+         * */
 //
 //		if ($scholar['css_voter'] === 'Yes') {
 //			$color = 'b="19" g="204"  r="244"';
@@ -232,9 +234,10 @@ foreach ($scholars as $scholar) {
 				$gexf .= '<attvalue for="4" value="10"/>' . "\n";
 
 			}
+                        /*
 			if (is_utf8($content)) {
 				$gexf .= '<attvalue for="2" value="' . htmlspecialchars($content) . '"/>' . "\n";
-			}
+			}*/
 			$gexf .= '</attvalues></node>' . "\n";
 		}
 	}

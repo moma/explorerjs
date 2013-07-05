@@ -37,7 +37,6 @@ function parse(gexfPath) {
     }
     else {
         gexfPath = "php/get_scholar_graph.php?login="+getUrlParam.nodeidparam+"*"+iterationsTinaForce;
-        pr(gexfPath);
     }
     
     gexfhttp.open('GET', gexfPath, false);
