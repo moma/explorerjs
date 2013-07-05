@@ -453,8 +453,8 @@ function graphNGrams(node_id){
             if(existingNodes[i].id==node_id) i++;
             for(j=0; j < existingNodes.length ; j++){
                 
-                i1="N"+existingNodes[i].id.substring(3,existingNodes[i].id.length)+";"+"N"+existingNodes[j].id.substring(3,existingNodes[j].id.length);                    
-                i2="N"+existingNodes[j].id.substring(3,existingNodes[j].id.length)+";"+"N"+existingNodes[i].id.substring(3,existingNodes[i].id.length);                    
+                i1=existingNodes[i].id+";"+existingNodes[j].id;                    
+                i2=existingNodes[j].id+";"+existingNodes[i].id;          
                       
                 if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined"){
                     
@@ -510,8 +510,8 @@ function graphDocs(node_id){
             if(existingNodes[i].id==node_id) i++;
             for(j=0; j < existingNodes.length ; j++){
                 
-                i1="D"+existingNodes[i].id.substring(3,existingNodes[i].id.length)+";"+"D"+existingNodes[j].id.substring(3,existingNodes[j].id.length);                    
-                i2="D"+existingNodes[j].id.substring(3,existingNodes[j].id.length)+";"+"D"+existingNodes[i].id.substring(3,existingNodes[i].id.length);                    
+                i1=existingNodes[i].id+";"+existingNodes[j].id;                    
+                i2=existingNodes[j].id+";"+existingNodes[i].id;                    
                       
                 if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined"){
                     
@@ -639,14 +639,14 @@ function createEdgesForExistingNodes (typeOfNodes) {
         for(i=0; i < existingNodes.length ; i++){
             for(j=0; j < existingNodes.length ; j++){
                 
-                i1=existingNodes[i].id.charAt(0)+existingNodes[i].id.substring(3,existingNodes[i].id.length)+";"+existingNodes[j].id.charAt(0)+existingNodes[j].id.substring(3,existingNodes[j].id.length);                    
-                i2=existingNodes[j].id.charAt(0)+existingNodes[j].id.substring(3,existingNodes[j].id.length)+";"+existingNodes[i].id.charAt(0)+existingNodes[i].id.substring(3,existingNodes[i].id.length);                    
+                i1=existingNodes[i].id+";"+existingNodes[j].id;                    
+                i2=existingNodes[j].id+";"+existingNodes[i].id;                    
                     
-                indexS1 = existingNodes[i].id.charAt(0)+existingNodes[i].id.substring(3,existingNodes[i].id.length);
-                indexT1 = existingNodes[j].id.charAt(0)+existingNodes[j].id.substring(3,existingNodes[j].id.length); 
+                indexS1 = existingNodes[i].id;
+                indexT1 = existingNodes[j].id; 
                     
-                indexS2 = existingNodes[j].id.charAt(0)+existingNodes[j].id.substring(3,existingNodes[j].id.length);  
-                indexT2 = existingNodes[i].id.charAt(0)+existingNodes[i].id.substring(3,existingNodes[i].id.length);     
+                indexS2 = existingNodes[j].id;  
+                indexT2 = existingNodes[i].id;     
 
                 if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined"){
                     if(Edges[i1].weight > Edges[i2].weight ){
@@ -691,12 +691,9 @@ function createEdgesForExistingNodes (typeOfNodes) {
         for(i=0; i < existingNodes.length ; i++){
             for(j=(i+1); j < existingNodes.length ; j++){
                     
-                i1=Type+existingNodes[i].id.substring(3,existingNodes[i].id.length)+";"+
-                Type+existingNodes[j].id.substring(3,existingNodes[j].id.length); 
+                i1=existingNodes[i].id+";"+existingNodes[j].id; 
+                i2=existingNodes[j].id+";"+existingNodes[i].id; 
                 
-                i2=Type+existingNodes[j].id.substring(3,existingNodes[j].id.length)+";"+
-                Type+existingNodes[i].id.substring(3,existingNodes[i].id.length);
-                            
                 if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined" && i1!=i2){
                         
                     if(Edges[i1].weight > Edges[i2].weight){
