@@ -56,6 +56,19 @@ function changeButton(buttonClicked) {
     if(buttonClicked=="unselectNodes"){
         document.getElementById("switch").src=fullurl+"graph_meso_null.png";
     }
+    if(is_empty(selections)){        
+        /***** The animation *****/
+        _cG = $("#leftcolumn");    
+        _cG.animate({
+            "left" : "-" + _cG.width() + "px"
+        }, function() {
+            $("#aUnfold").attr("class","rightarrow");
+            $("#zonecentre").css({
+                left: "0"
+            });
+        });
+        /***** The animation *****/
+    }
 }
 
 function changeInactvHover(imgClicked) { 

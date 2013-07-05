@@ -588,11 +588,8 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
                 }
             }).draw(2,1,2);
             
-            if(is_empty(selections)==true){  
-                $("#names").html(""); //Information extracted, just added
-                $("#opossiteNodes").html(""); //Information extracted, just added
-                $("#information").html("");
-                changeButton("unselectNodes");
+            if(is_empty(selections)){  
+                cancelSelection();
             }
             else changeButton("selectNode");
         //overNodes=false;
@@ -1056,7 +1053,7 @@ function setPanels(){
                 left: "0"
             });
         });
-    /***** The animation *****/
+        /***** The animation *****/
     });
     
     $("#overview")
