@@ -1,4 +1,5 @@
-var iterationsTinaForce=70;
+var iterationsTinaForce=10;
+
 var inactiveColor = '#666';
 var startingNodeId = "1";
 var minLengthAutoComplete = 1;
@@ -48,6 +49,7 @@ var socialConverged=0;
 var selections = [];
 var opossites = {};
 var opos=[];
+var oposMAX;
 
 var matches = [];
 
