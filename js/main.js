@@ -9,16 +9,15 @@ $(document).ready(function () {
     startMiniMap();
     
     console.log("parsing...");        
-    parse("ohgod");
+    parse("");
     fullExtract(); 
     updateEdgeFilter("social");
     updateNodeFilter("social");
     pushSWClick("social");
-    console.log("Parsing complete.");   
-    
+    console.log("Parsing complete.");      
     partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8).draw();
+    partialGraph.startForceAtlas2();   
     
-    startEnviroment();
-    partialGraph.startForceAtlas2();    
+    startEnviroment(); 
     
 });
