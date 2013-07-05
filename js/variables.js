@@ -1,4 +1,4 @@
-
+var iterationsTinaForce=70;
 var inactiveColor = '#666';
 var startingNodeId = "1";
 var minLengthAutoComplete = 1;
@@ -18,13 +18,6 @@ var swclickPrev="";
 
 var socsemFlag=false;
 var constantNGramFilter;
-
-//This variables will be updated in sigma.parseCustom.js
-var minNodeSize=5.00;
-var maxNodeSize=5.00;
-var minEdgeWeight=5.0;
-var maxEdgeWeight=0.0;
-//---------------------------------------------------
 
 var desirableTagCloudFont_MIN=12;
 var desirableTagCloudFont_MAX=20;
@@ -67,6 +60,13 @@ var flag=0;
 var firstime=0;
 var leftright=true;
 var edgesTF=false;
+
+//This variables will be updated in sigma.parseCustom.js
+var minNodeSize=5.00;
+var maxNodeSize=5.00;
+var minEdgeWeight=5.0;
+var maxEdgeWeight=0.0;
+//---------------------------------------------------
 
 var sigmaJsDrawingProperties = {
     defaultLabelColor: 'black',

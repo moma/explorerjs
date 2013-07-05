@@ -966,14 +966,14 @@ sigma.publicPrototype.startForceAtlas2 = function() {
   pr("nodesSortedBySize");
   pr(nodesSortedBySize);  
   pr("---------------------------");
-//  if(!is_empty(nodesSortedBySize)){
+  if(!is_empty(nodesSortedBySize)){
 //      n=nodesSortedBySize.length;
 //      for(i=0;i<n;i++){
 //          //highlightOpossites(nodesSortedBySize[n-1].value);
-//          pr(nodesSortedBySize[n].value);
+//          pr(nodesSortedBySize[n-1].value);
 //      }
-//  }
-//  else pr("nodes sorted by size VACIO");
+  }
+  else pr("nodes sorted by size VACIO");
   
   this.addGenerator('forceatlas2', this.forceatlas2.atomicGo, function(){
     return true;

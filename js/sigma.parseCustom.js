@@ -32,10 +32,13 @@ function parse(gexfPath) {
     gexfhttp = window.XMLHttpRequest ?
     new XMLHttpRequest() :
     new ActiveXObject('Microsoft.XMLHTTP');
-    if(getUrlParam.nodeidparam.indexOf("__")===-1)
+    if(getUrlParam.nodeidparam.indexOf("__")===-1){
         gexfPath = "php/getgraph.php?query="+getUrlParam.nodeidparam;
-    else 
-        gexfPath = "php/get_scholar_graph.php?login="+getUrlParam.nodeidparam;
+    }
+    else {
+        gexfPath = "php/get_scholar_graph.php?login="+getUrlParam.nodeidparam+"*"+iterationsTinaForce;
+        pr(gexfPath);
+    }
     
     gexfhttp.open('GET', gexfPath, false);
     gexfhttp.send();
