@@ -497,8 +497,11 @@ function updateLeftPanel(){
         information += '<ul>';
             
         for(var i in selections){
-            information += '<li><b>' + Nodes[i].label + '</b></li>';
+            information += '<li><b>' + Nodes[i].label.toUpperCase() + '</b></li>';
             for(var j in Nodes[i].attributes){ 
+                if(Nodes[i].attributes[j].attr=="period"||
+                   Nodes[i].attributes[j].attr=="cluster_label" 
+                )
                 information += 
                 '<li><b>' + Nodes[i].attributes[j].attr + 
                 '</b>:&nbsp;'+Nodes[i].attributes[j].val+'</li>';
