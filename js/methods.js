@@ -416,7 +416,40 @@ function selection(currentNode){
     partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8);
     partialGraph.refresh();
 }
-
+function selectionUni(currentNode){
+    pr("\tin selection");
+    if(checkBox==false && cursor_size==0) {
+        highlightSelectedNodes(false);
+        opossites = [];
+        selections = [];
+        partialGraph.refresh();
+    }    
+    if(socsemFlag==false){
+        if((typeof selections[currentNode.id])=="undefined"){
+            selections[currentNode.id] = 1;
+            currentNode.active=true; 
+        }
+        else {
+            delete selections[currentNode.id];        
+            currentNode.active=false;
+        }
+    }
+    
+    /* ============================================================================================== */
+    
+    else {
+        if((typeof selections[currentNode.id])=="undefined"){
+            selections[currentNode.id] = 1;
+            currentNode.active=true;
+        }
+        else {
+            delete selections[currentNode.id];               
+            currentNode.active=false;
+        }
+    }
+    partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8);
+    partialGraph.refresh();
+}
 function getOpossitesNodes(node_id, entireNode) {
     pr("\tin getOpossitesNodes");
     var node;    
@@ -428,17 +461,19 @@ function getOpossitesNodes(node_id, entireNode) {
     }
     
     if (!node) return null;
-    selection(node);
+    if(bipartite){
+        selection(node);
+        if(Nodes[node.id].type=="Document"){
+            flag=1;
+        } else {
+            flag=2;
+        }
     
-    if(Nodes[node.id].type=="Document"){
-        flag=1;
-    } else {
-        flag=2;
+        opos = ArraySortByValue(opossites, function(a,b){
+            return b-a
+        });
     }
-    
-    opos = ArraySortByValue(opossites, function(a,b){
-        return b-a
-    });
+    else selectionUni(node);
 //        console.log("WOLOLO WOLOLO WOLOLO WOLOLO");
 //        $.ajax({
 //            type: 'GET',
@@ -454,6 +489,61 @@ function getOpossitesNodes(node_id, entireNode) {
 //            }
 //        });
 }
+
+function updateLeftPanel2(){//Uni-partite graph
+    pr("nueva funcion");
+    var names='';
+    var information='';
+    
+    counter=0;
+    names += '<h4>';
+    for(var i in selections){
+        if(counter==4){
+            names += '<h4>[...]</h4>';
+            break;
+        }
+        names += Nodes[i].label+', ';
+        counter++;
+    }
+    names += '</h4>';
+    
+    
+    minFont=12;
+    //maxFont=(minFont+oposMAX)-1;  
+    maxFont=20;
+    js2='\');"';
+    information += '<br><h4>Information:</h4>';
+    information += '<ul>';
+            
+    for(var i in selections){
+        information += '<li><b>' + Nodes[i].label.toUpperCase() + '</b></li>';
+        for(var j in Nodes[i].attributes){ 
+            if(Nodes[i].attributes[j].attr=="period"||
+                Nodes[i].attributes[j].attr=="cluster_label" 
+                    )
+                information += 
+                '<li><b>' + Nodes[i].attributes[j].attr + 
+                '</b>:&nbsp;'+Nodes[i].attributes[j].val+'</li>';
+        }            
+        information += '</ul><br>';
+    }
+    
+    
+    $("#names").html(names); //Information extracted, just added
+    $("#information").html(information); //Information extracted, just added
+        
+    /***** The animation *****/
+    _cG = $("#leftcolumn");
+    _cG.animate({
+        "left" : "0px"
+    }, function() {
+        $("#aUnfold").attr("class","leftarrow");
+        $("#zonecentre").css({
+            left: _cG.width() + "px"
+        });
+    });  
+}
+
 function updateLeftPanel(){
     var names='';
     var opossitesNodes='';
@@ -500,11 +590,11 @@ function updateLeftPanel(){
             information += '<li><b>' + Nodes[i].label.toUpperCase() + '</b></li>';
             for(var j in Nodes[i].attributes){ 
                 if(Nodes[i].attributes[j].attr=="period"||
-                   Nodes[i].attributes[j].attr=="cluster_label" 
-                )
-                information += 
-                '<li><b>' + Nodes[i].attributes[j].attr + 
-                '</b>:&nbsp;'+Nodes[i].attributes[j].val+'</li>';
+                    Nodes[i].attributes[j].attr=="cluster_label" 
+                        )
+                    information += 
+                    '<li><b>' + Nodes[i].attributes[j].attr + 
+                    '</b>:&nbsp;'+Nodes[i].attributes[j].val+'</li>';
             }            
             information += '</ul><br>';
         }
@@ -800,9 +890,17 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
         //If cursor_size=0 -> Normal and single mouse-selection
         alertCheckBox(checkBox);
         partialGraph.bind('downnodes', function (event) {
-            getOpossitesNodes(event.content, false);
-            updateLeftPanel();
-            /****            
+            if(bipartite){
+                pr("en hoverNodeEffectWhileFA2: bipartito");
+                getOpossitesNodes(event.content, false);
+                updateLeftPanel();
+            }
+            else {
+                getOpossitesNodes(event.content, false);
+                pr("en hoverNodeEffectWhileFA2: unipartito");
+                updateLeftPanel2();
+            }
+            /*****            
                  *This give me the hoverNodes effect when the FA2 is running.
                 ****/
             var greyColor = '#9b9e9e';/**/
@@ -867,7 +965,8 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
                     getOpossitesNodes(n,true);
                 }
             });
-            updateLeftPanel();
+            if(bipartite) updateLeftPanel();
+            else updateLeftPanel2();
             partialGraph.refresh();
             if(is_empty(selections)==true){  
                 $("#names").html(""); //Information extracted, just added

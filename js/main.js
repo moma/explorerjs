@@ -45,6 +45,7 @@ function listGexfs(){
 }
 
 function startOnePartite(pathfile) {
+    bipartite=false;
     $("#labelchange").hide();
     $("#availableView").hide(); 
     $("#category-B").hide();
@@ -322,6 +323,7 @@ function startOnePartite(pathfile) {
 }
 
 function startBipartite(pathfile) {
+    bipartite=true;
     //currentUrl=window.location.href;
     pr("pathfile: "+pathfile);
     partialGraph = sigma.init(document.getElementById('sigma-example'))

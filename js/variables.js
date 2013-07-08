@@ -8,7 +8,7 @@ var minLengthAutoComplete = 1;
 var maxSearchResults = 10;
 var strSearchBar = "Search";
 
-
+var bipartite=false;
 var gexf;
 var zoom=0;
 var a_node_size= 0.50;
