@@ -496,6 +496,7 @@ function updateLeftPanel2(){//Uni-partite graph
     var information='';
     
     counter=0;
+    names+='<div id="selectionsBox">';
     names += '<h4>';
     for(var i in selections){
         if(counter==4){
@@ -506,6 +507,9 @@ function updateLeftPanel2(){//Uni-partite graph
         counter++;
     }
     names += '</h4>';
+    names=names.replace(", </h4>","</h4>");
+    names=names.replace(", <h4>","<h4>");
+    names+='</div>';
     
     
     minFont=12;
@@ -516,6 +520,7 @@ function updateLeftPanel2(){//Uni-partite graph
     information += '<ul>';
             
     for(var i in selections){
+        information += '<div id="opossitesBox">';
         information += '<li><b>' + Nodes[i].label.toUpperCase() + '</b></li>';
         for(var j in Nodes[i].attributes){ 
             if(Nodes[i].attributes[j].attr=="period"||
@@ -524,7 +529,8 @@ function updateLeftPanel2(){//Uni-partite graph
                 information += 
                 '<li><b>' + Nodes[i].attributes[j].attr + 
                 '</b>:&nbsp;'+Nodes[i].attributes[j].val+'</li>';
-        }            
+        }
+        information += '</div>';            
         information += '</ul><br>';
     }
     
@@ -550,6 +556,7 @@ function updateLeftPanel(){
     var information='';
     
     counter=0;
+    names+='<div id="selectionsBox">';
     names += '<h4>';
     for(var i in selections){
         if(counter==4){
@@ -560,6 +567,9 @@ function updateLeftPanel(){
         counter++;
     }
     names += '</h4>';
+    names=names.replace(", </h4>","</h4>");
+    names=names.replace(", <h4>","<h4>");
+    names+='</div>';
     
     
     minFont=12;
@@ -567,7 +577,8 @@ function updateLeftPanel(){
     maxFont=20;
     js2='\');"';
     if(flag==1) {
-        opossitesNodes += '<br><h4>Keywords: </h4><div style="margin: 5px 5px;">';
+        opossitesNodes+= '<br><h4>Keywords: </h4>';
+        opossitesNodes+='<div id="opossitesBox">';
         js1='onclick="edgesTF=false;selections=[];opossites=[];graphNGrams(\'';
         for(var i in opos){
             if(i==25){
@@ -601,7 +612,8 @@ function updateLeftPanel(){
     }
     
     if(flag==2 && socsemFlag==false) {
-        opossitesNodes += '<h4>Scholars: </h4><div style="margin: 5px 5px;">';
+        opossitesNodes+= '<br><h4>Scholars: </h4>';
+        opossitesNodes+='<div id="opossitesBox">';
         pr("max from opos: ");
         pr(oposMAX);    
         js1='onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\''; 
@@ -617,10 +629,12 @@ function updateLeftPanel(){
                 +js1+opos[i].key+js2+'>' + nodes1[opos[i].key].label+  '</span>,&nbsp;&nbsp;';
             }
 
-        }   
+        } 
+        opossitesNodes+='</div>';
     }
     if(flag==2 && socsemFlag==true) {
-        opossitesNodes += '<h4>Neighbours</h4><div style="margin: 5px 5px;">';
+        opossitesNodes+= '<br><h4>Neighbours: </h4>';
+        opossitesNodes+='<div id="opossitesBox">';
         opossitesNodes += 'en construcçao...aaaaaaaa ';
     }
     
@@ -890,16 +904,9 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
         //If cursor_size=0 -> Normal and single mouse-selection
         alertCheckBox(checkBox);
         partialGraph.bind('downnodes', function (event) {
-            if(bipartite){
-                pr("en hoverNodeEffectWhileFA2: bipartito");
-                getOpossitesNodes(event.content, false);
-                updateLeftPanel();
-            }
-            else {
-                getOpossitesNodes(event.content, false);
-                pr("en hoverNodeEffectWhileFA2: unipartito");
-                updateLeftPanel2();
-            }
+            getOpossitesNodes(event.content, false);
+            if(bipartite) updateLeftPanel();
+            else updateLeftPanel2();
             /*****            
                  *This give me the hoverNodes effect when the FA2 is running.
                 ****/
