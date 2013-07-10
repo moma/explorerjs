@@ -36,7 +36,7 @@ function parse(gexfPath) {
         gexfPath = "php/getgraph.php?query="+getUrlParam.nodeidparam;
     }
     else {
-        gexfPath = "php/get_scholar_graph.php?login="+getUrlParam.nodeidparam+"*"+iterationsTinaForce;
+        gexfPath = "php/get_scholar_graph.php?login="+getUrlParam.nodeidparam;
     }
     
     gexfhttp.open('GET', gexfPath, false);
