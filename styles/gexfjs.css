@@ -200,7 +200,7 @@ h1 a {
 }
 
 #PhotoGraph {
-    display: block; width: 24px; height: 24px; background:url(../img/loading.gif);  margin: 0 auto;
+    display: block; width: 24px; height: 24px; background:url(../img/trans/camara.png);  margin: 0 auto;
 }
 
 #zoomMinusButton, #zoomPlusButton {
