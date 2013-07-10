@@ -574,11 +574,9 @@ function graphNGrams(node_id){
         //partialGraph.stopForceAtlas2();
         
         partialGraph.addNode(node_id,Nodes[node_id]);
-        pushLabel(node_id,Nodes[node_id].label);
 
         for(i=0;i<nodes2[node_id].neighbours.length;i++) {
             partialGraph.addNode(nodes2[node_id].neighbours[i],Nodes[nodes2[node_id].neighbours[i]]);
-            pushLabel(nodes2[node_id].neighbours[i],Nodes[nodes2[node_id].neighbours[i]].label);
         }  
         
         /* ALGORITMO ESTRELLA*/
@@ -634,10 +632,8 @@ function graphDocs(node_id){
         partialGraph.emptyGraph(); 
         
         partialGraph.addNode(node_id,Nodes[node_id]);
-        pushLabel(node_id,Nodes[node_id].label);
         for(i=0;i<nodes1[node_id].neighbours.length;i++) {
             partialGraph.addNode(nodes1[node_id].neighbours[i],Nodes[nodes1[node_id].neighbours[i]]);
-            pushLabel(nodes1[node_id].neighbours[i],Nodes[nodes1[node_id].neighbours[i]].label);
         }  
         
         var existingNodes = partialGraph._core.graph.nodes;
