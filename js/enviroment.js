@@ -226,11 +226,13 @@ function updateEdgeFilter(edgeFilterName) {
     //pr(edges);
     edgesByWeight=[];
     for(var i in edges){
-        if(edges[i].label==thing){
-            if(typeof(edgesByWeight[edges[i].weight])=="undefined"){
-                edgesByWeight[edges[i].weight]=[];
+        if(edges[i].hidden==false){
+            if(edges[i].label==thing){
+                if(typeof(edgesByWeight[edges[i].weight])=="undefined"){
+                    edgesByWeight[edges[i].weight]=[];
+                }
+                edgesByWeight[edges[i].weight].push(edges[i].id);
             }
-            edgesByWeight[edges[i].weight].push(edges[i].id);
         }
     }
     edgesSortedByWeight = ArraySortByKey(edgesByWeight, function(a,b){
@@ -675,10 +677,12 @@ function extractContext(string, context) {
 function search(string) {
     var id_node = '';
     partialGraph.iterNodes(function (n) {
-        if (n.label == string) {
-            id_node = n.id;
-            return;
-        }                
+        if(n.hidden==false){
+            if (n.label == string) {
+                id_node = n.id;
+                return;
+            }  
+        }
     });
     getOpossitesNodes(id_node, false);
     updateLeftPanel();
@@ -690,31 +694,35 @@ function search(string) {
     var neighbors = {};
     var e = partialGraph._core.graph.edges; 
     for(i=0;i<e.length;i++){
-        if(nodes.indexOf(e[i].source.id)<0 && nodes.indexOf(e[i].target.id)<0){
-            if(!e[i].attr['grey']){
-                e[i].attr['true_color'] = e[i].color;
-                e[i].color = greyColor;
-                e[i].attr['grey'] = 1;
-            }
-        }else{
-            e[i].color = e[i].attr['grey'] ? e[i].attr['true_color'] : e[i].color;
-            e[i].attr['grey'] = 0;
+        if(e.hidden==false){
+            if(nodes.indexOf(e[i].source.id)<0 && nodes.indexOf(e[i].target.id)<0){
+                if(!e[i].attr['grey']){
+                    e[i].attr['true_color'] = e[i].color;
+                    e[i].color = greyColor;
+                    e[i].attr['grey'] = 1;
+                }
+            }else{
+                e[i].color = e[i].attr['grey'] ? e[i].attr['true_color'] : e[i].color;
+                e[i].attr['grey'] = 0;
 
-            neighbors[e[i].source.id] = 1;
-            neighbors[e[i].target.id] = 1;
+                neighbors[e[i].source.id] = 1;
+                neighbors[e[i].target.id] = 1;
+            }
         }
     }
             
     partialGraph.iterNodes(function(n){
-        if(!neighbors[n.id]){
-            if(!n.attr['grey']){
-                n.attr['true_color'] = n.color;
-                n.color = greyColor;
-                n.attr['grey'] = 1;
+        if(n.hidden==false){
+            if(!neighbors[n.id]){
+                if(!n.attr['grey']){
+                    n.attr['true_color'] = n.color;
+                    n.color = greyColor;
+                    n.attr['grey'] = 1;
+                }
+            }else{
+                n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
+                n.attr['grey'] = 0;
             }
-        }else{
-            n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
-            n.attr['grey'] = 0;
         }
     }).draw(2,1,2);
             

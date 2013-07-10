@@ -175,7 +175,7 @@ function fullExtract(){
                 node.type="Document";
                 numberOfDocs++;
                 node.size=desirableScholarSize;
-                partialGraph.addNode(id,node);
+                //partialGraph.addNode(id,node); // 
             }
             else {
                 node.type="NGram";
@@ -185,17 +185,20 @@ function fullExtract(){
                 
             }
             Nodes[id] = node;
-            //if(Nodes[id].type=="NGram")pr(Nodes[id].size);
         }
     }  
     //constantNGramFilter= ((parseInt(maxNodeSize)*(5-2+0.1))/(5))*0.001;
     //New scale for node size: now, between 2 and 5 instead [1,70]
-    for(var it in Nodes){
-        if(Nodes[it].type=="NGram") {
-            normalizedSize=desirableNodeSizeMIN+(Nodes[it].size-1)*((desirableNodeSizeMAX-desirableNodeSizeMIN)/(parseInt(maxNodeSize)-parseInt(minNodeSize)));
-            Nodes[it].size = ""+normalizedSize;
+    for(var i in Nodes){
+        if(Nodes[i].type=="NGram") {
+            normalizedSize=desirableNodeSizeMIN+(Nodes[i].size-1)*((desirableNodeSizeMAX-desirableNodeSizeMIN)/(parseInt(maxNodeSize)-parseInt(minNodeSize)));
+            Nodes[i].size = ""+normalizedSize;
+            
+            nodeK = Nodes[i];
+            nodeK.hidden=true;
+            partialGraph.addNode(i,nodeK);   
         }
-        
+        else partialGraph.addNode(i,Nodes[i]);                
     }
     var edgeId = 0;
     var edgesNodes = gexf.getElementsByTagName('edges');
@@ -208,17 +211,8 @@ function fullExtract(){
             var target = edgeNode.getAttribute('target');
             var indice=source+";"+target;
             //console.log(indice);
-            Edges[indice] = {
-                id:         indice,
-                sourceID:   source,
-                targetID:   target,
-                label:      "",
-                weight: 1,
-                attributes: []
-            };
-                
             var edge = {
-                id:         j,
+                id:         indice,
                 sourceID:   source,
                 targetID:   target,
                 label:      "",
@@ -228,7 +222,7 @@ function fullExtract(){
 
             var weight = edgeNode.getAttribute('weight');
             if(weight!=undefined){
-                Edges[indice]['weight'] = weight;
+                edge['weight'] = weight;
             }
             var kind;
             var attvalueNodes = edgeNode.getElementsByTagName('attvalue');
@@ -239,18 +233,12 @@ function fullExtract(){
                 if(k==1) {
                     kind=val;
                     edge.label=val;
-                    Edges[indice].label=val;
                 }
                 if(k==0) {
-                    Edges[indice].weight = val;
                     edge.weight = val;
                     if(edge.weight < minEdgeWeight) minEdgeWeight= edge.weight;
                     if(edge.weight > maxEdgeWeight) maxEdgeWeight= edge.weight;
                 }
-                Edges[indice].attributes.push({
-                    attr:attr, 
-                    val:val
-                });
                 edge.attributes.push({
                     attr:attr, 
                     val:val
@@ -258,10 +246,15 @@ function fullExtract(){
             }   
             
             
+            Edges[indice] = edge;
+            
             if(edge.attributes[1].val=="nodes1"){             
                 if( (typeof partialGraph._core.graph.edgesIndex[target+";"+source])=="undefined" ){
-                    partialGraph.addEdge(indice,source,target,edge);
+                    edge.hidden=false;
                 }
+                else edge.hidden=true;
+                partialGraph.addEdge(indice,source,target,edge);
+                
                 if((typeof nodes1[source])=="undefined"){
                     nodes1[source] = {
                         label: Nodes[source].label,
@@ -273,7 +266,9 @@ function fullExtract(){
             }
             
             
-            if(edge.attributes[1].val=="nodes2"){
+            if(edge.attributes[1].val=="nodes2"){ 
+                edge.hidden=true;
+                partialGraph.addEdge(indice,source,target,edge);
                 if((typeof nodes2[source])=="undefined"){
                     nodes2[source] = {
                         label: Nodes[source].label,
@@ -285,7 +280,9 @@ function fullExtract(){
             }
             
             
-            if(edge.attributes[1].val=="bipartite"){
+            if(edge.attributes[1].val=="bipartite"){   
+                edge.hidden=true;
+                partialGraph.addEdge(indice,source,target,edge);
                 /* Document to NGram */
                 if((typeof bipartiteD2N[source])=="undefined"){
                     bipartiteD2N[source] = {

@@ -5,6 +5,7 @@ $(document).ready(function () {
     .drawingProperties(sigmaJsDrawingProperties)
     .graphProperties(sigmaJsGraphProperties)
     .mouseProperties(sigmaJsMouseProperties);
+    partialGraph.type="social";
     
     startMiniMap();
     

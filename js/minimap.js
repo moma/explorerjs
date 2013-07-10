@@ -156,15 +156,17 @@ function updateMap(){
     partialGraph.ctxMini.clearRect(0, 0, overviewWidth, overviewHeight);
     
     partialGraph.iterNodes(function(n){
-        partialGraph.ctxMini.fillStyle = n.color;
-        partialGraph.ctxMini.beginPath();
-        numPosibilidades = 2.5 - 0.9;
-        aleat = Math.random() * numPosibilidades;
-        partialGraph.ctxMini.arc(((n.displayX/1.2)-200)*0.25 , ((n.displayY/1.2)+110)*0.25 , (0.9 + aleat)*0.25+1 , 0 , Math.PI*2 , true);
-        //        //console.log(n.x*1000 +" * 0.25"+" _ "+ n.y*1000 +" * 0.25"+" _ "+ (0.9 + aleat) +" * 0.25 + 1");
-        //        
-        partialGraph.ctxMini.closePath();
-        partialGraph.ctxMini.fill();
+        if(n.hidden==false){
+            partialGraph.ctxMini.fillStyle = n.color;
+            partialGraph.ctxMini.beginPath();
+            numPosibilidades = 2.5 - 0.9;
+            aleat = Math.random() * numPosibilidades;
+            partialGraph.ctxMini.arc(((n.displayX/1.2)-200)*0.25 , ((n.displayY/1.2)+110)*0.25 , (0.9 + aleat)*0.25+1 , 0 , Math.PI*2 , true);
+            //        //console.log(n.x*1000 +" * 0.25"+" _ "+ n.y*1000 +" * 0.25"+" _ "+ (0.9 + aleat) +" * 0.25 + 1");
+            //        
+            partialGraph.ctxMini.closePath();
+            partialGraph.ctxMini.fill();
+        }
     //        
     });
     partialGraph.imageMini = partialGraph.ctxMini.getImageData(0, 0, overviewWidth, overviewHeight);
