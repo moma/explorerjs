@@ -320,6 +320,7 @@ function startOnePartite(pathfile) {
         //return callSlider("#sliderSelectionZone", "selectionRadius");
         }
     });
+    camaraButton();
 }
 
 function startBipartite(pathfile) {
@@ -636,5 +637,6 @@ function startBipartite(pathfile) {
         //return callSlider("#sliderSelectionZone", "selectionRadius");
         }
     });
+    camaraButton();
     
 }
