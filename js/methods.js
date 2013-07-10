@@ -1071,6 +1071,7 @@ function changeHoverActive(img) {
 }
 
 function changeToMeso(iwannagraph) { 
+    labels=[]
     pr("changing to Meso-"+iwannagraph);  
     fullurl = returnBaseUrl()+"img/trans/";   
     if(iwannagraph=="social") {
@@ -1202,22 +1203,30 @@ function highlightOpossites (list){/*tofix*/
     }
 }
 
+function updateSearchLabels(name,type){    
+    labels.push({
+        'label' : name, 
+        'desc': type
+    });
+}
+
 function changeToMacro(iwannagraph) { 
+    labels=[]
     pr("changing to Macro-"+iwannagraph);
     fullurl = returnBaseUrl()+"img/trans/";
     if(iwannagraph=="semantic") {
         partialGraph.emptyGraph();
         for(var n in Nodes) {                
-            if(Nodes[n].type=="NGram"){
+            if(Nodes[n].type=="NGram"){         
                 partialGraph.addNode(n,Nodes[n]);
             }                
         }  
         createEdgesForExistingNodes("Keywords");
-//        for(var n in selections){
-//            if(Nodes[n].type=="Document")
-//                highlightOpossites(opossites);
-//            break;
-//        }
+        //        for(var n in selections){
+        //            if(Nodes[n].type=="Document")
+        //                highlightOpossites(opossites);
+        //            break;
+        //        }
         updateEdgeFilter(iwannagraph);
         updateNodeFilter("semantic");
     }
@@ -1229,11 +1238,11 @@ function changeToMacro(iwannagraph) {
             }                
         }
         createEdgesForExistingNodes("Scholars");
-//        for(var n in selections){
-//            if(Nodes[n].type=="NGram")
-//                highlightOpossites(opossites);
-//            break;
-//        }
+        //        for(var n in selections){
+        //            if(Nodes[n].type=="NGram")
+        //                highlightOpossites(opossites);
+        //            break;
+        //        }
         updateEdgeFilter(iwannagraph);
     }
     
@@ -1402,35 +1411,35 @@ function updateBothNodeFilters() {
         return a-b
     });
     
-//    $("#sliderANodeWeight").slider({
-//        range: true,
-//        min: 0,
-//        max: scholarsSortedBySize.length-1,
-//        values: [0, scholarsSortedBySize.length-1],
-//        step: 1,
-//        animate: true,
-//        slide: function(event, ui) {
-//            $.doTimeout(300,function (){
-//                //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
-//                nodesTemp = partialGraph._core.graph.nodesIndex;
-//                for(i=0;i<scholarsSortedBySize.length;i++){
-//                    if(i>=ui.values[0] && i<=ui.values[1]){
-//                        for (var j in scholarsSortedBySize[i].value){
-//                            id=scholarsSortedBySize[i].value[j];
-//                            nodesTemp[id].hidden=false;
-//                        }
-//                    }
-//                    else {
-//                        for (var j in scholarsSortedBySize[i].value){
-//                            id=scholarsSortedBySize[i].value[j];
-//                            nodesTemp[id].hidden=true;
-//                        }
-//                    }
-//                }
-//                partialGraph.draw();
-//            });
-//        }
-//    });
+    //    $("#sliderANodeWeight").slider({
+    //        range: true,
+    //        min: 0,
+    //        max: scholarsSortedBySize.length-1,
+    //        values: [0, scholarsSortedBySize.length-1],
+    //        step: 1,
+    //        animate: true,
+    //        slide: function(event, ui) {
+    //            $.doTimeout(300,function (){
+    //                //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+    //                nodesTemp = partialGraph._core.graph.nodesIndex;
+    //                for(i=0;i<scholarsSortedBySize.length;i++){
+    //                    if(i>=ui.values[0] && i<=ui.values[1]){
+    //                        for (var j in scholarsSortedBySize[i].value){
+    //                            id=scholarsSortedBySize[i].value[j];
+    //                            nodesTemp[id].hidden=false;
+    //                        }
+    //                    }
+    //                    else {
+    //                        for (var j in scholarsSortedBySize[i].value){
+    //                            id=scholarsSortedBySize[i].value[j];
+    //                            nodesTemp[id].hidden=true;
+    //                        }
+    //                    }
+    //                }
+    //                partialGraph.draw();
+    //            });
+    //        }
+    //    });
     $("#sliderBNodeWeight").slider({
         range: true,
         min: 0,

@@ -176,10 +176,6 @@ function fullExtract(){
                 numberOfDocs++;
                 node.size=desirableScholarSize;
                 partialGraph.addNode(id,node);
-                labels.push({
-                    'label' : label, 
-                    'desc': "Document"
-                });
             }
             else {
                 node.type="NGram";
