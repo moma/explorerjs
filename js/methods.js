@@ -124,6 +124,7 @@ function cancelSelection () {
     }).draw(2,1,2);
     //Nodes colors go back to normal
     changeButton("unselectNodes");
+    $("#searchinput").val("");
 }
 
 function highlightSelectedNodes(flag){  
