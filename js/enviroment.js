@@ -635,6 +635,12 @@ function alertCheckBox(eventCheck){
 
 
 //============================= < SEARCH > =============================//
+function updateSearchLabels(name,type){    
+    labels.push({
+        'label' : name, 
+        'desc': type
+    });
+}
 
 function extractContext(string, context) {
     var matched = string.toLowerCase().indexOf(context.toLowerCase());

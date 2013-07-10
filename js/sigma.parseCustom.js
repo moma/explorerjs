@@ -36,7 +36,7 @@ function parse(gexfPath) {
         gexfPath = "php/getgraph.php?query="+getUrlParam.nodeidparam;
     }
     else {
-        gexfPath = "php/get_scholar_graph.php?login="+getUrlParam.nodeidparam+"*"+iterationsTinaForce;
+        gexfPath = "php/get_scholar_graph.php?login="+getUrlParam.nodeidparam;//+"*"+iterationsTinaForce;
     }
     
     gexfhttp.open('GET', gexfPath, false);
@@ -176,10 +176,6 @@ function fullExtract(){
                 numberOfDocs++;
                 node.size=desirableScholarSize;
                 partialGraph.addNode(id,node);
-                labels.push({
-                    'label' : label, 
-                    'desc': "Document"
-                });
             }
             else {
                 node.type="NGram";

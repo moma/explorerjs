@@ -94,7 +94,7 @@ if ($login) {
 include('gexf_generator.php');
 
 
-exec("rm -R gexfs/*.gexf");
+exec("rm -R gexfs/*");
 $showdate = date('Y-m-d_H:i:s') . "." . microtime_float();
 $handle = fopen('gexfs/' . $showdate . '.gexf', "w", "UTF-8");
 fputs($handle, $gexf);
