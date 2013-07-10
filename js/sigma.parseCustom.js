@@ -36,7 +36,7 @@ function parse(gexfPath) {
         gexfPath = "php/getgraph.php?query="+getUrlParam.nodeidparam;
     }
     else {
-        gexfPath = "php/get_scholar_graph.php?login="+getUrlParam.nodeidparam;
+        gexfPath = "php/get_scholar_graph.php?login="+getUrlParam.nodeidparam;//+"*"+iterationsTinaForce;
     }
     
     gexfhttp.open('GET', gexfPath, false);
@@ -206,7 +206,7 @@ function fullExtract(){
             var edgeNode = edgeNodes[j];
             var source = edgeNode.getAttribute('source');
             var target = edgeNode.getAttribute('target');
-            var indice=source.charAt(0)+source.substring(3,source.length)+";"+target.charAt(0)+target.substring(3,target.length);
+            var indice=source+";"+target;
             //console.log(indice);
             Edges[indice] = {
                 id:         indice,
@@ -258,7 +258,10 @@ function fullExtract(){
             }   
             
             
-            if(edge.attributes[1].val=="nodes1"){
+            if(edge.attributes[1].val=="nodes1"){             
+                if( (typeof partialGraph._core.graph.edgesIndex[target+";"+source])=="undefined" ){
+                    partialGraph.addEdge(indice,source,target,edge);
+                }
                 if((typeof nodes1[source])=="undefined"){
                     nodes1[source] = {
                         label: Nodes[source].label,
@@ -303,13 +306,6 @@ function fullExtract(){
                 }
                 else bipartiteN2D[target].neighbours.push(source);
             }
-            if(edge.attributes[1].val=="nodes1"){  
-                indexS = source.charAt(0)+source.substring(3,source.length);
-                indexT = target.charAt(0)+target.substring(3,target.length);                
-                if( (typeof partialGraph._core.graph.edgesIndex[indexT+";"+indexS])=="undefined" ){
-                    partialGraph.addEdge(indice,source,target,edge);
-                }
-            }                
         }
     }
 }
