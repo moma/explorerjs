@@ -727,12 +727,4 @@ function search(string) {
     else changeButton("selectNode");
 }
 
-
-function pushLabel(node_id,node_label) {
-    labels.push({
-        'label' : node_label, 
-        'desc': Nodes[node_id].attributes[0].val
-    });
-}
-
 //============================ < / SEARCH > ============================//

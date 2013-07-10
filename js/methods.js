@@ -439,11 +439,9 @@ function graphNGrams(node_id){
         //partialGraph.stopForceAtlas2();
         
         partialGraph.addNode(node_id,Nodes[node_id]);
-        pushLabel(node_id,Nodes[node_id].label);
 
         for(i=0;i<nodes2[node_id].neighbours.length;i++) {
             partialGraph.addNode(nodes2[node_id].neighbours[i],Nodes[nodes2[node_id].neighbours[i]]);
-            pushLabel(nodes2[node_id].neighbours[i],Nodes[nodes2[node_id].neighbours[i]].label);
         }  
         
         /* ALGORITMO ESTRELLA*/
@@ -499,10 +497,8 @@ function graphDocs(node_id){
         partialGraph.emptyGraph(); 
         
         partialGraph.addNode(node_id,Nodes[node_id]);
-        pushLabel(node_id,Nodes[node_id].label);
         for(i=0;i<nodes1[node_id].neighbours.length;i++) {
             partialGraph.addNode(nodes1[node_id].neighbours[i],Nodes[nodes1[node_id].neighbours[i]]);
-            pushLabel(nodes1[node_id].neighbours[i],Nodes[nodes1[node_id].neighbours[i]].label);
         }  
         
         var existingNodes = partialGraph._core.graph.nodes;
@@ -709,6 +705,7 @@ function createEdgesForExistingNodes (typeOfNodes) {
 }
 
 function changeToMeso(iwannagraph) { 
+    labels=[]
     pr("changing to Meso-"+iwannagraph);  
     fullurl = returnBaseUrl()+"img/trans/";   
     if(iwannagraph=="social") {
@@ -835,6 +832,7 @@ function changeToMeso(iwannagraph) {
 }
 
 function changeToMacro(iwannagraph) { 
+    labels=[]
     pr("changing to Macro-"+iwannagraph);
     fullurl = returnBaseUrl()+"img/trans/";
     if(iwannagraph=="semantic") {
@@ -965,7 +963,7 @@ function setPanels(){
         //var desc = extractContext(item.desc, searchVal);
         return $('<li onclick=\'var s = "'+item.label+'"; search(s);$("#searchinput").val(strSearchBar);\'></li>')
         //.data('item.autocomplete', item)
-        .append("<a><span class=\"labelresult\">" + item.label + "</span></a><br><br>" )
+        .append("<a><span class=\"labelresult\">" + item.label + "</span></a>" )
         .appendTo(ul);
     };
 
@@ -1015,8 +1013,7 @@ function setPanels(){
     
     
     $("#searchinput").keydown(function (e) {
-        if (e.keyCode == 13 && $("input#searchinput").data('is_open') === true) {
-            
+        if (e.keyCode == 13 && $("input#searchinput").data('is_open') === true) {            
             if(!is_empty(matches)) {
                 for(j=0;j<matches.length;j++){
                     search(matches[j].label);
@@ -1150,22 +1147,22 @@ function startEnviroment(){
     $("#labelchange").hide();
     $("#availableView").hide();  
     /*======= Show some labels at the beginning =======*/
-//    minIn=50,
-//    maxIn=0,
-//    minOut=50,
-//    maxOut=0;        
-//    partialGraph.iterNodes(function(n){
-//        if(parseInt(n.inDegree) < minIn) minIn= n.inDegree;
-//        if(parseInt(n.inDegree) > maxIn) maxIn= n.inDegree;
-//        if(parseInt(n.outDegree) < minOut) minOut= n.outDegree;
-//        if(parseInt(n.outDegree) > maxOut) maxOut= n.outDegree;
-//    });
-//    partialGraph.iterNodes(function(n){
-//        if(n.inDegree==minIn) n.forceLabel=true;
-//        if(n.inDegree==maxIn) n.forceLabel=true;
-//        if(n.outDegree==minOut) n.forceLabel=true;
-//        if(n.outDegree==maxOut) n.forceLabel=true;
-//    });
+    minIn=50,
+    maxIn=0,
+    minOut=50,
+    maxOut=0;        
+    partialGraph.iterNodes(function(n){
+        if(parseInt(n.inDegree) < minIn) minIn= n.inDegree;
+        if(parseInt(n.inDegree) > maxIn) maxIn= n.inDegree;
+        if(parseInt(n.outDegree) < minOut) minOut= n.outDegree;
+        if(parseInt(n.outDegree) > maxOut) maxOut= n.outDegree;
+    });
+    partialGraph.iterNodes(function(n){
+        if(n.inDegree==minIn) n.forceLabel=true;
+        if(n.inDegree==maxIn) n.forceLabel=true;
+        if(n.outDegree==minOut) n.forceLabel=true;
+        if(n.outDegree==maxOut) n.forceLabel=true;
+    });
     /*======= Show some labels at the beginning =======*/
     initializeMap();
     updateMap();
