@@ -1916,12 +1916,31 @@ function traceMap() {
 
 function camaraButton(){
     $("#PhotoGraph").click(function (){
-        canvas = document.getElementById("sigma-example");
-        img = canvas.toDataURL("image/png");
-        var oCanvas = document.getElementById("thecanvas");  
-  
-        Canvas2Image.saveAsPNG(oCanvas);
-  /*
+        
+        //canvas=partialGraph._core.domElements.nodes;
+        
+        
+        
+        var nodesCtx = partialGraph._core.domElements.nodes;
+        /*
+        var edgesCtx = document.getElementById("sigma_edges_1").getContext('2d');
+        
+        var edgesImg = edgesCtx.getImageData(0, 0, document.getElementById("sigma_edges_1").width, document.getElementById("sigma_edges_1").height)
+        
+        nodesCtx.putImageData(edgesImg,0,0);
+        
+        
+        
+        
+        //ctx.drawImage(partialGraph._core.domElements.edges,0,0)
+        //var oCanvas = ctx;  
+  */
+        //div = document.getElementById("sigma_nodes_1").getContext('2d');
+        //ctx = div.getContext("2d");
+        //oCanvas.drawImage(partialGraph._core.domElements.edges,0,0);
+        Canvas2Image.saveAsPNG(nodesCtx);
+        
+        /*
         Canvas2Image.saveAsJPEG(oCanvas); // will prompt the user to save the image as JPEG.   
         // Only supported by Firefox.  
   
