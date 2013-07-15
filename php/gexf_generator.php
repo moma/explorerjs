@@ -297,7 +297,7 @@ foreach ($scholars as $scholar) {
             $weight=jaccard($scholarsMatrix[$nodeId1]['occ'],$scholarsMatrix[$neigh_id]['occ'],$cooc);
             $edgeid+=1;
             $gexf.='<edge id="'.$edgeid.'"'.' source="D'.$scholar['id'].'" '.
-                    ' target="D'.$scholar[$neigh_id]['id'].'" weight="'.$weight.'">'."\n";
+                    ' target="D'.$scholars[$neigh_id]['id'].'" weight="'.$weight.'">'."\n";
             $gexf.='<attvalues> <attvalue for="5" value="'.$weight.'"'.
                     '/><attvalue for="6" value="nodes1"/></attvalues>'."\n".'</edge>'."\n";
 
