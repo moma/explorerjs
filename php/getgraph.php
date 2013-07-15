@@ -178,6 +178,7 @@ $terms_colors = array(); // pour dire s'il y a des jobs postés sur ce term
 #echo "END;";
 foreach ($base->query($sql) as $row) {
     $info = array();
+    $info['id'] = $row['id'];
     $info['unique_id'] = $row['unique_id'];
     $info['photo_url'] = $row['photo_url'];
     $info['first_name'] = $row['first_name'];

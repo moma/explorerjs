@@ -139,7 +139,7 @@ foreach ($terms_array as $term) {
 			}
 		}
 	}
-	$nodeId = 'N::' . $term['id'];
+	$nodeId = 'N' . $term['id'];
 	$nodeLabel = str_replace('&', ' and ', $terms_array[$term['id']]['term']);
 	$nodePositionY = rand(0, 100) / 100;
 	$gexf .= '<node id="' . $nodeId . '" label="' . $nodeLabel . '">' . "\n";
@@ -160,7 +160,7 @@ foreach ($scholars as $scholar) {
     }
     if (count($scholarsMatrix[$uniqueId]['cooc']) >= $min_num_friends) {
         $scholarsIncluded += 1;
-        $nodeId = 'D::' . $uniqueId;
+        $nodeId = 'D' . $scholar['id'];
         $nodeLabel = $scholar['title'] . ' ' . $scholar['first_name'] . ' ' . $scholar['initials'] . ' ' . $scholar['last_name'];
         $nodePositionY = rand(0, 100) / 100;
         $content = '';        
@@ -257,7 +257,7 @@ foreach ($scholars as $scholar) {
 		foreach ($scholar['keywords_ids'] as $keywords)
 			if ($keywords != null) {
 				$edgeid += 1;
-				$gexf .= '<edge id="' . $edgeid . '"' . ' source="D::' . $scholar['unique_id'] . '" ' . ' target="N::' . $keywords . '" weight="1">' . "\n";
+				$gexf .= '<edge id="' . $edgeid . '"' . ' source="D' . $scholar['id'] . '" ' . ' target="N' . $keywords . '" weight="1">' . "\n";
 				$gexf .= '<attvalues> <attvalue for="5" value="1"' . '/><attvalue for="6" value="bipartite"/></attvalues>' . "\n" . '</edge>' . "\n";
 			}
 	}
@@ -277,7 +277,7 @@ foreach ($terms_array as $term) {
 	foreach ($neighbors as $neigh_id => $occ) {
 		if ($neigh_id != $nodeId1) {
 			$edgeid += 1;
-			$gexf .= '<edge id="' . $edgeid . '"' . ' source="N::' . $nodeId1 . '" ' . ' target="N::' . $neigh_id . '" weight="' . ($occ / $term['occurrences']) . '">' . "\n";
+			$gexf .= '<edge id="' . $edgeid . '"' . ' source="N' . $nodeId1 . '" ' . ' target="N' . $neigh_id . '" weight="' . ($occ / $term['occurrences']) . '">' . "\n";
 			$gexf .= '<attvalues> <attvalue for="5" value="' . ($occ / $term['occurrences']) . '"' . '/><attvalue for="6" value="nodes2"/></attvalues>' . "\n" . '</edge>' . "\n";
 
 		}
@@ -296,8 +296,8 @@ foreach ($scholars as $scholar) {
         if ($neigh_id!=$nodeId1) {
             $weight=jaccard($scholarsMatrix[$nodeId1]['occ'],$scholarsMatrix[$neigh_id]['occ'],$cooc);
             $edgeid+=1;
-            $gexf.='<edge id="'.$edgeid.'"'.' source="D::'.$nodeId1.'" '.
-                    ' target="D::'.$neigh_id.'" weight="'.$weight.'">'."\n";
+            $gexf.='<edge id="'.$edgeid.'"'.' source="D'.$scholar['id'].'" '.
+                    ' target="D'.$scholar[$neigh_id]['id'].'" weight="'.$weight.'">'."\n";
             $gexf.='<attvalues> <attvalue for="5" value="'.$weight.'"'.
                     '/><attvalue for="6" value="nodes1"/></attvalues>'."\n".'</edge>'."\n";
 

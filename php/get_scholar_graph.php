@@ -62,6 +62,7 @@ if ($login) {
             $sql = "SELECT * FROM scholars where unique_id='" . $scholar_id . "'";
             foreach ($base->query($sql) as $row) {
                 $info = array();
+                $info['id'] = $row['id'];
                 $info['unique_id'] = $row['unique_id'];
                 $info['photo_url'] = $row['photo_url'];
                 $info['first_name'] = $row['first_name'];
