@@ -96,7 +96,9 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         if (self.p.outboundAttractionDistribution) {
           self.p.outboundAttCompensation = 0;
           nodes.forEach(function(n) {
-            self.p.outboundAttCompensation += n.fa2.mass;
+            if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
+                self.p.outboundAttCompensation += n.fa2.mass;
+            }
           });
           self.p.outboundAttCompensation /= nodes.length;
         }
@@ -133,9 +135,11 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           while (i1 < nodes.length && i1 < self.state.index + cInt) {
             var n1 = nodes[i1++];
             if(n1.fa2)
-              nodes.forEach(function(n2, i2) {
-                if (i2 < i1 && n2.fa2) {
-                  Repulsion.apply_nn(n1, n2);
+              nodes.forEach(function(n2, i2) {                   
+                if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
+                    if (i2 < i1 && n2.fa2) {
+                      Repulsion.apply_nn(n1, n2);
+                    }
                 }
               });
           }
@@ -226,6 +230,8 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         var promdxdy=0;  /**/
 
         nodes.forEach(function(n) {
+            
+        if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
           var fixed = n.fixed || false;
           if (!fixed && n.fa2) {
             var swinging = Math.sqrt(Math.pow(n.fa2.old_dx - n.fa2.dx, 2) +
@@ -243,6 +249,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
                                         Math.pow(n.fa2.old_dy + n.fa2.dy, 2)
                                       );
           }
+        }
         });
 
         self.p.totalSwinging = totalSwinging;
@@ -277,8 +284,10 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
 
         // Save old coordinates
         nodes.forEach(function(n) {
-          n.old_x = +n.x;
-          n.old_y = +n.y;
+          if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
+            n.old_x = +n.x;
+            n.old_y = +n.y;
+          }
         });
 
         self.state.step = 5;
@@ -353,8 +362,10 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
   }
 
   this.end = function() {
-    this.graph.nodes.forEach(function(n) {
-      n.fa2 = null;
+    this.graph.nodes.forEach(function(n) {       
+      if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
+        n.fa2 = null;
+      }
     });
   }
 
@@ -854,16 +865,19 @@ sigma.forceatlas2.Region.prototype.updateMassAndGeometry = function() {
     var massSumX = 0;
     var massSumY = 0;
     this.nodes.forEach(function(n) {
+      if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
       mass += n.fa2.mass;
       massSumX += n.x * n.fa2.mass;
       massSumY += n.y * n.fa2.mass;
+      }
     });
     var massCenterX = massSumX / mass;
     massCenterY = massSumY / mass;
 
     // Compute size
     var size;
-    this.nodes.forEach(function(n) {
+    this.nodes.forEach(function(n) {        
+      if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
       var distance = Math.sqrt(
         (n.x - massCenterX) *
         (n.x - massCenterX) +
@@ -871,6 +885,7 @@ sigma.forceatlas2.Region.prototype.updateMassAndGeometry = function() {
         (n.y - massCenterY)
       );
       size = Math.max(size || (2 * distance), 2 * distance);
+      }
     });
 
     this.p.mass = mass;
@@ -892,21 +907,27 @@ sigma.forceatlas2.Region.prototype.buildSubRegions = function() {
 
     var self = this;
 
-    this.nodes.forEach(function(n) {
-      var nodesColumn = (n.x < massCenterX) ? (leftNodes) : (rightNodes);
-      nodesColumn.push(n);
+    this.nodes.forEach(function(n) {        
+      if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
+        var nodesColumn = (n.x < massCenterX) ? (leftNodes) : (rightNodes);
+        nodesColumn.push(n);
+      }
     });
 
     var tl = [], bl = [], br = [], tr = [];
 
-    leftNodes.forEach(function(n) {
-      var nodesLine = (n.y < massCenterY) ? (tl) : (bl);
-      nodesLine.push(n);
+    leftNodes.forEach(function(n) {        
+      if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
+        var nodesLine = (n.y < massCenterY) ? (tl) : (bl);
+        nodesLine.push(n);
+      }
     });
 
-    rightNodes.forEach(function(n) {
-      var nodesLine = (n.y < massCenterY) ? (tr) : (br);
-      nodesLine.push(n);
+    rightNodes.forEach(function(n) {        
+      if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
+        var nodesLine = (n.y < massCenterY) ? (tr) : (br);
+        nodesLine.push(n);
+      }
     });
 
     [tl, bl, br, tr].filter(function(a) {
