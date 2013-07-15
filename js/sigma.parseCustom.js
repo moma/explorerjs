@@ -201,7 +201,8 @@ function fullExtract(){
         }
         else {
             pr(Nodes[i]);
-            partialGraph.addNode(i,Nodes[i]);                
+            partialGraph.addNode(i,Nodes[i]);  
+            unHide(i);
         }
     }
     var edgeId = 0;

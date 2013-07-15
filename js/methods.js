@@ -423,6 +423,10 @@ function updateLeftPanel(){
     });
 }
 
+function unHide(node_id){
+    partialGraph._core.graph.nodesIndex[node_id].hidden=false;
+}
+
 function graphNGrams(node_id){   
     pr("\tin graphNGrams");/**/
     fullurl = returnBaseUrl()+"img/trans/";
@@ -439,10 +443,10 @@ function graphNGrams(node_id){
         hideEverything() 
         //partialGraph.stopForceAtlas2();
         
-        partialGraph._core.graph.nodesIndex[node_id].hidden=false;  
+        unHide(node_id);
 
         for(i=0;i<nodes2[node_id].neighbours.length;i++) {
-            partialGraph._core.graph.nodesIndex[nodes2[node_id].neighbours[i]].hidden=false;  
+            unHide(nodes2[node_id].neighbours[i]);  
         }  
         
         /* ALGORITMO ESTRELLA*/
@@ -458,13 +462,13 @@ function graphNGrams(node_id){
                 if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined"){
                     
                     if(Edges[i1].weight > Edges[i2].weight){
-                        partialGraph._core.graph.edgesIndex[i1].hidden=false;
+                        unHide(i1);
                     }
                     if(Edges[i1].weight < Edges[i2].weight){
-                        partialGraph._core.graph.edgesIndex[i2].hidden=false;
+                        unHide(i2);
                     }
                     if(Edges[i1].weight == Edges[i2].weight){
-                        partialGraph._core.graph.edgesIndex[i1].hidden=false;
+                        unHide(i1);
                     }
                 }                
             }            
@@ -496,9 +500,9 @@ function graphDocs(node_id){
     if(node_id.charAt(0)=="D") {
         labels = [];
         
-        partialGraph._core.graph.nodesIndex[node_id].hidden=false;  
+        unHide(node_id);
         for(i=0;i<nodes1[node_id].neighbours.length;i++) {
-            partialGraph._core.graph.nodesIndex[nodes1[node_id].neighbours[i]].hidden=false;  
+            unHide(nodes1[node_id].neighbours[i]);
         }  
         
         var existingNodes = partialGraph._core.graph.nodes;
@@ -512,13 +516,13 @@ function graphDocs(node_id){
                 if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined"){
                     
                     if(Edges[i1].weight > Edges[i2].weight){
-                        partialGraph._core.graph.edgesIndex[i1].hidden=false;
+                        unHide(i1);
                     }
                     if(Edges[i1].weight < Edges[i2].weight){
-                        partialGraph._core.graph.edgesIndex[i2].hidden=false;
+                        unHide(i2);
                     }
                     if(Edges[i1].weight == Edges[i2].weight){
-                        partialGraph._core.graph.edgesIndex[i1].hidden=false;
+                        unHide(i1);
                     }
                 }
             }
@@ -647,16 +651,16 @@ function createEdgesForExistingNodes (typeOfNodes) {
 
                 if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined"){
                     if(Edges[i1].weight > Edges[i2].weight ){
-                        partialGraph._core.graph.edgesIndex[indexS1+";"+indexT1].hidden=false;                        
+                        unHide(indexS1+";"+indexT1);
                     }
                     if(Edges[i1].weight < Edges[i2].weight){
-                        partialGraph._core.graph.edgesIndex[indexS2+";"+indexT2].hidden=false;
+                        unHide(indexS2+";"+indexT2);
                     }
                     if(Edges[i1].weight == Edges[i2].weight){
                         if(Edges[i1].attributes[1].val!="bipartite") {     
                             if( (typeof partialGraph._core.graph.edgesIndex[indexS1+";"+indexT1])=="undefined" &&
                                 (typeof partialGraph._core.graph.edgesIndex[indexT1+";"+indexS1])=="undefined" ){
-                                partialGraph._core.graph.edgesIndex[indexS1+";"+indexT1].hidden=false;
+                                unHide(indexS1+";"+indexT1);
                             }
                         }
                     }
@@ -666,11 +670,11 @@ function createEdgesForExistingNodes (typeOfNodes) {
                 else {
                     if((typeof Edges[i1])!="undefined" && Edges[i1].attributes[1].val=="bipartite"){
                         //I've found a source Node
-                        partialGraph._core.graph.edgesIndex[indexS1+";"+indexT1].hidden=false;                        
+                        unHide(indexS1+";"+indexT1);
                     }
                     if((typeof Edges[i2])!="undefined" && Edges[i2].attributes[1].val=="bipartite"){
                         //I've found a target Node
-                        partialGraph._core.graph.edgesIndex[indexS2+";"+indexT2].hidden=false;
+                        unHide(indexS2+";"+indexT2);
                     }
                 }
             }            
@@ -693,13 +697,13 @@ function createEdgesForExistingNodes (typeOfNodes) {
                 if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined" && i1!=i2){
                         
                     if(Edges[i1].weight > Edges[i2].weight){
-                        partialGraph._core.graph.edgesIndex[i1].hidden=false;
+                        unHide(i1);
                     }
                     if(Edges[i1].weight < Edges[i2].weight){
-                        partialGraph._core.graph.edgesIndex[i2].hidden=false;
+                        unHide(i2);
                     }
                     if(Edges[i1].weight == Edges[i2].weight){
-                        partialGraph._core.graph.edgesIndex[i1].hidden=false;
+                        unHide(i1);
                     }
                 }  
             }  
@@ -725,10 +729,10 @@ function changeToMeso(iwannagraph) {
             hideEverything();
             if(swclickPrev=="social") {
                 for(var i in selections) {
-                    partialGraph._core.graph.nodesIndex[i].hidden=false;
+                    unHide(i);
                     for(var j in nodes1[i].neighbours) { 
                         id=nodes1[i].neighbours[j];
-                        partialGraph._core.graph.nodesIndex[id].hidden=false;
+                        unHide(id);
                     }
                 }            
                 createEdgesForExistingNodes("Scholars");/**/
@@ -740,7 +744,7 @@ function changeToMeso(iwannagraph) {
                     }
                     if(Nodes[i].type=="NGram"){
                         for(var j in opossites) {
-                            partialGraph._core.graph.nodesIndex[j].hidden=false;                           
+                            unHide(j);
                         }
                         createEdgesForExistingNodes("Scholars");
                         break;
@@ -750,16 +754,16 @@ function changeToMeso(iwannagraph) {
             if(swclickPrev=="sociosemantic") {      
                 for(var i in selections) {
                     if(Nodes[i].type=="Document"){
-                        partialGraph._core.graph.nodesIndex[i].hidden=false;  
+                        unHide(i);
                         for(var j in nodes1[i].neighbours) { 
                             id=nodes1[i].neighbours[j];
-                            partialGraph._core.graph.nodesIndex[id].hidden=false;  
+                            unHide(id);
                         }
                         createEdgesForExistingNodes("Scholars");
                     }
                     if(Nodes[i].type=="NGram"){
                         for(var j in opossites) {
-                            partialGraph._core.graph.nodesIndex[j].hidden=false;                         
+                            unHide(j);
                         }
                         createEdgesForExistingNodes("Scholars");
                         break;
@@ -773,11 +777,11 @@ function changeToMeso(iwannagraph) {
         if(!is_empty(selections) && !is_empty(opossites)){
             hideEverything();
             for(var i in selections) {
-                partialGraph._core.graph.nodesIndex[i].hidden=false;  
+                unHide(i);
             }
                 
             for(var i in opossites) {
-                partialGraph._core.graph.nodesIndex[i].hidden=false;  
+                unHide(i);
             }
                 
             createEdgesForExistingNodes("Bipartite");
@@ -806,7 +810,7 @@ function changeToMeso(iwannagraph) {
                     }
                     if(Nodes[i].type=="Document"){
                         for(var j in opossites) {
-                            partialGraph._core.graph.nodesIndex[j].hidden=false;                          
+                            unHide(j);
                         }
                         createEdgesForExistingNodes("Keywords");
                         break;
@@ -817,7 +821,7 @@ function changeToMeso(iwannagraph) {
                 for(var i in selections) {
                     if(Nodes[i].type=="Document"){                        
                         for(var j in opossites) {
-                            partialGraph._core.graph.nodesIndex[j].hidden=false;                          
+                            unHide(j);
                         }
                         createEdgesForExistingNodes("Keywords");
                         break;
@@ -826,7 +830,7 @@ function changeToMeso(iwannagraph) {
                         partialGraph.addNode(i,Nodes[i]);
                         for(var j in nodes2[i].neighbours) { 
                             id=nodes2[i].neighbours[j];
-                            partialGraph._core.graph.nodesIndex[id].hidden=false;  
+                            unHide(id);
                         }
                         createEdgesForExistingNodes("Keywords");
                     }
@@ -851,7 +855,7 @@ function changeToMacro(iwannagraph) {
         hideEverything()
         for(var n in Nodes) {                
             if(Nodes[n].type=="NGram"){
-                partialGraph._core.graph.nodesIndex[n].hidden=false;  
+                unHide(n);
             }                
         }  
         createEdgesForExistingNodes("Keywords");
@@ -867,7 +871,7 @@ function changeToMacro(iwannagraph) {
         hideEverything()
         for(var n in Nodes) {                
             if(Nodes[n].type=="Document"){
-                partialGraph._core.graph.nodesIndex[n].hidden=false;  
+                unHide(n);
             }                
         }
         createEdgesForExistingNodes("Scholars");
@@ -882,7 +886,7 @@ function changeToMacro(iwannagraph) {
     if(iwannagraph=="sociosemantic") {
         hideEverything()
         for(var n in Nodes) {  
-            partialGraph._core.graph.nodesIndex[n].hidden=false;      
+            unHide(n);
         }
         
         for(var e in Edges) {  
@@ -893,20 +897,20 @@ function changeToMacro(iwannagraph) {
                     typeof(index[st[1]+";"+st[0]])=="undefined"
                     ){
                     if(Edges[st[0]+";"+st[1]].weight == Edges[st[1]+";"+st[0]].weight){
-                        partialGraph._core.graph.edgesIndex[st[0]+";"+st[1]].hidden=false;
+                        unHide(st[0]+";"+st[1]);
                     }
                     else {
                         if(Edges[st[0]+";"+st[1]].weight > Edges[st[1]+";"+st[0]].weight){
-                            partialGraph._core.graph.edgesIndex[st[0]+";"+st[1]].hidden=false;
+                            unHide(st[0]+";"+st[1]);
                         }
                         else {
-                            partialGraph._core.graph.edgesIndex[st[1]+";"+st[0]].hidden=false;   
+                            unHide(st[1]+";"+st[0]);
                         }
                     }
                 }                
             }
             if(Edges[e].label=="bipartite"){
-                partialGraph._core.graph.edgesIndex[e].hidden=false;
+                unHide(e);
             }
         }
         updateBothEdgeFilters();
