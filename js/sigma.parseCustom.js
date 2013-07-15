@@ -173,6 +173,7 @@ function fullExtract(){
                 
             if(node.attributes[0].val=="Document"){
                 node.type="Document";
+                node.shape="square";
                 numberOfDocs++;
                 node.size=desirableScholarSize;
                 //partialGraph.addNode(id,node); // 
@@ -198,7 +199,10 @@ function fullExtract(){
             nodeK.hidden=true;
             partialGraph.addNode(i,nodeK);   
         }
-        else partialGraph.addNode(i,Nodes[i]);                
+        else {
+            pr(Nodes[i]);
+            partialGraph.addNode(i,Nodes[i]);                
+        }
     }
     var edgeId = 0;
     var edgesNodes = gexf.getElementsByTagName('edges');
