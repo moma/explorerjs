@@ -423,9 +423,6 @@ function updateLeftPanel(){
     });
 }
 
-function unHide(node_id){
-    partialGraph._core.graph.nodesIndex[node_id].hidden=false;
-}
 
 function graphNGrams(node_id){   
     pr("\tin graphNGrams");/**/
@@ -635,7 +632,6 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
 function createEdgesForExistingNodes (typeOfNodes) {
     if(typeOfNodes=="Bipartite"){
         var existingNodes = partialGraph._core.graph.nodes;
-        pr(existingNodes);
         var edgesFound = [];
         for(i=0; i < existingNodes.length ; i++){
             for(j=0; j < existingNodes.length ; j++){
@@ -712,11 +708,24 @@ function createEdgesForExistingNodes (typeOfNodes) {
 }
 
 function hideEverything(){
+    visibleNodes=[];
+    visibleEdges=[];
     for(var n in partialGraph._core.graph.nodesIndex){
         partialGraph._core.graph.nodesIndex[n].hidden=true;
     }
     for(var e in partialGraph._core.graph.edgesIndex){
         partialGraph._core.graph.edgesIndex[e].hidden=true;
+    }
+}
+
+function unHide(id){
+    if(id.split(";").length==1){
+        visibleNodes.push(id);
+        partialGraph._core.graph.nodesIndex[id].hidden=false;
+    }
+    else {// It's an edge!
+        visibleEdges.push(id);
+        partialGraph._core.graph.edgesIndex[id].hidden=false;
     }
 }
 

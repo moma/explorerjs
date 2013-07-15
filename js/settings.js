@@ -36,6 +36,9 @@ var partialGraph;
 var Nodes = []; 
 var Edges = [];
 
+var visibleNodes=[];
+var visibleEdges=[];
+
 var scholarsSortedBySize=[];
 var keywordsSortedBySize=[];
 var nodesSortedBySize=[];

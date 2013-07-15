@@ -200,7 +200,6 @@ function fullExtract(){
             partialGraph.addNode(i,nodeK);   
         }
         else {
-            pr(Nodes[i]);
             partialGraph.addNode(i,Nodes[i]);  
             unHide(i);
         }
@@ -310,6 +309,7 @@ function fullExtract(){
             }
         }
     }
+    
 }
     
 
