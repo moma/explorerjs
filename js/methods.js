@@ -708,8 +708,16 @@ function createEdgesForExistingNodes (typeOfNodes) {
 }
 
 function hideEverything(){
-    visibleNodes=[];
-    visibleEdges=[];
+    //visibleNodes=[];
+    //visibleEdges=[];
+//    if(swclickActual=="social" && semanticConverged<2){
+//        if(semanticConverged===1) semanticConverged++;
+//    }
+//    if(swclickActual=="semantic" && socialConverged<2){
+//        if(socialConverged===1) socialConverged++;        
+//    }
+//    
+    nodeslength=0;
     for(var n in partialGraph._core.graph.nodesIndex){
         partialGraph._core.graph.nodesIndex[n].hidden=true;
     }
@@ -720,11 +728,12 @@ function hideEverything(){
 
 function unHide(id){
     if(id.split(";").length==1){
-        visibleNodes.push(id);
+        nodeslength++;
+        //visibleNodes.push(id);
         partialGraph._core.graph.nodesIndex[id].hidden=false;
     }
     else {// It's an edge!
-        visibleEdges.push(id);
+        //visibleEdges.push(id);
         partialGraph._core.graph.edgesIndex[id].hidden=false;
     }
 }

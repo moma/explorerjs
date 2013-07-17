@@ -36,8 +36,8 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
   this.init = function() {
     self.state = {step: 0, index: 0};
 
-    for(id=0;id<visibleNodes.length;id++){
-        n=self.graph.nodesIndex[visibleNodes[id]];
+    self.graph.nodes.forEach(function(n) {
+      if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
         n.fa2 = {
           mass: 1 + n.degree,
           old_dx: 0,
@@ -45,7 +45,8 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           dx: 0,
           dy: 0
         };
-    }
+      }
+    });
 
     return self;
   }
@@ -65,8 +66,8 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
     switch (self.state.step) {
       case 0: // Pass init
         // Initialise layout data
-        for(id=0;id<visibleNodes.length;id++){
-            n=graph.nodesIndex[visibleNodes[id]];
+        nodes.forEach(function(n) {
+          if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
             if(n.fa2) {
               n.fa2.mass = 1 + n.degree;
               n.fa2.old_dx = n.fa2.dx;
@@ -82,7 +83,8 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
                 dy: 0
               };
             }
-        }
+          }
+        });
 
         // If Barnes Hut active, initialize root region
         if (self.p.barnesHutOptimize) {
@@ -93,11 +95,10 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         // If outboundAttractionDistribution active, compensate.
         if (self.p.outboundAttractionDistribution) {
           self.p.outboundAttCompensation = 0;
-          for(id=0;id<visibleNodes.length;id++){
-            n=self.graph.nodesIndex[visibleNodes[id]];
+          nodes.forEach(function(n) {
             self.p.outboundAttCompensation += n.fa2.mass;
-          }
-          self.p.outboundAttCompensation /= visibleNodes.length;
+          });
+          self.p.outboundAttCompensation /= nodes.length;
         }
         self.state.step = 1;
         self.state.index = 0;
@@ -116,14 +117,12 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           // Pass to the scope of forEach
           var barnesHutTheta = self.p.barnesHutTheta;
           var i = self.state.index;
-          pr("self");
-          pr(self)
-          while (i < visibleNodes.length && i < self.state.index + cInt) {
-            var n = self.graph.nodesIndex[visibleNodes[i++]];
+          while (i < nodes.length && i < self.state.index + cInt) {
+            var n = nodes[i++];
             if(n.fa2)
               rootRegion.applyForce(n, Repulsion, barnesHutTheta);
           }
-          if (i == visibleNodes.length) {
+          if (i == nodes.length) {
             self.state.step = 2;
             self.state.index = 0;
           } else {
@@ -131,17 +130,16 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           }
         } else {
           var i1 = self.state.index;
-          while (i1 < visibleNodes.length && i1 < self.state.index + cInt) {
-            var n1 = self.graph.nodesIndex[visibleNodes[i1++]];
+          while (i1 < nodes.length && i1 < self.state.index + cInt) {
+            var n1 = nodes[i1++];
             if(n1.fa2)
-              for(i2=0;i2<visibleNodes.length;i2++){
-                n2=self.graph.nodesIndex[visibleNodes[i2]];
+              nodes.forEach(function(n2, i2) {
                 if (i2 < i1 && n2.fa2) {
                   Repulsion.apply_nn(n1, n2);
                 }
-              }
+              });
           }
-          if (i1 == visibleNodes.length) {
+          if (i1 == nodes.length) {
             self.state.step = 2;
             self.state.index = 0;
           } else {
@@ -165,13 +163,13 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         scalingRatio = self.p.scalingRatio;
 
         var i = self.state.index;
-        while (i < visibleNodes.length && i < self.state.index + sInt) {
-          var n = self.graph.nodesIndex[visibleNodes[i++]];
+        while (i < nodes.length && i < self.state.index + sInt) {
+          var n = nodes[i++];
           if (n.fa2)
             Gravity.apply_g(n, gravity / scalingRatio);
         }
 
-        if (i == visibleNodes.length) {
+        if (i == nodes.length) {
           self.state.step = 3;
           self.state.index = 0;
         } else {
@@ -192,19 +190,18 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
 
         var i = self.state.index;
         if (self.p.edgeWeightInfluence == 0) {
-          /*danger*/
-          while (i < visibleEdges.length && i < self.state.index + cInt) {
-            var e = self.graph.edgesIndex[visibleEdges[i++]];
+          while (i < edges.length && i < self.state.index + cInt) {
+            var e = edges[i++];
             Attraction.apply_nn(e.source, e.target, 1);
           }
         } else if (self.p.edgeWeightInfluence == 1) {
-          while (i < visibleEdges.length && i < self.state.index + cInt) {
-            var e = self.graph.edgesIndex[visibleEdges[i++]];
+          while (i < edges.length && i < self.state.index + cInt) {
+            var e = edges[i++];
             Attraction.apply_nn(e.source, e.target, e.weight || 1);
           }
         } else {
-          while (i < visibleEdges.length && i < self.state.index + cInt) {
-            var e = self.graph.edgesIndex[visibleEdges[i++]];
+          while (i < edges.length && i < self.state.index + cInt) {
+            var e = edges[i++];
             Attraction.apply_nn(
               e.source, e.target,
               Math.pow(e.weight || 1, self.p.edgeWeightInfluence)
@@ -212,7 +209,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           }
         }
 
-        if (i == visibleEdges.length) {
+        if (i == edges.length) {
           self.state.step = 4;
           self.state.index = 0;
         } else {
@@ -228,8 +225,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         var swingingSum=0;
         var promdxdy=0;  /**/
 
-        for(id=0;id<visibleNodes.length;id++){
-          n=self.graph.nodesIndex[visibleNodes[id]];
+        nodes.forEach(function(n) {
           var fixed = n.fixed || false;
           if (!fixed && n.fa2) {
             var swinging = Math.sqrt(Math.pow(n.fa2.old_dx - n.fa2.dx, 2) +
@@ -247,16 +243,17 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
                                         Math.pow(n.fa2.old_dy + n.fa2.dy, 2)
                                       );
           }
-        }
+        });
+
         self.p.totalSwinging = totalSwinging;
         
-        var convg= ((Math.pow(visibleNodes.length,2))/promdxdy);    /**/
-        var swingingVSnodes_length = swingingSum/visibleNodes.length;     /**/
+        var convg= ((Math.pow(nodes.length,2))/promdxdy);    /**/
+        var swingingVSnodes_length = swingingSum/nodes.length;     /**/
         if(convg > swingingVSnodes_length){ 
-            if(numberOfDocs==visibleNodes.length){
+            if(numberOfDocs==nodes.length){
                 socialConverged++;
             }
-            if(numberOfNGrams==visibleNodes.length ){
+            if(numberOfNGrams==nodes.length ){
                 semanticConverged++;
             }
             partialGraph.stopForceAtlas2(); 
@@ -279,11 +276,10 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
                        );
 
         // Save old coordinates
-        for(id=0;id<visibleNodes.length;id++){
-          n=self.graph.nodesIndex[visibleNodes[id]];
+        nodes.forEach(function(n) {
           n.old_x = +n.x;
           n.old_y = +n.y;
-        }
+        });
 
         self.state.step = 5;
         return true;
@@ -295,8 +291,8 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           var speed = self.p.speed;
           // If nodes overlap prevention is active,
           // it's not possible to trust the swinging mesure.
-          while (i < visibleNodes.length && i < self.state.index + sInt) {
-            var n = self.graph.nodesIndex[visibleNodes[i++]];
+          while (i < nodes.length && i < self.state.index + sInt) {
+            var n = nodes[i++];
             var fixed = n.fixed || false;
             if (!fixed && n.fa2) {
               // Adaptive auto-speed: the speed of each node is lowered
@@ -320,8 +316,8 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           }
         } else {
           var speed = self.p.speed;
-          while (i < visibleNodes.length && i < self.state.index + sInt) {
-            var n = self.graph.nodesIndex[visibleNodes[i++]];
+          while (i < nodes.length && i < self.state.index + sInt) {
+            var n = nodes[i++];
             var fixed = n.fixed || false;
             if (!fixed && n.fa2) {
               // Adaptive auto-speed: the speed of each node is lowered
@@ -340,7 +336,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           }
         }
 
-        if (i == visibleNodes.length) {
+        if (i == nodes.length) {
           self.state.step = 0;
           self.state.index = 0;
           return false;
@@ -357,17 +353,17 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
   }
 
   this.end = function() {
-    for(id=0;id<visibleNodes.length;id++){
-      n=self.graph.nodesIndex[visibleNodes[id]];
+    this.graph.nodes.forEach(function(n) {
       n.fa2 = null;
-    }
+    });
   }
 
   // Auto Settings
   this.setAutoSettings = function() {
     var graph = this.graph;
+
     // Tuning
-    if (visibleNodes.length >= 100) {
+    if (graph.nodes.length >= 100) {
       this.p.scalingRatio = 2.0;
     } else {
       this.p.scalingRatio = 10.0;
@@ -382,14 +378,14 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
     this.p.edgeWeightInfluence = 1;
 
     // Performance
-    if (visibleNodes.length >= 50000) {
+    if (graph.nodes.length >= 50000) {
       this.p.jitterTolerance = 10;
-    } else if (visibleNodes.length >= 5000) {
+    } else if (graph.nodes.length >= 5000) {
       this.p.jitterTolerance = 1;
     } else {
       this.p.jitterTolerance = 0.1;
     }
-    if (visibleNodes.length >= 1000) {
+    if (graph.nodes.length >= 1000) {
       this.p.barnesHutOptimize = true;
     } else {
       this.p.barnesHutOptimize = false;
@@ -852,24 +848,22 @@ sigma.forceatlas2.Region = function(nodes, depth) {
 }
 
 sigma.forceatlas2.Region.prototype.updateMassAndGeometry = function() {
-  if (visibleNodes.length > 1) {
+  if (this.nodes.length > 1) {
     // Compute Mass
     var mass = 0;
     var massSumX = 0;
     var massSumY = 0;
-    for(id=0;id<visibleNodes.length;id++){
-      n=self.graph.nodesIndex[visibleNodes[id]];
+    this.nodes.forEach(function(n) {
       mass += n.fa2.mass;
       massSumX += n.x * n.fa2.mass;
       massSumY += n.y * n.fa2.mass;
-    }
+    });
     var massCenterX = massSumX / mass;
     massCenterY = massSumY / mass;
 
     // Compute size
     var size;
-    for(id=0;id<visibleNodes.length;id++){
-      n=self.graph.nodesIndex[visibleNodes[id]];
+    this.nodes.forEach(function(n) {
       var distance = Math.sqrt(
         (n.x - massCenterX) *
         (n.x - massCenterX) +
@@ -877,7 +871,7 @@ sigma.forceatlas2.Region.prototype.updateMassAndGeometry = function() {
         (n.y - massCenterY)
       );
       size = Math.max(size || (2 * distance), 2 * distance);
-    }
+    });
 
     this.p.mass = mass;
     this.p.massCenterX = massCenterX;
@@ -888,7 +882,7 @@ sigma.forceatlas2.Region.prototype.updateMassAndGeometry = function() {
 
 
 sigma.forceatlas2.Region.prototype.buildSubRegions = function() {
-  if (visibleNodes.length > 1) {
+  if (this.nodes.length > 1) {
     var leftNodes = [];
     var rightNodes = [];
     var subregions = [];
@@ -898,11 +892,10 @@ sigma.forceatlas2.Region.prototype.buildSubRegions = function() {
 
     var self = this;
 
-    for(id=0;id<visibleNodes.length;id++){
-      n=self.graph.nodesIndex[visibleNodes[id]];
+    this.nodes.forEach(function(n) {
       var nodesColumn = (n.x < massCenterX) ? (leftNodes) : (rightNodes);
       nodesColumn.push(n);
-    }
+    });
 
     var tl = [], bl = [], br = [], tr = [];
 
@@ -919,7 +912,7 @@ sigma.forceatlas2.Region.prototype.buildSubRegions = function() {
     [tl, bl, br, tr].filter(function(a) {
       return a.length;
     }).forEach(function(a) {
-      if (nextDepth <= self.depthLimit && a.length < visibleNodes.length) {
+      if (nextDepth <= self.depthLimit && a.length < self.nodes.length) {
         var subregion = new sigma.forceatlas2.Region(a, nextDepth);
         subregions.push(subregion);
       } else {
@@ -940,8 +933,8 @@ sigma.forceatlas2.Region.prototype.buildSubRegions = function() {
 };
 
 sigma.forceatlas2.Region.prototype.applyForce = function(n, Force, theta) {
-  if (visibleNodes.length < 2) {
-    var regionNode = this.nodesIndex[visibleNodes[0]];/*danger*/
+  if (this.nodes.length < 2) {
+    var regionNode = this.nodes[0];
     Force.apply_nn(n, regionNode);
   } else {
     var distance = Math.sqrt(
@@ -963,31 +956,13 @@ sigma.forceatlas2.Region.prototype.applyForce = function(n, Force, theta) {
 
 sigma.publicPrototype.startForceAtlas2 = function() {
   //if(!this.forceatlas2) {
-    this.forceatlas2 = new sigma.forceatlas2.ForceAtlas2(this._core.graph);
-    this.forceatlas2.setAutoSettings();
-    this.forceatlas2.init();
-  //}
-  $("#overviewzone").hide();
-  
-  pr("\n*** Printing variables ***");
-  pr("scholarsSortedBySize");
-  pr(scholarsSortedBySize);
-  pr("keywordsSortedBySize");
-  pr(keywordsSortedBySize);
-  pr("nodesSortedBySize");
-  pr(nodesSortedBySize);  
-  pr("---------------------------");
-  if(!is_empty(nodesSortedBySize)){
-//      n=nodesSortedBySize.length;
-//      for(i=0;i<n;i++){
-//          //highlightOpossites(nodesSortedBySize[n-1].value);
-//          pr(nodesSortedBySize[n-1].value);
-//      }
-  }
-  else pr("nodes sorted by size VACIO");
-  
-  this.addGenerator('forceatlas2', this.forceatlas2.atomicGo, function(){
-    return true;
+      this.forceatlas2 = new sigma.forceatlas2.ForceAtlas2(this._core.graph);
+      this.forceatlas2.setAutoSettings();
+      this.forceatlas2.init();
+      //}
+      $("#overviewzone").hide();
+      this.addGenerator('forceatlas2', this.forceatlas2.atomicGo, function(){
+        return true;
   });
 };
 
