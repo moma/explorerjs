@@ -359,8 +359,8 @@ function updateLeftPanel(){
                 fontSize=desirableTagCloudFont_MIN+(opos[i].value-1)*((desirableTagCloudFont_MAX-desirableTagCloudFont_MIN)/(oposMAX-1));
             }
             if(typeof(nodes2[opos[i].key])!=="undefined"){
-                opossitesNodes += '<span style="font-size:'+fontSize+'px;cursor: pointer;" '
-                +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+ '</span><br>';
+                opossitesNodes += '<span style="display:inline-block;font-size:'+fontSize+'px;cursor: pointer;" '
+                +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+ '</span>,&nbsp;&nbsp;';
             }
 
         }
@@ -395,7 +395,7 @@ function updateLeftPanel(){
                 fontSize=desirableTagCloudFont_MIN+(opos[i].value-1)*((desirableTagCloudFont_MAX-desirableTagCloudFont_MIN)/(oposMAX-1));
             }
             if(typeof(nodes1[opos[i].key])!=="undefined"){
-                opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer;" '
+                opossitesNodes += '<span style="display:inline-block;font-size:'+fontSize+'px; cursor: pointer;" '
                 +js1+opos[i].key+js2+'>' + nodes1[opos[i].key].label+ '</span><br>';
             }
 
