@@ -113,14 +113,18 @@ function cancelSelection () {
     overNodes=false;
     var e = partialGraph._core.graph.edges;
     for(i=0;i<e.length;i++){
-        e[i].color = e[i].attr['grey'] ? e[i].attr['true_color'] : e[i].color;
-        e[i].attr['grey'] = 0;
+        if(e.hidden==false){
+            e[i].color = e[i].attr['grey'] ? e[i].attr['true_color'] : e[i].color;
+            e[i].attr['grey'] = 0;
+        }
     }
     partialGraph.draw(2,1,2);
                 
     partialGraph.iterNodes(function(n){
-        n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
-        n.attr['grey'] = 0;
+        if(n.hidden==false){
+            n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
+            n.attr['grey'] = 0;
+        }
     }).draw(2,1,2);
     //Nodes colors go back to normal
     changeButton("unselectNodes");
@@ -364,20 +368,14 @@ function updateLeftPanel(){
             else {
                 fontSize=desirableTagCloudFont_MIN+(opos[i].value-1)*((desirableTagCloudFont_MAX-desirableTagCloudFont_MIN)/(oposMAX-1));
             }
-            opossitesNodes += '<span style="font-size:'+fontSize+'px;cursor: pointer;" '
-            +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+ '</span><br>';
+            if(typeof(nodes2[opos[i].key])!=="undefined"){
+                opossitesNodes += '<span style="font-size:'+fontSize+'px;cursor: pointer;" '
+                +js1+opos[i].key+js2+'>' + nodes2[opos[i].key].label+ '</span><br>';
+            }
 
         }
         opossitesNodes += '</div>';
         
-        information += '<br><h4>Information:</h4>';
-        information += '<ul>';
-            
-        for(var i in selections){
-            information += '<li><b>' + Nodes[i].label + '</b></li>';
-            information += '<li>' + Nodes[i].attributes[3].val + '</li>';
-            information += '</ul><br>';
-        }
     }
     
     if(flag==2 && socsemFlag==false) {
@@ -397,9 +395,20 @@ function updateLeftPanel(){
             else {
                 fontSize=desirableTagCloudFont_MIN+(opos[i].value-1)*((desirableTagCloudFont_MAX-desirableTagCloudFont_MIN)/(oposMAX-1));
             }
-            opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer;" '
-            +js1+opos[i].key+js2+'>' + nodes1[opos[i].key].label+ '</span><br>';
+            if(typeof(nodes1[opos[i].key])!=="undefined"){
+                opossitesNodes += '<span style="font-size:'+fontSize+'px; cursor: pointer;" '
+                +js1+opos[i].key+js2+'>' + nodes1[opos[i].key].label+ '</span><br>';
+            }
 
+        }
+        
+        information += '<br><h4>Information:</h4>';
+        information += '<ul>';
+            
+        for(var i in selections){
+            information += '<li><b>' + Nodes[i].label + '</b></li>';
+            information += '<li>' + Nodes[i].attributes[3].val + '</li>';
+            information += '</ul><br>';
         }
     }
     if(flag==2 && socsemFlag==true) {
