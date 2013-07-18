@@ -1196,9 +1196,16 @@ function setPanels(){
                                 );
 }
 
-function changeSwitchSelection(current){
-    pr(current);/*tofix*/
-    pr($("#names").text());
+function changeSwitchSelection(img){
+    pr(img.id);/*tofix*/
+    fullurl = returnBaseUrl()+"img/trans/";
+    if(document.getElementById("switchbutton").src==fullurl+"showKeywords.png"){
+        document.getElementById("switchbutton").src=fullurl+"showScholars.png";
+    }
+    else {
+        document.getElementById("switchbutton").src=fullurl+"showKeywords.png";
+    }
+    //pr($("#names").text());
 }
 
 function startEnviroment(){
