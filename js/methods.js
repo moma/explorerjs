@@ -113,18 +113,14 @@ function cancelSelection () {
     overNodes=false;
     var e = partialGraph._core.graph.edges;
     for(i=0;i<e.length;i++){
-        if(e.hidden==false){
             e[i].color = e[i].attr['grey'] ? e[i].attr['true_color'] : e[i].color;
             e[i].attr['grey'] = 0;
-        }
     }
     partialGraph.draw(2,1,2);
                 
     partialGraph.iterNodes(function(n){
-        if(n.hidden==false){
             n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
             n.attr['grey'] = 0;
-        }
     }).draw(2,1,2);
     //Nodes colors go back to normal
     changeButton("unselectNodes");
@@ -306,12 +302,6 @@ function getOpossitesNodes(node_id, entireNode) {
     if (!node) return null;
     selection(node);
     
-    if(Nodes[node.id].type=="Document"){
-        flag=1;
-    } else {
-        flag=2;
-    }
-    
     opos = ArraySortByValue(opossites, function(a,b){
         return b-a
     });
@@ -352,7 +342,7 @@ function updateLeftPanel(){
     names=names.replace(", <h4>","<h4>");
     names+='</div>';
     js2='\');"';
-    if(flag==1) {
+    if(swclickActual=="social") {
         opossitesNodes+= '<br><h4>Keywords: </h4>';
         opossitesNodes+='<div id="opossitesBox">';
         js1='onclick="edgesTF=false;selections=[];opossites=[];graphNGrams(\'';
@@ -376,9 +366,18 @@ function updateLeftPanel(){
         }
         opossitesNodes += '</div>';
         
+        information += '<br><h4>Information:</h4>';
+        information += '<ul>';
+            
+        for(var i in selections){
+            information += '<li><b>' + Nodes[i].label + '</b></li>';
+            information += '<li>' + Nodes[i].attributes[3].val + '</li>';
+            information += '</ul><br>';
+        }
+        
     }
     
-    if(flag==2 && socsemFlag==false) {
+    if(swclickActual=="semantic" && socsemFlag==false) {
         opossitesNodes+= '<br><h4>Scholars: </h4>';
         opossitesNodes+='<div id="opossitesBox">';
         js1='onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'';
@@ -401,17 +400,9 @@ function updateLeftPanel(){
             }
 
         }
-        
-        information += '<br><h4>Information:</h4>';
-        information += '<ul>';
-            
-        for(var i in selections){
-            information += '<li><b>' + Nodes[i].label + '</b></li>';
-            information += '<li>' + Nodes[i].attributes[3].val + '</li>';
-            information += '</ul><br>';
-        }
+        opossitesNodes+='</div>';
     }
-    if(flag==2 && socsemFlag==true) {
+    if(swclickActual=="sociosemantic" && socsemFlag==true) {
         opossitesNodes += '<h4>Neighbours</h4><div style="margin: 5px 5px;">';
         opossitesNodes += 'en construcçao...aaaaaaaa ';
     }
