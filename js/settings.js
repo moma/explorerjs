@@ -38,9 +38,6 @@ var Edges = [];
 
 var nodeslength=0;
 
-var scholarsSortedBySize=[];
-var keywordsSortedBySize=[];
-var nodesSortedBySize=[];
 var labels = [];   
 
 var numberOfDocs=0;

@@ -3,6 +3,21 @@ function pr(msg) {
     console.log(msg);
 }
 
+$.fn.toggleClick = function(){
+        var methods = arguments, // store the passed arguments for future reference
+            count = methods.length; // cache the number of methods 
+
+        //use return this to maintain jQuery chainability
+        return this.each(function(i, item){
+            // for each element you bind to
+            var index = 0; // create a local counter for that element
+            $(item).click(function(){ // bind a click handler to that element
+                return methods[index++ % count].apply(this,arguments); // that when called will apply the 'index'th method to that element
+                // the index % count means that we constrain our iterator between 0 and (count-1)
+            });
+        });
+};
+
 getUrlParam = (function () {
     var get = {
         push:function (key,value){
@@ -592,7 +607,9 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
             if(is_empty(selections)){  
                 cancelSelection();
             }
-            else changeButton("selectNode");
+            else {
+                changeButton("selectNode");  
+            }
         //overNodes=false;
         });
     }
@@ -622,7 +639,9 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
                 $("#information").html("");
                 changeButton("unselectNodes");
             }
-            else changeButton("selectNode");
+            else {
+                changeButton("selectNode");    
+            }
         //overNodes=false;
         });
         
@@ -728,6 +747,7 @@ function hideEverything(){
 
 function unHide(id){
     if(id.split(";").length==1){
+        updateSearchLabels(Nodes[id].label,Nodes[id].type);
         nodeslength++;
         //visibleNodes.push(id);
         partialGraph._core.graph.nodesIndex[id].hidden=false;
@@ -1161,6 +1181,22 @@ function setPanels(){
         //return callSlider("#sliderSelectionZone", "selectionRadius");
         }
     });
+    
+    $('.switchButton').toggleClick(
+                                    function(){
+                                                $(this).addClass('on').html('Keywords');
+                                                changeSwitchSelection($('.switchButton').text());
+                                    },
+                                    function(){
+                                                $(this).removeClass('on').html('Scholars');
+                                                changeSwitchSelection($('.switchButton').text());
+                                    }
+                                );
+}
+
+function changeSwitchSelection(current){
+    pr(current);/*tofix*/
+    pr($("#names").text());
 }
 
 function startEnviroment(){

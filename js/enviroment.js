@@ -216,9 +216,13 @@ function updateEdgeFilter(edgeFilterName) {
     thing="";
     if(edgeFilterName=="social") {
         edgeFilterName="#sliderAEdgeWeight";
+        minvalue="#nodeAFilterMinValue";
+        maxvalue="#nodeAFilterMaxValue";
         thing="nodes1";
     }
     if(edgeFilterName=="semantic") {
+        minvalue="#nodeBFilterMinValue";
+        maxvalue="#nodeBFilterMaxValue";
         edgeFilterName="#sliderBEdgeWeight";
         thing="nodes2";
     }
@@ -238,23 +242,44 @@ function updateEdgeFilter(edgeFilterName) {
     edgesSortedByWeight = ArraySortByKey(edgesByWeight, function(a,b){
         return a-b
     });
+    
     //pr(edgesSortedByWeight);
+    
+    normEdges=[];
+    cont=0;
+    index=0;
+    for(var i in edgesSortedByWeight){
+        for(var j in edgesSortedByWeight[i].value){
+            if(typeof(normEdges[index])=="undefined"){
+                normEdges[index]=[];
+            }
+            normEdges[index].push(edgesSortedByWeight[i].value[j])
+            cont++;
+            if(cont%20==0) {
+                index++;
+                cont=0;
+            }
+        }
+    }
     
     $(edgeFilterName).slider({
         range: true,
         min: 0,
-        max: edgesSortedByWeight.length-1,
-        values: [0, edgesSortedByWeight.length-1],
+        max: normEdges.length-1,
+        values: [0, normEdges.length-1],
         step: 1,
         animate: true,
         slide: function(event, ui) {
             $.doTimeout(300,function (){
                 //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
                 edgesTemp = partialGraph._core.graph.edgesIndex;
-                for(i=0;i<edgesSortedByWeight.length;i++){
+                for(i=0;i<normEdges.length;i++){
                     if(i>=ui.values[0] && i<=ui.values[1]){
-                        for (var j in edgesSortedByWeight[i].value){
-                            id=edgesSortedByWeight[i].value[j];
+                        $(minvalue).text(ui.values[ 0 ]);
+                        $(maxvalue).text(ui.values[ 1 ]);
+                        //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
+                        for (var j in normEdges[i]){
+                            id=normEdges[i][j];
                             if(typeof(edgesTemp[id])=="undefined"){
                                 source=Edges[id].sourceID;
                                 target=Edges[id].targetID;
@@ -264,7 +289,7 @@ function updateEdgeFilter(edgeFilterName) {
                         }
                     }
                     else {
-                        partialGraph.dropEdge(edgesSortedByWeight[i].value);
+                        partialGraph.dropEdge(normEdges[i]);
                     }
                 }
                 partialGraph.draw();
