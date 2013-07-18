@@ -243,8 +243,6 @@ function updateEdgeFilter(edgeFilterName) {
         return a-b
     });
     
-    //pr(edgesSortedByWeight);
-    
     normEdges=[];
     cont=0;
     index=0;
@@ -324,6 +322,24 @@ function updateBothEdgeFilters() {
     keywordsEdgesSortedByWeight = ArraySortByKey(keywordsEdgesByWeight, function(a,b){
         return a-b
     });
+//    
+//    normScholarEdges=[];
+//    cont=0;
+//    index=0;
+//    for(var i in scholarsEdgesSortedByWeight){
+//        for(var j in scholarsEdgesSortedByWeight[i].value){
+//            if(typeof(normScholarEdges[index])=="undefined"){
+//                normScholarEdges[index]=[];
+//            }
+//            normScholarEdges[index].push(scholarsEdgesSortedByWeight[i].value[j])
+//            cont++;
+//            if(cont%20==0) {
+//                index++;
+//                cont=0;
+//            }
+//        }
+//    }
+//    pr(normScholarEdges);
     
     $("#sliderAEdgeWeight").slider({
         range: true,

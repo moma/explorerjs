@@ -623,12 +623,14 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
             y1 = partialGraph._core.mousecaptor.mouseY;
             //dist1(centerClick,selectionRadius)
             partialGraph.iterNodes(function(n){
-                distance = Math.sqrt(
-                    Math.pow((x1-parseInt(n.displayX)),2) +
-                    Math.pow((y1-parseInt(n.displayY)),2)
-                    );
-                if(parseInt(distance)<=cursor_size) {
-                    getOpossitesNodes(n,true);
+                if(n.hidden==false){
+                    distance = Math.sqrt(
+                        Math.pow((x1-parseInt(n.displayX)),2) +
+                        Math.pow((y1-parseInt(n.displayY)),2)
+                        );
+                    if(parseInt(distance)<=cursor_size) {
+                        getOpossitesNodes(n,true);
+                    }
                 }
             });
             updateLeftPanel();
