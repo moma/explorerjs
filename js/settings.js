@@ -71,7 +71,7 @@ var maxEdgeWeight=0.0;
 
 var sigmaJsDrawingProperties = {
     defaultLabelColor: 'black',
-    defaultLabelSize: 14,
+    //defaultLabelSize: 14,
     defaultLabelBGColor: '#fff',
     defaultLabelHoverColor: '#000',
     labelThreshold: 6,
@@ -88,5 +88,5 @@ var sigmaJsGraphProperties = {
 };
 var sigmaJsMouseProperties = {
     minRatio:0.3,
-    maxRatio: 10
+    maxRatio: 100
 };

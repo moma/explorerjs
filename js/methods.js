@@ -1059,7 +1059,7 @@ function setPanels(){
     $("#searchinput").keydown(function (e) {
         if (e.keyCode == 13 && $("input#searchinput").data('is_open') === true) {            
             if(!is_empty(matches)) {
-                for(j=0;j<matches.length;j++){
+                for(j=0;j<matches.length;j++){Keywords
                     search(matches[j].label);
                 }
             }
@@ -1196,7 +1196,7 @@ function setPanels(){
                                 );
 }
 
-function changeSwitchSelection(img){
+function changeSwitchImage(img){
     pr(img.id);/*tofix*/
     fullurl = returnBaseUrl()+"img/trans/";
     if(document.getElementById("switchbutton").src==fullurl+"showKeywords.png"){
@@ -1206,6 +1206,18 @@ function changeSwitchSelection(img){
         document.getElementById("switchbutton").src=fullurl+"showKeywords.png";
     }
     //pr($("#names").text());
+}
+
+function switchSelection(){
+    if(swclickActual=="social"){
+        //If we are seeing the Social Graph, this implies that the left panel
+        //is showing Keywords, so we have to invert names and opossites
+    }
+    if(swclickActual=="semantic"){
+        //If we are seeing the Semantic Graph, this implies that the left panel
+        //is showing Scholars, so we have to invert names and opossites
+    }
+    
 }
 
 function startEnviroment(){
