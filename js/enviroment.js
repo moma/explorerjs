@@ -43,7 +43,8 @@ function changeButton(buttonClicked) {
         $("#category-A").show();
         $("#category-B").show();
     }
-    if(buttonClicked=="selectNode"){
+    if(buttonClicked=="selectNode"){        
+        $("#switchbutton").show();
         if(document.getElementById("switch").src==fullurl+"graph_meso_null.png"){
             if(document.getElementById("viewType").src==fullurl+"status_macro_view.png"){
                 document.getElementById("switch").src=fullurl+"graph_meso.png";

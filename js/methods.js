@@ -140,6 +140,7 @@ function cancelSelection () {
     //Nodes colors go back to normal
     changeButton("unselectNodes");
     $("#searchinput").val("");
+    $("#switchbutton").hide();
 }
 
 function highlightSelectedNodes(flag){  
@@ -167,6 +168,7 @@ function highlightSelectedNodes(flag){
 function pushSWClick(arg){
     swclickPrev = swclickActual;
     swclickActual = arg;
+    changeSwitchImage('', arg);
 //pr("1. swclickPrev: "+swclickPrev+" - swclickActual: "+swclickActual);
 }
 
@@ -561,6 +563,7 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
         //If cursor_size=0 -> Normal and single mouse-selection
         alertCheckBox(checkBox);
         partialGraph.bind('downnodes', function (event) {
+            //$("#switchbutton").show();
             getOpossitesNodes(event.content, false);
             updateLeftPanel();
             /****            
@@ -1183,27 +1186,21 @@ function setPanels(){
         //return callSlider("#sliderSelectionZone", "selectionRadius");
         }
     });
-    
-    $('.switchButton').toggleClick(
-                                    function(){
-                                                $(this).addClass('on').html('Keywords');
-                                                changeSwitchSelection($('.switchButton').text());
-                                    },
-                                    function(){
-                                                $(this).removeClass('on').html('Scholars');
-                                                changeSwitchSelection($('.switchButton').text());
-                                    }
-                                );
 }
 
-function changeSwitchImage(img){
-    pr(img.id);/*tofix*/
+function changeSwitchImage(source, target){
     fullurl = returnBaseUrl()+"img/trans/";
-    if(document.getElementById("switchbutton").src==fullurl+"showKeywords.png"){
-        document.getElementById("switchbutton").src=fullurl+"showScholars.png";
+    if(source=="fromHtml"){
+        if(document.getElementById("switchbutton").src==fullurl+"showKeywords.png"){
+            document.getElementById("switchbutton").src=fullurl+"showScholars.png";
+        }
+        else {
+            document.getElementById("switchbutton").src=fullurl+"showKeywords.png";
+        }
     }
     else {
-        document.getElementById("switchbutton").src=fullurl+"showKeywords.png";
+        if(target=="social") document.getElementById("switchbutton").src=fullurl+"showKeywords.png";
+        if(target=="semantic") document.getElementById("switchbutton").src=fullurl+"showScholars.png";
     }
     //pr($("#names").text());
 }

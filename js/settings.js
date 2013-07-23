@@ -71,7 +71,7 @@ var maxEdgeWeight=0.0;
 
 var sigmaJsDrawingProperties = {
     defaultLabelColor: 'black',
-    //defaultLabelSize: 14,
+    defaultLabelSize: 12,
     defaultLabelBGColor: '#fff',
     defaultLabelHoverColor: '#000',
     labelThreshold: 6,
