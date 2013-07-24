@@ -752,6 +752,9 @@ function hideEverything(){
     for(var e in partialGraph._core.graph.edgesIndex){
         partialGraph._core.graph.edgesIndex[e].hidden=true;
     }
+    overNodes=false;//magic line!
+    //Remember that this function is the analogy of EmptyGraph
+    //"Saving node positions" should be applied in this function, too.
 }
 
 function unHide(id){
@@ -903,6 +906,7 @@ function changeToMeso(iwannagraph) {
 function changeToMacro(iwannagraph) { 
     labels=[]
     pr("CHANGING TO Macro-"+iwannagraph);
+    pr("\t\tover nodes: "+overNodes);
     fullurl = returnBaseUrl()+"img/trans/";
     if(iwannagraph=="semantic") {
         hideEverything()
