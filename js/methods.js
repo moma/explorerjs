@@ -145,7 +145,10 @@ function cancelSelection () {
 
 function highlightSelectedNodes(flag){  
     if(!is_empty(selections)){            
-        fullurl = returnBaseUrl()+"img/trans/";                
+        fullurl = returnBaseUrl()+"img/trans/"; 
+        pr("\nselections:")
+        pr(selections);
+        pr("\n");
         for(var i in selections) {
             if(Nodes[i].type=="Document" && document.getElementById("socio").src==fullurl+"active_scholars.png"){
                 node = partialGraph._core.graph.nodesIndex[i];
@@ -782,9 +785,9 @@ function changeToMeso(iwannagraph) {
             }
             if(swclickPrev=="semantic") {
                 for(var i in selections) {
-                    if(Nodes[i].type=="Document"){
-                        graphDocs(i);
-                    }
+//                    if(Nodes[i].type=="Document"){
+//                        graphDocs(i);
+//                    }
                     if(Nodes[i].type=="NGram"){
                         for(var j in opossites) {
                             unHide(j);
@@ -794,22 +797,28 @@ function changeToMeso(iwannagraph) {
                     }
                 }                
             }
-            if(swclickPrev=="sociosemantic") {      
+            if(swclickPrev=="sociosemantic") { 
+                pr("\nfinding what's going on");
+                pr(selections);
+                pr("iterando en selections:")
                 for(var i in selections) {
                     if(Nodes[i].type=="Document"){
+                        pr("\tmostrando: "+i+" y a sus vecinos:");
                         unHide(i);
+                        pr(nodes1[i].neighbours);
                         for(var j in nodes1[i].neighbours) { 
                             id=nodes1[i].neighbours[j];
-                            unHide(id);
+                            unHide(id);/*debug*/
                         }
                         createEdgesForExistingNodes("Scholars");
                     }
                     if(Nodes[i].type=="NGram"){
+                        pr("\tmostrando NGram: "+i+" y a sus vecinos Document:");
+                        pr(opossites);
                         for(var j in opossites) {
                             unHide(j);
                         }
                         createEdgesForExistingNodes("Scholars");
-                        break;
                     }
                 }                
             }
@@ -870,7 +879,7 @@ function changeToMeso(iwannagraph) {
                         break;
                     }
                     if(Nodes[i].type=="NGram"){                        
-                        partialGraph.addNode(i,Nodes[i]);
+                        unHide(i);//sneaky bug!
                         for(var j in nodes2[i].neighbours) { 
                             id=nodes2[i].neighbours[j];
                             unHide(id);
