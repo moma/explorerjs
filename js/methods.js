@@ -134,6 +134,7 @@ function cancelSelection () {
     partialGraph.draw(2,1,2);
                 
     partialGraph.iterNodes(function(n){
+            n.active=false;
             n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
             n.attr['grey'] = 0;
     }).draw(2,1,2);
@@ -808,7 +809,7 @@ function changeToMeso(iwannagraph) {
                         pr(nodes1[i].neighbours);
                         for(var j in nodes1[i].neighbours) { 
                             id=nodes1[i].neighbours[j];
-                            unHide(id);/*debug*/
+                            unHide(id);
                         }
                         createEdgesForExistingNodes("Scholars");
                     }
@@ -901,7 +902,7 @@ function changeToMeso(iwannagraph) {
 
 function changeToMacro(iwannagraph) { 
     labels=[]
-    pr("changing to Macro-"+iwannagraph);
+    pr("CHANGING TO Macro-"+iwannagraph);
     fullurl = returnBaseUrl()+"img/trans/";
     if(iwannagraph=="semantic") {
         hideEverything()
@@ -911,11 +912,18 @@ function changeToMacro(iwannagraph) {
             }                
         }  
         createEdgesForExistingNodes("Keywords");
-        //        for(var n in selections){
-        //            if(Nodes[n].type=="Document")
-        //                highlightOpossites(opossites);
-        //            break;
-        //        }
+        pr("analizing this!");
+        pr("I've a Documents-Selection, and I wanna change to SemanticGraph and show the NGrams-Selection");
+        pr("selections:");
+        pr(selections);
+        pr("opossites:");
+        pr(opossites);/*debug*/
+        for(var n in selections){
+            if(Nodes[n].type=="Document"){
+                highlightOpossites(opossites);
+            }
+            break;
+        }
         updateEdgeFilter(iwannagraph);
         updateNodeFilter("semantic");
     }
@@ -978,7 +986,7 @@ function changeToMacro(iwannagraph) {
 
 function highlightOpossites (list){/*tofix*/
     for(var n in list){
-        partialGraph._core.graph.nodesIndex[n].forceLabel=true;
+        partialGraph._core.graph.nodesIndex[n].active=true;
     }
 }
 
