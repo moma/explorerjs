@@ -903,10 +903,9 @@ function changeToMeso(iwannagraph) {
     partialGraph.startForceAtlas2();
 }
 
-function changeToMacro(iwannagraph) { 
+function changeToMacro(iwannagraph) {
     labels=[]
     pr("CHANGING TO Macro-"+iwannagraph);
-    pr("\t\tover nodes: "+overNodes);
     fullurl = returnBaseUrl()+"img/trans/";
     if(iwannagraph=="semantic") {
         hideEverything()
@@ -947,13 +946,13 @@ function changeToMacro(iwannagraph) {
         for(var n in Nodes) {  
             unHide(n);
         }
-        
+        //pr(partialGraph._core.graph.edgesIndex);
         for(var e in Edges) {  
             if(Edges[e].label=="nodes1" || Edges[e].label=="nodes2"){
                 st=e.split(";");
                 index = partialGraph._core.graph.edgesIndex;
-                if(typeof(index[st[0]+";"+st[1]])=="undefined" &&
-                    typeof(index[st[1]+";"+st[0]])=="undefined"
+                if(index[st[0]+";"+st[1]].hidden==true &&
+                   index[st[1]+";"+st[0]].hidden==true
                     ){
                     if(Edges[st[0]+";"+st[1]].weight == Edges[st[1]+";"+st[0]].weight){
                         unHide(st[0]+";"+st[1]);
