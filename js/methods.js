@@ -912,12 +912,6 @@ function changeToMacro(iwannagraph) {
             }                
         }  
         createEdgesForExistingNodes("Keywords");
-        pr("analizing this!");
-        pr("I've a Documents-Selection, and I wanna change to SemanticGraph and show the NGrams-Selection");
-        pr("selections:");
-        pr(selections);
-        pr("opossites:");
-        pr(opossites);/*debug*/
         for(var n in selections){
             if(Nodes[n].type=="Document"){
                 highlightOpossites(opossites);
@@ -935,11 +929,12 @@ function changeToMacro(iwannagraph) {
             }                
         }
         createEdgesForExistingNodes("Scholars");
-        //        for(var n in selections){
-        //            if(Nodes[n].type=="NGram")
-        //                highlightOpossites(opossites);
-        //            break;
-        //        }
+        for(var n in selections){
+            if(Nodes[n].type=="NGram"){
+                highlightOpossites(opossites);
+            }
+            break;
+        }
         updateEdgeFilter(iwannagraph);
     }
     
