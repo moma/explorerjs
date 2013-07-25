@@ -4,6 +4,7 @@ import networkx as nx
 import scipy as sp
 import numpy as np
 import random
+import threading
 
 import matplotlib.pyplot as plt
 
@@ -19,7 +20,7 @@ FW = nx.read_edgelist('web.edges', create_using= nx.DiGraph())
 
 
 class FA2:
-	## Utility functions
+
 	def eucl_dist(self,a,b):
 	    """
 	    Euclidean distance
