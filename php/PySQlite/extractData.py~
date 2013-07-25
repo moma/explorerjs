@@ -7,7 +7,7 @@ class extract:
 
     def __init__(self):
         self.algo="algo"
-        self.connection=sqlite3.connect('community.db')
+        self.connection=sqlite3.connect('../community.db')
 	self.connection.row_factory = sqlite3.Row# Magic line!
         self.cursor=self.connection.cursor()	
 	self.scholars = {}

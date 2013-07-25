@@ -7,9 +7,9 @@ class extract:
 
     def __init__(self):
         self.algo="algo"
-        self.connection=sqlite3.connect('../community.db')
+        self.connection=sqlite3.connect('community.db')
 	self.connection.row_factory = sqlite3.Row# Magic line!
-        self.cursor=self.connection.cursor()	
+        self.cursor=self.connection.cursor()
 	self.scholars = {}
 	self.scholars_colors = {}
 	self.terms_colors = {}
@@ -25,7 +25,7 @@ class extract:
 
     def extract(self):
         try:
-	    sql1="SELECT keywords_ids FROM scholars where unique_id='Elisa__Omodei'"#Isabelle__Alvarez'"
+	    sql1="SELECT keywords_ids FROM scholars where unique_id='Isabelle__Alvarez'"
             self.cursor.execute(sql1)
             res1=self.cursor.fetchone()
             while res1 is not None:
@@ -121,6 +121,7 @@ class extract:
 							termsMatrix[scholar_keywords[k]]['cooc'][scholar_keywords[l]] += 1
 						else:
 							termsMatrix[scholar_keywords[k]]['cooc'][scholar_keywords[l]] = 1;
+
 	sql='select login from jobs';
 	for res in self.cursor.execute(sql):
 		if res['login'].strip() in self.scholars_colors:
@@ -157,19 +158,13 @@ class extract:
 
 
 
-	sql="SELECT scholar FROM scholars2terms"
 	cont=0
 	for term in terms_array:
-		if cont==0: 
-			sql+=' where term_id='+str(term)
-			cont+=1
-		else: sql+=' or term_id='+str(term)
-		#print sql
+		sql="SELECT scholar FROM scholars2terms where term_id='"+str(term)+"'";
 		term_scholars=[]
 		for row in self.cursor.execute(sql):
 			term_scholars.append(row['scholar'])
 
-		#pprint.pprint(term_scholars)
 		for k in range(len(term_scholars)):
 			if scholarsMatrix.has_key(term_scholars[k]):
 				scholarsMatrix[term_scholars[k]]['occ'] = scholarsMatrix[term_scholars[k]]['occ'] + 1
@@ -191,7 +186,7 @@ class extract:
 							scholarsMatrix[term_scholars[k]]['cooc'][term_scholars[l]] += 1
 						else:
 							scholarsMatrix[term_scholars[k]]['cooc'][term_scholars[l]] = 1;
-		
+
 		nodeId = "N::"+str(term)
 		self.G.add_node(nodeId)
 		'''
@@ -208,7 +203,7 @@ class extract:
 
 	     }
 		'''
-	pprint.pprint(scholarsMatrix)
+
 	for scholar in self.scholars:
 		if scholar in scholarsMatrix:
 			if len(scholarsMatrix[scholar]['cooc']) >= self.min_num_friends:
@@ -265,24 +260,20 @@ class extract:
 					target="N::"+neigh
 					weight=neighbors[str(neigh)]/float(terms_array[term]['occurrences'])
 					self.G.add_edge( source , target , {'weight':weight,'type':"nodes2"})
-	'''
-	pprint.pprint(scholarsMatrix)
+
+
 	for scholar in self.scholars:
 		nodeId1 = self.scholars[scholar]['unique_id'];
-		print nodeId1
 		if scholarsMatrix.has_key(str(nodeId1)):
 			neighbors=scholarsMatrix[str(nodeId1)]['cooc']; 
-			print
 			for i, neigh in enumerate(neighbors):
-				if neigh != str(term):	
-					#print "\t"+neigh				
+				if neigh != str(scholar):					
 					source="D::"+str(self.scholars[scholar]['id'])
 					target="D::"+str(self.scholars[neigh]['id'])
 					weight=self.jaccard(scholarsMatrix[nodeId1]['occ'],scholarsMatrix[neigh]['occ'],neighbors[str(neigh)])
-					#print "\t"+source+","+target+" = "+str(neighbors[str(neigh)][])
-			print
-					#self.G.add_edge( source , target , {'weight':neighbors[str(neigh)]/float(terms_array[term]['occurrences']),'type':"nodes2"})
-	'''
+					#print "\t"+source+","+target+" = "+str(weight)
+					self.G.add_edge( source , target , {'weight':weight,'type':"nodes1"})
+
 
 	
 

@@ -417,7 +417,7 @@ function updateLeftPanel(){
             }
             if(typeof(nodes1[opos[i].key])!=="undefined"){
                 opossitesNodes += '<span style="display:inline-block;font-size:'+fontSize+'px; cursor: pointer;" '
-                +js1+opos[i].key+js2+'>' + nodes1[opos[i].key].label+ '</span><br>';
+                +js1+opos[i].key+js2+'>' + nodes1[opos[i].key].label+ '</span>,&nbsp;&nbsp;';
             }
 
         }
