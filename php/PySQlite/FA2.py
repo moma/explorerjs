@@ -95,3 +95,6 @@ class FA2:
 		t-=dt
 	    # Return the layout
 	    return dict(zip(G,pos))
+
+#nx.draw(G, forceatlas2_layout(G,linlog=False,nohubs=False,iterations=100))
+#plt.show()

@@ -7,13 +7,13 @@ class extract:
 
     def __init__(self):
         self.algo="algo"
-        self.connection=sqlite3.connect('community.db')
+        self.connection=sqlite3.connect('../community.db')
 	self.connection.row_factory = sqlite3.Row# Magic line!
         self.cursor=self.connection.cursor()
 	self.scholars = {}
 	self.scholars_colors = {}
 	self.terms_colors = {}
-	self.G = nx.DiGraph()
+	self.Graph = nx.DiGraph()
 	self.min_num_friends=0
 
     def jaccard(self,occ1,occ2,cooc):
@@ -188,7 +188,7 @@ class extract:
 							scholarsMatrix[term_scholars[k]]['cooc'][term_scholars[l]] = 1;
 
 		nodeId = "N::"+str(term)
-		self.G.add_node(nodeId)
+		self.Graph.add_node(nodeId)
 		'''
 		$nodeId = 'N::' . $term['id'];
 		$nodeLabel = str_replace('&', ' and ', $terms_array[$term['id']]['term']);
@@ -209,7 +209,7 @@ class extract:
 			if len(scholarsMatrix[scholar]['cooc']) >= self.min_num_friends:
 				scholarsIncluded += 1;
 				nodeId = 'D::'+str(self.scholars[scholar]['id']);
-				self.G.add_node(nodeId)
+				self.Graph.add_node(nodeId)
 				'''
 				$affiliation = '';
 				//pt($scholar['last_name'].','.$scholar['css_voter'].','.$scholar['css_member']);
@@ -248,7 +248,7 @@ class extract:
 					if keyword:
 						source="D::"+str(self.scholars[scholar]['id'])
 						target="N::"+str(keyword)
-						self.G.add_edge( source , target , {'weight':1,'type':"bipartite"})
+						self.Graph.add_edge( source , target , {'weight':1,'type':"bipartite"})
 
 	for term in terms_array:
 		nodeId1 = terms_array[term]['id'];
@@ -259,7 +259,7 @@ class extract:
 					source="N::"+str(term)
 					target="N::"+neigh
 					weight=neighbors[str(neigh)]/float(terms_array[term]['occurrences'])
-					self.G.add_edge( source , target , {'weight':weight,'type':"nodes2"})
+					self.Graph.add_edge( source , target , {'weight':weight,'type':"nodes2"})
 
 
 	for scholar in self.scholars:
@@ -272,7 +272,16 @@ class extract:
 					target="D::"+str(self.scholars[neigh]['id'])
 					weight=self.jaccard(scholarsMatrix[nodeId1]['occ'],scholarsMatrix[neigh]['occ'],neighbors[str(neigh)])
 					#print "\t"+source+","+target+" = "+str(weight)
-					self.G.add_edge( source , target , {'weight':weight,'type':"nodes1"})
+					self.Graph.add_edge( source , target , {'weight':weight,'type':"nodes1"})
+
+	#print "nbNodes: "+str( self.Graph.number_of_nodes())
+	#print "nbEdges: "+str( self.Graph.number_of_edges())
+	'''
+	print
+	pprint.pprint( self.Graph.nodes())
+	print
+	pprint.pprint( self.Graph.edges())
+	'''
 
 
 	
