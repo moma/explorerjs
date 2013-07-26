@@ -729,52 +729,53 @@ function search(string) {
     getOpossitesNodes(id_node, false);
     updateLeftPanel();
     
-    
-    var greyColor = '#9b9e9e';/**/
-    overNodes=true;
-    var nodes = id_node;
-    var neighbors = {};
-    var e = partialGraph._core.graph.edges; 
-    for(i=0;i<e.length;i++){
-        if(e.hidden==false){
-            if(nodes.indexOf(e[i].source.id)<0 && nodes.indexOf(e[i].target.id)<0){
-                if(!e[i].attr['grey']){
-                    e[i].attr['true_color'] = e[i].color;
-                    e[i].color = greyColor;
-                    e[i].attr['grey'] = 1;
-                }
-            }else{
-                e[i].color = e[i].attr['grey'] ? e[i].attr['true_color'] : e[i].color;
-                e[i].attr['grey'] = 0;
+            /****            
+                 *This give me the hoverNodes effect when the FA2 is running.
+                ****/
+            greyColor = '#9b9e9e';/**/
+            overNodes=true;
+            var nodes = id_node;//
+            var neighbors = {};
+            var e = partialGraph._core.graph.edges; 
+            for(i=0;i<e.length;i++){
+                if(e[i].hidden==false){
+                    if(nodes.indexOf(e[i].source.id)<0 && nodes.indexOf(e[i].target.id)<0){
+                        if(!e[i].attr['grey']){
+                            e[i].attr['true_color'] = e[i].color;
+                            e[i].color = greyColor;
+                            e[i].attr['grey'] = 1;
+                        }
+                    }else{
+                        e[i].color = e[i].attr['grey'] ? e[i].attr['true_color'] : e[i].color;
+                        e[i].attr['grey'] = 0;
 
-                neighbors[e[i].source.id] = 1;
-                neighbors[e[i].target.id] = 1;
-            }
-        }
-    }
-            
-    partialGraph.iterNodes(function(n){
-        if(n.hidden==false){
-            if(!neighbors[n.id]){
-                if(!n.attr['grey']){
-                    n.attr['true_color'] = n.color;
-                    n.color = greyColor;
-                    n.attr['grey'] = 1;
+                        neighbors[e[i].source.id] = 1;
+                        neighbors[e[i].target.id] = 1;
+                    }
                 }
-            }else{
-                n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
-                n.attr['grey'] = 0;
             }
-        }
-    }).draw(2,1,2);
             
-    if(is_empty(selections)==true){  
-        $("#names").html(""); //Information extracted, just added
-        $("#opossiteNodes").html(""); //Information extracted, just added
-        $("#information").html("");
-        changeButton("unselectNodes");
-    }
-    else changeButton("selectNode");
+            partialGraph.iterNodes(function(n){
+                if(n.hidden==false){
+                    if(!neighbors[n.id]){
+                        if(!n.attr['grey']){
+                            n.attr['true_color'] = n.color;
+                            n.color = greyColor;
+                            n.attr['grey'] = 1;
+                        }
+                    }else{
+                        n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
+                        n.attr['grey'] = 0;
+                    }
+                }
+            }).draw(2,1,2);
+            
+            if(is_empty(selections)){  
+                cancelSelection();
+            }
+            else {
+                changeButton("selectNode");  
+            }
 }
 
 //============================ < / SEARCH > ============================//
