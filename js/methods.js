@@ -113,16 +113,13 @@ function returnBaseUrl(){
 }
 
 
-function cancelSelection () {
+function cancelSelection (fromTagCloud) {
     pr("\tin cancelSelection");
     highlightSelectedNodes(false); //Unselect the selected ones :D
     opossites = [];
     selections = [];
     partialGraph.refresh();
     
-    $("#names").html(""); 
-    $("#opossiteNodes").html("");
-    $("#information").html("");
     
     //Nodes colors go back to normal
     overNodes=false;
@@ -140,8 +137,14 @@ function cancelSelection () {
     }).draw(2,1,2);
     //Nodes colors go back to normal
     changeButton("unselectNodes");
-    $("#searchinput").val("");
-    $("#switchbutton").hide();
+    
+    if(fromTagCloud==false){
+        $("#names").html(""); 
+        $("#opossiteNodes").html("");
+        $("#information").html("");
+        $("#searchinput").val("");
+        $("#switchbutton").hide();
+    }
 }
 
 function highlightSelectedNodes(flag){  
@@ -316,7 +319,7 @@ function getOpossitesNodes(node_id, entireNode) {
     if(entireNode==true) node=node_id;
     else node = partialGraph._core.graph.nodesIndex[node_id];
     if(socsemFlag==true) {
-        cancelSelection();
+        cancelSelection(false);
         socsemFlag=false;
     }
     
@@ -365,8 +368,8 @@ function updateLeftPanel(){
     js2='\');"';
     if(swclickActual=="social") {
         opossitesNodes+= '<br><h4>Keywords: </h4>';
-        opossitesNodes+='<div id="opossitesBox">';
-        js1='onclick="edgesTF=false;selections=[];opossites=[];graphNGrams(\'';
+        opossitesNodes+='<div id="opossitesBox">';/*tochange*/
+        js1='onclick="edgesTF=false;cancelSelection(true);graphNGrams(\'';
         for(var i in opos){
             if(i==22){
                 opossitesNodes += '<li>[...]</li>';
@@ -401,7 +404,7 @@ function updateLeftPanel(){
     if(swclickActual=="semantic" && socsemFlag==false) {
         opossitesNodes+= '<br><h4>Scholars: </h4>';
         opossitesNodes+='<div id="opossitesBox">';
-        js1='onclick="edgesTF=false;selections=[];opossites=[];graphDocs(\'';
+        js1='onclick="edgesTF=false;cancelSelection(true);graphDocs(\'';
         
         for(var i in opos){
             if(i==22){
@@ -612,7 +615,7 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
             }).draw(2,1,2);
             
             if(is_empty(selections)){  
-                cancelSelection();
+                cancelSelection(false);
             }
             else {
                 changeButton("selectNode");  
@@ -625,7 +628,7 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
         //If cursor_size>0 -> Multiple mouse-selection
         //Event: I've clicked the canvas (NOT A NODE) when I've a selection radius ON'
         partialGraph.bind('downnodes', function (event) {
-            if(checkBox==false) cancelSelection();
+            if(checkBox==false) cancelSelection(false);
             x1 = partialGraph._core.mousecaptor.mouseX;
             y1 = partialGraph._core.mousecaptor.mouseY;
             //dist1(centerClick,selectionRadius)
@@ -1101,7 +1104,7 @@ function setPanels(){
     
     $('#sigma-example').dblclick(function(event) {
         
-        cancelSelection();    
+        cancelSelection(false);    
         /***** The animation *****/
         _cG = $("#leftcolumn");    
         _cG.animate({
@@ -1131,7 +1134,7 @@ function setPanels(){
     
     //    $("#cancelselection").click(function (){
     //        pr("heeeeree");
-    //        cancelSelection();
+    //        cancelSelection(false);
     //    });
     
     $("#zoomPlusButton").click(function () {
@@ -1303,4 +1306,3 @@ function startEnviroment(){
     /* Initial Effect (Add: unchecked) HIDE */
     setPanels();
 }
-
