@@ -57,16 +57,16 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
 
   this.atomicGo = function() {
     var graph = self.graph;
-    var nodes = graph.nodes.filter(function(n) {
+    var nodes = graph.nodes;/*.filter(function(n) {
                     return !n['hidden'];
                 }).map(function(n) {
                     return n;
-                });
-    var edges = graph.edges.filter(function(e) {
+                });*/
+    var edges = graph.edges;/*.filter(function(e) {
                     return !e['hidden'];
                 }).map(function(e) {
                     return e;
-                });
+                });*/
     
     var cInt = self.p.complexIntervals;
     var sInt = self.p.simpleIntervals;
@@ -264,6 +264,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
             if(numberOfNGrams==nodes.length ){
                 semanticConverged++;
             }
+            pr("\tI'm going to apply the stop criteria!");
             partialGraph.stopForceAtlas2(); 
         }
         
@@ -370,14 +371,15 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
   
   // Auto Settings
   this.setAutoSettings = function() {
-    var graphnodes = nodes.filter(function(n) {
+    var graph = this.graph;
+    /*var graphnodes = nodes.filter(function(n) {
                         return !n['hidden'];
                     }).map(function(n) {
                         return n;
-                    });
+                    });*/
 
     // Tuning
-    if (graphnodes.length >= 100) {
+    if (graph.nodes.length >= 100) {
       this.p.scalingRatio = 2.0;
     } else {
       this.p.scalingRatio = 10.0;
@@ -392,14 +394,14 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
     this.p.edgeWeightInfluence = 1;
 
     // Performance
-    if (graphnodes.length >= 50000) {
+    if (graph.nodes.length >= 50000) {
       this.p.jitterTolerance = 10;
-    } else if (graphnodes.length >= 5000) {
+    } else if (graph.nodes.length >= 5000) {
       this.p.jitterTolerance = 1;
     } else {
       this.p.jitterTolerance = 0.1;
     }
-    if (graphnodes.length >= 1000) {
+    if (graph.nodes.length >= 1000) {
       this.p.barnesHutOptimize = true;
     } else {
       this.p.barnesHutOptimize = false;
@@ -970,6 +972,7 @@ sigma.forceatlas2.Region.prototype.applyForce = function(n, Force, theta) {
 
 sigma.publicPrototype.startForceAtlas2 = function() {
   //if(!this.forceatlas2) {
+      pr("\tStarting FA2");
       this.forceatlas2 = new sigma.forceatlas2.ForceAtlas2(this._core.graph);
       this.forceatlas2.setAutoSettings();
       this.forceatlas2.init();
@@ -982,6 +985,7 @@ sigma.publicPrototype.startForceAtlas2 = function() {
 
 sigma.publicPrototype.stopForceAtlas2 = function() {
   this.removeGenerator('forceatlas2');
+  pr("\tStopping FA2");
   updateMap();
   partialGraph.refresh();
   $("#overviewzone").show();

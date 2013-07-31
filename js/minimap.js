@@ -145,7 +145,6 @@ function initializeMap() {
 }
 
 function updateMap(){
-    console.log("updating MiniMap");
     
     partialGraph.imageMini="";
     partialGraph.ctxMini="";
