@@ -150,9 +150,6 @@ function cancelSelection (fromTagCloud) {
 function highlightSelectedNodes(flag){  
     if(!is_empty(selections)){            
         fullurl = returnBaseUrl()+"img/trans/"; 
-        pr("\nselections:")
-        pr(selections);
-        pr("\n");
         for(var i in selections) {
             if(Nodes[i].type=="Document" && document.getElementById("socio").src==fullurl+"active_scholars.png"){
                 node = partialGraph._core.graph.nodesIndex[i];
@@ -996,7 +993,6 @@ function setPanels(){
     $("#loading").remove();
     
     $("#aUnfold").click(function() {
-        pr("heeere");
         var _cG = $("#leftcolumn");
         if (_cG.offset().left < 0) {
             _cG.animate({
@@ -1102,18 +1098,29 @@ function setPanels(){
         partialGraph.startForceAtlas2();
     });
     
-    $('#sigma-example').dblclick(function(event) {
-        if(!is_empty(selections)){
-            cancelSelection(false);  ////  /***** The animation *****/
-            _cG = $("#leftcolumn");    
-            _cG.animate({
-                "left" : "-" + _cG.width() + "px"
-            }, function() {
-                $("#aUnfold").attr("class","rightarrow");
-                $("#zonecentre").css({
-                   left: "0"
-                });
+    $('#sigma-example').dblclick(function(event) {        
+        targeted = partialGraph._core.graph.nodes.filter(function(n) {
+                return !!n['hover'];
+            }).map(function(n) {
+                return n.id;
             });
+            
+        if(!is_empty(targeted)){
+            changeHoverActive(document.getElementById("switch"));
+        }
+        else {
+            if(!is_empty(selections)){
+                cancelSelection(false);
+                _cG = $("#leftcolumn");    
+                _cG.animate({
+                    "left" : "-" + _cG.width() + "px"
+                }, function() {
+                    $("#aUnfold").attr("class","rightarrow");
+                    $("#zonecentre").css({
+                       left: "0"
+                    });
+                });
+            }
         }
     });
     
