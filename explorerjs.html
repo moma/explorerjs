@@ -140,8 +140,11 @@
 
         <div id="zonecentre" class="gradient">
 
-            <!--<div onmousemove='if(typeof(partialGraph)!=="undefined") {trackMouse();}' -->
-            <div class="sigma-expand" id="sigma-example"></div>
+            <div onmousemove=
+                'if(typeof(partialGraph)!=="undefined" && cursor_size>0) {
+                    trackMouse();
+                }'
+                class="sigma-expand" id="sigma-example"></div>
 
             <ul id="ctlzoom">
                 <li>

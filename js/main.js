@@ -22,4 +22,11 @@ $(document).ready(function () {
     
     startEnviroment(); 
     
+    targeted = partialGraph._core.graph.edges.filter(function(n) {
+                return !n['hidden'];
+            }).map(function(n) {
+                return n;
+            });
+            
+    
 });

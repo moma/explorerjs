@@ -1254,28 +1254,21 @@ function startEnviroment(){
         if(n[i].hidden==false){
             if(n[i].inDegree==minIn && n[i].forceLabel==false) {
                 n[i].forceLabel=true;
-                pr(n[i].label);
                 counter++;
             }
             if(n[i].inDegree==maxIn && n[i].forceLabel==false) {
                 n[i].forceLabel=true;
-                pr(n[i].label);
                 counter++;
             }
             if(n[i].outDegree==minOut && n[i].forceLabel==false) {
                 n[i].forceLabel=true;
-                pr(n[i].label);
                 counter++;
             }
             if(n[i].outDegree==maxOut && n[i].forceLabel==false) {
                 n[i].forceLabel=true;
-                pr(n[i].label);
                 counter++;
             }
-            if(counter==6) {
-                pr("aqui");
-                break;
-            }
+            if(counter==6) break;
         }
     }
     /*======= Show some labels at the beginning =======*/

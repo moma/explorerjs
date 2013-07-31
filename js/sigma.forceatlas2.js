@@ -57,9 +57,17 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
 
   this.atomicGo = function() {
     var graph = self.graph;
-    var nodes = graph.nodes;
-    var edges = graph.edges;
-
+    var nodes = graph.nodes.filter(function(n) {
+                    return !n['hidden'];
+                }).map(function(n) {
+                    return n;
+                });
+    var edges = graph.edges.filter(function(e) {
+                    return !e['hidden'];
+                }).map(function(e) {
+                    return e;
+                });
+    
     var cInt = self.p.complexIntervals;
     var sInt = self.p.simpleIntervals;
 
@@ -354,10 +362,12 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
 
   this.end = function() {
     this.graph.nodes.forEach(function(n) {
-      n.fa2 = null;
+        if(!n.hidden){
+            n.fa2 = null;
+        }
     });
   }
-
+/*fromhere*/
   // Auto Settings
   this.setAutoSettings = function() {
     var graph = this.graph;
