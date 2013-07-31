@@ -1103,19 +1103,18 @@ function setPanels(){
     });
     
     $('#sigma-example').dblclick(function(event) {
-        
-        cancelSelection(false);    
-        /***** The animation *****/
-        _cG = $("#leftcolumn");    
-        _cG.animate({
-            "left" : "-" + _cG.width() + "px"
-        }, function() {
-            $("#aUnfold").attr("class","rightarrow");
-            $("#zonecentre").css({
-                left: "0"
+        if(!is_empty(selections)){
+            cancelSelection(false);  ////  /***** The animation *****/
+            _cG = $("#leftcolumn");    
+            _cG.animate({
+                "left" : "-" + _cG.width() + "px"
+            }, function() {
+                $("#aUnfold").attr("class","rightarrow");
+                $("#zonecentre").css({
+                   left: "0"
+                });
             });
-        });
-    /***** The animation *****/
+        }
     });
     
     $("#overview")
@@ -1125,17 +1124,13 @@ function setPanels(){
     //    .mouseout(endMove)
     .mousewheel(onGraphScroll);
     
-    $("sigma-example")
+    //$("sigma-example")
     //    .mousemove(onOverviewMove)
     //    .mousedown(startMove)
     //    .mouseup(endMove)
     //    .mouseout(endMove)
     //    .mousewheel(onGraphScroll); -> it doesn't answer!
     
-    //    $("#cancelselection").click(function (){
-    //        pr("heeeeree");
-    //        cancelSelection(false);
-    //    });
     
     $("#zoomPlusButton").click(function () {
         partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, partialGraph._core.mousecaptor.ratio * 1.5);
@@ -1253,14 +1248,36 @@ function startEnviroment(){
             if(parseInt(n.outDegree) > maxOut) maxOut= n.outDegree;
         }
     });
-    partialGraph.iterNodes(function(n){
-        if(n.hidden==false){
-            if(n.inDegree==minIn) n.forceLabel=true;
-            if(n.inDegree==maxIn) n.forceLabel=true;
-            if(n.outDegree==minOut) n.forceLabel=true;
-            if(n.outDegree==maxOut) n.forceLabel=true;
+    counter=0;
+    n = partialGraph._core.graph.nodes;
+    for(i=0;i<n.length;i++) {
+        if(n[i].hidden==false){
+            if(n[i].inDegree==minIn && n[i].forceLabel==false) {
+                n[i].forceLabel=true;
+                pr(n[i].label);
+                counter++;
+            }
+            if(n[i].inDegree==maxIn && n[i].forceLabel==false) {
+                n[i].forceLabel=true;
+                pr(n[i].label);
+                counter++;
+            }
+            if(n[i].outDegree==minOut && n[i].forceLabel==false) {
+                n[i].forceLabel=true;
+                pr(n[i].label);
+                counter++;
+            }
+            if(n[i].outDegree==maxOut && n[i].forceLabel==false) {
+                n[i].forceLabel=true;
+                pr(n[i].label);
+                counter++;
+            }
+            if(counter==6) {
+                pr("aqui");
+                break;
+            }
         }
-    });
+    }
     /*======= Show some labels at the beginning =======*/
     initializeMap();
     updateMap();

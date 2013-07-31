@@ -4,9 +4,6 @@ function trackMouse() {
     ctx.globalCompositeOperation = "source-over";
     ctx.clearRect(0, 0, partialGraph._core.domElements.nodes.width, partialGraph._core.domElements.nodes.height);
 
-    var x;
-    var y;
-
     x = partialGraph._core.mousecaptor.mouseX;
     y = partialGraph._core.mousecaptor.mouseY;
     
