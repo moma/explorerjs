@@ -367,13 +367,17 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         }
     });
   }
-/*fromhere*/
+  
   // Auto Settings
   this.setAutoSettings = function() {
-    var graph = this.graph;
+    var graphnodes = nodes.filter(function(n) {
+                        return !n['hidden'];
+                    }).map(function(n) {
+                        return n;
+                    });
 
     // Tuning
-    if (graph.nodes.length >= 100) {
+    if (graphnodes.length >= 100) {
       this.p.scalingRatio = 2.0;
     } else {
       this.p.scalingRatio = 10.0;
@@ -388,14 +392,14 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
     this.p.edgeWeightInfluence = 1;
 
     // Performance
-    if (graph.nodes.length >= 50000) {
+    if (graphnodes.length >= 50000) {
       this.p.jitterTolerance = 10;
-    } else if (graph.nodes.length >= 5000) {
+    } else if (graphnodes.length >= 5000) {
       this.p.jitterTolerance = 1;
     } else {
       this.p.jitterTolerance = 0.1;
     }
-    if (graph.nodes.length >= 1000) {
+    if (graphnodes.length >= 1000) {
       this.p.barnesHutOptimize = true;
     } else {
       this.p.barnesHutOptimize = false;
@@ -838,7 +842,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
     }
   };
 };
-
+/*fromhere*/
 // The Region class, as used by the Barnes Hut optimization
 sigma.forceatlas2.Region = function(nodes, depth) {
   sigma.classes.Cascade.call(this);
