@@ -803,13 +803,13 @@ function changeToMeso(iwannagraph) {
             }
             if(swclickPrev=="semantic") {
                 for(var i in selections) {
-                    unHide(i);
                     if(Nodes[i].type=="NGram"){
                         for(var j in opossites) {
                             unHide(j);
                         }
                     }
                     else {
+                        unHide(i);
                         neigh=nodes1[i].neighbours;
                         for(var j in neigh) {
                             unHide(neigh[j]);
@@ -880,19 +880,22 @@ function changeToMeso(iwannagraph) {
                 }
                 createEdgesForExistingNodes("Keywords");
             }
-            if(swclickPrev=="social") {
+            if(swclickPrev=="social") {                
                 for(var i in selections) {
-                    if(Nodes[i].type=="NGram"){
-                        graphNGrams(i);
-                    }
                     if(Nodes[i].type=="Document"){
                         for(var j in opossites) {
                             unHide(j);
                         }
-                        createEdgesForExistingNodes("Keywords");
-                        break;
                     }
-                } 
+                    else {
+                        unHide(i);
+                        neigh=nodes2[i].neighbours;
+                        for(var j in neigh) {
+                            unHide(neigh[j]);
+                        }
+                    }
+                }
+                createEdgesForExistingNodes("Keywords");
             }
             if(swclickPrev=="sociosemantic") {                     
                 for(var i in selections) {
