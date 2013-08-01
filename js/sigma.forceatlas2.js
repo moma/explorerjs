@@ -57,6 +57,8 @@ sigma.forceatlas2.ForceAtlas2 = function() {
   }
 
   this.atomicGo = function() {
+      
+    pr(edgesFA2.length);
     var cInt = self.p.complexIntervals;
     var sInt = self.p.simpleIntervals;
 
@@ -972,6 +974,8 @@ sigma.publicPrototype.startForceAtlas2 = function() {
                 });/*.map(function(e) {
                     return e;
                 });*/
+      pr("\t#nodes: "+nodesFA2.length);
+      pr("\t#edges: "+edgesFA2.length);
       this.forceatlas2 = new sigma.forceatlas2.ForceAtlas2();
       this.forceatlas2.setAutoSettings();
       this.forceatlas2.init();

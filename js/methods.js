@@ -658,9 +658,11 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
 }
 
 function createEdgesForExistingNodes (typeOfNodes) {
+    
+    existingNodes = partialGraph._core.graph.nodes.filter(function(n) {
+                            return !n['hidden'];
+                        });
     if(typeOfNodes=="Bipartite"){
-        var existingNodes = partialGraph._core.graph.nodes;
-        var edgesFound = [];
         for(i=0; i < existingNodes.length ; i++){
             for(j=0; j < existingNodes.length ; j++){
                 
@@ -705,13 +707,6 @@ function createEdgesForExistingNodes (typeOfNodes) {
         }
     }
     else {     
-        
-        var Type;
-        if(typeOfNodes=="Scholars") { 
-            Type="D";
-        }
-        else Type="N"; //Keywords
-        existingNodes = partialGraph._core.graph.nodes;
         for(i=0; i < existingNodes.length ; i++){
             for(j=(i+1); j < existingNodes.length ; j++){
                     
@@ -720,15 +715,32 @@ function createEdgesForExistingNodes (typeOfNodes) {
                 
                 if((typeof Edges[i1])!="undefined" && (typeof Edges[i2])!="undefined" && i1!=i2){
                         
-                    if(Edges[i1].weight > Edges[i2].weight){
-                        unHide(i1);
-                    }
-                    if(Edges[i1].weight < Edges[i2].weight){
-                        unHide(i2);
-                    }
-                    if(Edges[i1].weight == Edges[i2].weight){
-                        unHide(i1);
-                    }
+                        if(typeOfNodes=="Scholars") { 
+                            if(Edges[i1].label=="nodes1" && Edges[i2].label=="nodes1"){                              
+                                if(Edges[i1].weight > Edges[i2].weight){
+                                    unHide(i1);
+                                }
+                                if(Edges[i1].weight < Edges[i2].weight){
+                                    unHide(i2);
+                                }
+                                if(Edges[i1].weight == Edges[i2].weight){
+                                    unHide(i1);
+                                }  
+                            }
+                        }
+                        if(typeOfNodes=="Keywords") { 
+                            if(Edges[i1].label=="nodes2" && Edges[i2].label=="nodes2"){                              
+                                if(Edges[i1].weight > Edges[i2].weight){
+                                    unHide(i1);
+                                }
+                                if(Edges[i1].weight < Edges[i2].weight){
+                                    unHide(i2);
+                                }
+                                if(Edges[i1].weight == Edges[i2].weight){
+                                    unHide(i1);
+                                }
+                            }
+                        }
                 }  
             }  
         }  
@@ -744,7 +756,8 @@ function hideEverything(){
 //    if(swclickActual=="semantic" && socialConverged<2){
 //        if(socialConverged===1) socialConverged++;        
 //    }
-//    
+//  
+    pr("\thiding all");
     nodeslength=0;
     for(var n in partialGraph._core.graph.nodesIndex){
         partialGraph._core.graph.nodesIndex[n].hidden=true;
@@ -753,6 +766,7 @@ function hideEverything(){
         partialGraph._core.graph.edgesIndex[e].hidden=true;
     }
     overNodes=false;//magic line!
+    pr("\tall hidded");
     //Remember that this function is the analogy of EmptyGraph
     //"Saving node positions" should be applied in this function, too.
 }
@@ -789,12 +803,17 @@ function changeToMeso(iwannagraph) {
             }
             if(swclickPrev=="semantic") {
                 for(var i in selections) {
-//                    if(Nodes[i].type=="Document"){
-//                        graphDocs(i);
-//                    }
                     if(Nodes[i].type=="NGram"){
                         for(var j in opossites) {
                             unHide(j);
+                        }
+                        createEdgesForExistingNodes("Scholars");
+                        break;
+                    }
+                    else {
+                        neigh=nodes1[i].neighbours;
+                        for(var j in neigh) {
+                            unHide(neigh[j]);
                         }
                         createEdgesForExistingNodes("Scholars");
                         break;
