@@ -803,22 +803,20 @@ function changeToMeso(iwannagraph) {
             }
             if(swclickPrev=="semantic") {
                 for(var i in selections) {
+                    unHide(i);
                     if(Nodes[i].type=="NGram"){
                         for(var j in opossites) {
                             unHide(j);
                         }
-                        createEdgesForExistingNodes("Scholars");
-                        break;
                     }
                     else {
                         neigh=nodes1[i].neighbours;
                         for(var j in neigh) {
                             unHide(neigh[j]);
                         }
-                        createEdgesForExistingNodes("Scholars");
-                        break;
                     }
-                }                
+                }
+                createEdgesForExistingNodes("Scholars");
             }
             if(swclickPrev=="sociosemantic") { 
                 pr("\nfinding what's going on");
@@ -874,6 +872,7 @@ function changeToMeso(iwannagraph) {
             //pr("2. swclickPrev: "+swclickPrev+" - swclickActual: "+swclickActual);
             if(swclickPrev=="semantic") {
                 for(var i in selections) {
+                    unHide(i);
                     neigh=nodes2[i].neighbours;
                     for(var j in neigh) {
                         unHide(neigh[j]);
