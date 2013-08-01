@@ -177,7 +177,7 @@ function pushSWClick(arg){
 }
 
 function selection(currentNode){
-    pr("\tin selection");
+    pr("\tin selection()");
     if(checkBox==false && cursor_size==0) {
         highlightSelectedNodes(false);
         opossites = [];
@@ -212,7 +212,7 @@ function selection(currentNode){
         }
         else {
             delete selections[currentNode.id];        
-        
+            markAsSelected(currentNode.id,false);
             if(Nodes[currentNode.id].type=="Document"){
                 for(i=0;i<bipartiteD2N[currentNode.id].neighbours.length;i++) {
                     if((typeof opossites[bipartiteD2N[currentNode.id].neighbours[i]])=="undefined") {
@@ -274,8 +274,9 @@ function selection(currentNode){
             currentNode.active=true;
         }
         else {
-            delete selections[currentNode.id];        
-        
+            delete selections[currentNode.id];
+            markAsSelected(currentNode.id,false);
+            
             if(Nodes[currentNode.id].type=="Document"){
                 for(i=0;i<bipartiteD2N[currentNode.id].neighbours.length;i++) {
                     if((typeof opossites[bipartiteD2N[currentNode.id].neighbours[i]])=="undefined") {
@@ -593,20 +594,19 @@ function greyEverything(){
     }
 }
 
-function markAsSelected(n_id){
+function markAsSelected(n_id,sel){
+    pr("\tmarkAsSelected");
     greyColor = '#9b9e9e';
     if(typeof(n_id.id)!="undefined") nodeSel=n_id;
     else nodeSel = partialGraph._core.graph.nodesIndex[n_id];
     
-    if(nodeSel.attr['grey']==1){
+    if(sel==true){
         
         nodeSel.color = nodeSel.attr['true_color'];
         nodeSel.attr['grey'] = 0;
         
         if(swclickActual=="social") {
-            pr("debo destacar vecinos Docs");
             if(nodeSel.type=="Document"){
-                pr("\tdestacar nodes1");
                 neigh=nodes1[nodeSel.id].neighbours;/**/
                 for(var i in neigh){
                     vec = partialGraph._core.graph.nodesIndex[neigh[i]];
@@ -624,8 +624,7 @@ function markAsSelected(n_id){
                     }
                 }
             }
-            else {
-                pr("\tdestacar bipartiteN2D");       
+            else { 
                 neigh=bipartiteN2D[nodeSel.id].neighbours;/**/
                 for(var i in neigh){
                     vec = partialGraph._core.graph.nodesIndex[neigh[i]];
@@ -645,9 +644,7 @@ function markAsSelected(n_id){
             }
         }
         if(swclickActual=="semantic") {
-            pr("debo destacar vecinos NGrams");
-            if(nodeSel.type=="Document"){
-                pr("\tdestacar bipartiteD2N");      
+            if(nodeSel.type=="Document"){    
                 neigh=bipartiteD2N[nodeSel.id].neighbours;/**/
                 for(var i in neigh){
                     vec = partialGraph._core.graph.nodesIndex[neigh[i]];
@@ -665,8 +662,7 @@ function markAsSelected(n_id){
                     }
                 }
             }
-            else {
-                pr("\tdestacar nodes2");      
+            else {    
                 neigh=nodes2[nodeSel.id].neighbours;/**/
                 for(var i in neigh){
                     vec = partialGraph._core.graph.nodesIndex[neigh[i]];
@@ -686,9 +682,7 @@ function markAsSelected(n_id){
             }
         }
         if(swclickActual=="sociosemantic") {
-            pr("debo destacar todos los vecinos");
-            if(nodeSel.type=="Document"){
-                pr("\tdestacar nodes1 y bipartiteD2N");      
+            if(nodeSel.type=="Document"){  
                 neigh=nodes1[nodeSel.id].neighbours;/**/
                 for(var i in neigh){
                     vec = partialGraph._core.graph.nodesIndex[neigh[i]];
@@ -723,7 +717,6 @@ function markAsSelected(n_id){
                 }
             }
             else {
-                pr("\tdestacar nodes2 y bipartiteN2D");   
                 neigh=nodes2[nodeSel.id].neighbours;/**/
                 for(var i in neigh){
                     vec = partialGraph._core.graph.nodesIndex[neigh[i]];
@@ -761,22 +754,13 @@ function markAsSelected(n_id){
     }
     
     
-    
-    
-    
-    
-    
-    
-    
-    else {
+    else { //   sel=false <-> unselect(nodeSel)
                 
         nodeSel.color = greyColor;
         nodeSel.attr['grey'] = 1;
         
         if(swclickActual=="social") {
-            pr("debo no destacar vecinos Docs");
             if(nodeSel.type=="Document"){
-                pr("\tdestacar nodes1");
                 neigh=nodes1[nodeSel.id].neighbours;/**/
                 for(var i in neigh){
                     vec = partialGraph._core.graph.nodesIndex[neigh[i]];
@@ -794,8 +778,7 @@ function markAsSelected(n_id){
                     }
                 }
             }
-            else {
-                pr("\tdestacar bipartiteN2D");       
+            else {     
                 neigh=bipartiteN2D[nodeSel.id].neighbours;/**/
                 for(var i in neigh){
                     vec = partialGraph._core.graph.nodesIndex[neigh[i]];
@@ -815,9 +798,7 @@ function markAsSelected(n_id){
             }
         }
         if(swclickActual=="semantic") {
-            pr("debo destacar vecinos NGrams");
-            if(nodeSel.type=="Document"){
-                pr("\tdestacar bipartiteD2N");      
+            if(nodeSel.type=="Document"){   
                 neigh=bipartiteD2N[nodeSel.id].neighbours;/**/
                 for(var i in neigh){
                     vec = partialGraph._core.graph.nodesIndex[neigh[i]];
@@ -835,8 +816,7 @@ function markAsSelected(n_id){
                     }
                 }
             }
-            else {
-                pr("\tdestacar nodes2");      
+            else {   
                 neigh=nodes2[nodeSel.id].neighbours;/**/
                 for(var i in neigh){
                     vec = partialGraph._core.graph.nodesIndex[neigh[i]];
@@ -856,9 +836,7 @@ function markAsSelected(n_id){
             }
         }
         if(swclickActual=="sociosemantic") {
-            pr("debo destacar todos los vecinos");
-            if(nodeSel.type=="Document"){
-                pr("\tdestacar nodes1 y bipartiteD2N");      
+            if(nodeSel.type=="Document"){    
                 neigh=nodes1[nodeSel.id].neighbours;/**/
                 for(var i in neigh){
                     vec = partialGraph._core.graph.nodesIndex[neigh[i]];
@@ -892,8 +870,7 @@ function markAsSelected(n_id){
                     }
                 }
             }
-            else {
-                pr("\tdestacar nodes2 y bipartiteN2D");   
+            else { 
                 neigh=nodes2[nodeSel.id].neighbours;/**/
                 for(var i in neigh){
                     vec = partialGraph._core.graph.nodesIndex[neigh[i]];
@@ -934,16 +911,16 @@ function markAsSelected(n_id){
 function hoverNodeEffectWhileFA2(selectionRadius) { 
     
     partialGraph.bind('downnodes', function (event) {
-        
+        overNodes=true;
         if(cursor_size==0 && checkBox==false){
             greyEverything();
-            markAsSelected(event.content);
+            markAsSelected(event.content,true);
             getOpossitesNodes(event.content, false);
         }
         
         if(cursor_size==0 && checkBox==true){
             if(is_empty(selections)) greyEverything();
-            markAsSelected(event.content);
+            markAsSelected(event.content,true);
             getOpossitesNodes(event.content, false);
         }
         
@@ -966,7 +943,7 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
                         Math.pow((y1-parseInt(n.displayY)),2)
                         );
                     if(parseInt(distance)<=cursor_size) {
-                        markAsSelected(n);
+                        markAsSelected(n,true);
                         getOpossitesNodes(n,true);
                     }
                 }
