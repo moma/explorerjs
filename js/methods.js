@@ -874,7 +874,10 @@ function changeToMeso(iwannagraph) {
             //pr("2. swclickPrev: "+swclickPrev+" - swclickActual: "+swclickActual);
             if(swclickPrev=="semantic") {
                 for(var i in selections) {
-                    graphNGrams(i);
+                    neigh=nodes2[i].neighbours;
+                    for(var j in neigh) {
+                        unHide(neigh[j]);
+                    }
                 }
                 createEdgesForExistingNodes("Keywords");
             }
