@@ -595,7 +595,6 @@ function greyEverything(){
 }
 
 function markAsSelected(n_id,sel){
-    pr("\tmarkAsSelected");
     greyColor = '#9b9e9e';
     if(typeof(n_id.id)!="undefined") nodeSel=n_id;
     else nodeSel = partialGraph._core.graph.nodesIndex[n_id];
@@ -752,160 +751,161 @@ function markAsSelected(n_id,sel){
             }
         }
     }
-    
-    
-    else { //   sel=false <-> unselect(nodeSel)
-                
-        nodeSel.color = greyColor;
-        nodeSel.attr['grey'] = 1;
-        
-        if(swclickActual=="social") {
-            if(nodeSel.type=="Document"){
-                neigh=nodes1[nodeSel.id].neighbours;/**/
-                for(var i in neigh){
-                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
-                    vec.color = greyColor;
-                    vec.attr['grey'] = 1;
-                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                }
-            }
-            else {     
-                neigh=bipartiteN2D[nodeSel.id].neighbours;/**/
-                for(var i in neigh){
-                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
-                    vec.color = greyColor;
-                    vec.attr['grey'] = 1;
-                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                }
-            }
-        }
-        if(swclickActual=="semantic") {
-            if(nodeSel.type=="Document"){   
-                neigh=bipartiteD2N[nodeSel.id].neighbours;/**/
-                for(var i in neigh){
-                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
-                    vec.color = greyColor;
-                    vec.attr['grey'] = 1;
-                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                }
-            }
-            else {   
-                neigh=nodes2[nodeSel.id].neighbours;/**/
-                for(var i in neigh){
-                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
-                    vec.color = greyColor;
-                    vec.attr['grey'] = 1;
-                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                }
-            }
-        }
-        if(swclickActual=="sociosemantic") {
-            if(nodeSel.type=="Document"){    
-                neigh=nodes1[nodeSel.id].neighbours;/**/
-                for(var i in neigh){
-                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
-                    vec.color = greyColor;
-                    vec.attr['grey'] = 1;
-                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                }    
-                neigh=bipartiteD2N[nodeSel.id].neighbours;/**/
-                for(var i in neigh){
-                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
-                    vec.color = greyColor;
-                    vec.attr['grey'] = 1;
-                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                }
-            }
-            else { 
-                neigh=nodes2[nodeSel.id].neighbours;/**/
-                for(var i in neigh){
-                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
-                    vec.color = greyColor;
-                    vec.attr['grey'] = 1;
-                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                }
-                neigh=bipartiteN2D[nodeSel.id].neighbours;/**/
-                for(var i in neigh){
-                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
-                    vec.color = greyColor;
-                    vec.attr['grey'] = 1;
-                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
-                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-                        an_edge.color = greyColor;
-                        an_edge.attr['grey'] = 1;
-                    }
-                }
-            }
-        }
-    }
+//    /* Just in case of unselection */
+//    /* Finally I decide not using this unselection. */
+//    /* We just grayEverything and color the selections[] */
+//    else { //   sel=false <-> unselect(nodeSel)
+//                
+//        nodeSel.color = greyColor;
+//        nodeSel.attr['grey'] = 1;
+//        
+//        if(swclickActual=="social") {
+//            if(nodeSel.type=="Document"){
+//                neigh=nodes1[nodeSel.id].neighbours;/**/
+//                for(var i in neigh){
+//                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
+//                    vec.color = greyColor;
+//                    vec.attr['grey'] = 1;
+//                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                }
+//            }
+//            else {     
+//                neigh=bipartiteN2D[nodeSel.id].neighbours;/**/
+//                for(var i in neigh){
+//                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
+//                    vec.color = greyColor;
+//                    vec.attr['grey'] = 1;
+//                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                }
+//            }
+//        }
+//        if(swclickActual=="semantic") {
+//            if(nodeSel.type=="Document"){   
+//                neigh=bipartiteD2N[nodeSel.id].neighbours;/**/
+//                for(var i in neigh){
+//                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
+//                    vec.color = greyColor;
+//                    vec.attr['grey'] = 1;
+//                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                }
+//            }
+//            else {   
+//                neigh=nodes2[nodeSel.id].neighbours;/**/
+//                for(var i in neigh){
+//                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
+//                    vec.color = greyColor;
+//                    vec.attr['grey'] = 1;
+//                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                }
+//            }
+//        }
+//        if(swclickActual=="sociosemantic") {
+//            if(nodeSel.type=="Document"){    
+//                neigh=nodes1[nodeSel.id].neighbours;/**/
+//                for(var i in neigh){
+//                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
+//                    vec.color = greyColor;
+//                    vec.attr['grey'] = 1;
+//                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                }    
+//                neigh=bipartiteD2N[nodeSel.id].neighbours;/**/
+//                for(var i in neigh){
+//                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
+//                    vec.color = greyColor;
+//                    vec.attr['grey'] = 1;
+//                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                }
+//            }
+//            else { 
+//                neigh=nodes2[nodeSel.id].neighbours;/**/
+//                for(var i in neigh){
+//                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
+//                    vec.color = greyColor;
+//                    vec.attr['grey'] = 1;
+//                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                }
+//                neigh=bipartiteN2D[nodeSel.id].neighbours;/**/
+//                for(var i in neigh){
+//                    vec = partialGraph._core.graph.nodesIndex[neigh[i]];
+//                    vec.color = greyColor;
+//                    vec.attr['grey'] = 1;
+//                    an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+nodeSel.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                    an_edge=partialGraph._core.graph.edgesIndex[nodeSel.id+";"+vec.id];
+//                    if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
+//                        an_edge.color = greyColor;
+//                        an_edge.attr['grey'] = 1;
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
 
 function hoverNodeEffectWhileFA2(selectionRadius) { 
@@ -913,26 +913,15 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
     partialGraph.bind('downnodes', function (event) {
         overNodes=true;
         if(cursor_size==0 && checkBox==false){
-            greyEverything();
-            markAsSelected(event.content,true);
             getOpossitesNodes(event.content, false);
         }
         
         if(cursor_size==0 && checkBox==true){
-            if(is_empty(selections)) greyEverything();
-            markAsSelected(event.content,true);
             getOpossitesNodes(event.content, false);
         }
         
         if(cursor_size>0){            
-            if(checkBox==false) {
-                cancelSelection(false);
-                greyEverything();
-            }      
-            else {
-                if(is_empty(selections)) greyEverything();
-            }
-            
+            if(checkBox==false) cancelSelection(false);
             x1 = partialGraph._core.mousecaptor.mouseX;
             y1 = partialGraph._core.mousecaptor.mouseY;
             //dist1(centerClick,selectionRadius)
@@ -943,7 +932,6 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
                         Math.pow((y1-parseInt(n.displayY)),2)
                         );
                     if(parseInt(distance)<=cursor_size) {
-                        markAsSelected(n,true);
                         getOpossitesNodes(n,true);
                     }
                 }
@@ -959,8 +947,12 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
                 changeButton("unselectNodes");
                 cancelSelection(false);
             }
-            else {
-                changeButton("selectNode");    
+            else { 
+                greyEverything();
+                for(var i in selections){
+                    markAsSelected(i,true);
+                }
+                changeButton("selectNode");
             }
     });
 }
