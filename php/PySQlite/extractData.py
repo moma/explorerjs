@@ -2,6 +2,9 @@
 import sqlite3
 import pprint
 import networkx as nx
+import random
+import math
+import cgi
 
 import sys
 reload(sys)
@@ -19,6 +22,8 @@ class extract:
 	self.terms_colors = {}
 	self.Graph = nx.DiGraph()
 	self.min_num_friends=0
+	self.imsize=80
+	self.terms_array = {}
 
 
     def jaccard(self,occ1,occ2,cooc):
@@ -131,7 +136,6 @@ class extract:
 		if res['login'].strip() in self.scholars_colors:
 			self.scholars_colors[res['login'].strip()]+=1;
 
-	terms_array = {}
 	sql="SELECT term,id,occurrences FROM terms"
 	#self.cursor.execute(sql)
 	cont=0
@@ -147,11 +151,11 @@ class extract:
 		info['id'] = idT
 		info['occurrences'] = res['occurrences']
 		info['term'] = res['term']
-		terms_array[idT] = info
+		self.terms_array[idT] = info
 	
 	count=1
 	
-	for term in terms_array:
+	for term in self.terms_array:
 		self.terms_colors[term]=0
 
 	sql='select term_id from jobs2terms'
@@ -162,7 +166,7 @@ class extract:
 
 
 	cont=0
-	for term in terms_array:
+	for term in self.terms_array:
 		#sql="SELECT scholar FROM scholars2terms where term_id='"+str(term)+"'";
 		sql="SELECT scholars.id FROM scholars,scholars2terms where term_id='"+str(term)+"' and scholars.unique_id=scholars2terms.scholar"
 		term_scholars=[]
@@ -193,20 +197,6 @@ class extract:
 
 		nodeId = "N::"+str(term)
 		self.Graph.add_node(nodeId)
-		'''
-		$nodeId = 'N::' . $term['id'];
-		$nodeLabel = str_replace('&', ' and ', $terms_array[$term['id']]['term']);
-		$nodePositionY = rand(0, 100) / 100;
-		$gexf .= '<node id="' . $nodeId . '" label="' . $nodeLabel . '">' . "\n";
-		//$gexf .= '<viz:color b="19" g="'.max(0,180-(100*$terms_colors[$term['id']])).'"  r="244"/>' . "\n";
-		$gexf .= '<viz:position x="' . (rand(0, 100) / 100) . '"    y="' . $nodePositionY . '"  z="0" />' . "\n";
-		$gexf .= '<attvalues> <attvalue for="0" value="NGram"/>' . "\n";
-		$gexf .= '<attvalue for="1" value="' . $terms_array[$term['id']]['occurrences'] . '"/>' . "\n";
-		$gexf .= '<attvalue for="4" value="' . $terms_array[$term['id']]['occurrences'] . '"/>' . "\n";
-		$gexf .= '</attvalues></node>' . "\n";
-
-	     }
-		'''
 
 	for scholar in self.scholars:
 		if scholar in scholarsMatrix:
@@ -214,36 +204,7 @@ class extract:
 				scholarsIncluded += 1;
 				nodeId = str(scholar);
 				self.Graph.add_node(nodeId)
-				'''
-				$affiliation = '';
-				//pt($scholar['last_name'].','.$scholar['css_voter'].','.$scholar['css_member']);
-				//pt($color);
-				//pt($content);
-				if (is_utf8($nodeLabel)) {
-				        $gexf .= '<node id="' . $nodeId . '" label="' . $nodeLabel . '">' . "\n";
-					//$gexf .= '<viz:color b="'.(243-min(243,(200*$scholars_colors[$scholar['login']]))).'" g="183"  r="19"/>' . "\n";
-					//$gexf .= '<viz:color '.$color.'/>' . "\n";
-					$gexf .= '<viz:position x="' . (rand(0, 100) / 100) . '"    y="' . $nodePositionY . '"  z="0" />' . "\n";
-					$gexf .= '<attvalues> <attvalue for="0" value="Document"/>' . "\n";
-					if (true) {
-						$gexf .= '<attvalue for="1" value="12"/>' . "\n";
-						$gexf .= '<attvalue for="4" value="12"/>' . "\n";
 
-					} else {
-						$gexf .= '<attvalue for="1" value="10"/>' . "\n";
-						$gexf .= '<attvalue for="4" value="10"/>' . "\n";
-
-					}
-					if (is_utf8($content)) {
-						$gexf .= '<attvalue for="2" value="' . htmlspecialchars($content) . '"/>' . "\n";
-					}
-					$gexf .= '</attvalues></node>' . "\n";
-				}
-	
-	$gexf .= '</nodes><edges>' . "\n";
-	// écritude des liens
-	$edgeid = 0;
-				'''
 	edgeid = 0
 	for scholar in self.scholars:
 		if scholar in scholarsMatrix:
@@ -255,15 +216,15 @@ class extract:
 						self.Graph.add_edge( source , target , {'weight':1,'type':"bipartite"})
 						#Some bipartite relations are missing (just the 1%)
 
-	for term in terms_array:
-		nodeId1 = terms_array[term]['id'];
+	for term in self.terms_array:
+		nodeId1 = self.terms_array[term]['id'];
 		if termsMatrix.has_key(str(nodeId1)):
 			neighbors = termsMatrix[str(nodeId1)]['cooc'];
 			for i, neigh in enumerate(neighbors):
 				if neigh != str(term):					
 					source="N::"+str(term)
 					target="N::"+neigh
-					weight=neighbors[str(neigh)]/float(terms_array[term]['occurrences'])
+					weight=neighbors[str(neigh)]/float(self.terms_array[term]['occurrences'])
 					self.Graph.add_edge( source , target , {'weight':weight,'type':"nodes2"})
 
 	for scholar in self.scholars:
@@ -277,5 +238,130 @@ class extract:
 					weight=self.jaccard(scholarsMatrix[nodeId1]['occ'],scholarsMatrix[neigh]['occ'],neighbors[str(neigh)])
 					#print "\t"+source+","+target+" = "+str(weight)
 					self.Graph.add_edge( source , target , {'weight':weight,'type':"nodes1"})
+
+    def toHTML(self,string):
+	return cgi.escape(string).encode("ascii", "xmlcharrefreplace")
+
+    def buildGEXF(self,coords):
+	print "gonna build a mofo gexf"	
+
+	gexf=""
+	gexf += '<gexf xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gephi.org/gexf/viz" version="1.1"> '
+	gexf += '<meta lastmodifieddate="20011-11-11">\n'
+	gexf += ' </meta>\n'
+	gexf += '<graph type="static">\n'
+	gexf += '<attributes class="node" type="static">\n'
+	gexf += ' <attribute id="0" title="category" type="string">  </attribute>\n'
+	gexf += ' <attribute id="1" title="occurrences" type="float">    </attribute>\n'
+	gexf += ' <attribute id="2" title="content" type="string">    </attribute>\n'
+	gexf += ' <attribute id="3" title="keywords" type="string">   </attribute>\n'
+	gexf += ' <attribute id="4" title="weight" type="float">   </attribute>\n'
+	gexf += '</attributes>\n'
+	gexf += '<attributes class="edge" type="float">\n'
+	gexf += ' <attribute id="5" title="cooc" type="float"> </attribute>\n'
+	gexf += ' <attribute id="6" title="type" type="string"> </attribute>\n'
+	gexf += "</attributes>\n"
+	gexf += "<nodes>\n"
+
+	for idNode in coords:
+		if idNode[0]=="N":#If it is NGram
+			numID=int(idNode.split("::")[1])
+			nodeLabel= self.terms_array[numID]['term'].replace("&"," and ")
+			colorg=max(0,180-(100*self.terms_colors[numID]))
+			term_occ = self.terms_array[numID]['occurrences']
+
+			gexf += '<node id="'+idNode +'" label="'+nodeLabel+'">\n'
+			gexf += '<viz:color b="19" g="'+str(colorg)+'"  r="244"/>\n'
+			gexf += '<viz:position x="'+str(coords[idNode][0])+'"    y="'+str(coords[idNode][1])+'"  z="0" />\n'
+			gexf += '<attvalues> <attvalue for="0" value="NGram"/>\n'
+			gexf += '<attvalue for="1" value="' +str(term_occ)+'"/>\n'
+			gexf += '<attvalue for="4" value="' +str(term_occ)+'"/>\n'
+			gexf += '</attvalues></node>\n'
+
+		if idNode[0]=='D':#If it is Document
+			nodeLabel= self.scholars[idNode]['title']+" "+self.scholars[idNode]['first_name']+" "+self.scholars[idNode]['initials']+" "+self.scholars[idNode]['last_name']
+			color=""
+			if self.scholars_colors[self.scholars[idNode]['login']]==1:
+				color='b="243" g="183"  r="19"'
+			elif self.scholars[idNode]['job_market'] == "Yes":
+				color = 'b="139" g="28"  r="28"'
+			else:
+				color = 'b="78" g="193"  r="127"'
+
+			content=""
+			photo_url=self.scholars[idNode]['photo_url']
+			if photo_url != "":
+				content += '<img  src=http://main.csregistry.org/' + photo_url + ' width=' + str(self.imsize) + 'px  style=float:left;margin:5px>';
+			else:
+				if len(self.scholars)<2000:
+					im_id = math.floor(random.randint(0, 11))
+					content += '<img src=http://communityexplorer.csregistry.org/img/'  + str(im_id) +  '.png width='  + str(self.imsize) +  'px   style=float:left;margin:5px>'
+
+			content += '<b>Country: </b>' + self.scholars[idNode]['country'] + '</br>'
+
+			if self.scholars[idNode]['position'] != "":
+				content += '<b>Position: </b>' +self.scholars[idNode]['position'].replace("&"," and ")+ '</br>'
+
+			affiliation=""
+			if self.scholars[idNode]['lab'] != "":
+				affiliation += self.scholars[idNode]['lab']+ ','
+			if self.scholars[idNode]['affiliation'] != "":
+				affiliation += self.scholars[idNode]['affiliation']
+			if self.scholars[idNode]['affiliation'] != "" or self.scholars[idNode]['lab'] != "":
+				content += '<b>Affiliation: </b>' + affiliation.replace("&"," and ") + '</br>'
+			if len(self.scholars[idNode]['keywords']) > 3:
+				content += '<b>Keywords: </b>' + self.scholars[idNode]['keywords'][:-2].replace(",",", ")+'.</br>'
+			if self.scholars[idNode]['homepage'][0:3] == "www":
+				content += '[ <a href=http://' +self.scholars[idNode]['homepage'].replace("&"," and ")+ ' target=blank > View homepage </a ><br/>]'
+			elif self.scholars[idNode]['homepage'][0:4] == "http":
+				content += '[ <a href=' +self.scholars[idNode]['homepage'].replace("&"," and ")+ ' target=blank > View homepage </a ><br/>]'
+
+
+			gexf += '<node id="' +idNode+ '" label="' +nodeLabel+ '">\n'
+			gexf += '<viz:color '+color+'/>\n'
+			gexf += '<viz:position x="'+str(coords[idNode][0])+'"    y="'+str(coords[idNode][1])+'" z="0" />\n'
+			gexf += '<attvalues> <attvalue for="0" value="Document"/>\n'
+			if True:
+				gexf += '<attvalue for="1" value="12"/>\n'
+				gexf += '<attvalue for="4" value="12"/>\n'
+
+			else:
+				gexf += '<attvalue for="1" value="10"/>\n'
+				gexf += '<attvalue for="4" value="10"/>\n'
+
+
+			gexf += '<attvalue for="2" value="' + self.toHTML(content)+ '"/>\n'
+			gexf += '</attvalues></node>\n'
+			
+
+	gexf += '\n</nodes><edges>\n'
+	e = 0	
+	for n in self.Graph.edges_iter():#Memory, what's wrong with you?
+		weight = str("%.2f" % self.Graph[n[0]][n[1]]['weight'])
+		gexf += '<edge id="' +str(e)+ '" source="' +n[0]+ '" target="' +n[1]+ '" weight="'+weight+'">\n'
+		gexf += '<attvalues> <attvalue for="5" value="'+weight+'"/><attvalue for="6" value="'+self.Graph[n[0]][n[1]]['type']+'"/></attvalues>\n</edge>\n'
+		e+=1
+		if e%1000 == 0:
+			print e
+
+	gexf += '\n</edges></graph></gexf>'
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
