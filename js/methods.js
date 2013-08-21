@@ -393,10 +393,14 @@ function updateLeftPanel(){
             
         for(var i in selections){
             information += '<li><b>' + Nodes[i].label + '</b></li>';
-            information += '<li>' + Nodes[i].attributes[3].val + '</li>';
+            if(Nodes[i].htmlCont==""){
+                information += '<li>' + Nodes[i].attributes[3].val + '</li>';
+            }
+            else {
+                information += '<li>' + $("<div/>").html(Nodes[i].htmlCont).text() + '</li>';
+            }
             information += '</ul><br>';
         }
-        
     }
     
     if(swclickActual=="semantic" && socsemFlag==false) {
@@ -423,6 +427,25 @@ function updateLeftPanel(){
 
         }
         opossitesNodes+='</div>';
+        
+        
+        
+        
+        information += '<br><h4>Information:</h4>';
+        information += '<ul>';
+            
+        for(var i in selections){
+            information += '<li><b>' + Nodes[i].label + '</b></li>';
+            google='<a href=http://www.google.com/#hl=en&source=hp&q=%20'+Nodes[i].label.replace(" ","+")+'%20><img src="css/branding/google.png"></img></a>';
+            wiki = '<a href=http://en.wikipedia.org/wiki/'+Nodes[i].label.replace(" ","_")+'><img src="css/branding/wikipedia.png"></img></a>';
+            flickr= '<a href=http://www.flickr.com/search/?w=all&q='+Nodes[i].label.replace(" ","+")+'><img src="css/branding/flickr.png"></img></a>';
+            information += '<li>'+google+"&nbsp;"+wiki+"&nbsp;"+flickr+'</li><br>';
+            
+        }
+        information += '</ul><br>';
+        
+        
+        
     }
     if(swclickActual=="sociosemantic" && socsemFlag==true) {
         opossitesNodes += '<h4>Neighbours</h4><div style="margin: 5px 5px;">';
@@ -983,7 +1006,7 @@ function createEdgesForExistingNodes (typeOfNodes) {
                         unHide(indexS2+";"+indexT2);
                     }
                     if(Edges[i1].weight == Edges[i2].weight){
-                        if(Edges[i1].attributes[1].val!="bipartite") {     
+                        if(Edges[i1].label!="bipartite") {  /*danger*/   
                             if( (typeof partialGraph._core.graph.edgesIndex[indexS1+";"+indexT1])=="undefined" &&
                                 (typeof partialGraph._core.graph.edgesIndex[indexT1+";"+indexS1])=="undefined" ){
                                 unHide(indexS1+";"+indexT1);
@@ -994,11 +1017,11 @@ function createEdgesForExistingNodes (typeOfNodes) {
                         
                 }
                 else {
-                    if((typeof Edges[i1])!="undefined" && Edges[i1].attributes[1].val=="bipartite"){
+                    if((typeof Edges[i1])!="undefined" && Edges[i1].label=="bipartite"){
                         //I've found a source Node
                         unHide(indexS1+";"+indexT1);
                     }
-                    if((typeof Edges[i2])!="undefined" && Edges[i2].attributes[1].val=="bipartite"){
+                    if((typeof Edges[i2])!="undefined" && Edges[i2].label=="bipartite"){
                         //I've found a target Node
                         unHide(indexS2+";"+indexT2);
                     }
@@ -1073,7 +1096,7 @@ function hideEverything(){
 
 function unHide(id){
     if(id.split(";").length==1){
-        updateSearchLabels(Nodes[id].label,Nodes[id].type);
+        updateSearchLabels(id,Nodes[id].label,Nodes[id].type);
         nodeslength++;
         //visibleNodes.push(id);
         partialGraph._core.graph.nodesIndex[id].hidden=false;
@@ -1305,10 +1328,39 @@ function highlightOpossites (list){/*tofix*/
     }
 }
 
+function saveGraph(){
+    json = "<gexf><graph><nodes>";
+    nodes = partialGraph._core.graph.nodes.filter(function(n) {
+                    return !n['hidden'];
+            });
+    edges = partialGraph._core.graph.edges.filter(function(e) {
+                    return !e['hidden'];
+            });
+    for(var n in nodes){    
+        
+        json += '<node id="'+nodes[n].id+'" label="'+nodes[n].label+'">\n';
+        json += '<viz:position x="'+nodes[n].x+'"    y="'+nodes[n].y+'"  z="0" />\n';
+        json += '</node>\n';
+    }
+    json += "</nodes\n>";
+    json += "<edges>";    
+    cont = 1;
+    for(var e in edges){
+        json += '<edge id="'+cont+'" source="'+edges[e].source.id+'"  target="'+edges[e].target.id+'" weight="'+edges[e].weight+'" type="'+edges[e].label+'">'
+        json += '</edge>\n';
+        cont++;
+    }
+    json += "</edges></graph></gexf>";
+    uriContent = "data:application/octet-stream," + encodeURIComponent(json);
+    newWindow=window.open(uriContent, 'neuesDokument');
+}
+
 function setPanels(){
     
     $("#loading").remove();
-    
+    $("#saveAs").click(function() {
+        saveGraph();
+    });
     $("#aUnfold").click(function() {
         _cG = $("#leftcolumn");
         if (_cG.offset().left < 0) {
@@ -1391,11 +1443,20 @@ function setPanels(){
     
     
     $("#searchinput").keydown(function (e) {
-        if (e.keyCode == 13 && $("input#searchinput").data('is_open') === true) {            
+        if (e.keyCode == 13 && $("input#searchinput").data('is_open') === true) { 
             if(!is_empty(matches)) {
-                for(j=0;j<matches.length;j++){Keywords
-                    search(matches[j].label);
+                checkBox=true;
+                for(j=0;j<matches.length;j++){
+                    getOpossitesNodes(matches[j].id,false);
+                }  
+                updateLeftPanel();                
+                greyEverything();
+                for(j=0;j<matches.length;j++){
+                    markAsSelected(matches[j].id,true);
                 }
+                changeButton("selectNode");
+                partialGraph.refresh();
+                checkBox=false;
             }
         }
     });

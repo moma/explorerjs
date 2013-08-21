@@ -16,6 +16,7 @@
         
         <script src="js/jquery/jquery.ba-dotimeout.min.js" type="text/javascript"></script>
         <script src="js/jquery/jquery.mousewheel.min.js" type="text/javascript"></script>
+        <script src="js/misc/spin.js" type="text/javascript"></script>
 
         <script src="js/sigma.min.js" type="text/javascript" language="javascript"></script>
         <script src="js/sigma.forceatlas2.js" type="text/javascript" language="javascript"></script>
@@ -28,6 +29,8 @@
 
     </head>
     <body>
+        
+        <div style="position: absolute;top: 50%;left: 50%;width: 500px;height: 500px;margin-top: -250px; margin-left: -250px;" id="progressBar"></div>
         <div class="container">
             <div id="left">
                 <div id="images" style="margin-top:10px;">
@@ -147,6 +150,10 @@
                 class="sigma-expand" id="sigma-example"></div>
 
             <ul id="ctlzoom">
+                <li>
+                    <a href="#" id="saveAs" title="export as"> </a>
+                </li>
+                
                 <li>
                     <a href="#" id="zoomPlusButton" title="S'approcher"> </a>
                 </li>

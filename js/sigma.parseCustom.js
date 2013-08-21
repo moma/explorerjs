@@ -1,54 +1,236 @@
+function startLoader(){
+    target = document.getElementById('progressBar');
+    spinner = new Spinner(opts).spin(target);
+    $('#left').hide();
+    $('#right').hide();
+    $('#center').hide();
+    $('#zonecentre').hide();
+    $('#leftcolumn').hide();
+}
 
-getUrlParam = (function () {
-    var get = {
-        push:function (key,value){
-            var cur = this[key];
-            if (cur.isArray){
-                this[key].push(value);
-            }else {
-                this[key] = [];
-                this[key].push(cur);
-                this[key].push(value);
-            }
-        }
-    },
-    search = document.location.search,
-    decode = function (s,boo) {
-        var a = decodeURIComponent(s.split("+").join(" "));
-        return boo? a.replace(/\s+/g,''):a;
-    };
-    search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function (a,b,c) {
-        if (get[decode(b,true)]){
-            get.push(decode(b,true),decode(c));
-        }else {
-            get[decode(b,true)] = decode(c);
-        }
-    });
-    return get;
-})();
+function stopLoader(){
+    spinner.stop();
+    $('#left').show();
+    $('#right').show();
+    $('#center').show();
+    $('#zonecentre').show();
+    $('#leftcolumn').show();
+}
 
-function parse(gexfPath) {
-    var gexfhttp;
-    gexfhttp = window.XMLHttpRequest ?
-    new XMLHttpRequest() :
-    new ActiveXObject('Microsoft.XMLHTTP');
+function parse(){
+    //"http://localhost:5000/"+unique_id+"/"+iterations;
+    //http://localhost:8080/getJSON?callback=xxx&unique_id=Elisa__Omodei&it=3&_=1377043258090
+    startLoader();
     if(getUrlParam.nodeidparam.indexOf("__")===-1){
+        //If you want to MAP by attribute......
+        gexfhttp = window.XMLHttpRequest ?
+                    new XMLHttpRequest() :
+                    new ActiveXObject('Microsoft.XMLHTTP');
         gexfPath = "php/getgraph.php?query="+getUrlParam.nodeidparam;
+        pr(gexfPath);
+        gexfhttp.open('GET', gexfPath, false);
+        gexfhttp.send();
+        gexf = gexfhttp.responseXML;
+        fullExtract();  
+        stopLoader();
+        return true;
     }
     else {
-        gexfPath = "php/get_scholar_graph.php?login="+getUrlParam.nodeidparam;//+"*"+iterationsTinaForce;
+        //If you're searching a specific scholar
+        unique_id = getUrlParam.nodeidparam; 
+        $.ajax({
+            type: 'GET',
+            url: "http://localhost:8080/getJSON",
+            data: "unique_id="+unique_id+"&it="+iterationsFA2,
+            contentType: "application/json",
+            dataType: 'jsonp',
+            async: false,
+            success : function(data){ 
+                //pr("unique_id="+unique_id+"&it="+iterationsFA2);
+                extractFromJson(data); 
+                stopLoader();
+                updateEdgeFilter("social");
+                updateNodeFilter("social");
+                pushSWClick("social");
+                cancelSelection(false);
+                console.log("Parsing complete.");     
+                partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8).draw();
+                partialGraph.startForceAtlas2();   
+//
+                startEnviroment(); 
+            },
+            error: function(){ 
+                pr("Page Not found.");
+            }
+        });
+        return false;
+    }
+}
+
+function extractFromJson(data){
+    var i, j, k;
+    //partialGraph.emptyGraph();
+    // Parse Attributes
+    // This is confusing, so I'll comment heavily
+    var nodesAttributes = [];   // The list of attributes of the nodes of the graph that we build in json
+    var edgesAttributes = [];   // The list of attributes of the edges of the graph that we build in json
+    //var attributesNodes = gexf.getElementsByTagName('attributes');  // In the gexf (that is an xml), the list of xml nodes 'attributes' (note the plural 's')
+    
+    var nodesNodes = data.nodes // The list of xml nodes 'nodes' (plural)
+    labels = [];
+    numberOfDocs=0;
+    numberOfNGrams=0;
+    
+    for(var i in nodesNodes){
+            colorRaw = nodesNodes[i].color.split(",");
+            color = '#'+sigma.tools.rgbToHex(
+                    parseFloat(colorRaw[0]),
+                    parseFloat(colorRaw[1]),
+                    parseFloat(colorRaw[2]));
+            
+            var node = ({
+                id:i,
+                label:nodesNodes[i].label, 
+                size:1, 
+                x:nodesNodes[i].x, 
+                y:nodesNodes[i].y, 
+                type:"",
+                htmlCont:"",
+                color:color
+            });  // The graph node
+            if(nodesNodes[i].type=="Document"){
+                node.htmlCont = nodesNodes[i].content;
+                node.type="Document";
+                node.shape="square";
+                numberOfDocs++;
+                node.size=desirableScholarSize;
+            }
+            else {
+                node.type="NGram";
+                numberOfNGrams++;
+                node.size=parseInt(nodesNodes[i].term_occ).toFixed(2);
+                if(parseInt(node.size) < parseInt(minNodeSize)) minNodeSize= node.size;
+                if(parseInt(node.size) > parseInt(maxNodeSize)) maxNodeSize= node.size;
+            }
+            Nodes[i] = node;
+    }
+
+    for(var i in Nodes){
+        if(Nodes[i].type=="NGram") {
+            normalizedSize=desirableNodeSizeMIN+(Nodes[i].size-1)*((desirableNodeSizeMAX-desirableNodeSizeMIN)/(parseInt(maxNodeSize)-parseInt(minNodeSize)));
+            Nodes[i].size = ""+normalizedSize;
+            
+            nodeK = Nodes[i];
+            nodeK.hidden=true;
+            partialGraph.addNode(i,nodeK);   
+        }
+        else {
+            partialGraph.addNode(i,Nodes[i]);  
+            unHide(i);
+        }
     }
     
-    gexfhttp.open('GET', gexfPath, false);
-    gexfhttp.send();
-    gexf = gexfhttp.responseXML;
+    var edgeId = 0;
+    var edgesNodes = data.edges;
+    for(var i in edgesNodes){
+        //pr(edgesNodes[i]);
+        var indice=edgesNodes[i].s+";"+edgesNodes[i].t;
+        var source = edgesNodes[i].s;
+        var target = edgesNodes[i].t;
+        var edge = {
+                id:         indice,
+                sourceID:   source,
+                targetID:   target,
+                label:      edgesNodes[i].type,
+                weight: edgesNodes[i].w
+            };
+        if(edge.weight < minEdgeWeight) minEdgeWeight= edge.weight;
+        if(edge.weight > maxEdgeWeight) maxEdgeWeight= edge.weight;
+        Edges[indice] = edge;
+        
+        
+        
+        
+            if(edge.label=="nodes1"){             
+                if( (typeof partialGraph._core.graph.edgesIndex[target+";"+source])=="undefined" ){
+                    edge.hidden=false;
+                }
+                else edge.hidden=true;
+                partialGraph.addEdge(indice,source,target,edge);
+                
+                if((typeof nodes1[source])=="undefined"){
+                    nodes1[source] = {
+                        label: Nodes[source].label,
+                        neighbours: []
+                    };
+                    nodes1[source].neighbours.push(target);
+                }
+                else nodes1[source].neighbours.push(target);
+            }
+            
+            
+            if(edge.label=="nodes2"){ 
+                edge.hidden=true;
+                partialGraph.addEdge(indice,source,target,edge);
+                if((typeof nodes2[source])=="undefined"){
+                    nodes2[source] = {
+                        label: Nodes[source].label,
+                        neighbours: []
+                    };
+                    nodes2[source].neighbours.push(target);
+                }
+                else nodes2[source].neighbours.push(target);
+            }
+            
+            
+            if(edge.label=="bipartite"){   
+                edge.hidden=true;
+                partialGraph.addEdge(indice,source,target,edge);
+                // Document to NGram 
+                if((typeof bipartiteD2N[source])=="undefined"){
+                    bipartiteD2N[source] = {
+                        label: Nodes[source].label,
+                        neighbours: []
+                    };
+                    bipartiteD2N[source].neighbours.push(target);
+                }
+                else bipartiteD2N[source].neighbours.push(target);
+                
+                // NGram to Document 
+                if((typeof bipartiteN2D[target])=="undefined"){
+                    bipartiteN2D[target] = {
+                        label: Nodes[target].label,
+                        neighbours: []
+                    };
+                    bipartiteN2D[target].neighbours.push(source);
+                }
+                else bipartiteN2D[target].neighbours.push(source);
+            }
+    }
 }
+
+//function parse(gexfPath) {
+//    var gexfhttp;
+//    gexfhttp = window.XMLHttpRequest ?
+//    new XMLHttpRequest() :
+//    new ActiveXObject('Microsoft.XMLHTTP');
+//    if(getUrlParam.nodeidparam.indexOf("__")===-1){
+//        gexfPath = "php/getgraph.php?query="+getUrlParam.nodeidparam;
+//    }
+//    else {
+//        gexfPath = "php/get_scholar_graph.php?login="+getUrlParam.nodeidparam;//+"*"+iterationsTinaForce;
+//    }
+//    
+//    gexfhttp.open('GET', gexfPath, false);
+//    gexfhttp.send();
+//    gexf = gexfhttp.responseXML;
+//}
 
 function fullExtract(){
     var i, j, k;
     partialGraph.emptyGraph();
     // Parse Attributes
-    // This is confusing, so I'll comment heavily
+    // This is confusing, so I'll comment heavilyAttr
     var nodesAttributes = [];   // The list of attributes of the nodes of the graph that we build in json
     var edgesAttributes = [];   // The list of attributes of the edges of the graph that we build in json
     var attributesNodes = gexf.getElementsByTagName('attributes');  // In the gexf (that is an xml), the list of xml nodes 'attributes' (note the plural 's')

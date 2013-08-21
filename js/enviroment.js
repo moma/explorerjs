@@ -679,8 +679,9 @@ function alertCheckBox(eventCheck){
 
 
 //============================= < SEARCH > =============================//
-function updateSearchLabels(name,type){    
+function updateSearchLabels(id,name,type){    
     labels.push({
+        'id' : id,
         'label' : name, 
         'desc': type
     });
