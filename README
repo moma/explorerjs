@@ -25,8 +25,23 @@ TinawebJS is build on Alexis Jacomy's sigmaJS (http://sigmajs.org)
 This work is the continuation of the TINA project, an European Union FP7 project - FP7-ICT-2009-C
 
 REQUIREMENTS
+
+
+START THE PYTHON SERVER
+    It's required to start the python module located in php/PySQlite/main.py
+    It'll listen at port 8080
+    After this, we can launch the explorerjs
+
+Required Python module
+sudo apt-get install python-setuptools
+sudo apt-get install python-networkx
+sudo apt-get install python-scipy
+sudo apt-get install python-numpy
+sudo apt-get install python-matplotlib
+sudo apt-get install python-Flask
+
    
-    WEB BROWSER compatible with javascript : we recommend Firefox (http://getfirefox.com) or Chrome
+WEB BROWSER compatible with javascript : we recommend Firefox (http://getfirefox.com) or Chrome
 
 
 
