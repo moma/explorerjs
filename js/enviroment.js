@@ -227,7 +227,9 @@ function updateEdgeFilter(edgeFilterName) {
         edgeFilterName="#sliderBEdgeWeight";
         thing="nodes2";
     }
-    edges=partialGraph._core.graph.edges;
+    edges=partialGraph._core.graph.edges.filter(function(e) {
+                    return !e['hidden'];
+          });
     //pr(edges);
     edgesByWeight=[];
     for(var i in edges){
@@ -274,23 +276,30 @@ function updateEdgeFilter(edgeFilterName) {
                 edgesTemp = partialGraph._core.graph.edgesIndex;
                 for(i=0;i<normEdges.length;i++){
                     if(i>=ui.values[0] && i<=ui.values[1]){
-                        $(minvalue).text(ui.values[ 0 ]);
-                        $(maxvalue).text(ui.values[ 1 ]);
+                        //$(minvalue).text(ui.values[ 0 ]);
+                        //$(maxvalue).text(ui.values[ 1 ]);
                         //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);
                         for (var j in normEdges[i]){
                             id=normEdges[i][j];
-                            if(typeof(edgesTemp[id])=="undefined"){
-                                source=Edges[id].sourceID;
-                                target=Edges[id].targetID;
-                                edge=Edges[id];
-                                partialGraph.addEdge(id,source,target,edge);
-                            }
+                            //pr("unHideElem("+id+");");
+//                            if(typeof(edgesTemp[id])=="undefined"){
+//                                //source=Edges[id].sourceID;
+//                                //target=Edges[id].targetID;
+//                                //edge=Edges[id];
+//                                pr("unHideElem("+id+");")
+                            unHideElem(id);
+//                                //partialGraph.addEdge(id,source,target,edge);
+//                            }
                         }
                     }
                     else {
-                        partialGraph.dropEdge(normEdges[i]);
+                        for (var j in normEdges[i]){
+                            hideElem(normEdges[i][j]);
+                        }
+                        //partialGraph.dropEdge(normEdges[i]);
                     }
                 }
+                pr("==========================================")
                 partialGraph.draw();
             });
         }
@@ -298,7 +307,9 @@ function updateEdgeFilter(edgeFilterName) {
 }
 
 function updateBothEdgeFilters() {
-    edges=partialGraph._core.graph.edges;
+    edges=partialGraph._core.graph.edges.filter(function(e) {
+                    return !e['hidden'];
+          });;
     scholarsEdgesByWeight=[];
     keywordsEdgesByWeight=[];
     
@@ -357,16 +368,19 @@ function updateBothEdgeFilters() {
                     if(i>=ui.values[0] && i<=ui.values[1]){
                         for (var j in scholarsEdgesSortedByWeight[i].value){
                             id=scholarsEdgesSortedByWeight[i].value[j];
-                            if(typeof(edgesTemp[id])=="undefined"){
-                                source=Edges[id].sourceID;
-                                target=Edges[id].targetID;
-                                edge=Edges[id];
-                                partialGraph.addEdge(id,source,target,edge);
-                            }
+                            unHideElem(id);
+//                            if(typeof(edgesTemp[id])=="undefined"){
+//                                source=Edges[id].sourceID;
+//                                target=Edges[id].targetID;
+//                                edge=Edges[id];
+//                                //partialGraph.addEdge(id,source,target,edge);
+//                            }
                         }
                     }
                     else {
-                        partialGraph.dropEdge(scholarsEdgesSortedByWeight[i].value);
+                        for(var j in scholarsEdgesSortedByWeight[i].value){
+                            hideElem(scholarsEdgesSortedByWeight[i].value[j])
+                        }
                     }
                 }
                 partialGraph.draw();
@@ -389,16 +403,20 @@ function updateBothEdgeFilters() {
                     if(i>=ui.values[0] && i<=ui.values[1]){
                         for (var j in keywordsEdgesSortedByWeight[i].value){
                             id=keywordsEdgesSortedByWeight[i].value[j];
-                            if(typeof(edgesTemp[id])=="undefined"){
-                                source=Edges[id].sourceID;
-                                target=Edges[id].targetID;
-                                edge=Edges[id];
-                                partialGraph.addEdge(id,source,target,edge);
-                            }
+                            unHideElem(id);
+//                            if(typeof(edgesTemp[id])=="undefined"){
+//                                source=Edges[id].sourceID;
+//                                target=Edges[id].targetID;
+//                                edge=Edges[id];
+//                                //partialGraph.addEdge(id,source,target,edge);
+//                            }
                         }
                     }
                     else {
-                        partialGraph.dropEdge(keywordsEdgesSortedByWeight[i].value);
+                        for(var j in keywordsEdgesSortedByWeight[i].value){
+                            hideElem(keywordsEdgesSortedByWeight[i].value[j])
+                        }
+                        //partialGraph.dropEdge(keywordsEdgesSortedByWeight[i].value);
                     }
                 }
                 partialGraph.draw();
@@ -423,7 +441,9 @@ function updateNodeFilter(nodeFilterName) {
         nodeType="NGram";
         divName="#sliderBNodeWeight";
     }
-    nodes=partialGraph._core.graph.nodes;
+    nodes=partialGraph._core.graph.nodes.filter(function(n) {
+                    return !n['hidden'];
+          });
     nodesBySize=[];
     for(var i in nodes){
         if(Nodes[nodes[i].id].type=="Document"){
@@ -477,7 +497,9 @@ function updateNodeFilter(nodeFilterName) {
 }
 
 function updateBothNodeFilters() {
-    nodes=partialGraph._core.graph.nodes;    
+    nodes=partialGraph._core.graph.nodes.filter(function(n) {
+                    return !n['hidden'];
+          });
     scholarsNodesBySize=[];
     keywordsNodesBySize=[];
     nodesSortedBySize=[];

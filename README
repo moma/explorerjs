@@ -29,7 +29,7 @@ REQUIREMENTS
 
 START THE PYTHON SERVER
     It's required to start the python module located in php/PySQlite/main.py
-    It'll listen at port 8080
+    It'll listen on the port 8080
     After this, we can launch the explorerjs
 
 Required Python module

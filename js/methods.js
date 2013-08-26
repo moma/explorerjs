@@ -492,21 +492,21 @@ function updateLeftPanel(){
                     opossitesNodes += '<span style="display:inline-block;font-size:'+fontSize+'px; cursor: pointer;" '
                     +js1+opos_aux[i].key+js2+'>' + nodes1[opos_aux[i].key].label+ '</span>,&nbsp;&nbsp;';
                 }
-
             }
             opossitesNodes+='</div>';
-//            information += '<br><h4>Information:</h4>';
-//            information += '<ul>';
-//
-//            for(var i in selections){
-//                information += '<li><b>' + Nodes[i].label + '</b></li>';
-//                google='<a href=http://www.google.com/#hl=en&source=hp&q=%20'+Nodes[i].label.replace(" ","+")+'%20><img src="css/branding/google.png"></img></a>';
-//                wiki = '<a href=http://en.wikipedia.org/wiki/'+Nodes[i].label.replace(" ","_")+'><img src="css/branding/wikipedia.png"></img></a>';
-//                flickr= '<a href=http://www.flickr.com/search/?w=all&q='+Nodes[i].label.replace(" ","+")+'><img src="css/branding/flickr.png"></img></a>';
-//                information += '<li>'+google+"&nbsp;"+wiki+"&nbsp;"+flickr+'</li><br>';
-//
-//            }
-//            information += '</ul><br>';
+            information += '<br><h4>Information:</h4>';
+            information += '<ul>';
+
+            for(var i in selections){
+                if(i.charAt(0)=="N"){
+                    information += '<li><b>' + Nodes[i].label + '</b></li>';
+                    google='<a href=http://www.google.com/#hl=en&source=hp&q=%20'+Nodes[i].label.replace(" ","+")+'%20><img src="css/branding/google.png"></img></a>';
+                    wiki = '<a href=http://en.wikipedia.org/wiki/'+Nodes[i].label.replace(" ","_")+'><img src="css/branding/wikipedia.png"></img></a>';
+                    flickr= '<a href=http://www.flickr.com/search/?w=all&q='+Nodes[i].label.replace(" ","+")+'><img src="css/branding/flickr.png"></img></a>';
+                    information += '<li>'+google+"&nbsp;"+wiki+"&nbsp;"+flickr+'</li><br>';
+                  }
+           }
+            information += '</ul><br>';
             
             
         }
@@ -556,19 +556,21 @@ function updateLeftPanel(){
             }
             opossitesNodes += '</div>';
 
-//            information += '<br><h4>Information:</h4>';
-//            information += '<ul>';
-//
-//            for(var i in selections){
-//                information += '<li><b>' + Nodes[i].label + '</b></li>';
-//                if(Nodes[i].htmlCont==""){
-//                    information += '<li>' + Nodes[i].attributes[3].val + '</li>';
-//                }
-//                else {
-//                    information += '<li>' + $("<div/>").html(Nodes[i].htmlCont).text() + '</li>';
-//                }
-//                information += '</ul><br>';
-//            }
+            information += '<br><h4>Information:</h4>';
+            information += '<ul>';
+
+            for(var i in selections){                
+                if(i.charAt(0)=="D"){
+                    information += '<li><b>' + Nodes[i].label + '</b></li>';
+                    if(Nodes[i].htmlCont==""){
+                        information += '<li>' + Nodes[i].attributes[3].val + '</li>';
+                    }
+                    else {
+                        information += '<li>' + $("<div/>").html(Nodes[i].htmlCont).text() + '</li>';
+                    }
+                    information += '</ul><br>';
+                }
+            }
         }
     }
     
@@ -1226,6 +1228,27 @@ function unHide(id){
         partialGraph._core.graph.edgesIndex[id].hidden=false;
     }
 }
+
+function hideElem(id){
+    if(id.split(";").length==1){
+        //updateSearchLabels(id,Nodes[id].label,Nodes[id].type);
+        partialGraph._core.graph.nodesIndex[id].hidden=true;
+    }
+    else {// It's an edge!
+        partialGraph._core.graph.edgesIndex[id].hidden=true;
+    }
+}
+
+function unHideElem(id){
+    if(id.split(";").length==1){
+        //updateSearchLabels(id,Nodes[id].label,Nodes[id].type);
+        partialGraph._core.graph.nodesIndex[id].hidden=false;
+    }
+    else {// It's an edge!
+        partialGraph._core.graph.edgesIndex[id].hidden=false;
+    }
+}
+
 
 function changeToMeso(iwannagraph) { 
     labels=[]
