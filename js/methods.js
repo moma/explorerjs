@@ -403,7 +403,7 @@ function updateLeftPanel(){
         }
     }
     
-    if(swclickActual=="semantic" && socsemFlag==false) {
+    if(swclickActual=="semantic") {
         opossitesNodes+= '<br><h4>Scholars: </h4>';
         opossitesNodes+='<div id="opossitesBox">';
         js1='onclick="edgesTF=false;cancelSelection(true);graphDocs(\'';
@@ -427,10 +427,6 @@ function updateLeftPanel(){
 
         }
         opossitesNodes+='</div>';
-        
-        
-        
-        
         information += '<br><h4>Information:</h4>';
         information += '<ul>';
             
@@ -443,13 +439,137 @@ function updateLeftPanel(){
             
         }
         information += '</ul><br>';
-        
-        
-        
     }
-    if(swclickActual=="sociosemantic" && socsemFlag==true) {
-        opossitesNodes += '<h4>Neighbours</h4><div style="margin: 5px 5px;">';
-        opossitesNodes += 'en construcçao...aaaaaaaa ';
+    
+    
+    if(swclickActual=="sociosemantic") {
+        
+        fullurl = returnBaseUrl()+"img/trans/";
+        if (getSwitchButton() == fullurl+"showScholars.png"){
+            
+            pr("\t\t\tI've to show scholars");    
+            
+            
+            counter=0;
+            names ='<div id="selectionsBox">';
+            names += '<h4>';
+            for(var i in selections){
+                if(i.charAt(0)=="N"){
+                    if(counter==4){
+                        names += '<h4>[...]</h4>';
+                        break;
+                    }
+                    names += Nodes[i].label+', ';
+                    counter++;
+                }
+            }
+            names += '</h4>';
+            names=names.replace(", </h4>","</h4>");
+            names=names.replace(", <h4>","<h4>");
+            names+='</div>';
+            
+            opossitesNodes+= '<br><h4>Scholars: </h4>';
+            opossitesNodes+='<div id="opossitesBox">';
+            js1='onclick="edgesTF=false;cancelSelection(true);graphDocs(\'';
+            
+            opos_aux = opos.filter(function(n) {
+                            return n['key'].charAt(0)=="D";
+                        });        
+                        
+            for(var i in opos_aux){
+                if(i==22){
+                    opossitesNodes += '<li>[...]</li>';
+                    break;
+                }
+                //fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
+                if(oposMAX==1){
+                    fontSize=desirableTagCloudFont_MIN;
+                }
+                else {
+                    fontSize=desirableTagCloudFont_MIN+(opos_aux[i].value-1)*((desirableTagCloudFont_MAX-desirableTagCloudFont_MIN)/(oposMAX-1));
+                }
+                if(typeof(nodes1[opos_aux[i].key])!=="undefined"){
+                    opossitesNodes += '<span style="display:inline-block;font-size:'+fontSize+'px; cursor: pointer;" '
+                    +js1+opos_aux[i].key+js2+'>' + nodes1[opos_aux[i].key].label+ '</span>,&nbsp;&nbsp;';
+                }
+
+            }
+            opossitesNodes+='</div>';
+//            information += '<br><h4>Information:</h4>';
+//            information += '<ul>';
+//
+//            for(var i in selections){
+//                information += '<li><b>' + Nodes[i].label + '</b></li>';
+//                google='<a href=http://www.google.com/#hl=en&source=hp&q=%20'+Nodes[i].label.replace(" ","+")+'%20><img src="css/branding/google.png"></img></a>';
+//                wiki = '<a href=http://en.wikipedia.org/wiki/'+Nodes[i].label.replace(" ","_")+'><img src="css/branding/wikipedia.png"></img></a>';
+//                flickr= '<a href=http://www.flickr.com/search/?w=all&q='+Nodes[i].label.replace(" ","+")+'><img src="css/branding/flickr.png"></img></a>';
+//                information += '<li>'+google+"&nbsp;"+wiki+"&nbsp;"+flickr+'</li><br>';
+//
+//            }
+//            information += '</ul><br>';
+            
+            
+        }
+        else {
+            pr("\t\t\tI've to show keywords");
+            counter=0;
+            names ='<div id="selectionsBox">';
+            names += '<h4>';
+            for(var i in selections){
+                if(i.charAt(0)=="D"){
+                    if(counter==4){
+                        names += '<h4>[...]</h4>';
+                        break;
+                    }
+                    names += Nodes[i].label+', ';
+                    counter++;
+                }
+            }
+            names += '</h4>';
+            names=names.replace(", </h4>","</h4>");
+            names=names.replace(", <h4>","<h4>");
+            names+='</div>';           
+            
+            opossitesNodes+= '<br><h4>Keywords: </h4>';
+            opossitesNodes+='<div id="opossitesBox">';/*tochange*/
+            js1='onclick="edgesTF=false;cancelSelection(true);graphNGrams(\'';
+            opos_aux = opos.filter(function(n) {
+                            return n['key'].charAt(0)=="N";
+                        });        
+            for(var i in opos_aux){
+                if(i==22){
+                    opossitesNodes += '<li>[...]</li>';
+                    break;
+                }
+                //fontSize=(opos[i].value/maxFont)*(maxFont-minFont)+minFont;
+                if(oposMAX==1){
+                    fontSize=desirableTagCloudFont_MIN;
+                }
+                else {
+                    fontSize=desirableTagCloudFont_MIN+(opos_aux[i].value-1)*((desirableTagCloudFont_MAX-desirableTagCloudFont_MIN)/(oposMAX-1));
+                }
+                if(typeof(nodes2[opos_aux[i].key])!=="undefined"){
+                    opossitesNodes += '<span style="display:inline-block;font-size:'+fontSize+'px;cursor: pointer;" '
+                    +js1+opos_aux[i].key+js2+'>' + nodes2[opos_aux[i].key].label+ '</span>,&nbsp;&nbsp;';
+                }
+
+            }
+            opossitesNodes += '</div>';
+
+//            information += '<br><h4>Information:</h4>';
+//            information += '<ul>';
+//
+//            for(var i in selections){
+//                information += '<li><b>' + Nodes[i].label + '</b></li>';
+//                if(Nodes[i].htmlCont==""){
+//                    information += '<li>' + Nodes[i].attributes[3].val + '</li>';
+//                }
+//                else {
+//                    information += '<li>' + $("<div/>").html(Nodes[i].htmlCont).text() + '</li>';
+//                }
+//                information += '</ul><br>';
+//            }
+        }
     }
     
     $("#names").html(names); //Information extracted, just added
@@ -1328,8 +1448,21 @@ function highlightOpossites (list){/*tofix*/
     }
 }
 
-function saveGraph(){
-    json = "<gexf><graph><nodes>";
+function saveGEXF(){
+    json = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    json += '<gexf xmlns="http://www.gexf.net/1.1draft" xmlns:viz="http://www.gephi.org/gexf/viz" version="1.1">\n';
+    json += '<graph type="static">';
+    //json += '<attributes class="node" type="static">\n';
+    //json += ' <attribute id="0" title="category" type="string">  </attribute>\n';
+    //json += ' <attribute id="1" title="occurrences" type="float">    </attribute>\n';
+    //json += ' <attribute id="2" title="content" type="string">    </attribute>\n';
+    //json += ' <attribute id="3" title="keywords" type="string">   </attribute>\n';
+    //json += ' <attribute id="4" title="weight" type="float">   </attribute>\n';
+    //json += '</attributes>\n';
+    json += '<attributes class="edge" type="float">\n';
+    json += ' <attribute id="6" title="type" type="string"> </attribute>\n';
+    json += '</attributes>\n';
+    json += "<nodes>\n";
     nodes = partialGraph._core.graph.nodes.filter(function(n) {
                     return !n['hidden'];
             });
@@ -1343,10 +1476,11 @@ function saveGraph(){
         json += '</node>\n';
     }
     json += "</nodes\n>";
-    json += "<edges>";    
+    json += "<edges>\n";    
     cont = 1;
     for(var e in edges){
-        json += '<edge id="'+cont+'" source="'+edges[e].source.id+'"  target="'+edges[e].target.id+'" weight="'+edges[e].weight+'" type="'+edges[e].label+'">'
+        json += '<edge id="'+cont+'" source="'+edges[e].source.id+'"  target="'+edges[e].target.id+'" weight="'+edges[e].weight+'">\n';
+        json += '<attvalues> <attvalue for="6" value="'+edges[e].label+'"/></attvalues>';
         json += '</edge>\n';
         cont++;
     }
@@ -1355,11 +1489,61 @@ function saveGraph(){
     newWindow=window.open(uriContent, 'neuesDokument');
 }
 
+function savePNG(){
+    $("#PhotoGraph").click(function (){
+        
+        //canvas=partialGraph._core.domElements.nodes;
+        
+        var nodesCtx = partialGraph._core.domElements.nodes;
+        /*
+        var edgesCtx = document.getElementById("sigma_edges_1").getContext('2d');
+        
+        var edgesImg = edgesCtx.getImageData(0, 0, document.getElementById("sigma_edges_1").width, document.getElementById("sigma_edges_1").height)
+        
+        nodesCtx.putImageData(edgesImg,0,0);
+        
+        
+        
+        
+        //ctx.drawImage(partialGraph._core.domElements.edges,0,0)
+        //var oCanvas = ctx;  
+  */
+        //div = document.getElementById("sigma_nodes_1").getContext('2d');
+        //ctx = div.getContext("2d");
+        //oCanvas.drawImage(partialGraph._core.domElements.edges,0,0);
+        Canvas2Image.saveAsPNG(nodesCtx);
+        
+        /*
+        Canvas2Image.saveAsJPEG(oCanvas); // will prompt the user to save the image as JPEG.   
+        // Only supported by Firefox.  
+  
+        Canvas2Image.saveAsBMP(oCanvas);  // will prompt the user to save the image as BMP.  
+  
+  
+        // returns an <img> element containing the converted PNG image  
+        var oImgPNG = Canvas2Image.saveAsPNG(oCanvas, true);     
+  
+        // returns an <img> element containing the converted JPEG image (Only supported by Firefox)  
+        var oImgJPEG = Canvas2Image.saveAsJPEG(oCanvas, true);   
+                                                         
+        // returns an <img> element containing the converted BMP image  
+        var oImgBMP = Canvas2Image.saveAsBMP(oCanvas, true);   
+  
+  
+        // all the functions also takes width and height arguments.   
+        // These can be used to scale the resulting image:  
+  
+        // saves a PNG image scaled to 100x100  
+        Canvas2Image.saveAsPNG(oCanvas, false, 100, 100);  
+        */
+    });
+}
+
 function setPanels(){
     
     $("#loading").remove();
     $("#saveAs").click(function() {
-        saveGraph();
+        saveGEXF();
     });
     $("#aUnfold").click(function() {
         _cG = $("#leftcolumn");
@@ -1584,6 +1768,10 @@ function setPanels(){
         //return callSlider("#sliderSelectionZone", "selectionRadius");
         }
     });
+}
+
+function getSwitchButton(){
+    return document.getElementById("switchbutton").src;
 }
 
 function changeSwitchImage(source, target){

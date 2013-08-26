@@ -426,7 +426,9 @@ class extract:
 		edge["s"] = n[0] 
 		edge["t"] = n[1]
 		edge["w"] = str(self.Graph[n[0]][n[1]]['weight'])
-		edge["type"] = self.Graph[n[0]][n[1]]['type']
+		edge["attvalues"] = {}
+		edge["attvalue"] = {}
+		edge["attvalue"]["type"] = self.Graph[n[0]][n[1]]['type']
 		edges[str(e)] = edge
 		e+=1
 		#if e%1000 == 0:
