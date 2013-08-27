@@ -1056,7 +1056,6 @@ function markAsSelected(n_id,sel){
 function hoverNodeEffectWhileFA2(selectionRadius) { 
     
     partialGraph.bind('downnodes', function (event) {
-        overNodes=true;
         if(cursor_size==0 && checkBox==false){
             getOpossitesNodes(event.content, false);
         }
@@ -1084,21 +1083,22 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
         }
         
         updateLeftPanel();
-        partialGraph.draw();
-            if(is_empty(selections)==true){  
+        if(is_empty(selections)==true){  
                 $("#names").html(""); //Information extracted, just added
                 $("#opossiteNodes").html(""); //Information extracted, just added
                 $("#information").html("");
                 changeButton("unselectNodes");
                 cancelSelection(false);
-            }
-            else { 
+        }
+        else { 
                 greyEverything();
                 for(var i in selections){
                     markAsSelected(i,true);
                 }
                 changeButton("selectNode");
-            }
+        }
+        overNodes=true;        
+        partialGraph.draw();
     });
 }
 
@@ -1401,6 +1401,7 @@ function changeToMacro(iwannagraph) {
         for(var n in selections){
             if(Nodes[n].type=="Document"){
                 highlightOpossites(opossites);
+                selectOpossites(opossites);
             }
             break;
         }
@@ -1418,6 +1419,7 @@ function changeToMacro(iwannagraph) {
         for(var n in selections){
             if(Nodes[n].type=="NGram"){
                 highlightOpossites(opossites);
+                selectOpossites(opossites);
             }
             break;
         }
@@ -1470,6 +1472,33 @@ function highlightOpossites (list){/*tofix*/
         partialGraph._core.graph.nodesIndex[n].active=true;
     }
 }
+
+function selectOpossites (list){//Expanding selection    
+    cancelSelection(false);   
+    checkBox = true;
+    for(var n in list){
+        getOpossitesNodes(n,false);
+    }
+    updateLeftPanel();
+    if(is_empty(selections)==true){  
+                $("#names").html(""); //Information extracted, just added
+                $("#opossiteNodes").html(""); //Information extracted, just added
+                $("#information").html("");
+                changeButton("unselectNodes");
+                cancelSelection(false);
+    }
+    else { 
+                greyEverything();
+                for(var i in list){
+                    markAsSelected(i,true);
+                }
+                changeButton("selectNode");
+    }
+    overNodes=true;    
+    checkBox = false;      
+    partialGraph.draw();
+}
+
 
 function saveGEXF(){
     json = '<?xml version="1.0" encoding="UTF-8"?>\n';
@@ -1652,7 +1681,9 @@ function setPanels(){
     $("#searchinput").keydown(function (e) {
         if (e.keyCode == 13 && $("input#searchinput").data('is_open') === true) { 
             if(!is_empty(matches)) {
+                cancelSelection(false);
                 checkBox=true;
+                overNodes=true;
                 for(j=0;j<matches.length;j++){
                     getOpossitesNodes(matches[j].id,false);
                 }  
@@ -1662,7 +1693,8 @@ function setPanels(){
                     markAsSelected(matches[j].id,true);
                 }
                 changeButton("selectNode");
-                partialGraph.refresh();
+                partialGraph.draw();
+                overNodes=false;
                 checkBox=false;
             }
         }
