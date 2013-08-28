@@ -29,8 +29,8 @@ var constantNGramFilter;
 
 var desirableTagCloudFont_MIN=12;
 var desirableTagCloudFont_MAX=20;
-var desirableNodeSizeMIN=2;
-var desirableNodeSizeMAX=9;
+var desirableNodeSizeMIN=4;
+var desirableNodeSizeMAX=12;
 var desirableScholarSize=6; //Remember that all scholars have the same size!
 
 var overviewWidth = 200;
