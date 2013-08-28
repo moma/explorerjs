@@ -1,4 +1,11 @@
-var iterationsFA2=6;
+var isBipartite = [];
+isBipartite["2-Terms-Authors-300nodes.gexf"]=1;
+isBipartite["3-Terms-Countries-300nodes.gexf"]=1;
+isBipartite["3-Terms-Countries-500nodes.gexf"]=1;
+
+var bipartite=false;
+
+//var iterationsFA2=6;
 
 var inactiveColor = '#666';
 var startingNodeId = "1";

@@ -235,7 +235,6 @@ function onepartiteExtract(){
 
 function fullExtract(){
     var i, j, k;
-    partialGraph.emptyGraph();
     // Parse Attributes
     // This is confusing, so I'll comment heavily
     var nodesAttributes = [];   // The list of attributes of the nodes of the graph that we build in json
@@ -284,8 +283,6 @@ function fullExtract(){
     var nodesNodes = gexf.getElementsByTagName('nodes') // The list of xml nodes 'nodes' (plural)
   
     labels = [];
-    minNodeSize=5.00;
-    maxNodeSize=5.00;
     numberOfDocs=0;
     numberOfNGrams=0;
     for(i=0; i<nodesNodes.length; i++){
@@ -300,7 +297,6 @@ function fullExtract(){
 
             var id = nodeNode.getAttribute('id');
             var label = nodeNode.getAttribute('label') || id;
-                 
             //viz
             var size = 1;
             var x = 100 - 200*Math.random();
@@ -351,6 +347,8 @@ function fullExtract(){
                 });
                 /*      Para asignar tamaño a los NGrams    */
                 if(k==2) {
+                    node.size=parseInt(val).toFixed(2);
+                
                 /* Type of Node*/
                 //console.log(val);
                 //if(val<30) val=30;
@@ -366,23 +364,16 @@ function fullExtract(){
             }
             //console.log(node.attributes);
             
-            
             if(node.attributes[2].val=="Author"){
+                node.type="Document";
+                node.shape="square";
                 numberOfDocs++;
-                node.id=id;
-                node.type = "Document";
+                //node.size=desirableScholarSize;
                 node.size=node.attributes[0].val;
-                
-                partialGraph.addNode(id,node);
-                labels.push({
-                    'label' : label,
-                    'desc'  : node.type
-                });
             }
             else {
+                node.type="NGram";
                 numberOfNGrams++;
-                node.id=id;
-                node.type = "NGram";
                 node.size=node.attributes[0].val;
             }      
             
@@ -394,21 +385,24 @@ function fullExtract(){
     }    
     
     //New scale for node size: now, between 2 and 5 instead [1,70]
-    for(var it in Nodes){
-        Nodes[it].size = desirableNodeSizeMIN+
-        (parseInt(Nodes[it].size)-1)*
-        ((desirableNodeSizeMAX-desirableNodeSizeMIN)/
-            (maxNodeSize-minNodeSize));
-        if(Nodes[it].type.charAt(0)=="D") {
-            partialGraph._core.graph.nodesIndex[it].size=Nodes[it].size;
-        }        
+    for(var i in Nodes){
+        normalizedSize=desirableNodeSizeMIN+(Nodes[i].size-1)*((desirableNodeSizeMAX-desirableNodeSizeMIN)/(parseInt(maxNodeSize)-parseInt(minNodeSize)));
+        Nodes[i].size = ""+normalizedSize;
+        if(Nodes[i].type=="NGram") {
+            nodeK = Nodes[i];
+            nodeK.hidden=true;
+            partialGraph.addNode(i,nodeK);  
+            delete Nodes[i].hidden; 
+        }
+        else {
+            partialGraph.addNode(i,Nodes[i]);  
+            unHide(i);
+        }
     }
     
 
     var edgeId = 0;
     var edgesNodes = gexf.getElementsByTagName('edges');
-    minEdgeWeight=5.0;
-    maxEdgeWeight=0.0;
     for(i=0; i<edgesNodes.length; i++){
         var edgesNode = edgesNodes[i];
         var edgeNodes = edgesNode.getElementsByTagName('edge');
@@ -419,7 +413,7 @@ function fullExtract(){
             var indice=source+";"+target;
                 
             var edge = {
-                id:         j,
+                id:         indice,
                 sourceID:   source,
                 targetID:   target,
                 label:      "",
@@ -451,13 +445,19 @@ function fullExtract(){
                     val:val
                 });
             }
-            //console.log(edge);
+            
             
             idS=Nodes[edge.sourceID].type.charAt(0);
             idT=Nodes[edge.targetID].type.charAt(0);
             //pr(idS+";"+idT);
             if(idS=="D" && idT=="D"){
                 edge.label="nodes1";
+                
+                if( (typeof partialGraph._core.graph.edgesIndex[target+";"+source])=="undefined" ){
+                    edge.hidden=false;
+                }
+                else edge.hidden=true;
+                
                 if((typeof nodes1[source])=="undefined"){
                     nodes1[source] = {
                         label: Nodes[source].label,
@@ -471,6 +471,7 @@ function fullExtract(){
             
             if(idS=="N" && idT=="N"){
                 edge.label="nodes2";
+                edge.hidden=true;
                 if((typeof nodes2[source])=="undefined"){                    
                     nodes2[source] = {
                         label: Nodes[source].label,
@@ -484,6 +485,7 @@ function fullExtract(){
             
             if((idS=="D" && idT=="N")||(idS=="N" && idT=="D")){                 
                 edge.label="bipartite";
+                edge.hidden=true;
                 // Document to NGram 
                 if((typeof bipartiteD2N[source])=="undefined"){   
                     bipartiteD2N[source] = {
@@ -504,12 +506,9 @@ function fullExtract(){
                 }
                 else bipartiteN2D[target].neighbours.push(source);
             }
+            partialGraph.addEdge(indice,source,target,edge);
+            delete edge.hidden;
             Edges[indice]=edge;
-            if(idS=="D" && idT=="D"){               
-                if( (typeof partialGraph._core.graph.edgesIndex[target+";"+source])=="undefined" ){
-                    partialGraph.addEdge(indice,source,target,edge);
-                }
-            }                
         }
     }
 }
