@@ -74,7 +74,7 @@ h1 a {
 }
 
 #boxCurrentGraph{
-    left:50%;
+    left:31%;
     position:absolute; 
     bottom:0; 
     padding:2px;
@@ -87,6 +87,8 @@ h1 a {
     background: linear-gradient(to bottom, rgba(242,246,248,1) 0%,rgba(216,225,231,1) 50%,rgba(181,198,208,1) 51%,rgba(224,239,249,1) 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6f8', endColorstr='#e0eff9',GradientType=0 ); /* IE6-9 */
 }
+
+
 
 
 #selectionsBox{
@@ -118,7 +120,6 @@ h1 a {
     -webkit-box-shadow: 0px 2px 6px #000;
     box-shadow: 0px 2px 6px #000;
 }
-
 
 
 /* each sliders positioned relatively to their parent */
@@ -198,6 +199,10 @@ h1 a {
     height: 120px;
 }
 
+#PhotoGraph {
+    display: block; width: 24px; height: 24px; background:url(../img/trans/camara.png);  margin: 0 auto;
+}
+
 #zoomMinusButton, #zoomPlusButton {
     display: block; width: 24px; height: 24px; background:url(../img/plusmoins.png);  margin: 0 auto;
 }
@@ -260,10 +265,6 @@ h1 a {
 
 #edgesButton.off:hover {
     background-position: -108px -36px;
-}
-
-#saveAs {
-    display: block; width: 30px; height: 30px; background:url(../img/Save.png); margin: 0 auto;
 }
 
 #zoomSlider {
@@ -408,43 +409,4 @@ a:hover {
 
 #autocomplete img {
     float: left; border: 0; width: 24px; height: 24px; margin: 2px 6px;
-}
-
-.switchFrame {
-  position: relative;
-  display: block;
-  margin: 0 auto;
-  width: 84px;
-  height: 27px;
-  background-color: rgb(246, 249, 251);
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  -webkit-box-shadow: inset 0px 0px 4px 0 rgba(0, 0, 0, 0.25);
-  -moz-box-shadow: inset 0px 0px 4px 0 rgba(0, 0, 0, 0.25);
-  box-shadow: inset 0px 0px 4px 0 rgba(0, 0, 0, 0.25);
-}
-.switchButton {
-  display: block;
-  width: 58px;
-  height: 27px;
-  line-height: 27px;
-  background: #EDF2F7;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  -webkit-transition: all 0.25s ease-in-out;
-  -moz-transition: all 0.25s ease-in-out;
-  transition: all 0.25s ease-in-out;
-  color: #000;
-  font-family:sans-serif;
-  font-size:11px;
-  font-weight:bold;
-  text-align: center;
-  cursor: pointer;
-  -webkit-box-shadow: inset 0px 0px 4px 0 rgba(0, 0, 0, 0.25);
-  -moz-box-shadow: inset 0px 0px 4px 0 rgba(0, 0, 0, 0.25);
-  box-shadow: inset 0px 0px 4px 0 rgba(0, 0, 0, 0.25);
-}
-.switchButton.on {
-  margin-left: 40px;
-  background: #EDF2F7;
 }
