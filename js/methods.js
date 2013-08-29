@@ -1472,7 +1472,8 @@ function changeToMacro(iwannagraph) {
             if(Edges[e].label=="nodes1" || Edges[e].label=="nodes2"){
                 st=e.split(";");
                 index = partialGraph._core.graph.edgesIndex;
-                if(index[st[0]+";"+st[1]].hidden==true &&
+                if(index[st[0]+";"+st[1]] && index[st[1]+";"+st[0]] &&
+                   index[st[0]+";"+st[1]].hidden==true &&
                    index[st[1]+";"+st[0]].hidden==true
                     ){
                     if(Edges[st[0]+";"+st[1]].weight == Edges[st[1]+";"+st[0]].weight){
@@ -1821,9 +1822,10 @@ function setPanels(){
         max: 25,
         animate: true,
         slide: function(event, ui) {
-            $.doTimeout(300,function (){
+            $.doTimeout(100,function (){
                 partialGraph.iterNodes(function (n) {
-                    if(n.id.charAt(0)=="D") {
+                    pr();
+                    if(Nodes[n.id].type=="Document") {
                         n.size = parseFloat(Nodes[n.id].size) + parseFloat((ui.value-1))*0.3;
                     }
                 });
@@ -1837,9 +1839,9 @@ function setPanels(){
         max: 25,
         animate: true,
         slide: function(event, ui) {
-            $.doTimeout(300,function (){
+            $.doTimeout(100,function (){
                 partialGraph.iterNodes(function (n) {
-                    if(n.id.charAt(0)=="N") {
+                    if(Nodes[n.id].type=="NGram") {
                         n.size = parseFloat(Nodes[n.id].size) + parseFloat((ui.value-1))*0.3;
                     }
                 });
