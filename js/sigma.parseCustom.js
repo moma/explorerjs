@@ -83,10 +83,14 @@ function extractFromJson(data){
     
     for(var i in nodesNodes){
             colorRaw = nodesNodes[i].color.split(",");
+            if(nodesNodes[i].label=="second language acquisition"){
+                pr(colorRaw[0]+" - "+colorRaw[1]+" - "+colorRaw[2]);
+            }
             color = '#'+sigma.tools.rgbToHex(
-                    parseFloat(colorRaw[0]),
+                    parseFloat(colorRaw[2]),
                     parseFloat(colorRaw[1]),
-                    parseFloat(colorRaw[2]));
+                    parseFloat(colorRaw[0]));
+                    //Colors inverted... Srsly??
             
             var node = ({
                 id:i,
@@ -292,7 +296,6 @@ function fullExtract(){
             var id = nodeNode.getAttribute('id');
             var label = nodeNode.getAttribute('label') || id;
       
-      
             //viz
             var size = 1;
             var x = 100 - 200*Math.random();
@@ -319,6 +322,7 @@ function fullExtract(){
                     parseFloat(colorNode.getAttribute('g')),
                     parseFloat(colorNode.getAttribute('b')));
             }
+            
             var node = ({
                 id:id,
                 label:label, 

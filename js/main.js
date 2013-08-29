@@ -11,6 +11,8 @@ $(document).ready(function () {
     
     console.log("parsing...");     
     if(parse()){
+        //If false, it'll trigger the actions inside the "else" from "parse()"        
+        //If true, user has clicked MAP from topbar...
         updateEdgeFilter("social");
         updateNodeFilter("social");
         pushSWClick("social");
