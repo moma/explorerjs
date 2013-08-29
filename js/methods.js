@@ -454,7 +454,7 @@ function updateLeftPanel(){
             names ='<div id="selectionsBox">';
             names += '<h4>';
             for(var i in selections){
-                if(i.charAt(0)=="N"){
+                if(Nodes[i].type=="NGram"){
                     if(counter==4){
                         names += '<h4>[...]</h4>';
                         break;
@@ -471,9 +471,8 @@ function updateLeftPanel(){
             opossitesNodes+= '<br><h4>Scholars: </h4>';
             opossitesNodes+='<div id="opossitesBox">';
             js1='onclick="edgesTF=false;cancelSelection(true);graphDocs(\'';
-            
             opos_aux = opos.filter(function(n) {
-                            return n['key'].charAt(0)=="D";
+                             return (Nodes[n['key']].type=="Document") ? n['key'] : null;
                         });        
                         
             for(var i in opos_aux){
@@ -498,7 +497,7 @@ function updateLeftPanel(){
             information += '<ul>';
 
             for(var i in selections){
-                if(i.charAt(0)=="N"){
+                if(Nodes[i].type=="NGram"){
                     information += '<li><b>' + Nodes[i].label + '</b></li>';
                     google='<a href=http://www.google.com/#hl=en&source=hp&q=%20'+Nodes[i].label.replace(" ","+")+'%20><img src="css/branding/google.png"></img></a>';
                     wiki = '<a href=http://en.wikipedia.org/wiki/'+Nodes[i].label.replace(" ","_")+'><img src="css/branding/wikipedia.png"></img></a>';
@@ -512,11 +511,12 @@ function updateLeftPanel(){
         }
         else {
             pr("\t\t\tI've to show keywords");
+  
             counter=0;
             names ='<div id="selectionsBox">';
             names += '<h4>';
             for(var i in selections){
-                if(i.charAt(0)=="D"){
+                if(Nodes[i].type=="Document"){
                     if(counter==4){
                         names += '<h4>[...]</h4>';
                         break;
@@ -533,9 +533,15 @@ function updateLeftPanel(){
             opossitesNodes+= '<br><h4>Keywords: </h4>';
             opossitesNodes+='<div id="opossitesBox">';/*tochange*/
             js1='onclick="edgesTF=false;cancelSelection(true);graphNGrams(\'';
+            
+                      
+        pr(getSwitchButton());
+        pr(fullurl);
+        pr(opos);
+        
             opos_aux = opos.filter(function(n) {
-                            return n['key'].charAt(0)=="N";
-                        });        
+                            return (Nodes[n['key']].type=="NGram") ? n['key'] : null;
+                        }); 
             for(var i in opos_aux){
                 if(i==22){
                     opossitesNodes += '<li>[...]</li>';
@@ -560,7 +566,7 @@ function updateLeftPanel(){
             information += '<ul>';
 
             for(var i in selections){                
-                if(i.charAt(0)=="D"){
+                if(Nodes[i].type=="Document"){
                     information += '<li><b>' + Nodes[i].label + '</b></li>';
                     if(Nodes[i].htmlCont==""){
                         information += '<li>' + Nodes[i].attributes[3].val + '</li>';
@@ -602,7 +608,7 @@ function graphNGrams(node_id){
     
     
     console.log("in graphNGrams, nodae_id: "+node_id);
-    if(node_id.charAt(0)=="N") {
+    if(Nodes[node_id].type=="NGram") {
         labels = [];
         hideEverything() 
         //partialGraph.stopForceAtlas2();
@@ -663,13 +669,13 @@ function graphDocs(node_id){
     hideEverything()
     //partialGraph.stopForceAtlas2();
     
-    if(node_id.charAt(0)=="D") {
+    if(Nodes[node_id].type=="Document") {
         labels = [];
         
         unHide(node_id);
         for(i=0;i<nodes1[node_id].neighbours.length;i++) {
             unHide(nodes1[node_id].neighbours[i]);
-        }  
+        }
         
         existingNodes = partialGraph._core.graph.nodes.filter(function(n) {
                             return !n['hidden'];
