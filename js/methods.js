@@ -1098,6 +1098,7 @@ function markAsSelected(n_id,sel){
 function hoverNodeEffectWhileFA2(selectionRadius) { 
     
     partialGraph.bind('downnodes', function (event) {
+        pr("\t\t\t\t"+event.content+" -> "+Nodes[event.content].label);
         if(cursor_size==0 && checkBox==false){
             getOpossitesNodes(event.content, false);
         }
