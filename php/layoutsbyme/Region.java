@@ -39,13 +39,12 @@
 
  Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.layout.plugin.forceAtlas2;
+package layoutsbyme;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.gephi.graph.api.Node;
-import org.gephi.layout.plugin.forceAtlas2.ForceFactory.RepulsionForce;
+import layoutsbyme.ForceFactory.RepulsionForce;
 
 /**
  * Barnes Hut optimization

@@ -1,3 +1,5 @@
+package layoutsbyme;
+
 /*
 Copyright 2008-2011 Gephi
 Authors : Mathieu Jacomy <mathieu.jacomy@gmail.com>
@@ -39,31 +41,12 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.layout.plugin.forceAtlas2;
-
-import org.gephi.graph.api.Node;
-import org.gephi.layout.plugin.forceAtlas2.ForceFactory.RepulsionForce;
 
 /**
  *
  * @author Mathieu Jacomy
  */
-public class OperationNodeRegionRepulse extends Operation {
+public abstract class Operation {
 
-    private final Node n;
-    private final Region r;
-    private final RepulsionForce f;
-    private final double theta;
-
-    public OperationNodeRegionRepulse(Node n, Region r, RepulsionForce f, double theta) {
-        this.n = n;
-        this.f = f;
-        this.r = r;
-        this.theta = theta;
-    }
-
-    @Override
-    public void execute() {
-        r.applyForce(n, f, theta);
-    }
+    public abstract void execute();
 }

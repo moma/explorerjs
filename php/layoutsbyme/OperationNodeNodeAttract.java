@@ -39,29 +39,30 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.layout.plugin.forceAtlas2;
+package layoutsbyme;
 
-import org.gephi.graph.api.Node;
-import org.gephi.layout.plugin.forceAtlas2.ForceFactory.RepulsionForce;
+import layoutsbyme.ForceFactory.AttractionForce;
 
 /**
  *
  * @author Mathieu Jacomy
  */
-public class OperationNodeNodeRepulse extends Operation {
+public class OperationNodeNodeAttract extends Operation {
 
     private final Node n1;
     private final Node n2;
-    private final RepulsionForce f;
+    private final AttractionForce f;
+    private final double coefficient;
 
-    public OperationNodeNodeRepulse(Node n1, Node n2, RepulsionForce f) {
+    public OperationNodeNodeAttract(Node n1, Node n2, AttractionForce f, double coefficient) {
         this.n1 = n1;
         this.n2 = n2;
         this.f = f;
+        this.coefficient = coefficient;
     }
 
     @Override
     public void execute() {
-        f.apply(n1, n2);
+        f.apply(n1, n2, coefficient);
     }
 }

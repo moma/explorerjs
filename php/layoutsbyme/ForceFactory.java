@@ -39,9 +39,7 @@
 
  Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.layout.plugin.forceAtlas2;
-
-import org.gephi.graph.api.Node;
+package layoutsbyme;
 
 /**
  * Generates the forces on demand, here are all the formulas for attraction and
@@ -52,11 +50,11 @@ import org.gephi.graph.api.Node;
 public class ForceFactory {
 
     public static ForceFactory builder = new ForceFactory();
+    public static ForceAtlas2LayoutData[] Nodes = new ForceAtlas2LayoutData[100];
 
     private ForceFactory() {
     }
 
-    ;
 
     public RepulsionForce buildRepulsion(boolean adjustBySize, double coefficient) {
         if (adjustBySize) {

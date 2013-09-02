@@ -39,31 +39,43 @@ Contributor(s):
 
 Portions Copyrighted 2011 Gephi Consortium.
  */
-package org.gephi.layout.plugin.forceAtlas2;
+package layoutsbyme;
 
-import org.gephi.graph.api.Node;
-import org.gephi.layout.plugin.forceAtlas2.ForceFactory.AttractionForce;
 
 /**
- *
+ * Layout Builder
  * @author Mathieu Jacomy
  */
-public class OperationNodeNodeAttract extends Operation {
+public class ForceAtlas2Builder {
 
-    private final Node n1;
-    private final Node n2;
-    private final AttractionForce f;
-    private final double coefficient;
+    private ForceAtlas2UI ui = new ForceAtlas2UI();
 
-    public OperationNodeNodeAttract(Node n1, Node n2, AttractionForce f, double coefficient) {
-        this.n1 = n1;
-        this.n2 = n2;
-        this.f = f;
-        this.coefficient = coefficient;
+    
+    public String getName() {
+        return "ForceAtlas2.name";//NbBundle.getMessage(ForceAtlas2.class, "ForceAtlas2.name");
     }
 
-    @Override
-    public void execute() {
-        f.apply(n1, n2, coefficient);
+
+    
+    public ForceAtlas2 buildLayout() {
+        ForceAtlas2 layout = new ForceAtlas2(this);
+        return layout;
+    }
+
+    private class ForceAtlas2UI {
+
+        
+        public String getDescription() {
+            return "ForceAtlas2.description";//NbBundle.getMessage(ForceAtlas2.class, "ForceAtlas2.description");
+        }
+        
+        public int getQualityRank() {
+            return 4;
+        }
+
+        
+        public int getSpeedRank() {
+            return 4;
+        }
     }
 }
