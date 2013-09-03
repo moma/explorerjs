@@ -55,14 +55,23 @@ public class Node {
     
     
     public ForceAtlas2LayoutData getLayoutData(){
-        //if (ForceFactory.Nodes[this.id] != null) {
-            return ForceFactory.Nodes[this.id];
+        //if (ForceAtlas2.nodesFA2[this.id] != null) {
+            return ForceAtlas2.nodesFA2[this.getId()];
         //}
+        //else return null;
     }
     
     
     public void setLayoutData(ForceAtlas2LayoutData fa2ld){
-        ForceFactory.Nodes[this.id] = fa2ld;
+        ForceAtlas2.nodesFA2[this.getId()] = fa2ld;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
 }

@@ -50,7 +50,6 @@ package layoutsbyme;
 public class ForceFactory {
 
     public static ForceFactory builder = new ForceFactory();
-    public static ForceAtlas2LayoutData[] Nodes = new ForceAtlas2LayoutData[100];
 
     private ForceFactory() {
     }

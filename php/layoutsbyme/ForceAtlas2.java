@@ -74,6 +74,8 @@ public class ForceAtlas2 {
     private Region rootRegion;
     double outboundAttCompensation = 1;
     private ExecutorService pool;
+    public static ForceAtlas2LayoutData[] nodesFA2;
+    public ExtractData legraphe;
 
     public ForceAtlas2(ForceAtlas2Builder layoutBuilder) {
         this.layoutBuilder = layoutBuilder;
@@ -83,9 +85,11 @@ public class ForceAtlas2 {
     
     public void initAlgo() {
         speed = 1.;
+        legraphe = new ExtractData(); //get JSON data
 
-        Node[] nodes = null;//Extraer nodos
+        Node[] nodes = (Node[]) legraphe.getNds().toArray();//Extraer nodos
         graph.setNodeCount(nodes.length);
+        nodesFA2 = new ForceAtlas2LayoutData[nodes.length];
 
         // Initialise layout data
         for (Node n : nodes) {
@@ -108,8 +112,8 @@ public class ForceAtlas2 {
     
     public void goAlgo() {
         // Initialize graph data
-        Node[] nodes = null;//Extraer nodos
-        Edge[] edges = null;//Extraer aristas
+        Node[] nodes = (Node[]) legraphe.getNds().toArray();//Extraer nodos
+        Edge[] edges = (Edge[]) legraphe.getEgs().toArray();//Extraer aristas
 
         // Initialise layout data
         for (Node n : nodes) {
@@ -363,7 +367,7 @@ public class ForceAtlas2 {
     
     public void resetPropertiesValues() {
         int nodesCount = 0;
-        nodesCount = graph.getNodeCount();
+        nodesCount = legraphe.getNds().size();
 
         // Tuning
         if (nodesCount >= 100) {
