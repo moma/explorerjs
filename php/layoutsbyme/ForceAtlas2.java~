@@ -86,11 +86,9 @@ public class ForceAtlas2 {
     public void initAlgo() {
         speed = 1.;
         legraphe = new ExtractData(); //get JSON data
-        ArrayList<Node> nodesArrayList = legraphe.getNds();
-        Node[] nodes = new Node[nodesArrayList.size()];
-        nodesArrayList.toArray(nodes);
-        
-//        Node[] nodes = (Node[]) legraphe.getNds().toArray();//Extraer nodos
+
+        Node[] nodes = (Node[]) legraphe.getNds().toArray();//Extraer nodos
+        graph.setNodeCount(nodes.length);
         nodesFA2 = new ForceAtlas2LayoutData[nodes.length];
 
         // Initialise layout data
@@ -114,16 +112,8 @@ public class ForceAtlas2 {
     
     public void goAlgo() {
         // Initialize graph data
-        //Node[] nodes = (Node[]) legraphe.getNds().toArray();//Extraer nodos
-        //Edge[] edges = (Edge[]) legraphe.getEgs().toArray();//Extraer aristas
-        
-        ArrayList<Node> nodesArrayList = legraphe.getNds();
-        Node[] nodes = new Node[nodesArrayList.size()];
-        nodesArrayList.toArray(nodes);
-        
-        ArrayList<Edge> edgesArrayList = legraphe.getEgs();
-        Edge[] edges = new Edge[edgesArrayList.size()];
-        edgesArrayList.toArray(edges);
+        Node[] nodes = (Node[]) legraphe.getNds().toArray();//Extraer nodos
+        Edge[] edges = (Edge[]) legraphe.getEgs().toArray();//Extraer aristas
 
         // Initialise layout data
         for (Node n : nodes) {
@@ -253,8 +243,7 @@ public class ForceAtlas2 {
                 }
             }
         }
-        System.out.println("lalala");
-        //graph.readUnlockAll();/*not completed*/
+        graph.readUnlockAll();
     }
 
     
