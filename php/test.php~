@@ -1,6 +1,0 @@
-<?php
-$dbname='homework-20750-1-homework-db.db';
-$base = new PDO("sqlite:" . $dbname);
-
-$sql = "SELECT  FROM scholars where unique_id=";
-?>
