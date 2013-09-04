@@ -467,14 +467,14 @@ function fullExtract(){
                 }
                 else nodes1[source].neighbours.push(target);
                 
-                if((typeof nodes1[target])=="undefined"){
-                    nodes1[target] = {
-                        label: Nodes[target].label,
-                        neighbours: []
-                    };
-                    nodes1[target].neighbours.push(source);
-                }
-                else nodes1[target].neighbours.push(source);
+//                if((typeof nodes1[target])=="undefined"){
+//                    nodes1[target] = {
+//                        label: Nodes[target].label,
+//                        neighbours: []
+//                    };
+//                    nodes1[target].neighbours.push(source);
+//                }
+//                else nodes1[target].neighbours.push(source);
             }
             
             
