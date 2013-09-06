@@ -363,8 +363,24 @@ function updateLeftPanel(){
     names=names.replace(", </h4>","</h4>");
     names=names.replace(", <h4>","<h4>");
     names+='</div>';
+    
+    
     js2='\');"';
     if(swclickActual=="social") {
+        /*
+        papersdata+='<div id="opossitesBox">';
+        papersdata+='<ul>';
+        papersdata+='<li></li>';
+        papersdata+='<li></li>';
+        papersdata+='<li></li>';
+        papersdata+='</ul>';
+        papersdata+='</div>';
+        */
+       
+        //var variable = JSON.stringify(selections);
+        //pr(variable);
+
+        
         opossitesNodes+= '<br><h4>Keywords: </h4>';
         opossitesNodes+='<div id="opossitesBox">';/*tochange*/
         js1='onclick="edgesTF=false;cancelSelection(true);graphNGrams(\'';
@@ -388,6 +404,26 @@ function updateLeftPanel(){
         }
         opossitesNodes += '</div>';
         
+        params=[];
+        for(var i in selections){
+            params.push(Nodes[i].label);
+        }
+        jsonparams=JSON.stringify(params);
+        $.ajax({
+            type: 'GET',
+            url: 'php/test.php',
+            data: "type=social&query="+jsonparams,
+            //contentType: "application/json",
+            //dataType: 'json',
+            success : function(data){ 
+                console.log(data);
+                $("#topPapers").html(data);
+            },
+            error: function(){ 
+                pr("Page Not found.");
+            }
+        });
+        
         information += '<br><h4>Information:</h4>';
         information += '<ul>';
             
@@ -403,7 +439,7 @@ function updateLeftPanel(){
         }
     }
     
-    if(swclickActual=="semantic") {
+    if(swclickActual=="semantic") {       
         opossitesNodes+= '<br><h4>Scholars: </h4>';
         opossitesNodes+='<div id="opossitesBox">';
         js1='onclick="edgesTF=false;cancelSelection(true);graphDocs(\'';
@@ -427,6 +463,27 @@ function updateLeftPanel(){
 
         }
         opossitesNodes+='</div>';
+        
+        params=[];
+        for(var i in selections){
+            params.push(Nodes[i].label);
+        }
+        jsonparams=JSON.stringify(params);
+        $.ajax({
+            type: 'GET',
+            url: 'php/test.php',
+            data: "type=semantic&query="+jsonparams,
+            //contentType: "application/json",
+            //dataType: 'json',
+            success : function(data){ 
+                console.log(data);
+                $("#topPapers").html(data);
+            },
+            error: function(){ 
+                pr("Page Not found.");
+            }
+        });
+        
         information += '<br><h4>Information:</h4>';
         information += '<ul>';
             
