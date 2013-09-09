@@ -20,8 +20,8 @@ public class Main {
         //"http://localhost:8080/getJSON?callback=jQuery19109809626471251249_1377620962679&unique_id=Greg__Paperin&it=1&_=1377620962680");
         ForceAtlas2 fa2 = new ForceAtlas2(null);
         fa2.initAlgo();
-        fa2.goAlgo();
-        //while(true) fa2.goAlgo();
+        for(int i=0; i<10; i++) fa2.goAlgo();
+        System.exit(0);
 
     }
 }

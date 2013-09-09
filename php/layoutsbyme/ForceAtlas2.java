@@ -54,7 +54,7 @@ import layoutsbyme.ForceFactory.RepulsionForce;
  *
  * @author Mathieu Jacomy
  */
-public class ForceAtlas2 {
+public class ForceAtlas2 extends GraphLock{
 
     private Graph graph;
     private final ForceAtlas2Builder layoutBuilder;
@@ -87,6 +87,7 @@ public class ForceAtlas2 {
         speed = 1.;
         legraphe = new ExtractData(); //get JSON data
         ArrayList<Node> nodesArrayList = legraphe.getNds();
+        readLock();
         Node[] nodes = new Node[nodesArrayList.size()];
         nodesArrayList.toArray(nodes);
         
@@ -117,6 +118,7 @@ public class ForceAtlas2 {
         //Node[] nodes = (Node[]) legraphe.getNds().toArray();//Extraer nodos
         //Edge[] edges = (Edge[]) legraphe.getEgs().toArray();//Extraer aristas
         
+        readLock();
         ArrayList<Node> nodesArrayList = legraphe.getNds();
         Node[] nodes = new Node[nodesArrayList.size()];
         nodesArrayList.toArray(nodes);
@@ -127,6 +129,7 @@ public class ForceAtlas2 {
 
         // Initialise layout data
         for (Node n : nodes) {
+            System.out.println("1. iterNodes");
             if (n.getLayoutData() == null || !(n.getLayoutData() instanceof ForceAtlas2LayoutData)) {
                 ForceAtlas2LayoutData nLayout = new ForceAtlas2LayoutData();
                 n.setLayoutData(nLayout);
@@ -141,12 +144,14 @@ public class ForceAtlas2 {
 
         // If Barnes Hut active, initialize root region
         if (isBarnesHutOptimize()) {
+            System.out.println("2. isBarnesHutOptimize()");
             rootRegion = new Region(nodes);
             rootRegion.buildSubRegions();
         }
 
         // If outboundAttractionDistribution active, compensate.
         if (isOutboundAttractionDistribution()) {
+            System.out.println("3. isOutboundAttractionDistribution()");
             outboundAttCompensation = 0;
             for (Node n : nodes) {
                 ForceAtlas2LayoutData nLayout = n.getLayoutData();
@@ -170,6 +175,7 @@ public class ForceAtlas2 {
         }
         for (Future future : threads) {
             try {
+                //System.out.print("");
                 future.get();
             } catch (InterruptedException ex) {
                 System.err.print(ex);
@@ -214,6 +220,7 @@ public class ForceAtlas2 {
 
         // Apply forces
         if (isAdjustSizes()) {
+            System.out.println("4. isAdjustSizes()");
             // If nodes overlap prevention is active, it's not possible to trust the swinging mesure.
             for (Node n : nodes) {
                 ForceAtlas2LayoutData nLayout = n.getLayoutData();
@@ -235,6 +242,7 @@ public class ForceAtlas2 {
                 }
             }
         } else {
+            System.out.println("else 4. isAdjustSizes()");
             for (Node n : nodes) {
                 ForceAtlas2LayoutData nLayout = n.getLayoutData();
                 if (!n.isFixed()) {
@@ -253,8 +261,8 @@ public class ForceAtlas2 {
                 }
             }
         }
-        System.out.println("lalala");
         //graph.readUnlockAll();/*not completed*/
+        readUnlockAll();
     }
 
     

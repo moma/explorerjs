@@ -95,4 +95,16 @@ public class ExtractData {
     public ArrayList<Edge> getEgs() {
         return egs;
     }
+    
+    public void showNodes(){
+        for(Node n: nds){
+            System.out.println(n.getId()+": "+n.getDegree());
+        }
+    }
+    
+    public void showEdges(){
+        for(Edge e: egs){
+            System.out.println("");
+        }
+    }
 }
