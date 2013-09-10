@@ -45,7 +45,10 @@ public class ExtractData {
                 n.setId(id);
                 //String idS = (String) node.get("sID");
                 //System.out.println("node_idS: " + idS);
-                
+                double x = (0 + (int)(Math.random()*100))/100f; ;
+                double y = (0 + (int)(Math.random()*100))/100f; ;
+                n.setX(x);
+                n.setY(y);
                 int deg = (int) (long) node.get("occ");
                 //System.out.println("node_occ: " + deg);
                 n.setDegree(deg);

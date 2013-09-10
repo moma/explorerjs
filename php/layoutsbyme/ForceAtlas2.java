@@ -60,17 +60,17 @@ public class ForceAtlas2 extends GraphLock {
 
     private Graph graph;
     private final ForceAtlas2Builder layoutBuilder;
-    private double edgeWeightInfluence;
-    private double jitterTolerance;
-    private double scalingRatio;
+    private double edgeWeightInfluence=0;
+    private double jitterTolerance=1;
+    private double scalingRatio=1.;
     private double gravity;
-    private double speed;
-    private boolean outboundAttractionDistribution;
-    private boolean adjustSizes;
-    private boolean barnesHutOptimize;
-    private double barnesHutTheta;
-    private boolean linLogMode;
-    private boolean strongGravityMode;
+    private double speed=1.;
+    private boolean outboundAttractionDistribution = false;
+    private boolean adjustSizes=false;
+    private boolean barnesHutOptimize=false;
+    private double barnesHutTheta=1.2;
+    private boolean linLogMode=false;
+    private boolean strongGravityMode=false;
     private int threadCount;
     private int currentThreadCount;
     private Region rootRegion;
@@ -298,6 +298,7 @@ public class ForceAtlas2 extends GraphLock {
             Node n = nodes[nIndex];
             GravityForce.apply(n, gravity / getScalingRatio());
         }
+        
         /*===== NORMAL REPULSION & GRAVITY =====*/
 
 
@@ -403,7 +404,7 @@ public class ForceAtlas2 extends GraphLock {
 //                    n.setY((float) y);
                     n.setX(x);
                     n.setY(y);
-                    System.out.println(swinging);
+                    //System.out.println(swinging);
                 }
             }
         }

@@ -141,6 +141,12 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           }
         } else {
           pr("\t\taplicando repulsion");
+          
+          nodes.forEach(function(n) {
+              pr(n.fa2);/*debugging*/
+          });
+          partialGraph.stopForceAtlas2();
+          
           var i1 = self.state.index;
           while (i1 < nodes.length && i1 < self.state.index + cInt) {
             var n1 = nodes[i1++];
@@ -150,7 +156,6 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
                   Repulsion.apply_nn(n1, n2);
                 }
               });
-              partialGraph.stopForceAtlas2();
           }
           if (i1 == nodes.length) {
             self.state.step = 2;

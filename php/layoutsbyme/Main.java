@@ -23,9 +23,8 @@ public class Main {
         
         fa2.legraphe.showNodes();
         
-        /*for(int i=0; i<10; i++)*/ fa2.goAlgo();
-        //fa2.atomicGo();
-        
+        for(int i=0; i<10; i++) fa2.goAlgo();
+        //fa2.atomicGo();        
         fa2.legraphe.showNodes();
         
 
