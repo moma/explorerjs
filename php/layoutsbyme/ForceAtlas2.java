@@ -42,19 +42,21 @@
 package layoutsbyme;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import layoutsbyme.ForceFactory.AttractionForce;
 import layoutsbyme.ForceFactory.RepulsionForce;
+import org.json.simple.JSONObject;
 
 /**
  * ForceAtlas 2 Layout, manages each step of the computations.
  *
  * @author Mathieu Jacomy
  */
-public class ForceAtlas2 extends GraphLock{
+public class ForceAtlas2 extends GraphLock {
 
     private Graph graph;
     private final ForceAtlas2Builder layoutBuilder;
@@ -76,21 +78,26 @@ public class ForceAtlas2 extends GraphLock{
     private ExecutorService pool;
     public static ForceAtlas2LayoutData[] nodesFA2;
     public ExtractData legraphe;
+    private int complexIntervals = 500;
+    private int simpleIntervals = 1000;
+    HashMap<String, Integer> state = new HashMap<>();
 
     public ForceAtlas2(ForceAtlas2Builder layoutBuilder) {
         this.layoutBuilder = layoutBuilder;
         this.threadCount = Math.min(4, Math.max(1, Runtime.getRuntime().availableProcessors() - 1));
     }
 
-    
     public void initAlgo() {
         speed = 1.;
+        state.put("step", 0);
+        state.put("index", 0);
+
         legraphe = new ExtractData(); //get JSON data
         ArrayList<Node> nodesArrayList = legraphe.getNds();
-        readLock();
+        //readLock();
         Node[] nodes = new Node[nodesArrayList.size()];
         nodesArrayList.toArray(nodes);
-        
+
 //        Node[] nodes = (Node[]) legraphe.getNds().toArray();//Extraer nodos
         nodesFA2 = new ForceAtlas2LayoutData[nodes.length];
 
@@ -108,21 +115,129 @@ public class ForceAtlas2 extends GraphLock{
             nLayout.dy = 0;
         }
 
+
         pool = Executors.newFixedThreadPool(threadCount);
         currentThreadCount = threadCount;
     }
 
-    
+    public void pr(String msg) {
+        System.out.println(msg);
+    }
+
+//    public void atomicGo() {
+//
+//        ArrayList<Node> nodesArrayList = legraphe.getNds();
+//        Node[] nodes = new Node[nodesArrayList.size()];
+//        nodesArrayList.toArray(nodes);
+//
+//        ArrayList<Edge> edgesArrayList = legraphe.getEgs();
+//        Edge[] edges = new Edge[edgesArrayList.size()];
+//        edgesArrayList.toArray(edges);
+//
+//        int cInt = complexIntervals;
+//        int sInt = simpleIntervals;
+//
+//        switch (state.get("step")) {
+//            case 0:
+//                pr("cero");
+//                // Initialise layout data
+//                for (Node n : nodes) {
+//                    System.out.println("1. iterNodes");
+//                    if (n.getLayoutData() == null || !(n.getLayoutData() instanceof ForceAtlas2LayoutData)) {
+//                        ForceAtlas2LayoutData nLayout = new ForceAtlas2LayoutData();
+//                        n.setLayoutData(nLayout);
+//                    }
+//                    ForceAtlas2LayoutData nLayout = n.getLayoutData();
+//                    nLayout.mass = 1 + n.getDegree();//graph.getDegree(n)???;
+//                    nLayout.old_dx = nLayout.dx;
+//                    nLayout.old_dy = nLayout.dy;
+//                    nLayout.dx = 0;
+//                    nLayout.dy = 0;
+//                }
+//
+//                // If Barnes Hut active, initialize root region
+//                if (isBarnesHutOptimize()) {
+//                    System.out.println("2. isBarnesHutOptimize()");
+//                    rootRegion = new Region(nodes);
+//                    rootRegion.buildSubRegions();
+//                }
+//
+//                // If outboundAttractionDistribution active, compensate.
+//                if (isOutboundAttractionDistribution()) {
+//                    System.out.println("3. isOutboundAttractionDistribution()");
+//                    outboundAttCompensation = 0;
+//                    for (Node n : nodes) {
+//                        ForceAtlas2LayoutData nLayout = n.getLayoutData();
+//                        outboundAttCompensation += nLayout.mass;
+//                    }
+//                    outboundAttCompensation /= nodes.length;
+//                }
+//                state.put("step", 1);
+//                state.put("index", 0);
+//                break;
+//            case 1:
+//                pr("uno");
+//                /*===== NORMAL REPULSION & GRAVITY =====*/
+//                RepulsionForce Repulsion = ForceFactory.builder.buildRepulsion(isAdjustSizes(), getScalingRatio());
+//                // Repulsion
+//                if (barnesHutOptimize) {
+//                    int i = state.get("index");
+//                    while (i < nodes.length && i < state.get("index") + cInt) {
+//                        Node n = nodes[i++];
+//                        rootRegion.applyForce(n, Repulsion, barnesHutTheta);
+//                    }
+//                    if (i == nodes.length) {
+//                        state.put("step", 2);
+//                        state.put("index", 0);
+//                    } else {
+//                        state.put("index", i);
+//                    }
+//                } else {
+//                    int i1 = state.get("index");
+//                    while (i1 < nodes.length && i1 < state.get("index") + cInt) {
+//                        Node n1 = nodes[i1++];
+//                        for (int i2 = 0; i2 < nodes.length; i2++) {
+//                            if (i2 < i1){
+//                                Node n2 = nodes[i2];
+//                                Repulsion.apply(n1, n2);
+//                            }
+//                        }
+//                    }
+//
+//                    if (i1 == nodes.length) {
+//                        state.put("step", 2);
+//                        state.put("index", 0);
+//                    } else {
+//                        state.put("index", i1);
+//                    }
+//                }
+//                /*===== NORMAL REPULSION =====*/
+//                break;
+//            case 2:
+//                pr("dos");
+//                break;
+//            case 3:
+//                pr("tres");
+//                break;
+//            case 4:
+//                pr("cuatro");
+//                break;
+//            case 5:
+//                pr("cinco");
+//                break;
+//        }
+//    }
+
     public void goAlgo() {
         // Initialize graph data
         //Node[] nodes = (Node[]) legraphe.getNds().toArray();//Extraer nodos
         //Edge[] edges = (Edge[]) legraphe.getEgs().toArray();//Extraer aristas
-        
-        readLock();
+
+        //readLock();
         ArrayList<Node> nodesArrayList = legraphe.getNds();
         Node[] nodes = new Node[nodesArrayList.size()];
         nodesArrayList.toArray(nodes);
-        
+
         ArrayList<Edge> edgesArrayList = legraphe.getEgs();
         Edge[] edges = new Edge[edgesArrayList.size()];
         edgesArrayList.toArray(edges);
@@ -160,29 +275,54 @@ public class ForceAtlas2 extends GraphLock{
             outboundAttCompensation /= nodes.length;
         }
 
-        // Repulsion (and gravity)
-        // NB: Muti-threaded
+        /*===== NORMAL REPULSION & GRAVITY =====*/
         RepulsionForce Repulsion = ForceFactory.builder.buildRepulsion(isAdjustSizes(), getScalingRatio());
-
-        int taskCount = 8 * currentThreadCount;  // The threadPool Executor Service will manage the fetching of tasks and threads.
-        // We make more tasks than threads because some tasks may need more time to compute.
-        ArrayList<Future> threads = new ArrayList();
-        for (int t = taskCount; t > 0; t--) {
-            int from = (int) Math.floor(nodes.length * (t - 1) / taskCount);
-            int to = (int) Math.floor(nodes.length * t / taskCount);
-            Future future = pool.submit(new NodesThread(nodes, from, to, isBarnesHutOptimize(), getBarnesHutTheta(), getGravity(), (isStrongGravityMode()) ? (ForceFactory.builder.getStrongGravity(getScalingRatio())) : (Repulsion), getScalingRatio(), rootRegion, Repulsion));
-            threads.add(future);
-        }
-        for (Future future : threads) {
-            try {
-                //System.out.print("");
-                future.get();
-            } catch (InterruptedException ex) {
-                System.err.print(ex);
-            } catch (ExecutionException ex) {
-                System.err.print(ex);
+        // Repulsion
+        if (barnesHutOptimize) {
+            for (int nIndex = 0; nIndex < nodes.length; nIndex++) {
+                Node n = nodes[nIndex];
+                rootRegion.applyForce(n, Repulsion, barnesHutTheta);
+            }
+        } else {
+            for (int n1Index = 0; n1Index < nodes.length; n1Index++) {
+                Node n1 = nodes[n1Index];
+                for (int n2Index = 0; n2Index < n1Index; n2Index++) {
+                    Node n2 = nodes[n2Index];
+                    Repulsion.apply(n1, n2);
+                }
             }
         }
+        RepulsionForce GravityForce = (isStrongGravityMode()) ? (ForceFactory.builder.getStrongGravity(getScalingRatio())) : (Repulsion);
+        // Gravity
+        for (int nIndex = 0; nIndex < nodes.length; nIndex++) {
+            Node n = nodes[nIndex];
+            GravityForce.apply(n, gravity / getScalingRatio());
+        }
+        /*===== NORMAL REPULSION & GRAVITY =====*/
+
+
+        /*===== THREADED REPULSION & GRAVITY =====*/
+//        int taskCount = 8 * currentThreadCount;  // The threadPool Executor Service will manage the fetching of tasks and threads.
+//        // We make more tasks than threads because some tasks may need more time to compute.
+//        ArrayList<Future> threads = new ArrayList();
+//        for (int t = taskCount; t > 0; t--) {
+//            int from = (int) Math.floor(nodes.length * (t - 1) / taskCount);
+//            int to = (int) Math.floor(nodes.length * t / taskCount);
+//            Future future = pool.submit(new NodesThread(nodes, from, to, isBarnesHutOptimize(), getBarnesHutTheta(), getGravity(), (isStrongGravityMode()) ? (ForceFactory.builder.getStrongGravity(getScalingRatio())) : (Repulsion), getScalingRatio(), rootRegion, Repulsion));
+//            threads.add(future);
+//        }
+//        for (Future future : threads) {
+//            try {
+//                //System.out.print("");
+//                future.get();
+//            } catch (InterruptedException ex) {
+//                System.err.print(ex);
+//            } catch (ExecutionException ex) {
+//                System.err.print(ex);
+//            }
+//        }
+        /*===== THREADED REPULSION & GRAVITY =====*/
+
 
         // Attraction
         AttractionForce Attraction = ForceFactory.builder.buildAttraction(isLinLogMode(), isOutboundAttractionDistribution(), isAdjustSizes(), 1 * ((isOutboundAttractionDistribution()) ? (outboundAttCompensation) : (1)));
@@ -237,8 +377,11 @@ public class ForceAtlas2 extends GraphLock{
                     double x = n.x() + nLayout.dx * factor;
                     double y = n.y() + nLayout.dy * factor;
 
-                    n.setX((float) x);
-                    n.setY((float) y);
+                    //n.setX((float) x);
+                    //n.setY((float) y);
+                    n.setX(x);
+                    n.setY(y);
+                    //System.out.println(x+" , "+y);
                 }
             }
         } else {
@@ -256,21 +399,21 @@ public class ForceAtlas2 extends GraphLock{
                     double x = n.x() + nLayout.dx * factor;
                     double y = n.y() + nLayout.dy * factor;
 
-                    n.setX((float) x);
-                    n.setY((float) y);
+//                    n.setX((float) x);
+//                    n.setY((float) y);
+                    n.setX(x);
+                    n.setY(y);
+                    System.out.println(swinging);
                 }
             }
         }
         //graph.readUnlockAll();/*not completed*/
-        readUnlockAll();
+        //readUnlockAll();
     }
 
-    
 //    public boolean canAlgo() {
 //        return graphModel != null;
 //    }
-
-    
 //    public void endAlgo() {
 //        for (Node n : graph.getNodes()) {
 //            n.setLayoutData(null);
@@ -278,112 +421,6 @@ public class ForceAtlas2 extends GraphLock{
 //        pool.shutdown();
 //        graph.readUnlockAll();
 //    }
-    
-//    @Override
-//    public LayoutProperty[] getProperties() {
-//        List<LayoutProperty> properties = new ArrayList<LayoutProperty>();
-//        final String FORCEATLAS2_TUNING = NbBundle.getMessage(getClass(), "ForceAtlas2.tuning");
-//        final String FORCEATLAS2_BEHAVIOR = NbBundle.getMessage(getClass(), "ForceAtlas2.behavior");
-//        final String FORCEATLAS2_PERFORMANCE = NbBundle.getMessage(getClass(), "ForceAtlas2.performance");
-//        final String FORCEATLAS2_THREADS = NbBundle.getMessage(getClass(), "ForceAtlas2.threads");
-//
-//        try {
-//            properties.add(LayoutProperty.createProperty(
-//                    this, Double.class,
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.scalingRatio.name"),
-//                    FORCEATLAS2_TUNING,
-//                    "ForceAtlas2.scalingRatio.name",
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.scalingRatio.desc"),
-//                    "getScalingRatio", "setScalingRatio"));
-//
-//            properties.add(LayoutProperty.createProperty(
-//                    this, Boolean.class,
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.strongGravityMode.name"),
-//                    FORCEATLAS2_TUNING,
-//                    "ForceAtlas2.strongGravityMode.name",
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.strongGravityMode.desc"),
-//                    "isStrongGravityMode", "setStrongGravityMode"));
-//
-//            properties.add(LayoutProperty.createProperty(
-//                    this, Double.class,
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.gravity.name"),
-//                    FORCEATLAS2_TUNING,
-//                    "ForceAtlas2.gravity.name",
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.gravity.desc"),
-//                    "getGravity", "setGravity"));
-//
-//            properties.add(LayoutProperty.createProperty(
-//                    this, Boolean.class,
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.distributedAttraction.name"),
-//                    FORCEATLAS2_BEHAVIOR,
-//                    "ForceAtlas2.distributedAttraction.name",
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.distributedAttraction.desc"),
-//                    "isOutboundAttractionDistribution", "setOutboundAttractionDistribution"));
-//
-//            properties.add(LayoutProperty.createProperty(
-//                    this, Boolean.class,
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.linLogMode.name"),
-//                    FORCEATLAS2_BEHAVIOR,
-//                    "ForceAtlas2.linLogMode.name",
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.linLogMode.desc"),
-//                    "isLinLogMode", "setLinLogMode"));
-//
-//            properties.add(LayoutProperty.createProperty(
-//                    this, Boolean.class,
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.adjustSizes.name"),
-//                    FORCEATLAS2_BEHAVIOR,
-//                    "ForceAtlas2.adjustSizes.name",
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.adjustSizes.desc"),
-//                    "isAdjustSizes", "setAdjustSizes"));
-//
-//            properties.add(LayoutProperty.createProperty(
-//                    this, Double.class,
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.edgeWeightInfluence.name"),
-//                    FORCEATLAS2_BEHAVIOR,
-//                    "ForceAtlas2.edgeWeightInfluence.name",
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.edgeWeightInfluence.desc"),
-//                    "getEdgeWeightInfluence", "setEdgeWeightInfluence"));
-//
-//            properties.add(LayoutProperty.createProperty(
-//                    this, Double.class,
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.jitterTolerance.name"),
-//                    FORCEATLAS2_PERFORMANCE,
-//                    "ForceAtlas2.jitterTolerance.name",
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.jitterTolerance.desc"),
-//                    "getJitterTolerance", "setJitterTolerance"));
-//
-//            properties.add(LayoutProperty.createProperty(
-//                    this, Boolean.class,
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.barnesHutOptimization.name"),
-//                    FORCEATLAS2_PERFORMANCE,
-//                    "ForceAtlas2.barnesHutOptimization.name",
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.barnesHutOptimization.desc"),
-//                    "isBarnesHutOptimize", "setBarnesHutOptimize"));
-//
-//            properties.add(LayoutProperty.createProperty(
-//                    this, Double.class,
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.barnesHutTheta.name"),
-//                    FORCEATLAS2_PERFORMANCE,
-//                    "ForceAtlas2.barnesHutTheta.name",
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.barnesHutTheta.desc"),
-//                    "getBarnesHutTheta", "setBarnesHutTheta"));
-//
-//            properties.add(LayoutProperty.createProperty(
-//                    this, Integer.class,
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.threads.name"),
-//                    FORCEATLAS2_THREADS,
-//                    "ForceAtlas2.threads.name",
-//                    NbBundle.getMessage(getClass(), "ForceAtlas2.threads.desc"),
-//                    "getThreadsCount", "setThreadsCount"));
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return properties.toArray(new LayoutProperty[0]);
-//    }
-
-    
     public void resetPropertiesValues() {
         int nodesCount = 0;
         nodesCount = legraphe.getNds().size();
@@ -420,7 +457,6 @@ public class ForceAtlas2 extends GraphLock{
         setThreadsCount(2);
     }
 
-    
 //    public LayoutBuilder getBuilder() {
 //        return layoutBuilder;
 //    }
@@ -431,7 +467,6 @@ public class ForceAtlas2 extends GraphLock{
 //        // Trick: reset here to take the profile of the graph in account for default values
 //        resetPropertiesValues();
 //    }
-
     public Double getBarnesHutTheta() {
         return barnesHutTheta;
     }

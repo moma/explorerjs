@@ -43,7 +43,6 @@ public class ExtractData {
                 int id = (int) (long) node.get("id");
                 //System.out.println("node_id: " + id);                
                 n.setId(id);
-                
                 //String idS = (String) node.get("sID");
                 //System.out.println("node_idS: " + idS);
                 
@@ -98,13 +97,10 @@ public class ExtractData {
     
     public void showNodes(){
         for(Node n: nds){
-            System.out.println(n.getId()+": "+n.getDegree());
-        }
-    }
-    
-    public void showEdges(){
-        for(Edge e: egs){
-            System.out.println("");
+            System.out.println(
+                    "( id , deg , x , y ) = "+
+                    "( "+n.getId()+" , "+n.getDegree()+" , "+n.x()+" , "+n.y()+" )"
+                    );
         }
     }
 }

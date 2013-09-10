@@ -74,6 +74,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
     switch (self.state.step) {
       case 0: // Pass init
         // Initialise layout data
+        pr("Caso 0: Inicializar");
         nodes.forEach(function(n) {
           if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
             if(n.fa2) {
@@ -93,6 +94,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
             }
           }
         });
+        
 
         // If Barnes Hut active, initialize root region
         if (self.p.barnesHutOptimize) {
@@ -114,6 +116,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         break;
 
       case 1: // Repulsion
+        pr("Caso 1: Repulsion");
         var Repulsion = self.ForceFactory.buildRepulsion(
           self.p.adjustSizes,
           self.p.scalingRatio
@@ -137,6 +140,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
             self.state.index = i;
           }
         } else {
+          pr("\t\taplicando repulsion");
           var i1 = self.state.index;
           while (i1 < nodes.length && i1 < self.state.index + cInt) {
             var n1 = nodes[i1++];
@@ -146,6 +150,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
                   Repulsion.apply_nn(n1, n2);
                 }
               });
+              partialGraph.stopForceAtlas2();
           }
           if (i1 == nodes.length) {
             self.state.step = 2;
@@ -153,11 +158,13 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           } else {
             self.state.index = i1;
           }
+          
         }
         return true;
         break;
 
       case 2: // Gravity
+        pr("Caso 2: Gravedad");
         var Gravity = (self.p.strongGravityMode) ?
                       (self.ForceFactory.getStrongGravity(
                         self.p.scalingRatio
@@ -187,6 +194,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         break;
 
       case 3: // Attraction
+        pr("Caso 3: Atraccion");
         var Attraction = self.ForceFactory.buildAttraction(
           self.p.linLogMode,
           self.p.outboundAttractionDistribution,
@@ -228,6 +236,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         break;
 
       case 4: // Auto adjust speed
+        pr("Caso 4: Velocidad");
         var totalSwinging = 0;  // How much irregular movement
         var totalEffectiveTraction = 0;  // Hom much useful movement
         var swingingSum=0;
@@ -295,6 +304,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         break;
 
       case 5: // Apply forces
+        pr("Caso 5: Aplicar fuerzas");
         var i = self.state.index;
         if (self.p.adjustSizes) {
           var speed = self.p.speed;
