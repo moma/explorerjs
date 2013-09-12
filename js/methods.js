@@ -1712,7 +1712,7 @@ function setPanels(){
         partialGraph.position(0,0,1);
         partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8);
         partialGraph.refresh();
-        partialGraph.startForceAtlas2();
+        //partialGraph.startForceAtlas2();
     });
     
     $('#sigma-example').dblclick(function(event) {        
@@ -1769,13 +1769,13 @@ function setPanels(){
     
     $("#edgesButton").click(function () {
         if(edgesTF==false){
+            edgesTF=true;
             partialGraph.stopForceAtlas2();
             partialGraph.draw();
-            edgesTF=true;
         }
         else {
-            partialGraph.startForceAtlas2();
             edgesTF=false;
+            partialGraph.startForceAtlas2();
         }
     });
    

@@ -61,6 +61,7 @@ var flag=0;
 var firstime=0;
 var leftright=true;
 var edgesTF=false;
+var mapDrag=false;
 
 //This variables will be updated in sigma.parseCustom.js
 var minNodeSize=5.00;
