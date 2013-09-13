@@ -1,0 +1,9 @@
+/logs
+/project/project
+/project/target
+/target
+/tmp
+/out
+/*.iml
+/.idea
+/.idea_modules
