@@ -37,7 +37,7 @@ def main():
 	db.extract()       
 	#end = time.time()	  #====
 	#seconds1=end-start
-
+	'''
 	#start = time.time() #====
 	run = FA2()
 	#for n in db.Graph.edges_iter():
@@ -45,6 +45,8 @@ def main():
 	#	pprint.pprint(  db.Graph[n[0]][n[1]] )
 	#print
 	graphArray = db.buildJSON(run.forceatlas2_layout(db.Graph,linlog=False,nohubs=False,iterations=i))
+	'''
+	graphArray = db.buildJSON_sansfa2(db.Graph)
 	#nx.draw(db.Graph, positions)     
 	#end = time.time()	  #====
 	#seconds2 = end-start

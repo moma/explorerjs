@@ -5,8 +5,7 @@ function doSomething(){
         clickRandomNode();        
         setTimeout(function() {
             changeButton("active_tags.png");
-            changeToMacro("semantic")
-            pr("hola");
+            changeToMacro("semantic");
         },3250);
         
     },1800);

@@ -1474,6 +1474,7 @@ function highlightOpossites (list){/*tofix*/
 }
 
 function selectOpossites (list){//Expanding selection    
+    pr("\t\t\tstarting loader");
     cancelSelection(false);   
     checkBox = true;
     for(var n in list){
@@ -1497,6 +1498,7 @@ function selectOpossites (list){//Expanding selection
     overNodes=true;    
     checkBox = false;      
     partialGraph.draw();
+    pr("\t\t\tstoping loader");
 }
 
 
@@ -1728,15 +1730,16 @@ function setPanels(){
         else {
             if(!is_empty(selections)){
                 cancelSelection(false);
-                _cG = $("#leftcolumn");    
-                _cG.animate({
-                    "left" : "-" + _cG.width() + "px"
-                }, function() {
-                    $("#aUnfold").attr("class","rightarrow");
-                    $("#zonecentre").css({
-                       left: "0"
-                    });
-                });
+                $("#information").html("");
+//                _cG = $("#leftcolumn");    
+//                _cG.animate({
+//                    "left" : "-" + _cG.width() + "px"
+//                }, function() {
+//                    $("#aUnfold").attr("class","rightarrow");
+//                    $("#zonecentre").css({
+//                       left: "0"
+//                    });
+//                });
             }
         }
     });
@@ -1943,4 +1946,5 @@ function startEnviroment(){
 //    });
     /* Initial Effect (Add: unchecked) HIDE */
     setPanels();
+    $("#aUnfold").click();
 }

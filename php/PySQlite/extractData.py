@@ -437,6 +437,93 @@ class extract:
 	return graph
 
 
+    def buildJSON_sansfa2(self,coords):
+	print "gonna build a mofo json without coordinates"
+	nodes = {}
+	edges = {}
+
+	for idNode in coords.nodes_iter():
+		if idNode[0]=="N":#If it is NGram
+			numID=int(idNode.split("::")[1])
+			nodeLabel= self.terms_array[numID]['term'].replace("&"," and ")
+			colorg=max(0,180-(100*self.terms_colors[numID]))
+			term_occ = self.terms_array[numID]['occurrences']
+
+			node = {}
+			node["type"] = "NGram"
+			node["label"] = nodeLabel
+			node["color"] = "19,"+str(colorg)+",244"
+			node["term_occ"] = term_occ
+			#node["x"] = str(coords[idNode][0])
+			#node["y"] = str(coords[idNode][1])
+			
+			nodes[idNode] = node
+
+		if idNode[0]=='D':#If it is Document
+			nodeLabel= self.scholars[idNode]['title']+" "+self.scholars[idNode]['first_name']+" "+self.scholars[idNode]['initials']+" "+self.scholars[idNode]['last_name']
+			color=""
+			if self.scholars_colors[self.scholars[idNode]['login']]==1:
+				color='243,183,19'
+			elif self.scholars[idNode]['job_market'] == "Yes":
+				color = '139,28,28'
+			else:
+				color = '78,193,127'
+
+			content=""
+			photo_url=self.scholars[idNode]['photo_url']
+			if photo_url != "":
+				content += '<img  src=http://main.csregistry.org/' + photo_url + ' width=' + str(self.imsize) + 'px  style=float:left;margin:5px>';
+			else:
+				if len(self.scholars)<2000:
+					im_id = math.floor(random.randint(0, 11))
+					content += '<img src=http://communityexplorer.csregistry.org/img/'  + str(im_id) +  '.png width='  + str(self.imsize) +  'px   style=float:left;margin:5px>'
+
+			content += '<b>Country: </b>' + self.scholars[idNode]['country'] + '</br>'
+
+			if self.scholars[idNode]['position'] != "":
+				content += '<b>Position: </b>' +self.scholars[idNode]['position'].replace("&"," and ")+ '</br>'
+
+			affiliation=""
+			if self.scholars[idNode]['lab'] != "":
+				affiliation += self.scholars[idNode]['lab']+ ','
+			if self.scholars[idNode]['affiliation'] != "":
+				affiliation += self.scholars[idNode]['affiliation']
+			if self.scholars[idNode]['affiliation'] != "" or self.scholars[idNode]['lab'] != "":
+				content += '<b>Affiliation: </b>' + affiliation.replace("&"," and ") + '</br>'
+			if len(self.scholars[idNode]['keywords']) > 3:
+				content += '<b>Keywords: </b>' + self.scholars[idNode]['keywords'][:-2].replace(",",", ")+'.</br>'
+			if self.scholars[idNode]['homepage'][0:3] == "www":
+				content += '[ <a href=http://' +self.scholars[idNode]['homepage'].replace("&"," and ")+ ' target=blank > View homepage </a ><br/>]'
+			elif self.scholars[idNode]['homepage'][0:4] == "http":
+				content += '[ <a href=' +self.scholars[idNode]['homepage'].replace("&"," and ")+ ' target=blank > View homepage </a ><br/>]'
+
+		
+			node = {}
+			node["type"] = "Document"
+			node["label"] = nodeLabel
+			node["color"] = color
+			node["term_occ"] = "12"
+			#node["x"] = str(coords[idNode][0])
+			#node["y"] = str(coords[idNode][1])
+			node["content"] = self.toHTML(content)
+
+			nodes[idNode] = node
+	e = 0	
+	for n in self.Graph.edges_iter():#Memory, what's wrong with you?
+		weight = str("%.2f" % self.Graph[n[0]][n[1]]['weight'])
+		edge = {}
+		edge["s"] = n[0] 
+		edge["t"] = n[1]
+		edge["w"] = str(self.Graph[n[0]][n[1]]['weight'])
+		edge["type"] = self.Graph[n[0]][n[1]]['type']
+		edges[str(e)] = edge
+		e+=1
+		#if e%1000 == 0:
+		#	print e
+	graph = {}
+	graph["nodes"] = nodes
+	graph["edges"] = edges
+	return graph
 
 
 

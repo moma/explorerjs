@@ -129,7 +129,13 @@ function changeHoverActive(img) {
         if ( img.src==fullurl+"hover_scholars.png" ) {
             changeButton("active_scholars.png");
             if(document.getElementById("viewType").src==fullurl+"status_macro_view.png"){
-                changeToMacro("social");
+                startLoader();
+                setTimeout(function () {
+                    changeToMacro("social");
+                    return stopLoader();
+                }, 0);
+                
+                //changeToMacro("social");
             }
             if(document.getElementById("viewType").src==fullurl+"status_meso_view.png"){
                 changeToMeso("social");
@@ -141,7 +147,12 @@ function changeHoverActive(img) {
         if ( img.src==fullurl+"hover_tags.png" ) { 
             changeButton("active_tags.png");
             if(document.getElementById("viewType").src==fullurl+"status_macro_view.png"){
-                changeToMacro("semantic");
+                startLoader();
+                setTimeout(function () {
+                    changeToMacro("semantic");
+                    return stopLoader();
+                }, 0);
+                //changeToMacro("semantic");
             }
             if(document.getElementById("viewType").src==fullurl+"status_meso_view.png"){
                 changeToMeso("semantic");

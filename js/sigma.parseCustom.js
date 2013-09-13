@@ -97,8 +97,10 @@ function extractFromJson(data){
                 id:i,
                 label:nodesNodes[i].label, 
                 size:1, 
-                x:nodesNodes[i].x, 
-                y:nodesNodes[i].y, 
+                //x:nodesNodes[i].x, 
+                //y:nodesNodes[i].y, 
+                x:Math.random(),
+                y:Math.random(),
                 type:"",
                 htmlCont:"",
                 color:color
