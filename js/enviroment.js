@@ -212,6 +212,107 @@ function justhide(){
 
 //=========================== < FILTERS-SLIDERS > ===========================//
 
+function updateEdgeFilter_attempt(edgeFilterName) {
+    pr("Updating filter "+edgeFilterName);
+    thing="";
+    if(edgeFilterName=="social") {
+        edgeFilterName="#sliderAEdgeWeight";
+        minvalue="#nodeAFilterMinValue";
+        maxvalue="#nodeAFilterMaxValue";
+        thing="nodes1";
+    }
+    if(edgeFilterName=="semantic") {
+        minvalue="#nodeBFilterMinValue";
+        maxvalue="#nodeBFilterMaxValue";
+        edgeFilterName="#sliderBEdgeWeight";
+        thing="nodes2";
+    }
+    edges=partialGraph._core.graph.edges.filter(function(e) {
+                    return !e['hidden'];
+          });
+    //pr(edges);
+    edgesByWeight=[];
+    for(var i in edges){
+        if(edges[i].hidden==false){
+            if(edges[i].label==thing){
+                if(typeof(edgesByWeight[edges[i].weight])=="undefined"){
+                    edgesByWeight[edges[i].weight]=[];
+                }
+                edgesByWeight[edges[i].weight].push(edges[i].id);
+            }
+        }
+    }
+    edgesSortedByWeight = ArraySortByKey(edgesByWeight, function(a,b){
+        return a-b
+    });
+    
+    edgeList = [];
+    for(var i in edgesSortedByWeight){
+        for(var j in edgesSortedByWeight[i].value){
+            edgeList.push(edgesSortedByWeight[i].value[j]);
+        }
+    }
+    
+    nbSteps=10;
+    nbEdges=edgeList.length;
+    nbEdgesLeft = nbEdges;
+    nbStepsLeft = nbSteps;
+    nbEdgesProcessed=0;
+    
+    pr("\t\tprinting edges:");
+    pr(edges);
+    
+    pr("\t\tprint edges sorted by weight:");
+    pr(edgesSortedByWeight);
+    
+    
+    pr("\t\tprinting the edgeList just generated");
+    pr(edgeList);
+    
+    $(edgeFilterName).slider({
+        range: true,
+        min: 0,
+        max: 11,
+        values: [0, 11],
+        step: 1,
+        animate: true,
+        slide: function(event, ui) {
+            $.doTimeout(300,function (){
+                //console.log("Rango Pesos Arista: "+ui.values[ 0 ]+" , "+ui.values[ 1 ]);                
+                for(i=0;i<nbSteps;i++){
+                    nbEdges_per_Step = Math.floor(nbEdgesLeft/nbStepsLeft);
+                    target_weight = edges[nbEdgesProcessed+nbEdges_per_Step].weight;
+                    //in construction
+                    nbEdgesLeft = nbEdges-nbEdgesProcessed;
+                    nbStepsLeft = nbSteps-i;
+                }
+                
+                
+                
+                
+//                for(i=0;i<normEdges.length;i++){
+//                    if(i>=ui.values[0] && i<=ui.values[1]){                        
+//                        for (var j in normEdges[i]){
+//                            id=normEdges[i][j];
+//                            unHideElem(id);
+//                        }
+//                    }
+//                    else {
+//                        for (var j in normEdges[i]){
+//                            hideElem(normEdges[i][j]);
+//                        }
+//                    }
+//                }
+//                pr("==========================================")
+//                partialGraph.draw();
+            });
+        }
+    });
+}
+
+
+
+
 function updateEdgeFilter(edgeFilterName) {
     pr("Updating filter "+edgeFilterName);
     thing="";
@@ -246,6 +347,20 @@ function updateEdgeFilter(edgeFilterName) {
         return a-b
     });
     
+    pr("\t\tedgesSortedByWeightt:");
+    pr(edgesSortedByWeight);
+    
+    edgeList = [];
+    for(var i in edgesSortedByWeight){
+        for(var j in edgesSortedByWeight[i].value){
+            edgeList.push(edgesSortedByWeight[i].value[j]);
+        }
+    }
+    pr("\t\tprinting the nodeList just generated");
+    pr(edgeList);
+    
+    
+    
     normEdges=[];
     cont=0;
     index=0;
@@ -262,7 +377,7 @@ function updateEdgeFilter(edgeFilterName) {
             }
         }
     }
-    
+        
     $(edgeFilterName).slider({
         range: true,
         min: 0,

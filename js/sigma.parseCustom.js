@@ -50,6 +50,7 @@ function parse(){
                 extractFromJson(data); 
                 stopLoader();
                 updateEdgeFilter("social");
+                //updateEdgeFilter_attempt("social");
                 updateNodeFilter("social");
                 pushSWClick("social");
                 cancelSelection(false);
