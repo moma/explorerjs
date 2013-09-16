@@ -15,6 +15,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import models.*;
 
 public class ExtractData {
 
@@ -43,7 +44,40 @@ public class ExtractData {
         }
     }
 
-    public ExtractData() throws Exception {
+    public ExtractData(ArrayList<Node> nodes, ArrayList<Edge> edges) {
+	nds = new ArrayList<ANode>();
+	egs = new ArrayList<AnEdge>();
+	for(Node n : nodes){
+		ANode neo = new ANode();
+		neo.setId(n.getId());
+		neo.setDegree(n.getOcc());
+		//n.getGroup();
+		//n.getsID();
+                double x = (0 + (int)(Math.random()*100))/100f;
+                double y = (0 + (int)(Math.random()*100))/100f;		
+                neo.setX(x);
+                neo.setY(y);
+		nds.add(neo);
+		//System.out.println(neo.getId()+": deg->"+neo.getDegree()+" - x:"+neo.x()+" - y:"+neo.y());
+	}
+
+	for(Edge e : edges){
+		AnEdge neo = new AnEdge();
+		neo.setSource(getNds().get(e.getSource()));
+		neo.setTarget(getNds().get(e.getTarget()));
+		neo.setWeight(e.getValue());
+		egs.add(neo);
+		//System.out.println(neo.getSource().getId()+" -> "+neo.getTarget().getId()+" : "+neo.getWeight());
+	}
+    }
+
+
+
+
+
+
+/*throws Exception {
+	
 
         JSONParser parser = new JSONParser();
         try {
@@ -117,6 +151,7 @@ public class ExtractData {
         }
 
     }
+*/
 
     public ArrayList<ANode> getNds() {
         return nds;

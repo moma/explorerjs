@@ -17,6 +17,7 @@ import org.codehaus.jackson.JsonToken;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import views.html.*;
 
@@ -50,6 +51,10 @@ public class Application extends Controller {
     }
 
     public static Result post()  throws JsonParseException, JsonMappingException, IOException {
+
+	    ArrayList<Node> nodes = new ArrayList<Node>();
+	    ArrayList<Edge> edges = new ArrayList<Edge>();
+
 	    System.out.println("Nodes\n");
 	    String nodesRAW = request().body().asFormUrlEncoded().get("nodes")[0];
 	    //ObjectMapper mapper = new ObjectMapper();
@@ -64,7 +69,8 @@ public class Application extends Controller {
 		
 		while (jp.nextToken() == JsonToken.START_OBJECT) {
 		  Node foobar = mapper.readValue(jp, Node.class);
-		  System.out.println(foobar.getId()+" - "+foobar.getOcc()+" - "+foobar.getGroup());
+		  nodes.add(foobar);
+		  //System.out.println(foobar.getId()+" - "+foobar.getOcc()+" - "+foobar.getGroup());
 		}
 		
 	    } catch (Exception e){
@@ -83,7 +89,8 @@ public class Application extends Controller {
 		
 		while (jp.nextToken() == JsonToken.START_OBJECT) {
 		  Edge foobar = mapper.readValue(jp, Edge.class);
-		  System.out.println(foobar.getSource()+" - "+foobar.getTarget()+" - "+foobar.getValue());
+		  edges.add(foobar);
+		  //System.out.println(foobar.getSource()+" - "+foobar.getTarget()+" - "+foobar.getValue());
 		}
 		
 	    } catch (Exception e){
@@ -94,10 +101,11 @@ public class Application extends Controller {
 	    s[1] = "mundo";
 	    Main m = new Main();
 	    try {
-		m.main(s);
+		m.main(s,nodes,edges);
 	    } catch(Exception e){
 		System.out.println(e);
 	    }
+	    System.out.println("C'est fini\n\n");
 	    return ok("lalal");
     }
 
