@@ -17,7 +17,7 @@ import simplejson as json
 app = Flask(__name__)
 
 
-@app.route("/getJSON")
+#@app.route("/getJSON")
 def main():
 	#I should be using the REST-format provided by Flask, 
 	#but we've json transactions between differents ports (localhost vs localhost:8080 for ex.)
@@ -26,26 +26,38 @@ def main():
 	#A GET example: localhost:8080/getJSON?unique_id=David__Chavalarias&it=2&callback=lalalala
 	#The following two lines exclude that callback parameter. 
 
-	unique_id = request.args['unique_id']
-	i = int(request.args['it'])
-	callb = request.args['callback']
+	#####unique_id = request.args['unique_id']
+	#####i = int(request.args['it'])
+	#####callb = request.args['callback']
 	#print unique_id+" + "+request.args['it']
 	#unique_id=sys.argv[1]
 	#i=int(sys.argv[2])
 	#start = time.time() #====
+	unique_id = "Elisa__Omodei"
 	db=SQLite(unique_id)
 	db.extract()       
+    
 	#end = time.time()	  #====
 	#seconds1=end-start
-	'''
+
 	#start = time.time() #====
-	run = FA2()
+	#run = FA2()
 	#for n in db.Graph.edges_iter():
 	#	print n[0] + "," + n[1]
 	#	pprint.pprint(  db.Graph[n[0]][n[1]] )
 	#print
-	graphArray = db.buildJSON(run.forceatlas2_layout(db.Graph,linlog=False,nohubs=False,iterations=i))
-	'''
+	#graphArray = db.buildJSON(run.forceatlas2_layout(db.Graph,linlog=False,nohubs=False,iterations=i))
+
+	
+	tempGraph = db.buildSimpleJSON(db.Graph)
+	#json.dumps(tempGraph)
+	import urllib
+	print "uno"
+	params = urllib.urlencode(tempGraph)
+	print "dos"
+	f = urllib.urlopen("http://localhost:9000/post", params)
+	#print "tres"
+
 	graphArray = db.buildJSON_sansfa2(db.Graph)
 	#nx.draw(db.Graph, positions)     
 	#end = time.time()	  #====
@@ -56,10 +68,11 @@ def main():
 	#plt.savefig(info+times+".png")
 	
 	#Yes, we've to use that holly callback, else... it doesn't wooork :)
-	return callb+"("+json.dumps(graphArray)+")"
+	#####return callb+"("+json.dumps(graphArray)+")"
 
 
     
 
 if __name__ == "__main__":
-    app.run(port=8080)
+	main()
+    #app.run(port=8080)
