@@ -54,6 +54,7 @@ def main():
 	import urllib
 	params = urllib.urlencode(tempGraph)
 	f = urllib.urlopen("http://localhost:9000/post", params)
+	print f.read() #<- FINALLY COORDINATES FROM FA2.java !!!
 	#print "tres"
 
 	graphArray = db.buildJSON_sansfa2(db.Graph)

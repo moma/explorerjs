@@ -55,7 +55,7 @@ public class Application extends Controller {
 	    ArrayList<Node> nodes = new ArrayList<Node>();
 	    ArrayList<Edge> edges = new ArrayList<Edge>();
 
-	    System.out.println("Nodes\n");
+	    //System.out.println("Nodes\n");
 	    String nodesRAW = request().body().asFormUrlEncoded().get("nodes")[0];
 	    //ObjectMapper mapper = new ObjectMapper();
 	    //mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
@@ -76,7 +76,7 @@ public class Application extends Controller {
 	    } catch (Exception e){
 		System.out.println(e);
 	    }
-	    System.out.println("\nLinks\n");
+	    //System.out.println("\nLinks\n");
 	    String linksRAW = request().body().asFormUrlEncoded().get("links")[0];
 	    //System.out.println(linksRAW);
 
@@ -97,16 +97,30 @@ public class Application extends Controller {
 		System.out.println(e);
 	    }
 	    String[] s = new String[2];
-	    s[0] = "hola";
-	    s[1] = "mundo";
+	    s[0] = "bonjour";
+	    s[1] = "monde";
 	    Main m = new Main();
 	    try {
-		m.main(s,nodes,edges);
+		ArrayList<ANode> nodesArrayList = m.main(s,nodes,edges);
+		Node[] ns = new Node[nodesArrayList.size()];	
+		int i = 0;
+		for(ANode n : nodesArrayList){
+			//System.out.println("( "+n.getId()+" , "+n.getDegree()+" , "+n.x()+" , "+n.y()+" )");
+			ns[i] = new Node();
+			ns[i].setId(n.getId());
+			ns[i].setsID(nodes.get(n.getId()).getsID());
+			ns[i].setX(n.x());
+			ns[i].setY(n.y());
+			ns[i].setOcc((int)n.getDegree());
+			i++;
+		}
+		return ok(Json.toJson(ns));
+
 	    } catch(Exception e){
 		System.out.println(e);
 	    }
 	    System.out.println("C'est fini\n\n");
-	    return ok("lalal");
+	    return ok("error");
     }
 
   

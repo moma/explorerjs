@@ -14,6 +14,25 @@ public class Node extends Model {
     private int occ;
     private int group;
     private String sID;
+    private double x;
+    private double y;
+
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+    
+    public void setX(double x) {
+        this.x = x;
+    }
+    
+    public void setY(double y) {
+        this.y = y;
+    }
 
     public int getId() {
         return id;
@@ -31,7 +50,7 @@ public class Node extends Model {
         this.occ = occ;
     }
 
-    public int getGroup() {
+    public int group() {
         return group;
     }
 

@@ -12,11 +12,10 @@ import java.util.ArrayList;
  * @author pksm3
  */
 public class Main {
-    public static ForceAtlas2 fa2;
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args, ArrayList<Node> nodes, ArrayList<Edge> edges) throws Exception {
+    public static ArrayList<ANode> main(String[] args, ArrayList<Node> nodes, ArrayList<Edge> edges) throws Exception {
         //System.out.println(Math.min(4, Math.max(1, Runtime.getRuntime().availableProcessors())));
 
         // TODO code application logic here
@@ -33,7 +32,7 @@ public class Main {
         
         for(int i=0; i<50; i++) fa2.goAlgo();
 		//fa2.atomicGo();        
-        //fa2.legraphe.showNodes();
+        return fa2.legraphe.getNds();
 
     }
 }
