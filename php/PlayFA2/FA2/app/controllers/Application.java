@@ -8,6 +8,7 @@ import play.mvc.Http.RequestBody;
 import java.util.Map;
 import play.data.DynamicForm;
 import models.*;
+import layoutsbyme.*;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
@@ -69,9 +70,34 @@ public class Application extends Controller {
 	    } catch (Exception e){
 		System.out.println(e);
 	    }
-	    //System.out.println("\nLinks\n");
-	    //String linksRAW = request().body().asFormUrlEncoded().get("links")[0];
+	    System.out.println("\nLinks\n");
+	    String linksRAW = request().body().asFormUrlEncoded().get("links")[0];
 	    //System.out.println(linksRAW);
+
+	    try {
+		linksRAW = linksRAW.replace("'","\"");
+		JsonFactory f = new JsonFactory();
+        	JsonParser jp = f.createJsonParser(linksRAW);
+        	ObjectMapper mapper = new ObjectMapper();
+		jp.nextToken();
+		
+		while (jp.nextToken() == JsonToken.START_OBJECT) {
+		  Edge foobar = mapper.readValue(jp, Edge.class);
+		  System.out.println(foobar.getSource()+" - "+foobar.getTarget()+" - "+foobar.getValue());
+		}
+		
+	    } catch (Exception e){
+		System.out.println(e);
+	    }
+	    String[] s = new String[2];
+	    s[0] = "hola";
+	    s[1] = "mundo";
+	    Main m = new Main();
+	    try {
+		m.main(s);
+	    } catch(Exception e){
+		System.out.println(e);
+	    }
 	    return ok("lalal");
     }
 
