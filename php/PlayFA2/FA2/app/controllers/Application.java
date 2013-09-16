@@ -7,6 +7,15 @@ import play.libs.Json;
 import play.mvc.Http.RequestBody;
 import java.util.Map;
 import play.data.DynamicForm;
+import models.*;
+
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.JsonToken;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import java.io.IOException;
 
 import views.html.*;
 
@@ -39,22 +48,30 @@ public class Application extends Controller {
 	return ok(res);
     }
 
-    public static Result post() {
+    public static Result post()  throws JsonParseException, JsonMappingException, IOException {
 	    System.out.println("Nodes\n");
 	    String nodesRAW = request().body().asFormUrlEncoded().get("nodes")[0];
-	    System.out.println(nodesRAW);
-	    /*
-	    ObjectMapper mapper = new ObjectMapper();
-	    mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-	    JsonNode df = mapper.readValue(nodesRAW, JsonNode.class);
-	    System.out.println(df.toString());
-	    */
-
-
-
-	    System.out.println("\nLinks\n");
-	    String linksRAW = request().body().asFormUrlEncoded().get("links")[0];
-	    System.out.println(linksRAW);
+	    //ObjectMapper mapper = new ObjectMapper();
+	    //mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+	    try {
+		nodesRAW = nodesRAW.replace("'","\"");
+		//nodesRAW = nodesRAW.substring(1, nodesRAW.length()-1) ;
+		JsonFactory f = new JsonFactory();
+        	JsonParser jp = f.createJsonParser(nodesRAW);
+        	ObjectMapper mapper = new ObjectMapper();
+		jp.nextToken();
+		
+		while (jp.nextToken() == JsonToken.START_OBJECT) {
+		  Node foobar = mapper.readValue(jp, Node.class);
+		  System.out.println(foobar.getId()+" - "+foobar.getOcc()+" - "+foobar.getGroup());
+		}
+		
+	    } catch (Exception e){
+		System.out.println(e);
+	    }
+	    //System.out.println("\nLinks\n");
+	    //String linksRAW = request().body().asFormUrlEncoded().get("links")[0];
+	    //System.out.println(linksRAW);
 	    return ok("lalal");
     }
 

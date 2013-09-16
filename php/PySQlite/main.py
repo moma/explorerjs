@@ -2,8 +2,8 @@
 
 from FA2 import FA2 as FA2
 from extractData import extract as SQLite
-import networkx as nx
-import matplotlib.pyplot as plt
+#import networkx as nx
+#import matplotlib.pyplot as plt
 #import time
 #import pprint
 
@@ -52,9 +52,7 @@ def main():
 	tempGraph = db.buildSimpleJSON(db.Graph)
 	#json.dumps(tempGraph)
 	import urllib
-	print "uno"
 	params = urllib.urlencode(tempGraph)
-	print "dos"
 	f = urllib.urlopen("http://localhost:9000/post", params)
 	#print "tres"
 
