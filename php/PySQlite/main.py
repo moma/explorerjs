@@ -17,7 +17,7 @@ import simplejson as json
 app = Flask(__name__)
 
 
-#@app.route("/getJSON")
+@app.route("/getJSON")
 def main():
 	#I should be using the REST-format provided by Flask, 
 	#but we've json transactions between differents ports (localhost vs localhost:8080 for ex.)
@@ -26,14 +26,15 @@ def main():
 	#A GET example: localhost:8080/getJSON?unique_id=David__Chavalarias&it=2&callback=lalalala
 	#The following two lines exclude that callback parameter. 
 
-	#####unique_id = request.args['unique_id']
-	#####i = int(request.args['it'])
-	#####callb = request.args['callback']
+	unique_id = request.args['unique_id']
+	i = int(request.args['it'])
+	callb = request.args['callback']
+	#print request.args['unique_id']+" : "+request.args['it']
 	#print unique_id+" + "+request.args['it']
 	#unique_id=sys.argv[1]
 	#i=int(sys.argv[2])
 	#start = time.time() #====
-	unique_id = "Elisa__Omodei"
+	#unique_id = "David__Chavalarias"
 	db=SQLite(unique_id)
 	db.extract()       
     
@@ -48,16 +49,18 @@ def main():
 	#print
 	#graphArray = db.buildJSON(run.forceatlas2_layout(db.Graph,linlog=False,nohubs=False,iterations=i))
 
-	
+
 	tempGraph = db.buildSimpleJSON(db.Graph)
 	#json.dumps(tempGraph)
 	import urllib
 	params = urllib.urlencode(tempGraph)
+	#print params
 	f = urllib.urlopen("http://localhost:9000/post", params)
-	print f.read() #<- FINALLY COORDINATES FROM FA2.java !!!
-	#print "tres"
+	spatializedgraph = f.read() #<- FINALLY COORDINATES FROM FA2.java !!!
+	#print spatializedgraph
 
-	graphArray = db.buildJSON_sansfa2(db.Graph)
+
+	graphArray = db.buildJSON_sansfa2(db.Graph,spatializedgraph)
 	#nx.draw(db.Graph, positions)     
 	#end = time.time()	  #====
 	#seconds2 = end-start
@@ -67,11 +70,11 @@ def main():
 	#plt.savefig(info+times+".png")
 	
 	#Yes, we've to use that holly callback, else... it doesn't wooork :)
-	#####return callb+"("+json.dumps(graphArray)+")"
+	return callb+"("+json.dumps(graphArray)+")"
 
 
     
 
 if __name__ == "__main__":
-	main()
-    #app.run(port=8080)
+	#main()
+	app.run(port=8080)

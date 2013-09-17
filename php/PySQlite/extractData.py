@@ -242,7 +242,7 @@ class extract:
     def toHTML(self,string):
 	return cgi.escape(string).encode("ascii", "xmlcharrefreplace")
 
-    def buildGEXF(self,coords):
+    def buildGEXF(self,graph):
 	print "gonna build a mofo gexf"	
 
 	gexf=""
@@ -263,7 +263,7 @@ class extract:
 	gexf += "</attributes>\n"
 	gexf += "<nodes>\n"
 
-	for idNode in coords:
+	for idNode in graph:
 		if idNode[0]=="N":#If it is NGram
 			numID=int(idNode.split("::")[1])
 			nodeLabel= self.terms_array[numID]['term'].replace("&"," and ")
@@ -272,7 +272,7 @@ class extract:
 
 			gexf += '<node id="'+idNode +'" label="'+nodeLabel+'">\n'
 			gexf += '<viz:color b="19" g="'+str(colorg)+'"  r="244"/>\n'
-			gexf += '<viz:position x="'+str(coords[idNode][0])+'"    y="'+str(coords[idNode][1])+'"  z="0" />\n'
+			gexf += '<viz:position x="'+str(graph[idNode][0])+'"    y="'+str(coords[idNode][1])+'"  z="0" />\n'
 			gexf += '<attvalues> <attvalue for="0" value="NGram"/>\n'
 			gexf += '<attvalue for="1" value="' +str(term_occ)+'"/>\n'
 			gexf += '<attvalue for="4" value="' +str(term_occ)+'"/>\n'
@@ -319,7 +319,7 @@ class extract:
 
 			gexf += '<node id="' +idNode+ '" label="' +nodeLabel+ '">\n'
 			gexf += '<viz:color '+color+'/>\n'
-			gexf += '<viz:position x="'+str(coords[idNode][0])+'"    y="'+str(coords[idNode][1])+'" z="0" />\n'
+			gexf += '<viz:position x="'+str(graph[idNode][0])+'"    y="'+str(coords[idNode][1])+'" z="0" />\n'
 			gexf += '<attvalues> <attvalue for="0" value="Document"/>\n'
 			if True:
 				gexf += '<attvalue for="1" value="12"/>\n'
@@ -437,12 +437,22 @@ class extract:
 	return graph
 
 
-    def buildJSON_sansfa2(self,coords):
-	print "gonna build a mofo json without coordinates"
+    def buildJSON_sansfa2(self,graph,coordsRAW):
+	print "printing in buildJSON_sansfa2()"
 	nodes = {}
 	edges = {}
+	#print coordsRAW
+	import json
+	xy = json.loads(coordsRAW)
+	#print xy
+	coords = {}
+	for i in xy:
+		coords[i['sID']] = {}
+		coords[i['sID']]['x'] = i['x']
+		coords[i['sID']]['y'] = i['y']
+	#print coords
 
-	for idNode in coords.nodes_iter():
+	for idNode in graph.nodes_iter():
 		if idNode[0]=="N":#If it is NGram
 			numID=int(idNode.split("::")[1])
 			nodeLabel= self.terms_array[numID]['term'].replace("&"," and ")
@@ -454,8 +464,8 @@ class extract:
 			node["label"] = nodeLabel
 			node["color"] = "19,"+str(colorg)+",244"
 			node["term_occ"] = term_occ
-			#node["x"] = str(coords[idNode][0])
-			#node["y"] = str(coords[idNode][1])
+			node["x"] = str(coords[idNode]['x'])
+			node["y"] = str(coords[idNode]['y'])
 			
 			nodes[idNode] = node
 
@@ -503,8 +513,8 @@ class extract:
 			node["label"] = nodeLabel
 			node["color"] = color
 			node["term_occ"] = "12"
-			#node["x"] = str(coords[idNode][0])
-			#node["y"] = str(coords[idNode][1])
+			node["x"] = str(coords[idNode]['x'])
+			node["y"] = str(coords[idNode]['y'])
 			node["content"] = self.toHTML(content)
 
 			nodes[idNode] = node
@@ -528,19 +538,19 @@ class extract:
 
 
 
-    def buildSimpleJSON(self,coords):
-	print "gonna build a mofo json without coordinates"	
+    def buildSimpleJSON(self,graph):
+	print "gonna build a mofo json without coords"	
 	nodes = {}
 	nodes2 = []
 	edges = []
 	countnodes=0
 	
-	#for n in coords.edges_iter():
+	#for n in graph.edges_iter():
 	#	print n[0] + "," + n[1]
-	#	pprint.pprint(  coords[n[0]][n[1]] )
+	#	pprint.pprint(  graph[n[0]][n[1]] )
 	
 
-	for idNode in coords.nodes_iter():
+	for idNode in graph.nodes_iter():
 		if idNode[0]=="N":#If it is NGram
 			numID=int(idNode.split("::")[1])
 			nodeLabel= self.terms_array[numID]['term'].replace("&"," and ")

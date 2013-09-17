@@ -78,7 +78,6 @@ public class Application extends Controller {
 	    }
 	    //System.out.println("\nLinks\n");
 	    String linksRAW = request().body().asFormUrlEncoded().get("links")[0];
-	    //System.out.println(linksRAW);
 
 	    try {
 		linksRAW = linksRAW.replace("'","\"");
@@ -114,12 +113,13 @@ public class Application extends Controller {
 			ns[i].setOcc((int)n.getDegree());
 			i++;
 		}
+		//System.out.println(Json.toJson(ns));
+	    	System.out.println("C'est fini en fait\n\n");
 		return ok(Json.toJson(ns));
 
 	    } catch(Exception e){
 		System.out.println(e);
 	    }
-	    System.out.println("C'est fini\n\n");
 	    return ok("error");
     }
 
