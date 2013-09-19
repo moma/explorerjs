@@ -144,6 +144,7 @@ function cancelSelection (fromTagCloud) {
         $("#information").html("");
         $("#searchinput").val("");
         $("#switchbutton").hide();
+        $("#tips").html(getTips());
     }
 }
 
@@ -577,6 +578,7 @@ function updateLeftPanel(){
     $("#names").html(names); //Information extracted, just added
     $("#opossiteNodes").html(opossitesNodes); //Information extracted, just added
     $("#information").html(information); //Information extracted, just added
+    $("#tips").html("");
         
     /***** The animation *****/
     _cG = $("#leftcolumn");
@@ -1087,6 +1089,7 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
                 $("#names").html(""); //Information extracted, just added
                 $("#opossiteNodes").html(""); //Information extracted, just added
                 $("#information").html("");
+                $("#tips").html(getTips());
                 changeButton("unselectNodes");
                 cancelSelection(false);
         }
@@ -1485,6 +1488,7 @@ function selectOpossites (list){//Expanding selection
                 $("#names").html(""); //Information extracted, just added
                 $("#opossiteNodes").html(""); //Information extracted, just added
                 $("#information").html("");
+                $("#tips").html(getTips());
                 changeButton("unselectNodes");
                 cancelSelection(false);
     }
@@ -1591,6 +1595,30 @@ function savePNG(){
         Canvas2Image.saveAsPNG(oCanvas, false, 100, 100);  
         */
     });
+}
+
+function getTips(){
+    text = 
+        "<br>"+
+        "Basic Interactions:"+
+        "<ul>"+
+        "<li>Click on a node to select/unselect and get its information. In case of multiple selection, the button unselect clears all selections.</li>"+
+        "<li>The switch button switch allows to change the view type.</li>"+
+        "</ul>"+
+        "<br>"+
+        "Graph manipulation:"+
+        "<ul>"+
+        "<li>Link and node sizes indicate their strength.</li>"+
+        "<li>To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.</li>"+
+        "<li>To select a more of less specific area of the graph, use the 'nodes filter' slider.</li>"+
+        "</ul>"+
+        "<br>"+
+        "Micro/Macro view:"+
+        "<ul>"+
+        "<li>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.</li>"+
+        "<li>Click on the 'all nodes' tab below to view the full clickable list of nodes.</li>"+
+        "</ul>";
+    return text;
 }
 
 function setPanels(){
@@ -1731,6 +1759,7 @@ function setPanels(){
             if(!is_empty(selections)){
                 cancelSelection(false);
                 $("#information").html("");
+                $("#tips").html(getTips());
 //                _cG = $("#leftcolumn");    
 //                _cG.animate({
 //                    "left" : "-" + _cG.width() + "px"
@@ -1862,6 +1891,7 @@ function switchSelection(){
 }
 
 function startEnviroment(){
+    $("#tips").html(getTips());
     $('#sigma-example').css('background-color','white');
     $("#category-B").hide();
     $("#labelchange").hide();
