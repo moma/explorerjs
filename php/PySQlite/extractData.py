@@ -242,7 +242,10 @@ class extract:
     def toHTML(self,string):
 	return cgi.escape(string).encode("ascii", "xmlcharrefreplace")
 
-    def buildGEXF(self,graph):
+    def iterNodeAtts(self):
+	print "asdf"
+
+    def buildGEXF(self,coords):
 	print "gonna build a mofo gexf"	
 
 	gexf=""
@@ -263,7 +266,7 @@ class extract:
 	gexf += "</attributes>\n"
 	gexf += "<nodes>\n"
 
-	for idNode in graph:
+	for idNode in coords:
 		if idNode[0]=="N":#If it is NGram
 			numID=int(idNode.split("::")[1])
 			nodeLabel= self.terms_array[numID]['term'].replace("&"," and ")
@@ -272,7 +275,7 @@ class extract:
 
 			gexf += '<node id="'+idNode +'" label="'+nodeLabel+'">\n'
 			gexf += '<viz:color b="19" g="'+str(colorg)+'"  r="244"/>\n'
-			gexf += '<viz:position x="'+str(graph[idNode][0])+'"    y="'+str(coords[idNode][1])+'"  z="0" />\n'
+			gexf += '<viz:position x="'+str(coords[idNode][0])+'"    y="'+str(coords[idNode][1])+'"  z="0" />\n'
 			gexf += '<attvalues> <attvalue for="0" value="NGram"/>\n'
 			gexf += '<attvalue for="1" value="' +str(term_occ)+'"/>\n'
 			gexf += '<attvalue for="4" value="' +str(term_occ)+'"/>\n'
@@ -319,7 +322,7 @@ class extract:
 
 			gexf += '<node id="' +idNode+ '" label="' +nodeLabel+ '">\n'
 			gexf += '<viz:color '+color+'/>\n'
-			gexf += '<viz:position x="'+str(graph[idNode][0])+'"    y="'+str(coords[idNode][1])+'" z="0" />\n'
+			gexf += '<viz:position x="'+str(coords[idNode][0])+'"    y="'+str(coords[idNode][1])+'" z="0" />\n'
 			gexf += '<attvalues> <attvalue for="0" value="Document"/>\n'
 			if True:
 				gexf += '<attvalue for="1" value="12"/>\n'
@@ -485,7 +488,7 @@ class extract:
 				content += '<img  src=http://main.csregistry.org/' + photo_url + ' width=' + str(self.imsize) + 'px  style=float:left;margin:5px>';
 			else:
 				if len(self.scholars)<2000:
-					im_id = math.floor(random.randint(0, 11))
+					im_id = int(math.floor(random.randint(0, 11)))
 					content += '<img src=http://communityexplorer.csregistry.org/img/'  + str(im_id) +  '.png width='  + str(self.imsize) +  'px   style=float:left;margin:5px>'
 
 			content += '<b>Country: </b>' + self.scholars[idNode]['country'] + '</br>'
@@ -587,8 +590,9 @@ class extract:
 				content += '<img  src=http://main.csregistry.org/' + photo_url + ' width=' + str(self.imsize) + 'px  style=float:left;margin:5px>';
 			else:
 				if len(self.scholars)<2000:
-					im_id = math.floor(random.randint(0, 11))
-					content += '<img src=http://communityexplorer.csregistry.org/img/'  + str(im_id) +  '.png width='  + str(self.imsize) +  'px   style=float:left;margin:5px>'
+					im_id = int(math.floor(random.randint(0, 11)))
+					content += '<img src=http://communityexplorer.csregistry.org/img/'  + str(im_id) +  '.png width='  + str(self.imsize) +  'px   style=float:left;margin:5px>'					
+					#print '<img src=http://communityexplorer.csregistry.org/img/'  + str(im_id) +  '.png'
 
 			content += '<b>Country: </b>' + self.scholars[idNode]['country'] + '</br>'
 
