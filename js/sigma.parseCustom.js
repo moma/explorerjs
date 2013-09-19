@@ -40,7 +40,7 @@ function parse(){
         unique_id = getUrlParam.nodeidparam; 
         $.ajax({
             type: 'GET',
-            url: "http://localhost:8080/getJSON",
+            url: "http://tina.iscpif.fr/explorerjs/php/bridgeClientServer.php",
             data: "unique_id="+unique_id+"&it="+iterationsFA2,
             contentType: "application/json",
             dataType: 'jsonp',

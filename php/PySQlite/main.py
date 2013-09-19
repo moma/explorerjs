@@ -28,7 +28,7 @@ def main():
 
 	unique_id = request.args['unique_id']
 	i = int(request.args['it'])
-	callb = request.args['callback']
+	#callb = request.args['callback']
 	#print request.args['unique_id']+" : "+request.args['it']
 	#print unique_id+" + "+request.args['it']
 	#unique_id=sys.argv[1]
@@ -51,7 +51,6 @@ def main():
 
 
 	tempGraph = db.buildSimpleJSON(db.Graph)
-	#json.dumps(tempGraph)
 	import urllib
 	params = urllib.urlencode(tempGraph)
 	#print params
@@ -70,7 +69,8 @@ def main():
 	#plt.savefig(info+times+".png")
 	
 	#Yes, we've to use that holly callback, else... it doesn't wooork :)
-	return callb+"("+json.dumps(graphArray)+")"
+	#return callb+"("+json.dumps(graphArray)+")"
+	return json.dumps(graphArray)
 
 
     
