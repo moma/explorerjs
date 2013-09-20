@@ -21,18 +21,35 @@ function parse(){
     //"http://localhost:5000/"+unique_id+"/"+iterations;
     //http://localhost:8080/getJSON?callback=xxx&unique_id=Elisa__Omodei&it=3&_=1377043258090
     startLoader();
-    if(getUrlParam.nodeidparam.indexOf("__")===-1){
-        //If you want to MAP by attribute......
-        gexfhttp = window.XMLHttpRequest ?
-                    new XMLHttpRequest() :
-                    new ActiveXObject('Microsoft.XMLHTTP');
-        gexfPath = "php/getgraph.php?query="+getUrlParam.nodeidparam;
-        pr(gexfPath);
-        gexfhttp.open('GET', gexfPath, false);
-        gexfhttp.send();
-        gexf = gexfhttp.responseXML;
-        fullExtract();  
-        stopLoader();
+    if(getUrlParam.nodeidparam.indexOf("__")===-1){        
+        //gexfPath = "php/bridgeClientServer_filter.php?query="+getUrlParam.nodeidparam;
+        //pr(gexfPath)
+        $.ajax({
+            type: 'GET',
+            url: "php/bridgeClientServer_filter.php",
+            data: "query="+getUrlParam.nodeidparam,
+            contentType: "application/json",
+            dataType: 'jsonp',
+            async: false,
+            success : function(data){ 
+                //pr("unique_id="+unique_id+"&it="+iterationsFA2);
+                extractFromJson(data); 
+                stopLoader();
+                updateEdgeFilter("social");
+                //updateEdgeFilter_attempt("social");
+                updateNodeFilter("social");
+                pushSWClick("social");
+                cancelSelection(false);
+                console.log("Parsing complete.");     
+                partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8).draw();
+                partialGraph.startForceAtlas2();   
+//
+                startEnviroment(); 
+            },
+            error: function(){ 
+                pr("Page Not found.");
+            }
+        });
         return true;
     }
     else {
@@ -40,7 +57,7 @@ function parse(){
         unique_id = getUrlParam.nodeidparam; 
         $.ajax({
             type: 'GET',
-            url: "http://tina.iscpif.fr/explorerjs/php/bridgeClientServer.php",
+            url: "php/bridgeClientServer.php",
             data: "unique_id="+unique_id+"&it="+iterationsFA2,
             contentType: "application/json",
             dataType: 'jsonp',

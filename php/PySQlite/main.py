@@ -26,17 +26,25 @@ def main():
 	#A GET example: localhost:8080/getJSON?unique_id=David__Chavalarias&it=2&callback=lalalala
 	#The following two lines exclude that callback parameter. 
 
-	unique_id = request.args['unique_id']
-	i = int(request.args['it'])
-	#callb = request.args['callback']
-	#print request.args['unique_id']+" : "+request.args['it']
-	#print unique_id+" + "+request.args['it']
-	#unique_id=sys.argv[1]
-	#i=int(sys.argv[2])
-	#start = time.time() #====
-	#unique_id = "David__Chavalarias"
-	db=SQLite(unique_id)
-	db.extract()       
+	#query = request.args['query']
+	#{"categorya"%3A"Keywords"%2C"categoryb"%3A"Scholars"%2C"keywords"%3A[]%2C"countries"%3A["Chile"]%2C"laboratories"%3A[]%2C"coloredby"%3A[]%2C"tags"%3A[]%2C"organizations"%3A[]}
+	
+	if request.args.has_key("query"):
+		db=SQLite("")
+		db.extract2(request.args['query'])
+	else:
+		unique_id = request.args['unique_id']
+		i = int(request.args['it'])
+		#print "query: "+query+"."
+		#callb = request.args['callback']
+		#print request.args['unique_id']+" : "+request.args['it']
+		#print unique_id+" + "+request.args['it']
+		#unique_id=sys.argv[1]
+		#i=int(sys.argv[2])
+		#start = time.time() #====
+		#unique_id = "David__Chavalarias"
+		db=SQLite(unique_id)
+		db.extract()       
     
 	#end = time.time()	  #====
 	#seconds1=end-start
