@@ -240,44 +240,76 @@ class extract:
 					self.Graph.add_edge( source , target , {'weight':weight,'type':"nodes1"})
 
 
+    def test(self,daquery):
+	try:
+            	for row in self.cursor.execute(daquery):
+			info = {}
+			info['id'] = row['id']
+			ide="D::"+str(row['id']);
+			info['unique_id'] = row['unique_id']
+			info['photo_url'] = row['photo_url']
+			info['first_name'] = row['first_name']
+			info['initials'] = row['initials']
+			info['last_name'] = row['last_name']
+			info['nb_keywords'] = row['nb_keywords']
+			info['css_voter'] = row['css_voter']
+			info['css_member'] = row['css_member']
+			info['keywords_ids'] = row['keywords_ids'].split(',');
+			info['keywords'] = row['keywords']
+			info['country'] = row['country']
+			info['homepage'] = row['homepage']
+			info['lab'] = row['lab'];
+			info['affiliation'] = row['affiliation']
+			info['lab2'] = row['lab2']
+			info['affiliation2'] = row['affiliation2']
+			info['homepage'] = row['homepage']
+			info['title'] = row['title']
+			info['position'] = row['position']
+			info['job_market'] = row['job_market']
+			info['login'] = row['login']
+			self.scholars[ide] = info;
+			print self.scholars[ide]
+			print 
+			res1 = self.cursor.fetchone()#res1++
+
+	except Exception as error:
+		print "sql3:\t"+daquery
+		print error
+	
 
 
     def extract2(self,daquery):
 	try:
-			self.cursor.execute(daquery)
-			res3=self.cursor.fetchall()
-			n=len(res3)#in the DB, there are unique_ids duplicated
-			info = {};
-			#With (n-1) we're fetching only the last result.
-			ide="D::"+str(res3[n-1]['id']);
-			info['id'] = ide;	
-			info['unique_id'] = res3[n-1]['unique_id'];
-			info['photo_url'] = res3[n-1]['photo_url'];
-			info['first_name'] = res3[n-1]['first_name'];
-			info['initials'] = res3[n-1]['initials'];
-			info['last_name'] = res3[n-1]['last_name'];
-			info['nb_keywords'] = res3[n-1]['nb_keywords'];
-			info['css_voter'] = res3[n-1]['css_voter'];
-			info['css_member'] = res3[n-1]['css_member'];
-			info['keywords_ids'] = res3[n-1]['keywords_ids'].split(',');
-			info['keywords'] = res3[n-1]['keywords'];
-			info['country'] = res3[n-1]['country'];
-			info['homepage'] = res3[n-1]['homepage'];
-			info['lab'] = res3[n-1]['lab'];
-			info['affiliation'] = res3[n-1]['affiliation'];
-			info['lab2'] = res3[n-1]['lab2'];
-			info['affiliation2'] = res3[n-1]['affiliation2'];
-			info['homepage'] = res3[n-1]['homepage'];
-			info['title'] = res3[n-1]['title'];
-			info['position'] = res3[n-1]['position'];
-			info['job_market'] = res3[n-1]['job_market'];
-			info['login'] = res3[n-1]['login'];
+            	for row in self.cursor.execute(daquery):
+			info = {}
+			info['id'] = row['id']
+			ide="D::"+str(row['id']);
+			info['unique_id'] = row['unique_id']
+			info['photo_url'] = row['photo_url']
+			info['first_name'] = row['first_name']
+			info['initials'] = row['initials']
+			info['last_name'] = row['last_name']
+			info['nb_keywords'] = row['nb_keywords']
+			info['css_voter'] = row['css_voter']
+			info['css_member'] = row['css_member']
+			info['keywords_ids'] = row['keywords_ids'].split(',');
+			info['keywords'] = row['keywords']
+			info['country'] = row['country']
+			info['homepage'] = row['homepage']
+			info['lab'] = row['lab'];
+			info['affiliation'] = row['affiliation']
+			info['lab2'] = row['lab2']
+			info['affiliation2'] = row['affiliation2']
+			info['homepage'] = row['homepage']
+			info['title'] = row['title']
+			info['position'] = row['position']
+			info['job_market'] = row['job_market']
+			info['login'] = row['login']
 			self.scholars[ide] = info;
 
 	except Exception as error:
-			print "sql3:\t"+daquery
-			print error
-
+		print "sql3:\t"+daquery
+		print error
 
 	# génère le gexf
 	# include('gexf_generator.php');
