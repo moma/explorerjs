@@ -54,6 +54,8 @@ public class Application extends Controller {
 
 	    ArrayList<Node> nodes = new ArrayList<Node>();
 	    ArrayList<Edge> edges = new ArrayList<Edge>();
+	    String itsRAW = request().body().asFormUrlEncoded().get("it")[0];
+	    int iterations = Integer.parseInt(itsRAW);
 
 	    //System.out.println("Nodes\n");
 	    String nodesRAW = request().body().asFormUrlEncoded().get("nodes")[0];
@@ -100,7 +102,7 @@ public class Application extends Controller {
 	    s[1] = "monde";
 	    Main m = new Main();
 	    try {
-		ArrayList<ANode> nodesArrayList = m.main(s,nodes,edges);
+		ArrayList<ANode> nodesArrayList = m.main(s,nodes,edges,iterations);
 		Node[] ns = new Node[nodesArrayList.size()];	
 		int i = 0;
 		for(ANode n : nodesArrayList){

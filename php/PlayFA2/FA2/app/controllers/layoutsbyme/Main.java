@@ -15,7 +15,7 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static ArrayList<ANode> main(String[] args, ArrayList<Node> nodes, ArrayList<Edge> edges) throws Exception {
+    public static ArrayList<ANode> main(String[] args, ArrayList<Node> nodes, ArrayList<Edge> edges, int iterations) throws Exception {
         //System.out.println(Math.min(4, Math.max(1, Runtime.getRuntime().availableProcessors())));
 
         // TODO code application logic here
@@ -30,7 +30,7 @@ public class Main {
         
         //fa2.legraphe.showNodes();
         
-        for(int i=0; i<50; i++) fa2.goAlgo();
+        for(int i=0; i<iterations; i++) fa2.goAlgo();
 		//fa2.atomicGo();        
         return fa2.legraphe.getNds();
 

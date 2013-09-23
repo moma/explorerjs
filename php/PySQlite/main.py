@@ -29,12 +29,13 @@ def main():
 	#query = request.args['query']
 	#{"categorya"%3A"Keywords"%2C"categoryb"%3A"Scholars"%2C"keywords"%3A[]%2C"countries"%3A["Chile"]%2C"laboratories"%3A[]%2C"coloredby"%3A[]%2C"tags"%3A[]%2C"organizations"%3A[]}
 	
+	i = int(request.args['it'])
+
 	if request.args.has_key("query"):
 		db=SQLite("")
 		db.extract2(request.args['query'])
 	else:
 		unique_id = request.args['unique_id']
-		i = int(request.args['it'])
 		#print "query: "+query+"."
 		#callb = request.args['callback']
 		#print request.args['unique_id']+" : "+request.args['it']
@@ -57,8 +58,8 @@ def main():
 	#print
 	#graphArray = db.buildJSON(run.forceatlas2_layout(db.Graph,linlog=False,nohubs=False,iterations=i))
 
-
 	tempGraph = db.buildSimpleJSON(db.Graph)
+	tempGraph['it'] = i
 	import urllib
 	params = urllib.urlencode(tempGraph)
 	#print params

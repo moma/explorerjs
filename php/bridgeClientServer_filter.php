@@ -52,6 +52,7 @@ function objectToArray($d) {
 /*$gexf = '<?xml version="1.0" encoding="UTF-8"?>';*/
 $data = json_decode($_GET['query']);
 $data = objectToArray($data);
+$iterations = $_GET['it'];
 
 //echo json_decode('{ countries: [ "France" ]}');
 //$json = '{"a":1,"b":2,"c":3,"d":4,"e":5}';
@@ -185,7 +186,7 @@ if (strlen($f) > 0) {
 
 #echo $sql;
 include("curlGET.php");
-$url="http://localhost:8080/getJSON?query=".urlencode($sql);
+$url="http://localhost:8080/getJSON?query=".urlencode($sql)."&it=".$iterations;
 #echo $url;
 
 $res=remote_get_contents($url);
