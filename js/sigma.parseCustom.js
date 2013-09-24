@@ -54,6 +54,7 @@ function parse(){
     }
     else {
         //If you're searching a specific scholar
+        unique_id = getUrlParam.nodeidparam;
         $.ajax({
             type: 'GET',
             url: "php/bridgeClientServer.php",

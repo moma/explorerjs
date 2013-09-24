@@ -1,10 +1,11 @@
 // Mathieu Jacomy @ Sciences Po Médialab & WebAtlas
 // (requires sigma.js to be loaded)
+var nodesFA2;
+var edgesFA2;
 sigma.forceatlas2 = sigma.forceatlas2 || {};
-sigma.forceatlas2.ForceAtlas2 = function(graph) {
+sigma.forceatlas2.ForceAtlas2 = function() {
   sigma.classes.Cascade.call(this);
   var self = this;
-  this.graph = graph;
 
   this.p = {
     linLogMode: false,
@@ -36,7 +37,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
   this.init = function() {
     self.state = {step: 0, index: 0};
 
-    self.graph.nodes.forEach(function(n) {
+    nodesFA2.forEach(function(n) {
       if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
         n.fa2 = {
           mass: 1 + n.degree,
@@ -56,25 +57,15 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
   }
 
   this.atomicGo = function() {
-    var graph = self.graph;
-    var nodes = graph.nodes;/*.filter(function(n) {
-                    return !n['hidden'];
-                }).map(function(n) {
-                    return n;
-                });*/
-    var edges = graph.edges;/*.filter(function(e) {
-                    return !e['hidden'];
-                }).map(function(e) {
-                    return e;
-                });*/
-    
+      
+    pr(edgesFA2.length);
     var cInt = self.p.complexIntervals;
     var sInt = self.p.simpleIntervals;
 
     switch (self.state.step) {
       case 0: // Pass init
         // Initialise layout data
-        nodes.forEach(function(n) {
+        nodesFA2.forEach(function(n) {
           if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
             if(n.fa2) {
               n.fa2.mass = 1 + n.degree;
@@ -93,21 +84,20 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
             }
           }
         });
-        
 
         // If Barnes Hut active, initialize root region
         if (self.p.barnesHutOptimize) {
-          self.rootRegion = new sigma.forceatlas2.Region(nodes, 0);
+          self.rootRegion = new sigma.forceatlas2.Region(nodesFA2, 0);
           self.rootRegion.buildSubRegions();
         }
 
         // If outboundAttractionDistribution active, compensate.
         if (self.p.outboundAttractionDistribution) {
           self.p.outboundAttCompensation = 0;
-          nodes.forEach(function(n) {
+          nodesFA2.forEach(function(n) {
             self.p.outboundAttCompensation += n.fa2.mass;
           });
-          self.p.outboundAttCompensation /= nodes.length;
+          self.p.outboundAttCompensation /= nodesFA2.length;
         }
         self.state.step = 1;
         self.state.index = 0;
@@ -126,12 +116,12 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           // Pass to the scope of forEach
           var barnesHutTheta = self.p.barnesHutTheta;
           var i = self.state.index;
-          while (i < nodes.length && i < self.state.index + cInt) {
-            var n = nodes[i++];
+          while (i < nodesFA2.length && i < self.state.index + cInt) {
+            var n = nodesFA2[i++];
             if(n.fa2)
               rootRegion.applyForce(n, Repulsion, barnesHutTheta);
           }
-          if (i == nodes.length) {
+          if (i == nodesFA2.length) {
             self.state.step = 2;
             self.state.index = 0;
           } else {
@@ -139,22 +129,21 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           }
         } else {
           var i1 = self.state.index;
-          while (i1 < nodes.length && i1 < self.state.index + cInt) {
-            var n1 = nodes[i1++];
+          while (i1 < nodesFA2.length && i1 < self.state.index + cInt) {
+            var n1 = nodesFA2[i1++];
             if(n1.fa2)
-              nodes.forEach(function(n2, i2) {
+              nodesFA2.forEach(function(n2, i2) {
                 if (i2 < i1 && n2.fa2) {
                   Repulsion.apply_nn(n1, n2);
                 }
               });
           }
-          if (i1 == nodes.length) {
+          if (i1 == nodesFA2.length) {
             self.state.step = 2;
             self.state.index = 0;
           } else {
             self.state.index = i1;
           }
-          
         }
         return true;
         break;
@@ -173,13 +162,13 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         scalingRatio = self.p.scalingRatio;
 
         var i = self.state.index;
-        while (i < nodes.length && i < self.state.index + sInt) {
-          var n = nodes[i++];
+        while (i < nodesFA2.length && i < self.state.index + sInt) {
+          var n = nodesFA2[i++];
           if (n.fa2)
             Gravity.apply_g(n, gravity / scalingRatio);
         }
 
-        if (i == nodes.length) {
+        if (i == nodesFA2.length) {
           self.state.step = 3;
           self.state.index = 0;
         } else {
@@ -200,18 +189,18 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
 
         var i = self.state.index;
         if (self.p.edgeWeightInfluence == 0) {
-          while (i < edges.length && i < self.state.index + cInt) {
-            var e = edges[i++];
+          while (i < edgesFA2.length && i < self.state.index + cInt) {
+            var e = edgesFA2[i++];
             Attraction.apply_nn(e.source, e.target, 1);
           }
         } else if (self.p.edgeWeightInfluence == 1) {
-          while (i < edges.length && i < self.state.index + cInt) {
-            var e = edges[i++];
+          while (i < edgesFA2.length && i < self.state.index + cInt) {
+            var e = edgesFA2[i++];
             Attraction.apply_nn(e.source, e.target, e.weight || 1);
           }
         } else {
-          while (i < edges.length && i < self.state.index + cInt) {
-            var e = edges[i++];
+          while (i < edgesFA2.length && i < self.state.index + cInt) {
+            var e = edgesFA2[i++];
             Attraction.apply_nn(
               e.source, e.target,
               Math.pow(e.weight || 1, self.p.edgeWeightInfluence)
@@ -219,7 +208,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           }
         }
 
-        if (i == edges.length) {
+        if (i == edgesFA2.length) {
           self.state.step = 4;
           self.state.index = 0;
         } else {
@@ -235,7 +224,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         var swingingSum=0;
         var promdxdy=0;  /**/
 
-        nodes.forEach(function(n) {
+        nodesFA2.forEach(function(n) {
           var fixed = n.fixed || false;
           if (!fixed && n.fa2) {
             var swinging = Math.sqrt(Math.pow(n.fa2.old_dx - n.fa2.dx, 2) +
@@ -257,13 +246,13 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
 
         self.p.totalSwinging = totalSwinging;
         
-        var convg= ((Math.pow(nodes.length,2))/promdxdy);    /**/
-        var swingingVSnodes_length = swingingSum/nodes.length;     /**/
+        var convg= ((Math.pow(nodesFA2.length,2))/promdxdy);    /**/
+        var swingingVSnodes_length = swingingSum/nodesFA2.length;     /**/
         if(convg > swingingVSnodes_length){ 
-            if(numberOfDocs==nodes.length){
+            if(numberOfDocs==nodesFA2.length){
                 socialConverged++;
             }
-            if(numberOfNGrams==nodes.length ){
+            if(numberOfNGrams==nodesFA2.length ){
                 semanticConverged++;
             }
             pr("\tI'm going to apply the stop criteria!");
@@ -287,7 +276,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
                        );
 
         // Save old coordinates
-        nodes.forEach(function(n) {
+        nodesFA2.forEach(function(n) {
           n.old_x = +n.x;
           n.old_y = +n.y;
         });
@@ -302,8 +291,8 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           var speed = self.p.speed;
           // If nodes overlap prevention is active,
           // it's not possible to trust the swinging mesure.
-          while (i < nodes.length && i < self.state.index + sInt) {
-            var n = nodes[i++];
+          while (i < nodesFA2.length && i < self.state.index + sInt) {
+            var n = nodesFA2[i++];
             var fixed = n.fixed || false;
             if (!fixed && n.fa2) {
               // Adaptive auto-speed: the speed of each node is lowered
@@ -327,8 +316,8 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           }
         } else {
           var speed = self.p.speed;
-          while (i < nodes.length && i < self.state.index + sInt) {
-            var n = nodes[i++];
+          while (i < nodesFA2.length && i < self.state.index + sInt) {
+            var n = nodesFA2[i++];
             var fixed = n.fixed || false;
             if (!fixed && n.fa2) {
               // Adaptive auto-speed: the speed of each node is lowered
@@ -347,7 +336,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
           }
         }
 
-        if (i == nodes.length) {
+        if (i == nodesFA2.length) {
           self.state.step = 0;
           self.state.index = 0;
           return false;
@@ -364,7 +353,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
   }
 
   this.end = function() {
-    this.graph.nodes.forEach(function(n) {
+    nodesFA2.forEach(function(n) {
         if(!n.hidden){
             n.fa2 = null;
         }
@@ -373,7 +362,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
   
   // Auto Settings
   this.setAutoSettings = function() {
-    var graph = this.graph;
+    //var graph = this.graph;
     /*var graphnodes = nodes.filter(function(n) {
                         return !n['hidden'];
                     }).map(function(n) {
@@ -381,7 +370,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
                     });*/
 
     // Tuning
-    if (graph.nodes.length >= 100) {
+    if (nodesFA2.length >= 100) {
       this.p.scalingRatio = 2.0;
     } else {
       this.p.scalingRatio = 10.0;
@@ -396,14 +385,14 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
     this.p.edgeWeightInfluence = 1;
 
     // Performance
-    if (graph.nodes.length >= 50000) {
+    if (nodesFA2.length >= 50000) {
       this.p.jitterTolerance = 10;
-    } else if (graph.nodes.length >= 5000) {
+    } else if (nodesFA2.length >= 5000) {
       this.p.jitterTolerance = 1;
     } else {
       this.p.jitterTolerance = 0.1;
     }
-    if (graph.nodes.length >= 1000) {
+    if (nodesFA2.length >= 1000) {
       this.p.barnesHutOptimize = true;
     } else {
       this.p.barnesHutOptimize = false;
@@ -974,34 +963,27 @@ sigma.forceatlas2.Region.prototype.applyForce = function(n, Force, theta) {
 
 sigma.publicPrototype.startForceAtlas2 = function() {
   //if(!this.forceatlas2) {
-        pr("Edges True-False");
-        pr(edgesTF);
-        pr("");
-        if(edgesTF==false){
-            nodesFA2 = partialGraph._core.graph.nodes.filter(function(n) {
-                          return !n['hidden'];
-                      });/*ŝ.map(function(n) {
-                          return n;
-                      });*/
-            edgesFA2 = partialGraph._core.graph.edges.filter(function(e) {
-                          return !e['hidden'];
-                      });/*ŝ.map(function(n) {
-                          return n;
-                      });*/
-
-            pr(nodesFA2.length);
-            pr(edgesFA2.length);
-
-            this.forceatlas2 = new sigma.forceatlas2.ForceAtlas2(this._core.graph);
-            this.forceatlas2.setAutoSettings();
-            this.forceatlas2.init();
-            //}
-            $("#overviewzone").hide();
-            this.addGenerator('forceatlas2', this.forceatlas2.atomicGo, function(){
-              return true;
-            });
-        }
-
+      pr("\tStarting FA2");
+      nodesFA2 = this._core.graph.nodes.filter(function(n) {
+                    return !n['hidden'];
+                });/*.map(function(n) {
+                    return n;
+                });*/
+      edgesFA2 = this._core.graph.edges.filter(function(e) {
+                    return !e['hidden'];
+                });/*.map(function(e) {
+                    return e;
+                });*/
+      pr("\t#nodes: "+nodesFA2.length);
+      pr("\t#edges: "+edgesFA2.length);
+      this.forceatlas2 = new sigma.forceatlas2.ForceAtlas2();
+      this.forceatlas2.setAutoSettings();
+      this.forceatlas2.init();
+      //}
+      $("#overviewzone").hide();
+      this.addGenerator('forceatlas2', this.forceatlas2.atomicGo, function(){
+        return true;
+  });
 };
 
 sigma.publicPrototype.stopForceAtlas2 = function() {
