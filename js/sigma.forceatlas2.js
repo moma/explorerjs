@@ -2,6 +2,16 @@
 // (requires sigma.js to be loaded)
 var nodesFA2;
 var edgesFA2;
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
 sigma.forceatlas2 = sigma.forceatlas2 || {};
 sigma.forceatlas2.ForceAtlas2 = function() {
   sigma.classes.Cascade.call(this);
@@ -58,7 +68,7 @@ sigma.forceatlas2.ForceAtlas2 = function() {
 
   this.atomicGo = function() {
       
-    pr(edgesFA2.length);
+    //pr(edgesFA2.length);
     var cInt = self.p.complexIntervals;
     var sInt = self.p.simpleIntervals;
 
