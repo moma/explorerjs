@@ -126,7 +126,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'whoosh',
-    #'haystack',
     'article'
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
@@ -163,13 +162,15 @@ LOGGING = {
     }
 }
 
-'''
-import os
+
+
+WHOOSH_INDEX = os.path.join(ROOT_PATH,'whoosh/')
+
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'ISIterms'),
+        'PATH': WHOOSH_INDEX,
     },
 }
-'''
+
 
