@@ -90,7 +90,7 @@ public class Application extends Controller {
 
     public static Result post()  throws JsonParseException, JsonMappingException, IOException {
 
-	    
+	    System.out.println("Starting to spatialize");
 	    ArrayList<Node_copy> nodes = new ArrayList<Node_copy>();
 	    ArrayList<Edge_copy> edges = new ArrayList<Edge_copy>();
 	    String itsRAW = request().body().asFormUrlEncoded().get("it")[0];

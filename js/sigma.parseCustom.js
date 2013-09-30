@@ -26,7 +26,7 @@ function parse(){
         //pr(gexfPath)
         $.ajax({
             type: 'GET',
-            url: "php/bridgeClientServer_filter.php",
+            url: "http://tina.iscpif.fr/explorerjs/php/bridgeClientServer_filter.php",
             data: "query="+getUrlParam.nodeidparam,
             contentType: "application/json",
             dataType: 'jsonp',
@@ -57,7 +57,7 @@ function parse(){
         unique_id = getUrlParam.nodeidparam;
         $.ajax({
             type: 'GET',
-            url: "php/bridgeClientServer.php",
+            url: "http://tina.iscpif.fr/explorerjs/php/bridgeClientServer.php",
             data: "unique_id="+unique_id+"&it="+iterationsFA2,
             contentType: "application/json",
             dataType: 'jsonp',
