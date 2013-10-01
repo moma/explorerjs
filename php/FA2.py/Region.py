@@ -41,7 +41,7 @@ class Region:
 
 	def buildSubRegions(self):
 		print "buildSubRegions"
-		'''
+
 		nds = self.nodes
 		if nds.length > 1:
 			leftNodes = []
@@ -70,13 +70,30 @@ class Region:
 				if (rightNodes[n]['x'] < massCenterX: nodesLine = tr
 				else: nodesLine = br
 				nodesLine.append(leftNodes[n])
-		'''
+			listsum = tl+bl+br+tr
+			filtList = [elem for elem in listsum if listsum[elem].length]
+			for a in filtList:
+				if (nextDepth <= self.depthLimit && filtList[a].length < self.nodes.length):
+					subregion = Region(filtList[a],nextDepth)
+					subregions.append(subregion)
+				else:
+					for n in filtList[a]:
+						oneNodeList = filtList[a][n]
+						subregion = Region(oneNodeList, nextDepth)
+						subregions.append(subregion)
+
+			self.subregions = subregions
+			for i in subregions:
+				subregions[i].buildSubRegions()
+
 
 
 			
 
 	def applyForce(self, n , Force , theta):
 		print "applyForce"
+		if self.nodes.length < 2:
+			regionNode = self.nodes[0]
 
 
 def test():
