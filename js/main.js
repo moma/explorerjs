@@ -1,6 +1,23 @@
 listGexfs();
 
 if(typeof(getUrlParam.file)!=="undefined"){
+    $.doTimeout(30,function (){
+        parse(getUrlParam.file);
+        nb_cats = scanCategories();        
+        listGexfs();
+        
+        if(nb_cats==1) startOnePartite(getUrlParam.file); 
+        else if(nb_cats==2) startBipartite(getUrlParam.file);
+        
+        $.doTimeout(30,function (){
+            $("#currentGraph").html(getUrlParam.file);
+        });            
+    });
+} else {
+    window.location.href=window.location.origin+window.location.pathname+"?file=2-Terms-Authors-300nodes.gexf";
+}
+/*
+if(typeof(getUrlParam.file)!=="undefined"){
     if(typeof(isBipartite[getUrlParam.file])!=="undefined"){
         $.doTimeout(30,function (){
             listGexfs();
@@ -25,6 +42,7 @@ if(typeof(getUrlParam.file)!=="undefined"){
 else {
     window.location.href=window.location.origin+window.location.pathname+"?file=2-Terms-Authors-300nodes.gexf";
 }
+*/
 
 
 

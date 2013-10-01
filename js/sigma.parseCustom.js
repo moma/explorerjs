@@ -16,6 +16,26 @@ function parse(gexfPath) {
     gexf = gexfhttp.responseXML;
 }
 
+function scanCategories(){
+    var categories = {}
+    nodesNodes = gexf.getElementsByTagName('nodes');
+    for(i=0; i<nodesNodes.length; i++){       
+        var nodesNode = nodesNodes[i];  // Each xml node 'nodes' (plural)
+        nodeNodes = nodesNode.getElementsByTagName('node');
+        
+        for(j=0; j<nodeNodes.length; j++){
+            attvalueNodes = nodeNodes[j].getElementsByTagName('attvalue');
+            for(k=0; k<attvalueNodes.length; k++){
+                attvalueNode = attvalueNodes[k];
+                attr = attvalueNode.getAttribute('for');
+                val = attvalueNode.getAttribute('value');
+                if (attr=="category") categories[val]=1;
+            }
+        }
+    }
+    return Object.keys(categories).length;
+}
+
 function onepartiteExtract(){
     
     var i, j, k;

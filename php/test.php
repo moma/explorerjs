@@ -77,7 +77,7 @@ foreach ($base->query($sql) as $row) {
 
 $output = "<ul>";
 foreach($titles as $title) {
-	$output.="<li>$title</li><br>";
+	$output.="<li><a href=http://scholar.google.com/scholar?q=".urlencode($title).">$title</a></li><br>";
 }
 $output .= "</ul>";
 
