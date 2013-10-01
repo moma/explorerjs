@@ -2,7 +2,7 @@
 var bipartite=false;
 
 //var iterationsFA2=6;
-
+var categories = {};
 var inactiveColor = '#666';
 var startingNodeId = "1";
 var minLengthAutoComplete = 1;

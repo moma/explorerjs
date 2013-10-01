@@ -17,7 +17,6 @@ function parse(gexfPath) {
 }
 
 function scanCategories(){
-    var categories = {}
     nodesNodes = gexf.getElementsByTagName('nodes');
     for(i=0; i<nodesNodes.length; i++){       
         var nodesNode = nodesNodes[i];  // Each xml node 'nodes' (plural)
@@ -29,10 +28,11 @@ function scanCategories(){
                 attvalueNode = attvalueNodes[k];
                 attr = attvalueNode.getAttribute('for');
                 val = attvalueNode.getAttribute('value');
-                if (attr=="category") categories[val]=1;
+                if (attr=="category") categories[val]=val;
             }
         }
     }
+    pr(categories);
     return Object.keys(categories).length;
 }
 
@@ -384,7 +384,7 @@ function fullExtract(){
             }
             //console.log(node.attributes);
             
-            if(node.attributes[2].val=="Author"){
+            if(node.attributes[2].val=="Author"||node.attributes[2].val=="Countries"){
                 node.type="Document";
                 node.shape="square";
                 numberOfDocs++;

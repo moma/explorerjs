@@ -3,7 +3,8 @@ listGexfs();
 if(typeof(getUrlParam.file)!=="undefined"){
     $.doTimeout(30,function (){
         parse(getUrlParam.file);
-        nb_cats = scanCategories();        
+        nb_cats = scanCategories();  
+        pr("nb_cats: "+nb_cats);
         listGexfs();
         
         if(nb_cats==1) startOnePartite(getUrlParam.file); 
