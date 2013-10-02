@@ -92,6 +92,11 @@ var sigmaJsMouseProperties = {
     maxRatio: 100
 };
 
+var bridge={};
+external="http://tina.iscpif.fr/explorerjs/";//Just if you want to use the server-apps from tina.server
+bridge["forFilteredQuery"] = external+"php/bridgeClientServer_filter.php";
+bridge["forNormalQuery"] = external+"php/bridgeClientServer.php";
+
 var opts = {
   lines: 13, // The number of lines to draw
   length: 20, // The length of each line
