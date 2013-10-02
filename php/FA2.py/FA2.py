@@ -139,7 +139,7 @@ class ForceAtlas2:
 				if n["fa2"]:
 					Gravity.apply_g(n, gravity / scalingRatio)
 
-			if (i1 == len(nodes)):
+			if (i == len(nodes)):
 				self.state["step"] = 3
 				self.state["index"] = 0
 			else:
@@ -153,7 +153,7 @@ class ForceAtlas2:
 				field = self.p["outboundAttCompensation"]
 			else:
 				field = 1
-			Attraction = self.ForceFactory.buildAttraction(self.p.linLogMode,self.p.outboundAttractionDistribution,self.p.adjustSizes,1*field)
+			Attraction = ForceFactory.buildAttraction(self.p["linLogMode"],self.p["outboundAttractionDistribution"],self.p["adjustSizes"],1*field)
 			i = self.state["index"]
 			if self.p["edgeWeightInfluence"] == 0:
 				while (i < len(edges) and i < self.state["index"] + cInt):
@@ -183,12 +183,14 @@ class ForceAtlas2:
 			totalEffectiveTraction = 0  # Hom much useful movement
 			swingingSum=0
 			promdxdy=0
-			for n in range(len(nodes)):
+			for i in range(len(nodes)):
+				n = nodes[i]
 				fixed = n["fixed"] or False
+				print fixed
 				if not fixed and n["fa2"]:
 					swinging = math.sqrt(math.pow(n["fa2"]["old_dx"] - n["fa2"]["dx"], 2)+math.pow(n["fa2"]["old_dy"] - n["fa2"]["dy"], 2))
 					totalSwinging+=n["fa2"]["mass"]*swinging
-					totalEffectiveTraction +=n["fa2"]["mass"]*0.5*math.sqrt(math.pow(n["fa2"]["old_dx"] + n["fa2"]["dx"], 2),math.pow(n["fa2"]["old_dy"] + n["fa2"]["dy"], 2))
+					totalEffectiveTraction +=n["fa2"]["mass"]*0.5*math.sqrt(math.pow(n["fa2"]["old_dx"] + n["fa2"]["dx"], 2)+math.pow(n["fa2"]["old_dy"] + n["fa2"]["dy"], 2))
 			self.p["totalSwinging"] = totalSwinging
 			self.p["totalEffectiveTraction"] = totalEffectiveTraction
 			#We want that swingingMovement < tolerance * convergenceMovement
@@ -196,7 +198,7 @@ class ForceAtlas2:
 			#But the speed shoudn't rise too much too quickly,
 			#since it would make the convergence drop dramatically.
 			maxRise = 0.5
-			self.p["speed"] = self.p["speed"]+math.min(targetSpeed-self.p["speed"],maxRise * self.p["speed"])
+			self.p["speed"] = self.p["speed"]+min(targetSpeed-self.p["speed"],maxRise * self.p["speed"])
 
 			#Save old coordinates
 			for i in range(len(nodes)):
@@ -208,7 +210,7 @@ class ForceAtlas2:
 		elif case==5:
 								# Apply forces
 			i = self.state["index"]
-			if self.p.adjustSizes:
+			if self.p["adjustSizes"]:
 				speed = self.p["speed"]
 				while (i < len(nodes) and i < self.state["index"] + sInt):
 					n = nodes[i]
@@ -218,7 +220,7 @@ class ForceAtlas2:
 						swinging = math.sqrt((n["fa2"]["old_dx"] - n["fa2"]["dx"])*(n["fa2"]["old_dx"] - n["fa2"]["dx"]) +(n["fa2"]["old_dy"] - n["fa2"]["dy"])*(n["fa2"]["old_dy"] - n["fa2"]["dy"]))
 						factor = 0.1 * speed / (1 + speed * math.sqrt(swinging))
 						df = math.sqrt(math.pow(n["fa2"]["dx"], 2)+math.pow(n["fa2"]["dy"], 2))
-						factor = math.min(factor * df, 10) / df
+						factor = min(factor * df, 10) / df
 						n["x"] += n["fa2"]["dx"] * factor
 						n["y"] += n["fa2"]["dy"] * factor
 			else:

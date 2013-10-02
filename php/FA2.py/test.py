@@ -7,24 +7,28 @@ def poblate():
 	n1 = {
 		"x":random.uniform(0,1),
 		"y":random.uniform(0,1),
+		"fixed":False,
 		"degree":3,
 		"size":3
 	}
 	n2 = {
 		"x":random.uniform(0,1),
 		"y":random.uniform(0,1),
+		"fixed":False,
 		"degree":1,
 		"size":5
 	}
 	n3 = {
 		"x":random.uniform(0,1),
 		"y":random.uniform(0,1),
+		"fixed":False,
 		"degree":0,
 		"size":2
 	}
 	n4 = {
 		"x":random.uniform(0,1),
 		"y":random.uniform(0,1),
+		"fixed":False,
 		"degree":0,
 		"size":3
 	}
@@ -65,4 +69,21 @@ def poblate():
 
 a=ForceAtlas2(poblate())
 a.init()
+a.atomicGo()
+a.atomicGo()
+a.atomicGo()
+a.atomicGo()
+a.atomicGo()
+a.atomicGo()
+a.atomicGo()
+a.atomicGo()
+a.atomicGo()
+a.atomicGo()
+a.atomicGo()
+a.atomicGo()
+a.atomicGo()
+a.atomicGo()
+a.atomicGo()
+a.atomicGo()
+a.atomicGo()
 a.atomicGo()
