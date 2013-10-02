@@ -5,33 +5,32 @@ import math
 class ForceAtlas2:
 	def __init__(self,graph):
 		self.graph = graph
-		self.p = {
-		    "linLogMode": "false",
-		    "outboundAttractionDistribution": "false",
-		    "adjustSizes": "false",
-		    "edgeWeightInfluence": 0,
-		    "scalingRatio": 1,
-		    "strongGravityMode": "false",
-		    "gravity": 1,
-		    "jitterTolerance": 1,
-		    "barnesHutOptimize": "false",
-		    "barnesHutTheta": 1.2,
-		    "speed": 1,
-		    "outboundAttCompensation": 1,
-		    "totalSwinging": 0,
-		    "swingVSnode1": 0,
-		    "totalEffectiveTraction": 0,
-		    "complexIntervals": 500,
-		    "simpleIntervals": 1000
+		self.p={
+			"linLogMode": "false",
+			"outboundAttractionDistribution": "false",
+			"adjustSizes": "false",
+			"edgeWeightInfluence": 0,
+			"scalingRatio": 1,
+			"strongGravityMode": "false",
+			"gravity": 1,
+			"jitterTolerance": 1,
+			"barnesHutOptimize": "false",
+			"barnesHutTheta": 1.2,
+			"speed": 1,
+			"outboundAttCompensation": 1,
+			"totalSwinging": 0,
+			"swingVSnode1": 0,
+			"totalEffectiveTraction": 0,
+			"complexIntervals": 500,
+			"simpleIntervals": 1000
 		}
 		self.state = {"step": 0, "index": 0}
 		self.rootRegion = 0
 
 	def init(self):
-		self.state = {"step": 0, "index": 0}
-		for i in self.graph.nodes:
-			self.graph.nodes[i]["fa2"] = {
-				"mass": 1 + self.graph.nodes[i].degree,
+		for i in range(len(self.graph["nodes"])):
+			self.graph["nodes"][i]["fa2"] = {
+				"mass": 1+self.graph["nodes"][i]["degree"],
 				"old_dx": 0,
 				"old_dy": 0,
 				"dx": 0,
@@ -41,7 +40,7 @@ class ForceAtlas2:
 
 	def go(self):
 		while (self.atomicGo()):
-			#something
+			print "something"
 
 	def atomicGo(self):
 		graph = self.graph
@@ -54,8 +53,8 @@ class ForceAtlas2:
 		case = self.state["step"]
 
 		if   case==0:
-							# Initialise layout data
-			for i in nodes:
+								# Initialise layout data
+			for i in range(len(nodes)):
 				if nodes[i]["fa2"]:
 					nodes[i]["fa2"]["mass"] = 1 + nodes[i]["degree"]
 					nodes[i]["fa2"]["old_dx"] = nodes[i]["fa2"]["dx"]
@@ -70,6 +69,7 @@ class ForceAtlas2:
 						"dx": 0,
 						"dy": 0
 					}
+				print nodes[i]["fa2"]
 			
 			# If Barnes Hut active, initialize root region
 			if self.p["barnesHutOptimize"]:
@@ -80,7 +80,7 @@ class ForceAtlas2:
 			# If outboundAttractionDistribution active, compensate.
 			if self.p["outboundAttractionDistribution"]:
 				self.p["outboundAttCompensation"] = 0
-				for i in nodes:
+				for i in range(len(nodes)):
 					self.p["outboundAttCompensation"] += nodes[i]["fa2"]["mass"]
 				self.p["outboundAttCompensation"] /= len(nodes)
 
@@ -90,7 +90,7 @@ class ForceAtlas2:
 
 
 		elif case==1:
-		    					# Repulsion
+								# Repulsion
 			Repulsion = ForceFactory.buildRepulsion(self.p["adjustSizes"],self.p["scalingRatio"])
 			if self.p["barnesHutOptimize"]:
 				rootRegion = self.rootRegion
@@ -112,7 +112,7 @@ class ForceAtlas2:
 					n1 = nodes[i1]
 					i1+=1
 					if n1["fa2"]:
-						for i2 in nodes:
+						for i2 in range(len(nodes)):
 							if i2 < i1 and nodes[i2]["fa2"]:
 								Repulsion.apply_nn(n1, nodes[i2])
 				if (i1 == len(nodes)):
@@ -124,7 +124,7 @@ class ForceAtlas2:
 
 
 		elif case==2:
-		    					# Gravity
+								# Gravity
 			Gravity=""
 			if self.p["strongGravityMode"]:
 				Gravity = ForceFactory.getStrongGravity(self.p["scalingRatio"])
@@ -147,7 +147,7 @@ class ForceAtlas2:
 			return True
 
 		elif case==3:
-							# Attraction
+								# Attraction
 			field=""
 			if self.p["outboundAttractionDistribution"]:
 				field = self.p["outboundAttCompensation"]
@@ -164,7 +164,7 @@ class ForceAtlas2:
 				while (i < len(edges) and i < self.state["index"] + cInt):
 					e = edges[i]
 					i+=1
-					Attraction.apply_nn(e["source"], e["target"], (e["weight"]. or 1))
+					Attraction.apply_nn(e["source"], e["target"], (e["weight"] or 1))
 			else:
 				while (i < len(edges) and i < self.state["index"] + cInt):
 					e = edges[i]
@@ -178,16 +178,16 @@ class ForceAtlas2:
 			return True
 
 		elif case==4:
-		    					# Auto adjust speed
-			totalSwinging = 0  # How much irregular movement
+								# Auto adjust speed
+			totalSwinging=0# How much irregular movement
 			totalEffectiveTraction = 0  # Hom much useful movement
 			swingingSum=0
 			promdxdy=0
-			for n in nodes:
+			for n in range(len(nodes)):
 				fixed = n["fixed"] or False
 				if not fixed and n["fa2"]:
-					swinging = math.sqrt(math.pow(n["fa2"]["old_dx"] - n["fa2"]["dx"], 2)+math.pow(n["fa2"]["old_dy"] - n["fa2"]["dy"], 2)
-					totalSwinging += n["fa2"]["mass"] * swinging
+					swinging = math.sqrt(math.pow(n["fa2"]["old_dx"] - n["fa2"]["dx"], 2)+math.pow(n["fa2"]["old_dy"] - n["fa2"]["dy"], 2))
+					totalSwinging+=n["fa2"]["mass"]*swinging
 					totalEffectiveTraction +=n["fa2"]["mass"]*0.5*math.sqrt(math.pow(n["fa2"]["old_dx"] + n["fa2"]["dx"], 2),math.pow(n["fa2"]["old_dy"] + n["fa2"]["dy"], 2))
 			self.p["totalSwinging"] = totalSwinging
 			self.p["totalEffectiveTraction"] = totalEffectiveTraction
@@ -199,14 +199,14 @@ class ForceAtlas2:
 			self.p["speed"] = self.p["speed"]+math.min(targetSpeed-self.p["speed"],maxRise * self.p["speed"])
 
 			#Save old coordinates
-			for i in nodes:
+			for i in range(len(nodes)):
 				nodes[i]["old_x"] = +nodes[i]["x"]
 				nodes[i]["old_y"] = +nodes[i]["y"]
 			self.state["step"] = 5
 			return True
 
 		elif case==5:
-		    					# Apply forces
+								# Apply forces
 			i = self.state["index"]
 			if self.p.adjustSizes:
 				speed = self.p["speed"]
@@ -243,11 +243,6 @@ class ForceAtlas2:
 				return True
 
 		else:
-		    					# Do the default
+								# Do the default
 			print "Error"
 			return False
-
-
-
-inst = ForceAtlas2("thegraph")
-print inst.p

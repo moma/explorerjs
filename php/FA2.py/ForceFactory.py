@@ -54,7 +54,7 @@ class linRepulsion:
 				n2["fa2"]["dx"] -= xDist * factor
 				n2["fa2"]["dy"] -= yDist * factor
 
-	def apply_nr(self,n,r)
+	def apply_nr(self,n,r):
 		#not used?
 		'''
 		xDist = n["x"] - r.config('massCenterX')
@@ -66,7 +66,7 @@ class linRepulsion:
 			n["fa2"]["dy"] += yDist * factor
 		'''
 
-	def apply_g(self,n,g)
+	def apply_g(self,n,g):
 		xDist = n["x"]
 		yDist = n["y"]
 		distance = math.sqrt(xDist*xDist + yDist*yDist)
@@ -102,7 +102,7 @@ class linRepulsion_antiCollision:
 				n2["fa2"]["dx"] -= xDist * factor
 				n2["fa2"]["dy"] -= yDist * factor
 
-	def apply_nr(self,n,r)
+	def apply_nr(self,n,r):
 		#not used?
 		'''
 		xDist = n["x"] - r.config('massCenterX')
@@ -118,7 +118,7 @@ class linRepulsion_antiCollision:
 			n["fa2"]["dy"] += yDist * factor
 		'''
 
-	def apply_g(self,n,g)
+	def apply_g(self,n,g):
 		xDist = n["x"]
 		yDist = n["y"]
 		distance = math.sqrt(xDist*xDist + yDist*yDist)
@@ -135,10 +135,10 @@ class strongGravity:
 	def apply_nn(self,n1,n2):
 		pass
 
-	def apply_nr(self,n,r)
+	def apply_nr(self,n,r):
 		pass
 
-	def apply_g(self,n,g)
+	def apply_g(self,n,g):
 		xDist = n["x"]
 		yDist = n["y"]
 		distance = math.sqrt(xDist*xDist + yDist*yDist)
