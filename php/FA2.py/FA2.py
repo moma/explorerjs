@@ -1,5 +1,6 @@
 from Region import Region
 import ForceFactory
+import math
 
 class ForceAtlas2:
 	def __init__(self,graph):
@@ -161,16 +162,90 @@ class ForceAtlas2:
 					Attraction.apply_nn(e["source"], e["target"], 1)
 			elif self.p["edgeWeightInfluence"] == 1:
 				while (i < len(edges) and i < self.state["index"] + cInt):
-					pass
+					e = edges[i]
+					i+=1
+					Attraction.apply_nn(e["source"], e["target"], (e["weight"]. or 1))
+			else:
+				while (i < len(edges) and i < self.state["index"] + cInt):
+					e = edges[i]
+					i+=1
+					Attraction.apply_nn(e["target"],(math.pow(e["weight"] or 1), self.p["edgeWeightInfluence"]))
+			if (i == len(edges)):
+				self.state["step"] = 4
+				self.state["index"] = 0
+			else:
+				self.state["index"] = i
+			return True
 
 		elif case==4:
 		    					# Auto adjust speed
+			totalSwinging = 0  # How much irregular movement
+			totalEffectiveTraction = 0  # Hom much useful movement
+			swingingSum=0
+			promdxdy=0
+			for n in nodes:
+				fixed = n["fixed"] or False
+				if not fixed and n["fa2"]:
+					swinging = math.sqrt(math.pow(n["fa2"]["old_dx"] - n["fa2"]["dx"], 2)+math.pow(n["fa2"]["old_dy"] - n["fa2"]["dy"], 2)
+					totalSwinging += n["fa2"]["mass"] * swinging
+					totalEffectiveTraction +=n["fa2"]["mass"]*0.5*math.sqrt(math.pow(n["fa2"]["old_dx"] + n["fa2"]["dx"], 2),math.pow(n["fa2"]["old_dy"] + n["fa2"]["dy"], 2))
+			self.p["totalSwinging"] = totalSwinging
+			self.p["totalEffectiveTraction"] = totalEffectiveTraction
+			#We want that swingingMovement < tolerance * convergenceMovement
+			targetSpeed = math.pow(self.p["jitterTolerance"], 2)*self.p["totalEffectiveTraction"]/self.p["totalSwinging"]
+			#But the speed shoudn't rise too much too quickly,
+			#since it would make the convergence drop dramatically.
+			maxRise = 0.5
+			self.p["speed"] = self.p["speed"]+math.min(targetSpeed-self.p["speed"],maxRise * self.p["speed"])
+
+			#Save old coordinates
+			for i in nodes:
+				nodes[i]["old_x"] = +nodes[i]["x"]
+				nodes[i]["old_y"] = +nodes[i]["y"]
+			self.state["step"] = 5
+			return True
 
 		elif case==5:
 		    					# Apply forces
+			i = self.state["index"]
+			if self.p.adjustSizes:
+				speed = self.p["speed"]
+				while (i < len(nodes) and i < self.state["index"] + sInt):
+					n = nodes[i]
+					i+=1
+					fixed = n["fixed"] or False
+					if not fixed and n["fa2"]:
+						swinging = math.sqrt((n["fa2"]["old_dx"] - n["fa2"]["dx"])*(n["fa2"]["old_dx"] - n["fa2"]["dx"]) +(n["fa2"]["old_dy"] - n["fa2"]["dy"])*(n["fa2"]["old_dy"] - n["fa2"]["dy"]))
+						factor = 0.1 * speed / (1 + speed * math.sqrt(swinging))
+						df = math.sqrt(math.pow(n["fa2"]["dx"], 2)+math.pow(n["fa2"]["dy"], 2))
+						factor = math.min(factor * df, 10) / df
+						n["x"] += n["fa2"]["dx"] * factor
+						n["y"] += n["fa2"]["dy"] * factor
+			else:
+				speed = self.p["speed"]
+				while (i < len(nodes) and i < self.state["index"] + sInt):
+					n = nodes[i]
+					i+=1
+					fixed = n["fixed"] or False
+					if not fixed and n["fa2"]:
+					#Adaptive auto-speed: the speed of each node is lowered
+					#when the node swings.
+						swinging = math.sqrt((n["fa2"]["old_dx"] - n["fa2"]["dx"])*(n["fa2"]["old_dx"] - n["fa2"]["dx"]) +(n["fa2"]["old_dy"] - n["fa2"]["dy"])*(n["fa2"]["old_dy"] - n["fa2"]["dy"]))
+						factor = speed / (1 + speed * math.sqrt(swinging))
+						n["x"] += n["fa2"]["dx"] * factor
+						n["y"] += n["fa2"]["dy"] * factor
+			if (i == len(edges)):
+				self.state["step"] = 0
+				self.state["index"] = 0
+				return False
+			else:
+				self.state["index"] = i
+				return True
 
 		else:
 		    					# Do the default
+			print "Error"
+			return False
 
 
 
