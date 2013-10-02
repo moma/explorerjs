@@ -14,7 +14,6 @@ class Region:
 
 	def updateMassAndGeometry(self):
 		print "updating mass and geometry"
-		'''
 		nds = self.nodes
 		if nds.length > 1:
 			mass=0
@@ -36,7 +35,7 @@ class Region:
 			self.p['massCenterX'] = massCenterX;
 			self.p['massCenterY'] = massCenterY;
 			self.size = size;
-		'''
+
 
 
 	def buildSubRegions(self):
@@ -44,42 +43,75 @@ class Region:
 
 		nds = self.nodes
 		if nds.length > 1:
-			leftNodes = []
-			rightNodes = []
 			subregions = []
 			massCenterX = self.p['massCenterX']
 			massCenterY = self.p['massCenterY']
 			nextDepth = self.depth + 1
+			leftNodes = []
+			rightNodes = []
 			for n in nds:
 				#nodesColumn = (nds[n]['x'] < massCenterX) ? (leftNodes) : (rightNodes);
-				if (nds[n]['x'] < massCenterX):	nodesColumn = leftNodes
+				if (nds[n]['x'] < massCenterX):	nodesColumn= leftNodes
 				else:	nodesColumn = rightNodes
 				nodesColumn.append(nds[n])
-			tl = []
-			bl = []
-			br = []
-			tr = []
+			topleftNodes = []
+			bottomleftNodes = []
+			for n in nds:
+				#nodesLine = (n.y() < massCenterY) ? (topleftNodes) : (bottomleftNodes);
+				if nds[n]['y'] < massCenterY:	nodesLine = topleftNodes
+				else:	nodesLine = bottomleftNodes
+				nodesLine.append(nds[n])
 
-			for n in leftNodes:
-				#nodesLine = (leftNodes[n]['y'] < massCenterY) ? (tl) : (bl);
-				if (leftNodes[n]['y'] < massCenterY): nodesLine = tl
-				else: nodesLine = bl
-				nodesLine.append(leftNodes[n])
-			for n in rightNodes:
-				#nodesLine = (leftNodes[n]['y'] < massCenterY) ? (tl) : (bl);
-				if (rightNodes[n]['x'] < massCenterX: nodesLine = tr
-				else: nodesLine = br
-				nodesLine.append(leftNodes[n])
-			listsum = tl+bl+br+tr
-			filtList = [elem for elem in listsum if listsum[elem].length]
-			for a in filtList:
-				if (nextDepth <= self.depthLimit && filtList[a].length < self.nodes.length):
-					subregion = Region(filtList[a],nextDepth)
+			bottomrightNodes = []
+			toprightNodes = []
+			for n in nds:
+				#nodesLine = (n.y() < massCenterY) ? (toprightNodes) : (bottomrightNodes);
+				if nds[n]['y'] < massCenterY:	nodesLine = toprightNodes
+				else:	nodesLine = bottomrightNodes
+				nodesLine.append(nds[n])
+
+			if (len(topleftNodes) > 0):
+				if (len(topleftNodes) < len(nds)):
+					subregion = Region(topleftNodes,nextDepth)
 					subregions.append(subregion)
 				else:
-					for n in filtList[a]:
-						oneNodeList = filtList[a][n]
-						subregion = Region(oneNodeList, nextDepth)
+					for n in topleftNodes:
+						oneNodeList = []
+						oneNodeList.append(topleftNodes[n])
+						subregion = Region(oneNodeList)
+						subregions.append(subregion)
+
+			if (len(bottomleftNodes) > 0):
+				if (len(bottomleftNodes) < len(nds)):
+					subregion = Region(bottomleftNodes,nextDepth)
+					subregions.append(subregion)
+				else:
+					for n in bottomleftNodes:
+						oneNodeList = []
+						oneNodeList.append(topleftNodes[n])
+						subregion = Region(oneNodeList)
+						subregions.append(subregion)
+
+			if (len(bottomrightNodes) > 0):
+				if (len(bottomrightNodes) < len(nds)):
+					subregion = Region(bottomrightNodes,nextDepth)
+					subregions.append(subregion)
+				else:
+					for n in bottomrightNodes:
+						oneNodeList = []
+						oneNodeList.append(topleftNodes[n])
+						subregion = Region(oneNodeList)
+						subregions.append(subregion)
+
+			if (len(toprightNodes) > 0):
+				if (len(toprightNodes) < len(nds)):
+					subregion = Region(toprightNodes,nextDepth)
+					subregions.append(subregion)
+				else:
+					for n in bottomrightNodes:
+						oneNodeList = []
+						oneNodeList.append(topleftNodes[n])
+						subregion = Region(oneNodeList)
 						subregions.append(subregion)
 
 			self.subregions = subregions
@@ -91,14 +123,14 @@ class Region:
 			
 
 	def applyForce(self, n , Force , theta):
-		print "applyForce"
 		if self.nodes.length < 2:
 			regionNode = self.nodes[0]
+			Force.apply_nn(n, regionNode)
+		else:
+			distance = math.sqrt((n["x"] - self.p["massCenterX"]) * (n["x"] - self.p["massCenterX"]) + (n["y"] - self.p["massCenterY"]) * (n["y"] - self.p["massCenterY"]))
+			if (distance * theta > self.size):
+				Force.apply_nr(n, self)
+			else:
+				for i in self.subregions:
+					self.subregions[i].applyForce(n, Force, theta)
 
-
-def test():
-	inst = Region("nodes","depth")
-	print inst.p['mass']
-
-
-test()

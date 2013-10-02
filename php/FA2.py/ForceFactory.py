@@ -1,7 +1,11 @@
 import math
 
 def buildRepulsion(adjustBySize,coefficient):
-	print "Hola mundo"
+	if adjustBySize:
+		return linRepulsion_antiCollision(coefficient)
+	else:
+		return linRepulsion(coefficient)
+
 
 def getStrongGravity(coefficient):
 	return strongGravity(coefficient)
@@ -241,7 +245,7 @@ class linAttraction_degreeDistributed_antiCollision:
 
 			if (distance > 0):
 			#NB: factor = force / distance
-				factor = -self.coefficient * e / n1["fa2"]["mass"];
+				factor = -self.coefficient * e / n1["fa2"]["mass"]
 				n1["fa2"]["dx"] += xDist * factor
 				n1["fa2"]["dy"] += yDist * factor
 				n2["fa2"]["dx"] -= xDist * factor
