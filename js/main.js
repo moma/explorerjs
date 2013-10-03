@@ -362,9 +362,9 @@ function startBipartite(pathfile) {
     pushSWClick("social");
     cancelSelection(false);
     console.log("Parsing complete.");     
-    partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8).draw();
+    partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8).draw(2,2,2);
     partialGraph.startForceAtlas2();   
-//
+
     startEnviroment(); 
     camaraButton();
 }

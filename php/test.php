@@ -85,8 +85,6 @@ echo $output;
 
 
 
-
-
 /*
 SELECT wos_id
 FROM articles2terms 
@@ -95,11 +93,5 @@ GROUP BY wos_id
 ORDER BY count(wos_id) DESC
 LIMIT 6
 */
-
-/*
-
-*/
-
-
 
 ?>

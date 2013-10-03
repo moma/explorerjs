@@ -401,9 +401,13 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
       }
     },
 
+
+
     getStrongGravity: function(coefficient) {
       return new this.strongGravity(coefficient);
     },
+
+
 
     buildAttraction: function(logAttr, distributedAttr, adjustBySize, c) {
       if (adjustBySize) {
@@ -436,6 +440,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         }
       }
     },
+
 
     // Repulsion force: Linear
     linRepulsion: function(c) {
@@ -497,6 +502,8 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         }
       }
     },
+
+
 
     linRepulsion_antiCollision: function(c) {
       this.coefficient = c;
@@ -600,6 +607,7 @@ sigma.forceatlas2.ForceAtlas2 = function(graph) {
         }
       }
     },
+
 
     // Attraction force: Linear
     linAttraction: function(c) {
@@ -875,7 +883,6 @@ sigma.forceatlas2.Region.prototype.updateMassAndGeometry = function() {
     this.size = size;
   }
 };
-
 
 sigma.forceatlas2.Region.prototype.buildSubRegions = function() {
   if (this.nodes.length > 1) {
