@@ -367,20 +367,6 @@ function updateLeftPanel(){
     
     js2='\');"';
     if(swclickActual=="social") {
-        /*
-        papersdata+='<div id="opossitesBox">';
-        papersdata+='<ul>';
-        papersdata+='<li></li>';
-        papersdata+='<li></li>';
-        papersdata+='<li></li>';
-        papersdata+='</ul>';
-        papersdata+='</div>';
-        */
-       
-        //var variable = JSON.stringify(selections);
-        //pr(variable);
-
-        
         opossitesNodes+= '<br><h4>Keywords: </h4>';
         opossitesNodes+='<div id="opossitesBox">';/*tochange*/
         js1='onclick="edgesTF=false;cancelSelection(true);graphNGrams(\'';
@@ -416,7 +402,6 @@ function updateLeftPanel(){
             //contentType: "application/json",
             //dataType: 'json',
             success : function(data){ 
-                console.log(data);
                 $("#topPapers").html(data);
             },
             error: function(){ 
@@ -476,7 +461,6 @@ function updateLeftPanel(){
             //contentType: "application/json",
             //dataType: 'json',
             success : function(data){ 
-                console.log(data);
                 $("#topPapers").html(data);
             },
             error: function(){ 
@@ -592,10 +576,6 @@ function updateLeftPanel(){
             js1='onclick="edgesTF=false;cancelSelection(true);graphNGrams(\'';
             
                       
-        pr(getSwitchButton());
-        pr(fullurl);
-        pr(opos);
-        
             opos_aux = opos.filter(function(n) {
                             return (Nodes[n['key']].type=="NGram") ? n['key'] : null;
                         }); 

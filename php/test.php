@@ -38,7 +38,7 @@ if($type=="semantic"){
 	$id = "wos_id";
 }
 
-$sql = 'SELECT '.$id.'
+$sql = 'SELECT count(*),'.$id.'
 	FROM '.$table.' where (';
 
 foreach($elems as $elem){
@@ -51,33 +51,33 @@ $sql.=')
 	ORDER BY count('.$id.') DESC
 	LIMIT 6';
 
-
 $wos_ids = array();
+$sum=0;
 foreach ($base->query($sql) as $row) {
-	array_push($wos_ids, $row[$id]);
+        $wos_ids[$row[$id]] = $row["count(*)"];
+        $sum = $row["count(*)"] +$sum;
 }
 
-
-
-
-$sql = 'SELECT data FROM ISITITLE WHERE (';
-foreach ($wos_ids as $wos_id){
-	$sql.=" id=$wos_id OR";
+$sql = 'SELECT id,data FROM ISITITLE WHERE (';
+foreach ($wos_ids as $key => $value){
+	$sql.=" id=".$key." OR";
 }
 $sql = substr($sql, 0, -2);
 $sql.=")";
 
-
 $titles = array();
 foreach ($base->query($sql) as $row) {
-	array_push($titles, $row['data']);
+	//array_push($titles, $row['data']);
+        $i = $row['id'];
+        $info = array();
+        $info["title"] = $row['data'];
+        $info["occ"] = $wos_ids[$i];
+        $titles[$i] = $info;
 }
 
-#echo json_encode($titles);
-
 $output = "<ul>";
-foreach($titles as $title) {
-	$output.="<li><a href=http://scholar.google.com/scholar?q=".urlencode($title).">$title</a></li><br>";
+foreach($titles as $key => $data) {
+	$output.="<li title='".$data["occ"]."'><a href=http://scholar.google.com/scholar?q=".urlencode('"'.$data["title"].'"').">".$data["title"]."</a></li><br>";
 }
 $output .= "</ul>";
 
