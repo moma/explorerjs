@@ -655,9 +655,8 @@ class extract:
 	print "printing in buildJSON_sansfa2()"
 	nodes = {}
 	edges = {}
-	#print coordsRAW
 	import json
-	xy = json.loads(coordsRAW)
+	xy = coordsRAW #For FA2.java: json.loads(coordsRAW)
 	#print xy
 	coords = {}
 	for i in xy:
@@ -854,6 +853,118 @@ class extract:
 	graph = {}
 	graph["nodes"] = nodes2
 	graph["links"] = edges
+	return graph
+
+
+
+    def buildSimpleJSONFinal(self,graph):
+	print "gonna build a mofo json in buildSimpleJSONFinal"	
+	nodes = {}
+	nodes2 = []
+	edges = []
+	countnodes=0
+	
+	#for n in graph.edges_iter():
+	#	print n[0] + "," + n[1]
+	#	pprint.pprint(  graph[n[0]][n[1]] )
+	
+
+	for idNode in graph.nodes_iter():
+		if idNode[0]=="N":#If it is NGram
+			numID=int(idNode.split("::")[1])
+			nodeLabel= self.terms_array[numID]['term'].replace("&"," and ")
+			colorg=max(0,180-(100*self.terms_colors[numID]))
+			term_occ = self.terms_array[numID]['occurrences']
+
+			node = {}
+			#node["nID"] = countnodes
+			#node["sID"] = idNode
+			#node["id"] = countnodes
+			node["id"] = idNode
+			#node["group"] = 1
+			#node["name"] = nodeLabel
+			#node["color"] = "green"
+			#node["occ"] = int(term_occ)
+			node["degree"] = int(term_occ)
+			node["size"] = int(term_occ)
+			#node["x"] = str(coords[idNode][0])
+			#node["y"] = str(coords[idNode][1])
+
+			nodes2.append(node)
+			nodes[idNode] = countnodes
+
+		if idNode[0]=='D':#If it is Document
+			nodeLabel= self.scholars[idNode]['title']+" "+self.scholars[idNode]['first_name']+" "+self.scholars[idNode]['initials']+" "+self.scholars[idNode]['last_name']
+			color=""
+			if self.scholars_colors[self.scholars[idNode]['login']]==1:
+				color='243,183,19'
+			elif self.scholars[idNode]['job_market'] == "Yes":
+				color = '139,28,28'
+			else:
+				color = '78,193,127'
+
+			content=""
+			photo_url=self.scholars[idNode]['photo_url']
+			if photo_url != "":
+				content += '<img  src=http://main.csregistry.org/' + photo_url + ' width=' + str(self.imsize) + 'px  style=float:left;margin:5px>';
+			else:
+				if len(self.scholars)<2000:
+					im_id = int(math.floor(random.randint(0, 11)))
+					content += '<img src=http://communityexplorer.csregistry.org/img/'  + str(im_id) +  '.png width='  + str(self.imsize) +  'px   style=float:left;margin:5px>'					
+					#print '<img src=http://communityexplorer.csregistry.org/img/'  + str(im_id) +  '.png'
+
+			content += '<b>Country: </b>' + self.scholars[idNode]['country'] + '</br>'
+
+			if self.scholars[idNode]['position'] != "":
+				content += '<b>Position: </b>' +self.scholars[idNode]['position'].replace("&"," and ")+ '</br>'
+
+			affiliation=""
+			if self.scholars[idNode]['lab'] != "":
+				affiliation += self.scholars[idNode]['lab']+ ','
+			if self.scholars[idNode]['affiliation'] != "":
+				affiliation += self.scholars[idNode]['affiliation']
+			if self.scholars[idNode]['affiliation'] != "" or self.scholars[idNode]['lab'] != "":
+				content += '<b>Affiliation: </b>' + affiliation.replace("&"," and ") + '</br>'
+			if len(self.scholars[idNode]['keywords']) > 3:
+				content += '<b>Keywords: </b>' + self.scholars[idNode]['keywords'][:-2].replace(",",", ")+'.</br>'
+			if self.scholars[idNode]['homepage'][0:3] == "www":
+				content += '[ <a href=http://' +self.scholars[idNode]['homepage'].replace("&"," and ")+ ' target=blank > View homepage </a ><br/>]'
+			elif self.scholars[idNode]['homepage'][0:4] == "http":
+				content += '[ <a href=' +self.scholars[idNode]['homepage'].replace("&"," and ")+ ' target=blank > View homepage </a ><br/>]'
+
+		
+			node = {}
+			#node["nID"] = countnodes
+			#node["sID"] = idNode
+			#node["id"] = countnodes
+			#node["group"] = 2
+			#node["name"] = '"'+nodeLabel+'"'
+			#node["color"] = "orange"
+			#node["occ"] = 12
+			#node["x"] = str(coords[idNode][0])
+			#node["y"] = str(coords[idNode][1])
+			#node["content"] = self.toHTML(content)
+			node["id"] = idNode
+			node["degree"] = 12
+			node["size"] = 12
+			nodes2.append(node)
+			nodes[idNode] = countnodes
+		countnodes+=1
+	e = 0	
+	for n in self.Graph.edges_iter():#Memory, what's wrong with you?
+		weight = str("%.2f" % self.Graph[n[0]][n[1]]['weight'])
+		edge = {}
+		edge["source"] = n[0].encode('utf-8')
+		edge["target"] = n[1].encode('utf-8')
+		edge["weight"] = str(self.Graph[n[0]][n[1]]['weight'])
+		#edge["type"] = self.Graph[n[0]][n[1]]['type']
+		edges.append(edge)
+		e+=1
+		#if e%1000 == 0:
+		#	print e
+	graph = {}
+	graph["nodes"] = nodes2
+	graph["edges"] = edges
 	return graph
 
 

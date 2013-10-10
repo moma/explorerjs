@@ -1,4 +1,4 @@
-var iterationsFA2=20;
+var iterationsFA2=100;
 
 var inactiveColor = '#666';
 var startingNodeId = "1";
@@ -93,7 +93,8 @@ var sigmaJsMouseProperties = {
 };
 
 var bridge={};
-external="http://tina.iscpif.fr/explorerjs/";//Just if you want to use the server-apps from tina.server
+external="";
+//external="http://tina.iscpif.fr/explorerjs/";//Just if you want to use the server-apps from tina.server
 bridge["forFilteredQuery"] = external+"php/bridgeClientServer_filter.php";
 bridge["forNormalQuery"] = external+"php/bridgeClientServer.php";
 

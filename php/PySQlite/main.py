@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from FA2 import FA2 as FA2
+#from FA2 import FA2 as FA2
+from FA2 import ForceAtlas2
 from extractData import extract as SQLite
 #import networkx as nx
 #import matplotlib.pyplot as plt
@@ -28,7 +29,12 @@ def main():
 
 	#query = request.args['query']
 	#{"categorya"%3A"Keywords"%2C"categoryb"%3A"Scholars"%2C"keywords"%3A[]%2C"countries"%3A["Chile"]%2C"laboratories"%3A[]%2C"coloredby"%3A[]%2C"tags"%3A[]%2C"organizations"%3A[]}
-	
+	'''
+	i=int(sys.argv[2])
+	unique_id = sys.argv[1]
+	db=SQLite(unique_id)
+	db.extract()
+	'''
 	i = int(request.args['it'])
 
 	if request.args.has_key("query"):
@@ -46,7 +52,7 @@ def main():
 		#unique_id = "David__Chavalarias"
 		db=SQLite(unique_id)
 		db.extract()       
-    
+
 	#end = time.time()	  #====
 	#seconds1=end-start
 
@@ -58,17 +64,21 @@ def main():
 	#print
 	#graphArray = db.buildJSON(run.forceatlas2_layout(db.Graph,linlog=False,nohubs=False,iterations=i))
 
-	tempGraph = db.buildSimpleJSON(db.Graph)
-	tempGraph['it'] = i
-	import urllib
-	params = urllib.urlencode(tempGraph)
+	#####tempGraph = db.buildSimpleJSON(db.Graph)
+	tempGraph = db.buildSimpleJSONFinal(db.Graph)
+	spatialized = ForceAtlas2(tempGraph)
+	spatialized.init()
+	for i in range(0,i):
+		spatialized.atomicGo()
+	#####tempGraph['it'] = i
+	#####import urllib
+	#####params = urllib.urlencode(tempGraph)
 	#print params
-	f = urllib.urlopen("http://localhost:9000/post", params)
-	spatializedgraph = f.read() #<- FINALLY COORDINATES FROM FA2.java !!!
+	#####f = urllib.urlopen("http://localhost:9000/post", params)
+	#####spatializedgraph = f.read() #<- FINALLY COORDINATES FROM FA2.java !!!
 	#print spatializedgraph
 
-
-	graphArray = db.buildJSON_sansfa2(db.Graph,spatializedgraph)
+	graphArray = db.buildJSON_sansfa2(db.Graph,spatialized.getGraph())
 	#nx.draw(db.Graph, positions)     
 	#end = time.time()	  #====
 	#seconds2 = end-start

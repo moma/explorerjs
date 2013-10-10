@@ -64,6 +64,7 @@ function parse(){
             async: false,
             success : function(data){ 
                 //pr("unique_id="+unique_id+"&it="+iterationsFA2);
+                pr(data);
                 extractFromJson(data); 
                 stopLoader();
                 updateEdgeFilter("social");
