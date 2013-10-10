@@ -67,6 +67,7 @@ sigma.forceatlas2.ForceAtlas2 = function() {
     switch (self.state.step) {
       case 0: // Pass init
         // Initialise layout data
+	pr("case0()");
         nodesFA2.forEach(function(n) {
           if (self.p.layoutHiddenNodes || (!self.p.layoutHiddenNodes && !n.hidden)) {
             if(n.fa2) {
@@ -107,6 +108,7 @@ sigma.forceatlas2.ForceAtlas2 = function() {
         break;
 
       case 1: // Repulsion
+	pr("case1()");
         var Repulsion = self.ForceFactory.buildRepulsion(
           self.p.adjustSizes,
           self.p.scalingRatio
@@ -151,6 +153,7 @@ sigma.forceatlas2.ForceAtlas2 = function() {
         break;
 
       case 2: // Gravity
+	pr("case2()");
         var Gravity = (self.p.strongGravityMode) ?
                       (self.ForceFactory.getStrongGravity(
                         self.p.scalingRatio
@@ -180,6 +183,7 @@ sigma.forceatlas2.ForceAtlas2 = function() {
         break;
 
       case 3: // Attraction
+	pr("case3()");
         var Attraction = self.ForceFactory.buildAttraction(
           self.p.linLogMode,
           self.p.outboundAttractionDistribution,
@@ -221,6 +225,7 @@ sigma.forceatlas2.ForceAtlas2 = function() {
         break;
 
       case 4: // Auto adjust speed
+	pr("case4()");
         var totalSwinging = 0;  // How much irregular movement
         var totalEffectiveTraction = 0;  // Hom much useful movement
         var swingingSum=0;
@@ -250,16 +255,16 @@ sigma.forceatlas2.ForceAtlas2 = function() {
         
         var convg= ((Math.pow(nodesFA2.length,2))/promdxdy);    /**/
         var swingingVSnodes_length = swingingSum/nodesFA2.length;     /**/
-//        if(convg > swingingVSnodes_length){ 
-//            if(numberOfDocs==nodesFA2.length){
-//                socialConverged++;
-//            }
-//            if(numberOfNGrams==nodesFA2.length ){
-//                semanticConverged++;
-//            }
-//            pr("\tI'm going to apply the stop criteria!");
-//            partialGraph.stopForceAtlas2(); 
-//        }
+        if(convg > swingingVSnodes_length){ 
+            if(numberOfDocs==nodesFA2.length){
+                socialConverged++;
+            }
+            if(numberOfNGrams==nodesFA2.length ){
+                semanticConverged++;
+            }
+            pr("\tI'm going to apply the stop criteria!");
+            partialGraph.stopForceAtlas2(); 
+        }
         
         self.p.totalEffectiveTraction = totalEffectiveTraction;
 
@@ -288,6 +293,7 @@ sigma.forceatlas2.ForceAtlas2 = function() {
         break;
 
       case 5: // Apply forces
+	pr("case5()");
         var i = self.state.index;
         if (self.p.adjustSizes) {
           var speed = self.p.speed;
@@ -337,6 +343,8 @@ sigma.forceatlas2.ForceAtlas2 = function() {
             }
           }
         }
+	partialGraph.stopForceAtlas2();
+	printNodesFA2();
 
         if (i == nodesFA2.length) {
           self.state.step = 0;
@@ -963,25 +971,35 @@ sigma.forceatlas2.Region.prototype.applyForce = function(n, Force, theta) {
   }
 };
 
-sigma.publicPrototype.startForceAtlas2 = function() {
+function printNodesFA2(){
+	for(n in nodesFA2){
+		pr(nodesFA2[n]['fa2']);
+	}
+	pr("");
+}
 
+function printNodes(){
+	for(n in nodesFA2){
+		pr(nodesFA2[n]);
+	}
+	pr("");
+}
+
+sigma.publicPrototype.startForceAtlas2 = function() {
   //if(!this.forceatlas2) {
       pr("\tStarting FA2");
-      nodesFA2 = this._core.graph.nodes.filter(function(n) {
-                    return !n['hidden'];
-                });/*.map(function(n) {
-                    return n;
-                });*/
-      edgesFA2 = this._core.graph.edges.filter(function(e) {
-                    return !e['hidden'];
-                });/*.map(function(e) {
-                    return e;
-                });*/
+      nodesFA2 = this._core.graph.nodes;
+      edgesFA2 = this._core.graph.edges;
+	for(n in nodesFA2){
+		nodesFA2[n]['x'] = parseInt(n);
+		nodesFA2[n]['y'] = parseInt(n);
+	}
       pr("\t#nodes: "+nodesFA2.length);
       pr("\t#edges: "+edgesFA2.length);
       this.forceatlas2 = new sigma.forceatlas2.ForceAtlas2();
       this.forceatlas2.setAutoSettings();
       this.forceatlas2.init();
+	printNodes();
       //}
       $("#overviewzone").hide();
       this.addGenerator('forceatlas2', this.forceatlas2.atomicGo, function(){
@@ -995,4 +1013,5 @@ sigma.publicPrototype.stopForceAtlas2 = function() {
   updateMap();
   partialGraph.refresh();
   $("#overviewzone").show();
+	printNodes();
 };

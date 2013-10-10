@@ -2,21 +2,23 @@ from Region import Region
 import ForceFactory
 import math
 import random
+import sys
+import pprint
 
 class ForceAtlas2:
 	def __init__(self,graph):
 		self.graph = graph
 		self.nodesIndex = {}
 		self.p={
-			"linLogMode": "false",
-			"outboundAttractionDistribution": "false",
-			"adjustSizes": "false",
+			"linLogMode": False,
+			"outboundAttractionDistribution": False,
+			"adjustSizes": False,
 			"edgeWeightInfluence": 0,
 			"scalingRatio": 1,
-			"strongGravityMode": "false",
+			"strongGravityMode": False,
 			"gravity": 1,
 			"jitterTolerance": 1,
-			"barnesHutOptimize": "false",
+			"barnesHutOptimize": False,
 			"barnesHutTheta": 1.2,
 			"speed": 1,
 			"outboundAttCompensation": 1,
@@ -30,6 +32,7 @@ class ForceAtlas2:
 		self.rootRegion = 0
 
 	def init(self):
+		self.setAutoSettings()
 		nds = self.graph["nodes"]
 		for i in range(len(nds)):
 
@@ -56,6 +59,45 @@ class ForceAtlas2:
 		while (self.atomicGo()):
 			print "something"
 
+	def printNodesFA2(self):
+		for i in self.graph["nodes"]:
+			print i
+
+	def setAutoSettings(self):
+		# Tuning
+		lenNodes = len(self.graph["nodes"])
+		if (lenNodes >= 100):
+			self.p["scalingRatio"] = 2.0
+		else:
+			self.p["scalingRatio"] = 10.0
+
+		self.p["strongGravityMode"] = False
+		self.p["gravity"] = 1
+
+		# Behavior
+		self.p["outboundAttractionDistribution"] = False
+		self.p["linLogMode"] = False
+		self.p["adjustSizes"] = False
+		self.p["edgeWeightInfluence"] = 1
+
+		# Performance
+		if (lenNodes >= 50000):
+			self.p["jitterTolerance"] = 10
+		elif (lenNodes >= 5000):
+			self.p["jitterTolerance"] = 1
+		else:
+			self.p["jitterTolerance"] = 0.1
+
+		if (lenNodes >= 1000):
+			self.p["barnesHutOptimize"] = True
+		else:
+			self.p["barnesHutOptimize"] = False
+
+		self.p["barnesHutTheta"] = 1.2
+
+
+
+
 	def atomicGo(self):
 		graph = self.graph
 		nodes = graph["nodes"]
@@ -68,6 +110,7 @@ class ForceAtlas2:
 
 		if   case==0:
 								# Initialise layout data
+			print "the case 0"
 			for i in range(len(nodes)):
 				if nodes[i]["fa2"]:
 					nodes[i]["fa2"]["mass"] = 1 + nodes[i]["degree"]
@@ -86,12 +129,14 @@ class ForceAtlas2:
 			
 			# If Barnes Hut active, initialize root region
 			if self.p["barnesHutOptimize"]:
+				print '\tcase 0 -> ["barnesHutOptimize"]'
 				self.rootRegion = Region(nodes, 0)
 				self.rootRegion.buildSubRegions()
 
 
 			# If outboundAttractionDistribution active, compensate.
 			if self.p["outboundAttractionDistribution"]:
+				print '\tcase 0 -> ["outboundAttractionDistribution"]'
 				self.p["outboundAttCompensation"] = 0
 				for i in range(len(nodes)):
 					self.p["outboundAttCompensation"] += nodes[i]["fa2"]["mass"]
@@ -104,7 +149,10 @@ class ForceAtlas2:
 
 		elif case==1:
 								# Repulsion
+			print "the case 1: Repulsion"
 			Repulsion = ForceFactory.buildRepulsion(self.p["adjustSizes"],self.p["scalingRatio"])
+			print "\tprinting what it is inside of Repulsion variable"
+			print Repulsion
 			if self.p["barnesHutOptimize"]:
 				rootRegion = self.rootRegion
 				barnesHutTheta = self.p["barnesHutTheta"]
@@ -138,6 +186,7 @@ class ForceAtlas2:
 
 		elif case==2:
 								# Gravity
+			print "the case 2: Gravity"
 			Gravity=""
 			if self.p["strongGravityMode"]:
 				Gravity = ForceFactory.getStrongGravity(self.p["scalingRatio"])
@@ -161,6 +210,7 @@ class ForceAtlas2:
 
 		elif case==3:
 								# Attraction
+			print "the case 3: Attraction"
 			field=""
 			if self.p["outboundAttractionDistribution"]:
 				field = self.p["outboundAttCompensation"]
@@ -197,6 +247,7 @@ class ForceAtlas2:
 
 		elif case==4:
 								# Auto adjust speed
+			print "the case 4: Auto-adjust speed"
 			totalSwinging=0# How much irregular movement
 			totalEffectiveTraction = 0  # Hom much useful movement
 			swingingSum=0
@@ -226,6 +277,8 @@ class ForceAtlas2:
 
 		elif case==5:
 								# Apply forces
+			print "the case 5: Apply forces"
+
 			i = self.state["index"]
 			if self.p["adjustSizes"]:
 				speed = self.p["speed"]

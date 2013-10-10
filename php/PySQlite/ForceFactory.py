@@ -157,8 +157,7 @@ class linAttraction:
 		if n1["fa2"] and n2["fa2"]:
 			xDist = n1["x"] - n2["x"]
 			yDist = n1["y"] - n2["y"]
-			factor = -self.coefficient * e
-
+			factor = -self.coefficient * float(e)
 			n1["fa2"]["dx"] += xDist * factor
 			n1["fa2"]["dy"] += yDist * factor
 			n2["fa2"]["dx"] -= xDist * factor

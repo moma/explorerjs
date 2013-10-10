@@ -885,7 +885,7 @@ class extract:
 			#node["name"] = nodeLabel
 			#node["color"] = "green"
 			#node["occ"] = int(term_occ)
-			node["degree"] = int(term_occ)
+			node["degree"] = 0
 			node["size"] = int(term_occ)
 			#node["x"] = str(coords[idNode][0])
 			#node["y"] = str(coords[idNode][1])
@@ -945,7 +945,7 @@ class extract:
 			#node["y"] = str(coords[idNode][1])
 			#node["content"] = self.toHTML(content)
 			node["id"] = idNode
-			node["degree"] = 12
+			node["degree"] = 0
 			node["size"] = 12
 			nodes2.append(node)
 			nodes[idNode] = countnodes
@@ -956,12 +956,15 @@ class extract:
 		edge = {}
 		edge["source"] = n[0].encode('utf-8')
 		edge["target"] = n[1].encode('utf-8')
+		nodes2[nodes[edge["source"]]]['degree']+=1 # incrementing the degree
+		nodes2[nodes[edge["target"]]]['degree']+=1
 		edge["weight"] = str(self.Graph[n[0]][n[1]]['weight'])
 		#edge["type"] = self.Graph[n[0]][n[1]]['type']
 		edges.append(edge)
 		e+=1
 		#if e%1000 == 0:
 		#	print e
+
 	graph = {}
 	graph["nodes"] = nodes2
 	graph["edges"] = edges
