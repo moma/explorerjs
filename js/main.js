@@ -17,34 +17,6 @@ if(typeof(getUrlParam.file)!=="undefined"){
 } else {
     window.location.href=window.location.origin+window.location.pathname+"?file=2-Terms-Authors-300nodes.gexf";
 }
-/*
-if(typeof(getUrlParam.file)!=="undefined"){
-    if(typeof(isBipartite[getUrlParam.file])!=="undefined"){
-        $.doTimeout(30,function (){
-            listGexfs();
-            startBipartite(getUrlParam.file);
-            $.doTimeout(30,function (){
-                $("#currentGraph").html(getUrlParam.file);
-            });
-            
-        });
-    }
-    else {
-        $.doTimeout(30,function (){
-            listGexfs();
-            startOnePartite(getUrlParam.file);            
-            $.doTimeout(30,function (){
-                $("#currentGraph").html(getUrlParam.file);
-            });            
-        });
-    }
-    
-}
-else {
-    window.location.href=window.location.origin+window.location.pathname+"?file=2-Terms-Authors-300nodes.gexf";
-}
-*/
-
 
 
 function listGexfs(){

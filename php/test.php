@@ -9,6 +9,8 @@ class Match{
 */
 
 
+//header ("Content-Type:application/json");
+
 $dbname='homework-20750-1-homework-db.db';
 $base = new PDO("sqlite:" . $dbname);
 
@@ -76,14 +78,18 @@ foreach ($base->query($sql) as $row) {
 }
 
 $output = "<ul>";
+
 foreach($titles as $key => $data) {
+        //echo $key." : ".var_dump($data)."<br>";
 	$output.="<li title='".$data["occ"]."'><a href=http://scholar.google.com/scholar?q=".urlencode('"'.$data["title"].'"').">".$data["title"]."</a></li><br>";
+        //echo $data["occ"]." : ".$data["occ"]/$sum."<br>";
 }
 $output .= "</ul>";
-
 echo $output;
+ 
 
 
+//echo json_encode($titles);
 
 /*
 SELECT wos_id
@@ -93,5 +99,14 @@ GROUP BY wos_id
 ORDER BY count(wos_id) DESC
 LIMIT 6
 */
+/*
+ void BubbleSort(int *nums, int n)
+{
+for (int i=0; i<n-1; i++)
+for (int j=n-1; j>i; j--)
+if(nums[j] < nums[j-1]
+swap(j,j-1);
+}
+ */
 
 ?>

@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     url(r'^prueba/$', 'article.views.ejemplo_template'),
     url(r'^search/$', 'search.views.basicSearch'),
     url(r'^search_titles/$','search.views.search_titles',name='search_titles'),
+    url(r'^login/$', 'auth.views.login_user'),
     # url(r'^$', 'mysite.views.home', name='home'),
     # url(r'^mysite/', include('mysite.foo.urls')),
 
