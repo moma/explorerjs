@@ -13,7 +13,7 @@ class Match{
 
 $dbname='homework-20750-1-homework-db.db';
 $base = new PDO("sqlite:" . $dbname);
-
+$output = "<ul>"; // string sent to the javascript for display
 
 #http://localhost/branch_ademe/php/test.php?type=social&query=[%22marwah,%20m%22]
 #http://localhost/branch_ademe/php/test.php?type=social&query=[%22murakami,%20s%22,%22tasaki,%20t%22,%22oguchi,%20m%22,%22daigo,%20i%22]
@@ -53,42 +53,48 @@ $sql.=')
 	ORDER BY count('.$id.') DESC
 	LIMIT 6';
 
+
+
 $wos_ids = array();
 $sum=0;
+
+// array of all relevant documents with score
 foreach ($base->query($sql) as $row) {
         $wos_ids[$row[$id]] = $row["count(*)"];
         $sum = $row["count(*)"] +$sum;
 }
 
-$sql = 'SELECT id,data FROM ISITITLE WHERE (';
-foreach ($wos_ids as $key => $value){
-	$sql.=" id=".$key." OR";
-}
-$sql = substr($sql, 0, -2);
-$sql.=")";
+foreach ($wos_ids as $id => $score) {
+	$output.="<li title='".$score."'>";
+	// get the authors
+	$sql = 'SELECT data FROM ISIAUTHOR WHERE id='.$id;
+	foreach ($base->query($sql) as $row) {
+		$output.=strtoupper($row['data']).', ';
+	}
+	$sql = 'SELECT data FROM ISIpubdate WHERE id='.$id;
+	foreach ($base->query($sql) as $row) {
+		$output.='('.$row['data'].') ';
+	}
 
-$titles = array();
-foreach ($base->query($sql) as $row) {
-	//array_push($titles, $row['data']);
-        $i = $row['id'];
-        $info = array();
-        $info["title"] = $row['data'];
-        $info["occ"] = $wos_ids[$i];
-        $titles[$i] = $info;
+	$sql = 'SELECT data FROM ISITITLE WHERE id='.$id;
+	foreach ($base->query($sql) as $row) {
+		$output.="<a href=http://scholar.google.com/scholar?q=".urlencode('"'.$row['data'].'"').">".$row['data']."</a></li><br>";		
+	}
+
 }
 
-$output = "<ul>";
-
-foreach($titles as $key => $data) {
-        //echo $key." : ".var_dump($data)."<br>";
-	$output.="<li title='".$data["occ"]."'><a href=http://scholar.google.com/scholar?q=".urlencode('"'.$data["title"].'"').">".$data["title"]."</a></li><br>";
-        //echo $data["occ"]." : ".$data["occ"]/$sum."<br>";
-}
 $output .= "</ul>";
 echo $output;
  
+function pt($string){
+    // juste pour afficher avec retour à la ligne
+echo $string."<br/>";
+}
 
-
+function pta($array){
+    print_r($array);
+    echo '<br/>';
+}
 //echo json_encode($titles);
 
 /*
