@@ -64,7 +64,6 @@ function parse(){
             async: false,
             success : function(data){ 
                 //pr("unique_id="+unique_id+"&it="+iterationsFA2);
-                pr(data);
                 extractFromJson(data); 
                 stopLoader();
                 updateEdgeFilter("social");
@@ -102,9 +101,6 @@ function extractFromJson(data){
     
     for(var i in nodesNodes){
             colorRaw = nodesNodes[i].color.split(",");
-            if(nodesNodes[i].label=="second language acquisition"){
-                pr(colorRaw[0]+" - "+colorRaw[1]+" - "+colorRaw[2]);
-            }
             color = '#'+sigma.tools.rgbToHex(
                     parseFloat(colorRaw[2]),
                     parseFloat(colorRaw[1]),
@@ -146,7 +142,7 @@ function extractFromJson(data){
             Nodes[i].size = ""+normalizedSize;
             
             nodeK = Nodes[i];
-            nodeK.hidden=true;
+            nodeK.hidden=true;/**///should be uncommented
             partialGraph.addNode(i,nodeK);   
         }
         else {
@@ -181,7 +177,6 @@ function extractFromJson(data){
                     edge.hidden=false;
                 }
                 else edge.hidden=true;
-                partialGraph.addEdge(indice,source,target,edge);
                 
                 if((typeof nodes1[source])=="undefined"){
                     nodes1[source] = {
@@ -196,7 +191,6 @@ function extractFromJson(data){
             
             if(edge.label=="nodes2"){ 
                 edge.hidden=true;
-                partialGraph.addEdge(indice,source,target,edge);
                 if((typeof nodes2[source])=="undefined"){
                     nodes2[source] = {
                         label: Nodes[source].label,
@@ -210,7 +204,6 @@ function extractFromJson(data){
             
             if(edge.label=="bipartite"){   
                 edge.hidden=true;
-                partialGraph.addEdge(indice,source,target,edge);
                 // Document to NGram 
                 if((typeof bipartiteD2N[source])=="undefined"){
                     bipartiteD2N[source] = {
@@ -231,6 +224,9 @@ function extractFromJson(data){
                 }
                 else bipartiteN2D[target].neighbours.push(source);
             }
+            
+            //edge.hidden=false/**///should be commented
+            partialGraph.addEdge(indice,source,target,edge);
     }
 }
 

@@ -269,16 +269,16 @@ function updateEdgeFilter_attempt(edgeFilterName) {
     nbEdgesLeft = nbEdges;
     nbStepsLeft = nbSteps;
     nbEdgesProcessed=0;
-    
-    pr("\t\tprinting edges:");
-    pr(edges);
-    
-    pr("\t\tprint edges sorted by weight:");
-    pr(edgesSortedByWeight);
-    
-    
-    pr("\t\tprinting the edgeList just generated");
-    pr(edgeList);
+//    
+//    pr("\t\tprinting edges:");
+//    pr(edges);
+//    
+//    pr("\t\tprint edges sorted by weight:");
+//    pr(edgesSortedByWeight);
+//    
+//    
+//    pr("\t\tprinting the edgeList just generated");
+//    pr(edgeList);
     
     $(edgeFilterName).slider({
         range: true,
@@ -357,19 +357,19 @@ function updateEdgeFilter(edgeFilterName) {
     edgesSortedByWeight = ArraySortByKey(edgesByWeight, function(a,b){
         return a-b
     });
-    
-    pr("\t\tedgesSortedByWeightt:");
-    pr(edgesSortedByWeight);
-    
+//    
+//    pr("\t\tedgesSortedByWeightt:");
+//    pr(edgesSortedByWeight);
+//    
     edgeList = [];
     for(var i in edgesSortedByWeight){
         for(var j in edgesSortedByWeight[i].value){
             edgeList.push(edgesSortedByWeight[i].value[j]);
         }
     }
-    pr("\t\tprinting the nodeList just generated");
-    pr(edgeList);
-    
+//    pr("\t\tprinting the nodeList just generated");
+//    pr(edgeList);
+//    
     
     
     normEdges=[];
@@ -425,7 +425,7 @@ function updateEdgeFilter(edgeFilterName) {
                         //partialGraph.dropEdge(normEdges[i]);
                     }
                 }
-                pr("==========================================")
+                //pr("==========================================")
                 partialGraph.draw();
             });
         }
