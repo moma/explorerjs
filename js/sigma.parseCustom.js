@@ -21,13 +21,13 @@ function parse(){
     //"http://localhost:5000/"+unique_id+"/"+iterations;
     //http://localhost:8080/getJSON?callback=xxx&unique_id=Elisa__Omodei&it=3&_=1377043258090
     startLoader();
-    if(getUrlParam.nodeidparam.indexOf("__")===-1){        
+    if(getUrlParam.nodeidparam.indexOf("__")===-1){
         //gexfPath = "php/bridgeClientServer_filter.php?query="+getUrlParam.nodeidparam;
         //pr(gexfPath)
         $.ajax({
             type: 'GET',
             url: bridge["forFilteredQuery"],
-            data: "query="+getUrlParam.nodeidparam,
+            data: "query="+getUrlParam.nodeidparam+"&it="+iterationsFA2,
             contentType: "application/json",
             dataType: 'jsonp',
             async: false,
@@ -47,7 +47,7 @@ function parse(){
                 startEnviroment(); 
             },
             error: function(){ 
-                pr("Page Not found.");
+                pr("Page Not found. parseCustom, inside the IF");
             }
         });
         return true;
@@ -79,7 +79,7 @@ function parse(){
                 startEnviroment(); 
             },
             error: function(){ 
-                pr("Page Not found.");
+                pr("Page Not found. parseCustom, inside the ELSE");
             }
         });
         return false;

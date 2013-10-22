@@ -1806,6 +1806,7 @@ function setPanels(){
             partialGraph.draw();
         }
         else {
+            fa2enabled=true;
             edgesTF=false;
             partialGraph.startForceAtlas2();
         }

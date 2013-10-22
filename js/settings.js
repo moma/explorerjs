@@ -1,4 +1,5 @@
 var iterationsFA2=50;
+var fa2enabled=true;
 
 var inactiveColor = '#666';
 var startingNodeId = "1";

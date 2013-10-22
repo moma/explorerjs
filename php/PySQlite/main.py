@@ -34,7 +34,7 @@ def main():
 	else:
 		unique_id = request.args['unique_id']
 		db=SQLite(unique_id)
-		db.extract()       
+		db.extract()
 	# < / Data Extraction > #
 
 
