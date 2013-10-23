@@ -355,7 +355,7 @@ class extract:
 			sql+=' where id='+t
 			cont+=1
 		else: sql+=' or id='+t
-		
+	#print sql
 	for res in self.cursor.execute(sql):
 		idT = res['id'] 	
 		info = {}

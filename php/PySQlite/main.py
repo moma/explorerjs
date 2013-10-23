@@ -30,6 +30,7 @@ def main():
 
 	if request.args.has_key("query"):
 		db=SQLite("")
+		print request.args['query']
 		db.extract2(request.args['query'])
 	else:
 		unique_id = request.args['unique_id']
