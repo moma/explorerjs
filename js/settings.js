@@ -10,7 +10,7 @@ var strSearchBar = "Search";
 
 var gexf;
 //var zoom=0;
-var cursor_size= 0.00;
+var cursor_size= 20.00;
 
 var checkBox=false;
 var overNodes=false;
@@ -89,7 +89,7 @@ var sigmaJsGraphProperties = {
     maxEdgeSize: 2
 };
 var sigmaJsMouseProperties = {
-    minRatio:0.3,
+    minRatio:0.1,
     maxRatio: 100
 };
 
