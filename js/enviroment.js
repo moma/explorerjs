@@ -426,6 +426,8 @@ function updateEdgeFilter(edgeFilterName) {
                     }
                 }
                 //pr("==========================================")
+                partialGraph.stopForceAtlas2();
+                partialGraph.startForceAtlas2();
                 partialGraph.draw();
             });
         }
@@ -509,6 +511,8 @@ function updateBothEdgeFilters() {
                         }
                     }
                 }
+                partialGraph.stopForceAtlas2();
+                partialGraph.startForceAtlas2();
                 partialGraph.draw();
             });
         }
@@ -545,6 +549,8 @@ function updateBothEdgeFilters() {
                         //partialGraph.dropEdge(keywordsEdgesSortedByWeight[i].value);
                     }
                 }
+                partialGraph.stopForceAtlas2();
+                partialGraph.startForceAtlas2();
                 partialGraph.draw();
             });
         }
@@ -616,6 +622,8 @@ function updateNodeFilter(nodeFilterName) {
                         }
                     }
                 }
+                partialGraph.stopForceAtlas2();
+                partialGraph.startForceAtlas2();
                 partialGraph.draw();
             });
         }
@@ -705,6 +713,8 @@ function updateBothNodeFilters() {
                         }
                     }
                 }
+                partialGraph.stopForceAtlas2();
+                partialGraph.startForceAtlas2();
                 partialGraph.draw();
             });
         }
