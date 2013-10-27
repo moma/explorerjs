@@ -21,12 +21,16 @@ if($type=="social"){
 	$table = "ISIAUTHOR";
 	$column = "data";
 	$id = "id";
+	$restriction='';
+	$factor=1;// factor for normalisation of stars
 }
 
 if($type=="semantic"){
 	$table = "articles2terms";
 	$column = "terms_id";
 	$id = "wos_id";
+	$restriction=' AND  title_or_abstract=0 ';
+	$factor=3;
 }
 
 $sql = 'SELECT count(*),'.$id.'
@@ -37,12 +41,10 @@ foreach($elems as $elem){
 }
 $sql = substr($sql, 0, -3);
 
-$sql.=')
+$sql.=')'.$restriction.'
 	GROUP BY '.$id.'
 	ORDER BY count('.$id.') DESC
 	LIMIT 6';
-
-
 
 $wos_ids = array();
 $sum=0;
@@ -55,6 +57,14 @@ foreach ($base->query($sql) as $row) {
 
 foreach ($wos_ids as $id => $score) {
 	$output.="<li title='".$score."'>";
+	$output.=imagestar($score,$factor).' ';
+	$sql = 'SELECT data FROM ISITITLE WHERE id='.$id;
+	foreach ($base->query($sql) as $row) {
+		$output.='<a href="JavaScript:newPopup(\'php/doc_details.php?id='.$id.'	\')">'.$row['data']." </a> ";		
+		$external_link="<a href=http://scholar.google.com/scholar?q=".urlencode('"'.$row['data'].'"')." target=blank>".' <img src="img/externallink.png"></a>';	
+		//$output.='<a href="JavaScript:newPopup(''php/doc_details.php?id='.$id.''')"> Link</a>';	
+	}
+
 	// get the authors
 	$sql = 'SELECT data FROM ISIAUTHOR WHERE id='.$id;
 	foreach ($base->query($sql) as $row) {
@@ -65,16 +75,11 @@ foreach ($wos_ids as $id => $score) {
 		$output.='('.$row['data'].') ';
 	}
 
-	$sql = 'SELECT data FROM ISITITLE WHERE id='.$id;
-	foreach ($base->query($sql) as $row) {
-		$output.='<a href="JavaScript:newPopup(\'php/doc_details.php?id='.$id.'\')">'.$row['data']." </a> ";		
-		$output.="<a href=http://scholar.google.com/scholar?q=".urlencode('"'.$row['data'].'"')." target=blank>".' <img src="img/externallink.png"></a>';	
-		//$output.='<a href="JavaScript:newPopup(''php/doc_details.php?id='.$id.''')"> Link</a>';	
-	}
+	
 
 	//<a href="JavaScript:newPopup('http://www.quackit.com/html/html_help.cfm');">Open a popup window</a>'
 
-	$output.="</li><br>";
+	$output.=$external_link."</li><br>";
 
 }
 
@@ -90,24 +95,19 @@ function pta($array){
     print_r($array);
     echo '<br/>';
 }
-//echo json_encode($titles);
 
-/*
-SELECT wos_id
-FROM articles2terms 
-where (terms_id="polution" OR terms_id="biological diversity" OR terms_id="pollution")
-GROUP BY wos_id
-ORDER BY count(wos_id) DESC
-LIMIT 6
-*/
-/*
- void BubbleSort(int *nums, int n)
-{
-for (int i=0; i<n-1; i++)
-for (int j=n-1; j>i; j--)
-if(nums[j] < nums[j-1]
-swap(j,j-1);
+function imagestar($score,$factor) {
+// produit le html des images de score
+    $star_image = '';
+    if ($score > .5) {
+        $star_image = '';
+        for ($s = 0; $s < min(5,$score/$factor); $s++) {
+            $star_image.='<img src="img/star.gif" border="0" >';
+        }
+    } else {
+        $star_image.='<img src="img/stargrey.gif" border="0">';
+    }
+    return $star_image;
 }
- */
 
 ?>
