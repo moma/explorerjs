@@ -1,18 +1,7 @@
 <?php
 
-/*
-class Match{
-	function setFoo(){
-		echo "inside this function";
-	}
-}
-*/
+include('parameters_details.php');
 
-
-//header ("Content-Type:application/json");
-
-$dbname='homework-20750-1-homework-db.db';
-$base = new PDO("sqlite:" . $dbname);
 $output = "<ul>"; // string sent to the javascript for display
 
 #http://localhost/branch_ademe/php/test.php?type=social&query=[%22marwah,%20m%22]
@@ -78,8 +67,11 @@ foreach ($wos_ids as $id => $score) {
 
 	$sql = 'SELECT data FROM ISITITLE WHERE id='.$id;
 	foreach ($base->query($sql) as $row) {
-		$output.="<a href=http://scholar.google.com/scholar?q=".urlencode('"'.$row['data'].'"').">".$row['data']."</a></li><br>";		
+		$output.="<a href=http://scholar.google.com/scholar?q=".urlencode('"'.$row['data'].'"').">".$row['data']."</a> ";		
+		$output.="<a href=php/doc_details.php?id=".$id." target='_blank'> Link</a>";	
 	}
+
+	$output.="</li><br>";
 
 }
 
