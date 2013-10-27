@@ -67,9 +67,12 @@ foreach ($wos_ids as $id => $score) {
 
 	$sql = 'SELECT data FROM ISITITLE WHERE id='.$id;
 	foreach ($base->query($sql) as $row) {
-		$output.="<a href=http://scholar.google.com/scholar?q=".urlencode('"'.$row['data'].'"').">".$row['data']."</a> ";		
-		$output.="<a href=php/doc_details.php?id=".$id." target='_blank'> Link</a>";	
+		$output.='<a href="JavaScript:newPopup(\'php/doc_details.php?id='.$id.'\')">'.$row['data']." </a> ";		
+		$output.="<a href=http://scholar.google.com/scholar?q=".urlencode('"'.$row['data'].'"')." target=blank>".' <img src="img/externallink.png"></a>';	
+		//$output.='<a href="JavaScript:newPopup(''php/doc_details.php?id='.$id.''')"> Link</a>';	
 	}
+
+	//<a href="JavaScript:newPopup('http://www.quackit.com/html/html_help.cfm');">Open a popup window</a>'
 
 	$output.="</li><br>";
 

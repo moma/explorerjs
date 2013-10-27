@@ -1,10 +1,40 @@
 <?php
 
 include('parameters_details.php');
-$output = "<ul>"; // string sent to the javascript for display
+echo '
+<html>
+        <head>
+  <meta charset="utf-8" />
+  <title>jQuery UI Tabs - Collapse content</title>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  
+  <script>
+  $(function() {
+    $( "#tabs" ).tabs({
+      collapsible: true
+    });
+  });
+  </script>
+</head>
+          
+    <body>
+    <div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">Selected Document</a></li>
+    <li><a href="#tabs-2">Starred</a></li>    
+  </ul>';
+
+echo '<div id="tabs-1">';
+$output = ""; // string sent to the javascript for display
 $id=$_GET["id"];
 //$elems = json_decode($query);
-	$output.="<li'>";
+	$sql = 'SELECT data FROM ISITITLE WHERE id='.$id;
+	foreach ($base->query($sql) as $row) {
+		$output.='<h2>'.$row['data'].'</h2>';
+		$find.="<br/><a href=http://scholar.google.com/scholar?q=".urlencode('"'.$row['data'].'"')." target='blank'>[ Search on the web ] </a>";		
+	}
 	// get the authors
 	$sql = 'SELECT data FROM ISIAUTHOR WHERE id='.$id;
 	foreach ($base->query($sql) as $row) {
@@ -14,21 +44,21 @@ $id=$_GET["id"];
 	foreach ($base->query($sql) as $row) {
 		$output.='('.$row['data'].') ';
 	}
-
-	$sql = 'SELECT data FROM ISITITLE WHERE id='.$id;
-	foreach ($base->query($sql) as $row) {
-		$output.="<a href=http://scholar.google.com/scholar?q=".urlencode('"'.$row['data'].'"').">".$row['data']."</a>";		
-	}
 	$sql = 'SELECT data FROM ISIABSTRACT WHERE id='.$id;
 	foreach ($base->query($sql) as $row) {
-		$output.='<br/><b>Abstract :</b><i>'.$row['data'].' </i>';
-		$output.="</li><br>";		
+		$output.='<br/><p><b>Abstract : </b><i>'.$row['data'].' </i></p>';
+		$output.="<br>";		
 	}
-	$output.=
+
+echo $output.$find;
+echo '</div>';
+echo '<div id="tabs-2">
+    <p><strong>Click this tab again to close the content pane.</strong></p>
+    <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
+  </div>';
 
 
-$output .= "</ul>";
-echo $output;
+echo '</div>';
  
 function pt($string){
     // juste pour afficher avec retour à la ligne
@@ -39,24 +69,6 @@ function pta($array){
     print_r($array);
     echo '<br/>';
 }
-//echo json_encode($titles);
 
-/*
-SELECT wos_id
-FROM articles2terms 
-where (terms_id="polution" OR terms_id="biological diversity" OR terms_id="pollution")
-GROUP BY wos_id
-ORDER BY count(wos_id) DESC
-LIMIT 6
-*/
-/*
- void BubbleSort(int *nums, int n)
-{
-for (int i=0; i<n-1; i++)
-for (int j=n-1; j>i; j--)
-if(nums[j] < nums[j-1]
-swap(j,j-1);
-}
- */
 
 ?>
