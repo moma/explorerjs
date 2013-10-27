@@ -80,7 +80,6 @@ foreach ($wos_ids as $id => $score) {
 	//<a href="JavaScript:newPopup('http://www.quackit.com/html/html_help.cfm');">Open a popup window</a>'
 
 	$output.=$external_link."</li><br>";
-
 }
 
 $output .= "</ul>";
