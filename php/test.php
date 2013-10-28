@@ -54,7 +54,7 @@ foreach ($base->query($sql) as $row) {
         $wos_ids[$row[$id]] = $row["count(*)"];
         $sum = $row["count(*)"] +$sum;
 }
-//echo "jijiji";
+
 foreach ($wos_ids as $id => $score) {
 	$output.="<li title='".$score."'>";
 	$output.=imagestar($score,$factor).' ';
@@ -83,16 +83,16 @@ foreach ($wos_ids as $id => $score) {
 }
 
 $output .= "</ul>";
- 
-function pt($string){
-    // juste pour afficher avec retour à la ligne
-	echo $string."<br/>";
-}
 
-function pta($array){
-    print_r($array);
-    echo '<br/>';
-}
+#function pt($string){
+#    // juste pour afficher avec retour à la ligne
+#	echo $string."<br/>";
+#}
+
+#function pta($array){
+#    print_r($array);
+#    echo '<br/>';
+#}
 
 function imagestar($score,$factor) {
 // produit le html des images de score
