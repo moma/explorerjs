@@ -155,23 +155,26 @@ function onepartiteExtract(){
                 
             // Attribute values
             var attvalueNodes = nodeNode.getElementsByTagName('attvalue');
+            var atts={};
             for(k=0; k<attvalueNodes.length; k++){
                 var attvalueNode = attvalueNodes[k];
                 var attr = attvalueNode.getAttribute('for');
                 var val = attvalueNode.getAttribute('value');
-                node.attributes.push({
-                    attr:attr, 
-                    val:val
-                });
+//                node.attributes.push({
+//                    attr:attr, 
+//                    val:val
+//                });
+                atts[attr]=val;
+                node.attributes = atts;
             }
             node.id=id;
             node.type = "Document";
-            if(node.attributes[0].attr=="weight"){
-                node.size=node.attributes[0].val;
-            }
-            if(node.attributes[1].attr=="weight"){
-                node.size=node.attributes[1].val;
-            }
+            //if(node.attributes[0].attr=="weight"){
+            node.size=parseInt(node.attributes["weight"]);
+            //}
+//            if(node.attributes[1].attr=="weight"){
+//                node.size=node.attributes[1].val;
+//            }
                 
             partialGraph.addNode(id,node);
             labels.push({

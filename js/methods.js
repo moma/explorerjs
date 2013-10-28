@@ -419,7 +419,7 @@ function updateLeftPanel(){
         for(var i in selections){
             information += '<li><b>' + Nodes[i].label + '</b></li>';
             if(Nodes[i].htmlCont==""){
-                information += '<li>' + Nodes[i].attributes[3].val + '</li>';
+                information += '<li>' + Nodes[i].attributes["level"] + '</li>';
             }
             else {
                 information += '<li>' + $("<div/>").html(Nodes[i].htmlCont).text() + '</li>';
@@ -610,7 +610,7 @@ function updateLeftPanel(){
                 if(Nodes[i].type=="Document"){
                     information += '<li><b>' + Nodes[i].label + '</b></li>';
                     if(Nodes[i].htmlCont==""){
-                        information += '<li>' + Nodes[i].attributes[3].val + '</li>';
+                        information += '<li>' + Nodes[i].attributes["level"] + '</li>';
                     }
                     else {
                         information += '<li>' + $("<div/>").html(Nodes[i].htmlCont).text() + '</li>';
@@ -1165,7 +1165,7 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
                 }
             });
         }
-        if(categoriesIndex.length==1) updateLeftPanel2();
+        if(categoriesIndex.length==1) updateLeftPanel_uni();
         if(categoriesIndex.length==2) updateLeftPanel();
         if(is_empty(selections)==true){  
                 $("#names").html(""); //Information extracted, just added

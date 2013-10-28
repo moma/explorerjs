@@ -6,8 +6,7 @@
 
 
 //For UNI-PARTITE
-function updateLeftPanel2(){//Uni-partite graph
-    pr("nueva funcion");
+function updateLeftPanel_uni(){//Uni-partite graph
     var names='';
     var information='';
     
@@ -31,6 +30,30 @@ function updateLeftPanel2(){//Uni-partite graph
     minFont=12;
     //maxFont=(minFont+oposMAX)-1;  
     maxFont=20;
+    
+//    
+//    params=[];
+//    for(var i in selections){
+//        params.push(Nodes[i].label);
+//    }
+//        jsonparams=JSON.stringify(params);
+//    $.ajax({
+//        type: 'GET',
+//        url: 'php/test.php',
+//        data: "type=social&query="+jsonparams,
+//        //contentType: "application/json",
+//        //dataType: 'json',
+//        success : function(data){ 
+//            $("#topPapers").html(data);
+//        },
+//        error: function(){ 
+//            pr('Page Not found: updateLeftPanel_uni(), if(swclickActual=="social")');
+//        }
+//    });
+    
+    
+    
+    
     js2='\');"';
     information += '<br><h4>Information:</h4>';
     information += '<ul>';
@@ -38,14 +61,17 @@ function updateLeftPanel2(){//Uni-partite graph
     for(var i in selections){
         information += '<div id="opossitesBox">';
         information += '<li><b>' + Nodes[i].label.toUpperCase() + '</b></li>';
-        for(var j in Nodes[i].attributes){ 
-            if(Nodes[i].attributes[j].attr=="period"||
-                Nodes[i].attributes[j].attr=="cluster_label" 
-                    )
+        //for(var j in Nodes[i].attributes){
+//            if(Nodes[i].attributes[j].attr=="period"||
+//                Nodes[i].attributes[j].attr=="cluster_label" 
+//                    )
                 information += 
-                '<li><b>' + Nodes[i].attributes[j].attr + 
-                '</b>:&nbsp;'+Nodes[i].attributes[j].val+'</li>';
-        }
+                '<li><b>density:' + 
+                '</b>:&nbsp;'+Nodes[i].attributes["density"]+'</li>';
+                information += 
+                '<li><b>weight:' + 
+                '</b>:&nbsp;'+Nodes[i].attributes["weight"]+'</li>';
+        //}
         information += '</div>';            
         information += '</ul><br>';
     }
@@ -63,7 +89,7 @@ function updateLeftPanel2(){//Uni-partite graph
         $("#zonecentre").css({
             left: _cG.width() + "px"
         });
-    });  
+    });
 }
 
 //FOR UNI-PARTITE
