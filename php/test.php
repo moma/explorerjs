@@ -82,7 +82,6 @@ $output = "<ul>";
 foreach($titles as $key => $data) {
         //echo $key." : ".var_dump($data)."<br>";
 	$output.="<li title='".$data["occ"]."'><a href=http://scholar.google.com/scholar?q=".urlencode('"'.$data["title"].'"').">".$data["title"]."</a></li><br>";
-        
 }
 $output .= "</ul>";
 echo $output;

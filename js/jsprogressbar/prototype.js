@@ -1567,7 +1567,7 @@ Element.Methods = {
     return $(element).style.display != 'none';
   },
 
-  toggle: function(element) {
+  toggle1: function(element) {
     element = $(element);
     Element[Element.visible(element) ? 'hide' : 'show'](element);
     return element;
@@ -1838,7 +1838,7 @@ Element.Methods = {
     return element;
   },
 
-  toggleClassName: function(element, className) {
+  toggle1ClassName: function(element, className) {
     if (!(element = $(element))) return;
     return element[element.hasClassName(className) ?
       'removeClassName' : 'addClassName'](className);
@@ -4035,7 +4035,7 @@ Object.extend(document, {
 
 Hash.toQueryString = Object.toQueryString;
 
-var Toggle = { display: Element.toggle };
+var Toggle1 = { display: Element.toggle1 };
 
 Element.Methods.childOf = Element.Methods.descendantOf;
 
