@@ -347,7 +347,7 @@ function getOpossitesNodes(node_id, entireNode) {
 }
 
 function updateLeftPanel(){
-    pr("in updateLeftPanel()");
+    pr("\t ** in updateLeftPanel() ** ");
     names='';
     opossitesNodes='';
     information='';
@@ -399,6 +399,8 @@ function updateLeftPanel(){
             params.push(Nodes[i].label);
         }
         jsonparams=JSON.stringify(params);
+        jsonparams = jsonparams.replace("&","__and__");
+        pr(jsonparams);
         $.ajax({
             type: 'GET',
             url: 'php/test.php',

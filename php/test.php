@@ -11,7 +11,7 @@ $output = "<ul>"; // string sent to the javascript for display
 
 
 $type = $_GET["type"];
-$query = $_GET["query"];
+$query = str_replace( '__and__', '&', $_GET["query"] );
 $elems = json_decode($query);
 $table = "";
 $column = "";
@@ -48,7 +48,7 @@ $sql.=')'.$restriction.'
 
 $wos_ids = array();
 $sum=0;
-
+echo $sql;
 // array of all relevant documents with score
 foreach ($base->query($sql) as $row) {
         $wos_ids[$row[$id]] = $row["count(*)"];

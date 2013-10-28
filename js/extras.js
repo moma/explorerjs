@@ -7,6 +7,7 @@
 
 //For UNI-PARTITE
 function updateLeftPanel_uni(){//Uni-partite graph
+    pr("\t ** in updateLeftPanel_uni() ** ");
     var names='';
     var information='';
     
@@ -36,7 +37,10 @@ function updateLeftPanel_uni(){//Uni-partite graph
     for(var i in selections){
         params.push(Nodes[i].label);
     }
-        jsonparams=JSON.stringify(params);
+    jsonparams=JSON.stringify(params);
+    //jsonparams = jsonparams.replaceAll("&","__and__");
+    jsonparams = jsonparams.split('&').join('__and__');
+    pr(jsonparams);
     $.ajax({
         type: 'GET',
         url: 'php/test.php',
