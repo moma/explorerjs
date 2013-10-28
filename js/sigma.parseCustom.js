@@ -32,7 +32,17 @@ function scanCategories(){
             }
         }
     }
+    pr("The categories");
     pr(categories);
+    pr("");
+    i=0;
+    for (var cat in categories) {
+        categoriesIndex[i] = cat;
+        i++;
+    }
+    pr("The categoriesIndex");
+    pr(categoriesIndex);
+    pr("");
     return Object.keys(categories).length;
 }
 
@@ -365,7 +375,7 @@ function fullExtract(){
                 atts[attr]=val;
                 node.attributes = atts;
                 /*      Para asignar tamaño a los NGrams    */
-                if(atts["category"]!=="Terms") {
+                if(atts["category"]===categoriesIndex[1]) {
                     node.size=parseInt(val).toFixed(2);
 //                
 //                /* Type of Node*/
@@ -384,9 +394,7 @@ function fullExtract(){
             //console.log(node.attributes);
             nodecat=node.attributes["category"];
             nodew=parseInt(node.attributes["weight"]);
-            if( nodecat=="Author"||
-                nodecat=="Countries"||
-                nodecat!=="Terms"){
+            if( nodecat===categoriesIndex[1]){
                 node.type="Document";
                 node.shape="square";
                 numberOfDocs++;
