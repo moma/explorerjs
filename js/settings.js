@@ -12,7 +12,7 @@ var strSearchBar = "Search";
 
 var gexf;
 //var zoom=0;
-var cursor_size= 0.00;
+var cursor_size= 30;
 
 var checkBox=false;
 var overNodes=false;
@@ -66,7 +66,7 @@ var leftright=true;
 var edgesTF=false;
 
 //This variables will be updated in sigma.parseCustom.js
-var minNodeSize=5.00;
+var minNodeSize=1.00;
 var maxNodeSize=5.00;
 var minEdgeWeight=5.0;
 var maxEdgeWeight=0.0;
@@ -90,7 +90,7 @@ var sigmaJsGraphProperties = {
     maxEdgeSize: 2
 };
 var sigmaJsMouseProperties = {
-    minRatio:0.3,
+    minRatio:0.1,
     maxRatio: 100
 };
 

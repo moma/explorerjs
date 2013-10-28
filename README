@@ -18,8 +18,8 @@ AUTHORS
 Aknowledgments
 
     Former Tina developpers (java based software from which tinawebJS is adapted)
-    elias showk <elishowk@nonutc.fr>
-    julian bilcke <julian.bilcke@iscpif.fr>
+    elias showk <elishowk_at-nonutc.fr>
+    julian bilcke <julian.bilcke_at-iscpif.fr>
 
 TinawebJS is build on Alexis Jacomy's sigmaJS (http://sigmajs.org)
 This work is the continuation of the TINA project, an European Union FP7 project - FP7-ICT-2009-C
@@ -27,7 +27,6 @@ This work is the continuation of the TINA project, an European Union FP7 project
 REQUIREMENTS
    
     WEB BROWSER compatible with javascript : we recommend Firefox (http://getfirefox.com) or Chrome
-
 
 
 COPYRIGHT AND LICENSE

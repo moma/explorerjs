@@ -1,19 +1,8 @@
 <?php
 
-/*
-class Match{
-	function setFoo(){
-		echo "inside this function";
-	}
-}
-*/
+include('doc_details.php');
 
-
-//header ("Content-Type:application/json");
-
-$dbname='homework-20750-1-homework-db.db';
-$base = new PDO("sqlite:" . $dbname);
-
+$output = "<ul>"; // string sent to the javascript for display
 
 #http://localhost/branch_ademe/php/test.php?type=social&query=[%22marwah,%20m%22]
 #http://localhost/branch_ademe/php/test.php?type=social&query=[%22murakami,%20s%22,%22tasaki,%20t%22,%22oguchi,%20m%22,%22daigo,%20i%22]
@@ -32,12 +21,16 @@ if($type=="social"){
 	$table = "ISIAUTHOR";
 	$column = "data";
 	$id = "id";
+	$restriction='';
+	$factor=1;// factor for normalisation of stars
 }
 
 if($type=="semantic"){
 	$table = "articles2terms";
 	$column = "terms_id";
 	$id = "wos_id";
+	$restriction=' AND  title_or_abstract=0 ';
+	$factor=3;
 }
 
 $sql = 'SELECT count(*),'.$id.'
@@ -48,64 +41,74 @@ foreach($elems as $elem){
 }
 $sql = substr($sql, 0, -3);
 
-$sql.=')
+$sql.=')'.$restriction.'
 	GROUP BY '.$id.'
 	ORDER BY count('.$id.') DESC
 	LIMIT 6';
 
 $wos_ids = array();
 $sum=0;
+
+// array of all relevant documents with score
 foreach ($base->query($sql) as $row) {
         $wos_ids[$row[$id]] = $row["count(*)"];
         $sum = $row["count(*)"] +$sum;
 }
+//echo "jijiji";
+foreach ($wos_ids as $id => $score) {
+	$output.="<li title='".$score."'>";
+	$output.=imagestar($score,$factor).' ';
+	$sql = 'SELECT data FROM ISITITLE WHERE id='.$id;
+	foreach ($base->query($sql) as $row) {
+		$output.='<a href="JavaScript:newPopup(\'php/doc_details.php?id='.$id.'	\')">'.$row['data']." </a> ";		
+		$external_link="<a href=http://scholar.google.com/scholar?q=".urlencode('"'.$row['data'].'"')." target=blank>".' <img src="img/externallink.png"></a>';	
+		//$output.='<a href="JavaScript:newPopup(''php/doc_details.php?id='.$id.''')"> Link</a>';	
+	}
 
-$sql = 'SELECT id,data FROM ISITITLE WHERE (';
-foreach ($wos_ids as $key => $value){
-	$sql.=" id=".$key." OR";
+	// get the authors
+	$sql = 'SELECT data FROM ISIAUTHOR WHERE id='.$id;
+	foreach ($base->query($sql) as $row) {
+		$output.=strtoupper($row['data']).', ';
+	}
+	$sql = 'SELECT data FROM ISIpubdate WHERE id='.$id;
+	foreach ($base->query($sql) as $row) {
+		$output.='('.$row['data'].') ';
+	}
+
+	
+
+	//<a href="JavaScript:newPopup('http://www.quackit.com/html/html_help.cfm');">Open a popup window</a>'
+
+	$output.=$external_link."</li><br>";
 }
-$sql = substr($sql, 0, -2);
-$sql.=")";
 
-$titles = array();
-foreach ($base->query($sql) as $row) {
-	//array_push($titles, $row['data']);
-        $i = $row['id'];
-        $info = array();
-        $info["title"] = $row['data'];
-        $info["occ"] = $wos_ids[$i];
-        $titles[$i] = $info;
-}
-
-$output = "<ul>";
-
-foreach($titles as $key => $data) {
-        //echo $key." : ".var_dump($data)."<br>";
-	$output.="<li title='".$data["occ"]."'><a href=http://scholar.google.com/scholar?q=".urlencode('"'.$data["title"].'"').">".$data["title"]."</a></li><br>";
-}
 $output .= "</ul>";
-echo $output;
  
-
-
-//echo json_encode($titles);
-
-/*
-SELECT wos_id
-FROM articles2terms 
-where (terms_id="polution" OR terms_id="biological diversity" OR terms_id="pollution")
-GROUP BY wos_id
-ORDER BY count(wos_id) DESC
-LIMIT 6
-*/
-/*
- void BubbleSort(int *nums, int n)
-{
-for (int i=0; i<n-1; i++)
-for (int j=n-1; j>i; j--)
-if(nums[j] < nums[j-1]
-swap(j,j-1);
+function pt($string){
+    // juste pour afficher avec retour à la ligne
+	echo $string."<br/>";
 }
- */
+
+function pta($array){
+    print_r($array);
+    echo '<br/>';
+}
+
+function imagestar($score,$factor) {
+// produit le html des images de score
+    $star_image = '';
+    if ($score > .5) {
+        $star_image = '';
+        for ($s = 0; $s < min(5,$score/$factor); $s++) {
+            $star_image.='<img src="img/star.gif" border="0" >';
+        }
+    } else {
+        $star_image.='<img src="img/stargrey.gif" border="0">';
+    }
+    return $star_image;
+}
+
+
+echo $output;
 
 ?>
