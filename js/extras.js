@@ -32,24 +32,24 @@ function updateLeftPanel_uni(){//Uni-partite graph
     maxFont=20;
     
 //    
-//    params=[];
-//    for(var i in selections){
-//        params.push(Nodes[i].label);
-//    }
-//        jsonparams=JSON.stringify(params);
-//    $.ajax({
-//        type: 'GET',
-//        url: 'php/test.php',
-//        data: "type=social&query="+jsonparams,
-//        //contentType: "application/json",
-//        //dataType: 'json',
-//        success : function(data){ 
-//            $("#topPapers").html(data);
-//        },
-//        error: function(){ 
-//            pr('Page Not found: updateLeftPanel_uni(), if(swclickActual=="social")');
-//        }
-//    });
+    params=[];
+    for(var i in selections){
+        params.push(Nodes[i].label);
+    }
+        jsonparams=JSON.stringify(params);
+    $.ajax({
+        type: 'GET',
+        url: 'php/test.php',
+        data: "type=social&query="+jsonparams,
+        //contentType: "application/json",
+        //dataType: 'json',
+        success : function(data){ 
+            $("#topPapers").html(data);
+        },
+        error: function(){ 
+            pr('Page Not found: updateLeftPanel_uni()');
+        }
+    });
     
     
     

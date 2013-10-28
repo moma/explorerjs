@@ -84,16 +84,6 @@ foreach ($wos_ids as $id => $score) {
 
 $output .= "</ul>";
 
-function pt($string){
-    // juste pour afficher avec retour à la ligne
-	echo $string."<br/>";
-}
-
-function pta($array){
-    print_r($array);
-    echo '<br/>';
-}
-
 function imagestar($score,$factor) {
 // produit le html des images de score
     $star_image = '';
@@ -107,7 +97,6 @@ function imagestar($score,$factor) {
     }
     return $star_image;
 }
-
 
 echo $output;
 
