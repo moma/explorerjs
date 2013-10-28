@@ -1,5 +1,6 @@
 
 var bipartite=false;
+var fa2enabled=false;
 
 //var iterationsFA2=6;
 var categories = {};
