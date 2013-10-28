@@ -322,7 +322,10 @@ function getOpossitesNodes(node_id, entireNode) {
     }
     
     if (!node) return null;
-    selection(node);
+    //selection(node);
+    
+    if(categoriesIndex.length==1) selectionUni(node);
+    if(categoriesIndex.length==2) selection(node);
     
     opos = ArraySortByValue(opossites, function(a,b){
         return b-a
@@ -344,6 +347,7 @@ function getOpossitesNodes(node_id, entireNode) {
 }
 
 function updateLeftPanel(){
+    pr("in updateLeftPanel()");
     names='';
     opossitesNodes='';
     information='';
@@ -405,7 +409,7 @@ function updateLeftPanel(){
                 $("#topPapers").html(data);
             },
             error: function(){ 
-                pr("Page Not found.");
+                pr('Page Not found: updateLeftPanel(), if(swclickActual=="social")');
             }
         });
         
@@ -464,7 +468,7 @@ function updateLeftPanel(){
                 $("#topPapers").html(data);
             },
             error: function(){ 
-                pr("Page Not found.");
+                pr('Page Not found: updateLeftPanel(), if(swclickActual=="semantic")');
             }
         });
         
@@ -1161,8 +1165,8 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
                 }
             });
         }
-        
-        updateLeftPanel();
+        if(categoriesIndex.length==1) updateLeftPanel2();
+        if(categoriesIndex.length==2) updateLeftPanel();
         if(is_empty(selections)==true){  
                 $("#names").html(""); //Information extracted, just added
                 $("#opossiteNodes").html(""); //Information extracted, just added
