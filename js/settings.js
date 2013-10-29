@@ -14,7 +14,7 @@ var strSearchBar = "Search";
 
 var gexf;
 //var zoom=0;
-var cursor_size= 30;
+var cursor_size= 0;
 
 var checkBox=false;
 var overNodes=false;

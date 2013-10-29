@@ -799,7 +799,7 @@ function markAsSelected(n_id,sel){
         nodeSel.attr['grey'] = 0;
         
         if(swclickActual=="social") {
-            if(nodeSel.type=="Document"){   
+            if(nodeSel.type=="Document"){
                 if( typeof(nodes1[nodeSel.id])!=="undefined" &&
                     typeof(nodes1[nodeSel.id].neighbours)!=="undefined"
                   ){
@@ -1144,12 +1144,12 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
         pr("\t\t\t\t"+event.content+" -> "+Nodes[event.content].label);
         if(cursor_size==0 && checkBox==false){
             //Normal click on a node
-            getOpossitesNodes(event.content, false);
+            getOpossitesNodes(event.content, false);//passing just the node-id
         }
         
         if(cursor_size==0 && checkBox==true){
             //Normal click on a node, but we won't clean the previous selections
-            getOpossitesNodes(event.content, false);
+            getOpossitesNodes(event.content, false);//passing just the node-id
         }
         
         if(cursor_size>0){
@@ -1165,7 +1165,7 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
                         Math.pow((y1-parseInt(n.displayY)),2)
                         );
                     if(parseInt(distance)<=cursor_size) {
-                        getOpossitesNodes(n,true);
+                        getOpossitesNodes(n,true);//passing the entire node
                     }
                 }
             });
@@ -1557,9 +1557,11 @@ function changeToMacro(iwannagraph) {
     partialGraph.startForceAtlas2();
 }
 
-function highlightOpossites (list){/*tofix*/
+function highlightOpossites (list){/*here*/
     for(var n in list){
-        partialGraph._core.graph.nodesIndex[n].active=true;
+        if(typeof(partialGraph._core.graph.nodesIndex[n])!=="undefined"){
+            partialGraph._core.graph.nodesIndex[n].active=true;
+        }
     }
 }
 
