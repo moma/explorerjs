@@ -1154,7 +1154,7 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
         
         if(cursor_size>0){
             //The click WAS in a node and the cursor_size is ON
-            if(checkBox==false) cancelSelection(false);
+            //if(checkBox==false) cancelSelection(false);
             x1 = partialGraph._core.mousecaptor.mouseX;
             y1 = partialGraph._core.mousecaptor.mouseY;
             //dist1(centerClick,selectionRadius)
