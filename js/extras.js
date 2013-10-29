@@ -44,7 +44,7 @@ function updateLeftPanel_uni(){//Uni-partite graph
     $.ajax({
         type: 'GET',
         url: 'php/test.php',
-        data: "type=social&query="+jsonparams,
+        data: "type=semantic&query="+jsonparams,
         //contentType: "application/json",
         //dataType: 'json',
         success : function(data){ 

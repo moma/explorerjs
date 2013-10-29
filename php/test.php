@@ -40,6 +40,7 @@ foreach($elems as $elem){
 	$sql.=' '.$column.'="'.$elem.'" OR ';
 }
 $sql = substr($sql, 0, -3);
+$sql = str_replace( ' & ', '" OR '.$column.'="', $sql );
 
 $sql.=')'.$restriction.'
 	GROUP BY '.$id.'
@@ -48,7 +49,7 @@ $sql.=')'.$restriction.'
 
 $wos_ids = array();
 $sum=0;
-echo $sql;
+//echo $sql;//The final query!
 // array of all relevant documents with score
 foreach ($base->query($sql) as $row) {
         $wos_ids[$row[$id]] = $row["count(*)"];
