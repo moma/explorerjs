@@ -1,5 +1,5 @@
 /*
- *Categories:
+ *Categories example (bigraph):
  *  ISItermsAlexandrePartCountry
  *  Authors
  **/
@@ -264,7 +264,6 @@ function onepartiteExtract(){
         }
     }
 }
-
 
 function fullExtract(){
     var i, j, k;

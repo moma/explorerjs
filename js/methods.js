@@ -1143,14 +1143,17 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
     partialGraph.bind('downnodes', function (event) {
         pr("\t\t\t\t"+event.content+" -> "+Nodes[event.content].label);
         if(cursor_size==0 && checkBox==false){
+            //Normal click on a node
             getOpossitesNodes(event.content, false);
         }
         
         if(cursor_size==0 && checkBox==true){
+            //Normal click on a node, but we won't clean the previous selections
             getOpossitesNodes(event.content, false);
         }
         
-        if(cursor_size>0){            
+        if(cursor_size>0){
+            //The click WAS in a node and the cursor_size is ON
             if(checkBox==false) cancelSelection(false);
             x1 = partialGraph._core.mousecaptor.mouseX;
             y1 = partialGraph._core.mousecaptor.mouseY;
