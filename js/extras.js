@@ -99,7 +99,6 @@ function updateLeftPanel_uni(){//Uni-partite graph
 //FOR UNI-PARTITE
 function selectionUni(currentNode){
     pr("in selectionUni");
-    pr(currentNode);
     if(checkBox==false && cursor_size==0) {
         highlightSelectedNodes(false);
         opossites = [];
@@ -115,38 +114,13 @@ function selectionUni(currentNode){
         delete selections[currentNode.id];               
         currentNode.active=false;
     }
-    pr(currentNode);
-    pr("");
     //highlightOpossites(nodes1[currentNode.id].neighbours);
 //        currentNode.color = currentNode.attr['true_color'];
 //        currentNode.attr['grey'] = 0;
 //        
 //
-    if( typeof(nodes1[currentNode.id])!=="undefined" &&
-        typeof(nodes1[currentNode.id].neighbours)!=="undefined"
-      ){
-        neigh=nodes1[currentNode.id].neighbours;/**/
-        for(var i in neigh){
-            vec = partialGraph._core.graph.nodesIndex[neigh[i]];
-            //vec.color = vec.attr['true_color'];
-            pr(vec.attr);
-            //Then if I want to show vec.attr["true_color"] IS UNDEFINED
-            //I mean, why?
-            
-            
-//            vec.attr['grey'] = 0;
-//            an_edge=partialGraph._core.graph.edgesIndex[vec.id+";"+currentNode.id];
-//            if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-//                an_edge.color = an_edge.attr['true_color'];
-//                an_edge.attr['grey'] = 0;
-//            }
-//            an_edge=partialGraph._core.graph.edgesIndex[currentNode.id+";"+vec.id];
-//            if(typeof(an_edge)!="undefined" && an_edge.hidden==false){
-//                an_edge.color = an_edge.attr['true_color'];
-//                an_edge.attr['grey'] = 0;
-//            }
-        }
-    }
+   
+
     partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8);
     partialGraph.refresh();
 }
