@@ -1,6 +1,8 @@
 
 var bipartite=false;
 var fa2enabled=false;
+//var mainfile="";
+var mainfile="InnovativeAward.gexf";
 
 //var iterationsFA2=6;
 var categories = {};

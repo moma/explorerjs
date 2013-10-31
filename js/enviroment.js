@@ -213,7 +213,7 @@ function justhide(){
 //=========================== < FILTERS-SLIDERS > ===========================//
 
 function updateEdgeFilter(edgeFilterName) {
-    pr("Updating filter "+edgeFilterName);
+    pr("Updating filter_ "+edgeFilterName);
     thing="";
     if(edgeFilterName=="social") {
         edgeFilterName="#sliderAEdgeWeight";
@@ -231,11 +231,10 @@ function updateEdgeFilter(edgeFilterName) {
                     return !e['hidden'];
           });
           
-    pr("\tall edges:");
-    pr(partialGraph._core.graph.edges); //#edges=936
-    pr("\texcluding hidden edges:");
-    pr(edges);                          //#edges=936
-    //Filter function from JavaScript not working??
+//    pr("\tpartialGraph._core.graph.edges: "+partialGraph._core.graph.edges.length);
+//    pr(partialGraph._core.graph.edges); //#edges=936
+//    pr("\tpartialGraph._core.graph.edges.filter(function(x){return !x['hidden']});: "+edges.length);
+//    pr(edges);                          //#edges=936
     
     
     
@@ -250,13 +249,19 @@ function updateEdgeFilter(edgeFilterName) {
             }
         }
     }
+//    pr("\tedgesByWeight: ");
+//    pr(edgesByWeight);
     edgesSortedByWeight = ArraySortByKey(edgesByWeight, function(a,b){
         return a-b
     });
     
+//    pr("\tedgesSortedByWeight: ");
+//    pr(edgesSortedByWeight);
+    
     normEdges=[];
     cont=0;
     index=0;
+    nbCuts=Math.floor(edges.length/10);
     for(var i in edgesSortedByWeight){
         for(var j in edgesSortedByWeight[i].value){
             if(typeof(normEdges[index])=="undefined"){
@@ -264,12 +269,15 @@ function updateEdgeFilter(edgeFilterName) {
             }
             normEdges[index].push(edgesSortedByWeight[i].value[j])
             cont++;
-            if(cont%20==0) {
+            if(cont%nbCuts==0) {
                 index++;
                 cont=0;
             }
         }
     }
+    
+//    pr("\tnormEdges: ");
+//    pr(normEdges);
     
     $(edgeFilterName).slider({
         range: true,
@@ -747,13 +755,28 @@ function extractContext(string, context) {
     return begin_pts + str + end_pts;
 }
 
+function searchLabel(string){    
+    var id_node = '';
+    var n;
+    
+    nds = partialGraph._core.graph.nodes.filter(function(x){return !x["hidden"]});
+    for(var i in nds){
+        n = nds[i]
+        if(n.hidden==false){
+            if (n.label == string) {
+                return n;
+            }  
+        }
+    }
+}
+
 function search(string) {
     var id_node = '';
     partialGraph.iterNodes(function (n) {
         if(n.hidden==false){
             if (n.label == string) {
                 id_node = n.id;
-                return;
+                return n;
             }  
         }
     });
