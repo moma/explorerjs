@@ -1,6 +1,6 @@
 <?php
 
-include('doc_details.php');
+include('parameters_details.php');
 
 $output = "<ul>"; // string sent to the javascript for display
 
