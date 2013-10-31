@@ -15,7 +15,7 @@ if(typeof(getUrlParam.file)!=="undefined"){
         });            
     });
 } else {
-    window.location.href=window.location.origin+window.location.pathname+"?file=0-terms-terms-MainNodes.gexf";
+    window.location.href=window.location.origin+window.location.pathname+"?file="+mainfile;
 }
 
 
@@ -210,16 +210,33 @@ function startOnePartite(pathfile) {
     
     
     $("#searchinput").keydown(function (e) {
-        if (e.keyCode == 13 && $("input#searchinput").data('is_open') === true) {
-            pr("holaaaaaaa");
-            
+        if (e.keyCode == 13 && $("input#searchinput").data('is_open') === true) {            
             if(!is_empty(matches)) {
+                checkBox=true;
                 for(j=0;j<matches.length;j++){
-                    search(matches[j].label);
-                    alert("jaja");
+                    nodeFound=searchLabel(matches[j].label);
+                    getOpossitesNodes(nodeFound,true); 
                 }
             }
         }
+        if(categoriesIndex.length==1) updateLeftPanel_uni();
+        if(categoriesIndex.length==2) updateLeftPanel();
+        
+        if(is_empty(selections)==true){  
+            $("#names").html("");
+            $("#opossiteNodes").html("");
+            $("#information").html("");
+            changeButton("unselectNodes");
+        }
+        else {
+            greyEverything();
+            for(var i in selections){
+                markAsSelected(i,true);
+            }
+            changeButton("selectNode");
+            partialGraph.draw();
+        }
+        checkBox=false;
     });
     
     $("#searchsubmit").click(function () {
