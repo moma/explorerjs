@@ -230,7 +230,15 @@ function updateEdgeFilter(edgeFilterName) {
     edges=partialGraph._core.graph.edges.filter(function(e) {
                     return !e['hidden'];
           });
-    //pr(edges);
+          
+    pr("\tall edges:");
+    pr(partialGraph._core.graph.edges); //#edges=936
+    pr("\texcluding hidden edges:");
+    pr(edges);                          //#edges=936
+    //Filter function from JavaScript not working??
+    
+    
+    
     edgesByWeight=[];
     for(var i in edges){
         if(edges[i].hidden==false){
@@ -585,7 +593,7 @@ function updateBothNodeFilters() {
     });
 }
 
-
+//Almost Empty
 function alertCheckBox(eventCheck){
     //pr("\tin alertCheckbox");
     //De-activate previous Binds

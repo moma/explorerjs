@@ -6,8 +6,8 @@
 
 
 //For UNI-PARTITE
-function updateLeftPanel2(){//Uni-partite graph
-    pr("nueva funcion");
+function updateLeftPanel_uni(){//Uni-partite graph
+    pr("\t ** in updateLeftPanel_uni() ** ");
     var names='';
     var information='';
     
@@ -31,6 +31,33 @@ function updateLeftPanel2(){//Uni-partite graph
     minFont=12;
     //maxFont=(minFont+oposMAX)-1;  
     maxFont=20;
+    
+//    
+    params=[];
+    for(var i in selections){
+        params.push(Nodes[i].label);
+    }
+    jsonparams=JSON.stringify(params);
+    //jsonparams = jsonparams.replaceAll("&","__and__");
+    jsonparams = jsonparams.split('&').join('__and__');
+    pr(jsonparams);
+    $.ajax({
+        type: 'GET',
+        url: 'php/test.php',
+        data: "type=semantic&query="+jsonparams,
+        //contentType: "application/json",
+        //dataType: 'json',
+        success : function(data){ 
+            $("#topPapers").html(data);
+        },
+        error: function(){ 
+            pr('Page Not found: updateLeftPanel_uni()');
+        }
+    });
+    
+    
+    
+    
     js2='\');"';
     information += '<br><h4>Information:</h4>';
     information += '<ul>';
@@ -38,14 +65,17 @@ function updateLeftPanel2(){//Uni-partite graph
     for(var i in selections){
         information += '<div id="opossitesBox">';
         information += '<li><b>' + Nodes[i].label.toUpperCase() + '</b></li>';
-        for(var j in Nodes[i].attributes){ 
-            if(Nodes[i].attributes[j].attr=="period"||
-                Nodes[i].attributes[j].attr=="cluster_label" 
-                    )
+        //for(var j in Nodes[i].attributes){
+//            if(Nodes[i].attributes[j].attr=="period"||
+//                Nodes[i].attributes[j].attr=="cluster_label" 
+//                    )
                 information += 
-                '<li><b>' + Nodes[i].attributes[j].attr + 
-                '</b>:&nbsp;'+Nodes[i].attributes[j].val+'</li>';
-        }
+                '<li><b>density:' + 
+                '</b>:&nbsp;'+Nodes[i].attributes["density"]+'</li>';
+                information += 
+                '<li><b>weight:' + 
+                '</b>:&nbsp;'+Nodes[i].attributes["weight"]+'</li>';
+        //}
         information += '</div>';            
         information += '</ul><br>';
     }
@@ -63,41 +93,34 @@ function updateLeftPanel2(){//Uni-partite graph
         $("#zonecentre").css({
             left: _cG.width() + "px"
         });
-    });  
+    });
 }
 
 //FOR UNI-PARTITE
 function selectionUni(currentNode){
-    pr("\tin selection");
+    pr("in selectionUni");
     if(checkBox==false && cursor_size==0) {
         highlightSelectedNodes(false);
         opossites = [];
         selections = [];
         partialGraph.refresh();
-    }    
-    if(socsemFlag==false){
-        if((typeof selections[currentNode.id])=="undefined"){
-            selections[currentNode.id] = 1;
-            currentNode.active=true; 
-        }
-        else {
-            delete selections[currentNode.id];        
-            currentNode.active=false;
-        }
+    }   
+    
+    if((typeof selections[currentNode.id])=="undefined"){
+        selections[currentNode.id] = 1;
+        currentNode.active=true;
     }
-    
-    /* ============================================================================================== */
-    
     else {
-        if((typeof selections[currentNode.id])=="undefined"){
-            selections[currentNode.id] = 1;
-            currentNode.active=true;
-        }
-        else {
-            delete selections[currentNode.id];               
-            currentNode.active=false;
-        }
+        delete selections[currentNode.id];               
+        currentNode.active=false;
     }
+    //highlightOpossites(nodes1[currentNode.id].neighbours);
+//        currentNode.color = currentNode.attr['true_color'];
+//        currentNode.attr['grey'] = 0;
+//        
+//
+   
+
     partialGraph.zoomTo(partialGraph._core.width / 2, partialGraph._core.height / 2, 0.8);
     partialGraph.refresh();
 }

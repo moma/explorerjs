@@ -1,5 +1,5 @@
 /*
- *Categories:
+ *Categories example (bigraph):
  *  ISItermsAlexandrePartCountry
  *  Authors
  **/
@@ -32,7 +32,17 @@ function scanCategories(){
             }
         }
     }
+    pr("The categories");
     pr(categories);
+    pr("");
+    i=0;
+    for (var cat in categories) {
+        categoriesIndex[i] = cat;
+        i++;
+    }
+    pr("The categoriesIndex");
+    pr(categoriesIndex);
+    pr("");
     return Object.keys(categories).length;
 }
 
@@ -145,23 +155,26 @@ function onepartiteExtract(){
                 
             // Attribute values
             var attvalueNodes = nodeNode.getElementsByTagName('attvalue');
+            var atts={};
             for(k=0; k<attvalueNodes.length; k++){
                 var attvalueNode = attvalueNodes[k];
                 var attr = attvalueNode.getAttribute('for');
                 var val = attvalueNode.getAttribute('value');
-                node.attributes.push({
-                    attr:attr, 
-                    val:val
-                });
+//                node.attributes.push({
+//                    attr:attr, 
+//                    val:val
+//                });
+                atts[attr]=val;
+                node.attributes = atts;
             }
             node.id=id;
             node.type = "Document";
-            if(node.attributes[0].attr=="weight"){
-                node.size=node.attributes[0].val;
-            }
-            if(node.attributes[1].attr=="weight"){
-                node.size=node.attributes[1].val;
-            }
+            //if(node.attributes[0].attr=="weight"){
+            node.size=parseInt(node.attributes["weight"]);
+            //}
+//            if(node.attributes[1].attr=="weight"){
+//                node.size=node.attributes[1].val;
+//            }
                 
             partialGraph.addNode(id,node);
             labels.push({
@@ -251,7 +264,6 @@ function onepartiteExtract(){
         }
     }
 }
-
 
 function fullExtract(){
     var i, j, k;
@@ -357,53 +369,53 @@ function fullExtract(){
                 
             // Attribute values
             var attvalueNodes = nodeNode.getElementsByTagName('attvalue');
+            var atts={};
             for(k=0; k<attvalueNodes.length; k++){
                 var attvalueNode = attvalueNodes[k];
                 var attr = attvalueNode.getAttribute('for');
                 var val = attvalueNode.getAttribute('value');
-                node.attributes.push({
-                    attr:attr, 
-                    val:val
-                });
+                atts[attr]=val;
+                node.attributes = atts;
                 /*      Para asignar tamaño a los NGrams    */
-                if(k==2) {
+                if(atts["category"]===categoriesIndex[1]) {
                     node.size=parseInt(val).toFixed(2);
-                
-                /* Type of Node*/
-                //console.log(val);
-                //if(val<30) val=30;
-                //Nodes[id].size=(parseInt(val).toFixed(2)*5)/70;
-                //                    Nodes[id].size=parseInt(val).toFixed(2);
-                //                    node.size=Nodes[id].size;
-                //                    if(id.charAt(0)=="D") {
-                //                        Nodes[id].size = "5";
-                //                        node.size = "5";
-                //                    }
+//                
+//                /* Type of Node*/
+//                //console.log(val);
+//                //if(val<30) val=30;
+//                //Nodes[id].size=(parseInt(val).toFixed(2)*5)/70;
+//                //                    Nodes[id].size=parseInt(val).toFixed(2);
+//                //                    node.size=Nodes[id].size;
+//                //                    if(id.charAt(0)=="D") {
+//                //                        Nodes[id].size = "5";
+//                //                        node.size = "5";
+//                //                    }
                 }
             /*      Para asignar tamaño a los NGrams    */
             }
             //console.log(node.attributes);
-            
-            if(node.attributes[2].val=="Author"||node.attributes[2].val=="Countries"){
+            nodecat=node.attributes["category"];
+            nodew=parseInt(node.attributes["weight"]);
+            if( nodecat===categoriesIndex[1]){
                 node.type="Document";
                 node.shape="square";
                 numberOfDocs++;
                 //node.size=desirableScholarSize;
-                node.size=node.attributes[0].val;
+                node.size=nodew;
             }
             else {
                 node.type="NGram";
                 numberOfNGrams++;
-                node.size=node.attributes[0].val;
+                node.size=nodew;
             }      
             
             if(parseInt(node.size) < parseInt(minNodeSize)) minNodeSize= node.size;
             if(parseInt(node.size) > parseInt(maxNodeSize)) maxNodeSize= node.size;
             // Create Node
             Nodes[id] = node  // The graph node
+            //pr(Nodes[id]);
         }
-    }    
-    
+    }  
     //New scale for node size: now, between 2 and 5 instead [1,70]
     for(var i in Nodes){
         normalizedSize=desirableNodeSizeMIN+(Nodes[i].size-1)*((desirableNodeSizeMAX-desirableNodeSizeMIN)/(parseInt(maxNodeSize)-parseInt(minNodeSize)));
@@ -420,7 +432,7 @@ function fullExtract(){
         }
     }
     
-
+    
     var edgeId = 0;
     var edgesNodes = gexf.getElementsByTagName('edges');
     for(i=0; i<edgesNodes.length; i++){

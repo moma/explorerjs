@@ -1,59 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <title>collapsable example</title>
-    <link href="http://www.w3resource.com/twitter-bootstrap/twitter-bootstrap-v2/docs/assets/css/bootstrap.css" rel="stylesheet" type="text/css" />
+	<title>Percentage Bar</title>
+	<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+
+	<!-- jsProgressBarHandler-->
+	<script type="text/javascript" src="js/jsprogressbar/prototype.js"></script>
+	<script type="text/javascript" src="js/jsprogressbar/jsProgressBarHandler.js"></script>
+
 
 </head>
+
 <body>
-   <!--<div class="container-fluid">-->
-     <div class="accordion" id="accordion2">
 
-            <div class="accordion-group">
-              <div class="accordion-heading">
-		        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#titles">
-		          Click me to exapand. Click me again to collapse. Part I.
-		        </a>
-              </div>
-              <div id="collapseOne" class="accordion-body collapse" style="height: 0px; ">
-		        <div class="accordion-inner">
-		          Contenido 1.
-		        </div>
-              </div>
-            </div>
+	<div>
+			<!--
+			<h2>2. Manually created Progress Bars (Custom Styling)</h2>
 
-            <div class="accordion-group">
-              <div class="accordion-heading">
-		        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#inform">
-		         Click me to exapand. Click me again to collapse. Part II.
-		        </a>
-		      </div>
-              <div id="collapseTwo" class="accordion-body collapse">
-		        <div class="accordion-inner">
-		          Contenido 2.
-		        </div>
-              </div>
-            </div>
+			<span style="color:#006600;font-weight:bold;">Custom Progress Bar (without text, without animation)</span> <br/>
+			<span id="element6">50%</span>
+			<span class="extra"><a href="#" onclick="manualPB.setPercentage('0');return false;"><img src="images/icons/empty.gif" alt="" title="" onmouseout="$('Text5').innerHTML ='&laquo; Select Options'" onmouseover="$('Text5').innerHTML ='Empty Bar'"/></a></span>
+			<span class="options"><a href="#" onclick="manualPB.setPercentage('+15');return false;"><img src="images/icons/add.gif" alt="" title="" onmouseout="$('Text5').innerHTML ='&laquo; Select Options'" onmouseover="$('Text5').innerHTML ='Add 15%'"/></a></span>
+			<span class="options"><a href="#" onclick="manualPB.setPercentage('-30');return false;"><img src="images/icons/minus.gif" alt="" title="" onmouseout="$('Text5').innerHTML ='&laquo; Select Options'" onmouseover="$('Text5').innerHTML ='Minus 30%'" /></a></span>
+			<span class="options"><a href="#" onclick="manualPB.setPercentage('80');return false;"><img src="images/icons/set.gif" alt="" title="" onmouseout="$('Text5').innerHTML ='&laquo; Select Options'" onmouseover="$('Text5').innerHTML ='Set 80%'"/></a></span>
+			<span class="options"><a href="#" onclick="manualPB.setPercentage('50');return false;"><img src="images/icons/fill.gif" alt="" title="" onmouseout="$('Text5').innerHTML ='&laquo; Select Options'" onmouseover="$('Text5').innerHTML ='Fill 50%'" /></a></span>
+			<span class="getOption"><a href="#" onclick="alert(manualPB.getPercentage());return false;"><img src="images/icons/get.gif" alt="" title="" onmouseout="$('Text5').innerHTML ='&laquo; Select Options'" onmouseover="$('Text5').innerHTML ='Get Current %'"/></a></span>
+			<span id="Text5" style="font-weight:bold">&laquo; Select Options</span>
+			<br/><br/>
+			-->
 
-            <div class="accordion-group">
-              <div class="accordion-heading">
-		        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-		          Click me to exapand. Click me again to collapse. Part III.
-		        </a>
-              </div>
-              <div id="collapseThree" class="accordion-body collapse">
-		        <div class="accordion-inner">
-		          Contenido 3.
-		        </div>
-              </div>
-            </div>
+			<span id="element5"></span>
+			<br/><br/>
 
-          </div>
-    <!--</div>-->
- <script type="text/javascript" src="http://www.w3resource.com/twitter-bootstrap/twitter-bootstrap-v2/docs/assets/js/jquery.js"></script>
-<script type="text/javascript" src="http://www.w3resource.com/twitter-bootstrap/twitter-bootstrap-v2/docs/assets/js/bootstrap-collapse.js"></script>
+
+			<script type="text/javascript">
+				document.observe('dom:loaded', function() {
+
+					// first manuale progressbar : different bar (width, height, images) and no animation
+					manualPB = new JS_BRAMUS.jsProgressBar(
+								$('element5'),
+								50,
+								{
+									showText	: false,
+									animate		: false,
+									width		: 154,
+									height		: 11,
+									boxImage	: 'img/bramus/custom1_box.gif',
+									barImage	: 'img/bramus/custom1_bar.gif'
+								}
+							);
+
+
+				}, false);
+			</script>
+
+
+
+
+	</div>
+
 </body>
 </html>
-

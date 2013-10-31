@@ -1,8 +1,10 @@
 
 var bipartite=false;
+var fa2enabled=false;
 
 //var iterationsFA2=6;
 var categories = {};
+var categoriesIndex = [];
 var inactiveColor = '#666';
 var startingNodeId = "1";
 var minLengthAutoComplete = 1;
@@ -12,7 +14,7 @@ var strSearchBar = "Search";
 
 var gexf;
 //var zoom=0;
-var cursor_size= 30;
+var cursor_size= 0;
 
 var checkBox=false;
 var overNodes=false;

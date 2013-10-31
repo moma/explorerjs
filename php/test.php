@@ -11,7 +11,7 @@ $output = "<ul>"; // string sent to the javascript for display
 
 
 $type = $_GET["type"];
-$query = $_GET["query"];
+$query = str_replace( '__and__', '&', $_GET["query"] );
 $elems = json_decode($query);
 $table = "";
 $column = "";
@@ -40,6 +40,7 @@ foreach($elems as $elem){
 	$sql.=' '.$column.'="'.$elem.'" OR ';
 }
 $sql = substr($sql, 0, -3);
+$sql = str_replace( ' & ', '" OR '.$column.'="', $sql );
 
 $sql.=')'.$restriction.'
 	GROUP BY '.$id.'
@@ -48,7 +49,7 @@ $sql.=')'.$restriction.'
 
 $wos_ids = array();
 $sum=0;
-
+//echo $sql;//The final query!
 // array of all relevant documents with score
 foreach ($base->query($sql) as $row) {
         $wos_ids[$row[$id]] = $row["count(*)"];
@@ -61,7 +62,7 @@ foreach ($wos_ids as $id => $score) {
 	$sql = 'SELECT data FROM ISITITLE WHERE id='.$id;
 	foreach ($base->query($sql) as $row) {
 		$output.='<a href="JavaScript:newPopup(\'php/doc_details.php?id='.$id.'	\')">'.$row['data']." </a> ";		
-		$external_link="<a href=http://scholar.google.com/scholar?q=".urlencode('"'.$row['data'].'"')." target=blank>".' <img src="img/externallink.png"></a>';	
+		$external_link="<a href=http://scholar.google.com/scholar?q=".urlencode('"'.$row['data'].'"')." target=blank>".' <img width=8% src="img/gs.png"></a>';	
 		//$output.='<a href="JavaScript:newPopup(''php/doc_details.php?id='.$id.''')"> Link</a>';	
 	}
 
@@ -80,21 +81,9 @@ foreach ($wos_ids as $id => $score) {
 	//<a href="JavaScript:newPopup('http://www.quackit.com/html/html_help.cfm');">Open a popup window</a>'
 
 	$output.=$external_link."</li><br>";
-
 }
 
 $output .= "</ul>";
-echo $output;
- 
-function pt($string){
-    // juste pour afficher avec retour à la ligne
-echo $string."<br/>";
-}
-
-function pta($array){
-    print_r($array);
-    echo '<br/>';
-}
 
 function imagestar($score,$factor) {
 // produit le html des images de score
@@ -109,5 +98,7 @@ function imagestar($score,$factor) {
     }
     return $star_image;
 }
+
+echo $output;
 
 ?>

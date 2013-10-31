@@ -15,7 +15,7 @@ if(typeof(getUrlParam.file)!=="undefined"){
         });            
     });
 } else {
-    window.location.href=window.location.origin+window.location.pathname+"?file=2-Terms-Authors-300nodes.gexf";
+    window.location.href=window.location.origin+window.location.pathname+"?file=0-terms-terms-MainNodes.gexf";
 }
 
 
