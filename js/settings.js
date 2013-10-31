@@ -3,6 +3,7 @@ var bipartite=false;
 var fa2enabled=false;
 //var mainfile="";
 var mainfile="0-terms-terms-MainNodes.gexf";
+ircChannel="";
 
 //var iterationsFA2=6;
 var categories = {};

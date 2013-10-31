@@ -762,11 +762,9 @@ function searchLabel(string){
     nds = partialGraph._core.graph.nodes.filter(function(x){return !x["hidden"]});
     for(var i in nds){
         n = nds[i]
-        if(n.hidden==false){
             if (n.label == string) {
                 return n;
-            }  
-        }
+            }
     }
 }
 

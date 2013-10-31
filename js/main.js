@@ -155,8 +155,6 @@ function startOnePartite(pathfile) {
     /******************* /SEARCH ***********************/
     $.ui.autocomplete.prototype._renderItem = function(ul, item) {
         var searchVal = $("#searchinput").val();
-        pr("item-desc: "+item.desc);
-        pr("searchVal: "+searchVal);
         var desc = extractContext(item.desc, searchVal);
         return $('<li onclick=\'var s = "'+item.label+'"; search(s);$("#searchinput").val(strSearchBar);\'></li>')
         .data('item.autocomplete', item)
@@ -210,33 +208,41 @@ function startOnePartite(pathfile) {
     
     
     $("#searchinput").keydown(function (e) {
-        if (e.keyCode == 13 && $("input#searchinput").data('is_open') === true) {            
+        if (e.keyCode == 13 && $("input#searchinput").data('is_open') === true) {
             if(!is_empty(matches)) {
+                pr("im here");
                 checkBox=true;
                 for(j=0;j<matches.length;j++){
                     nodeFound=searchLabel(matches[j].label);
                     getOpossitesNodes(nodeFound,true); 
                 }
+//                for(var i in selections){
+//                    pr(Nodes[i].label);
+//                    markAsSelected(i,true);
+//                }
+//                
+//                
+//                
+//                if(is_empty(selections)==true){  
+//                    $("#names").html("");
+//                    $("#opossiteNodes").html("");
+//                    $("#information").html("");
+//                    changeButton("unselectNodes");
+//                }
+//                else {
+//                    greyEverything();
+//                    for(var i in selections){
+//                        markAsSelected(i,true);
+//                    }
+//                    changeButton("selectNode");
+//                    partialGraph.draw();
+//                }
+                checkBox=false;
+                $("input#searchinput").val("");
+                $("input#searchinput").autocomplete( "close" );
+                //$("input#searchinput").trigger('autocompleteclose');
             }
         }
-        if(categoriesIndex.length==1) updateLeftPanel_uni();
-        if(categoriesIndex.length==2) updateLeftPanel();
-        
-        if(is_empty(selections)==true){  
-            $("#names").html("");
-            $("#opossiteNodes").html("");
-            $("#information").html("");
-            changeButton("unselectNodes");
-        }
-        else {
-            greyEverything();
-            for(var i in selections){
-                markAsSelected(i,true);
-            }
-            changeButton("selectNode");
-            partialGraph.draw();
-        }
-        checkBox=false;
     });
     
     $("#searchsubmit").click(function () {

@@ -114,7 +114,7 @@ function returnBaseUrl(){
 
 
 function cancelSelection (fromTagCloud) {
-    pr("\tin cancelSelection");
+    pr("\t***in cancelSelection");
     highlightSelectedNodes(false); //Unselect the selected ones :D
     opossites = [];
     selections = [];
@@ -317,6 +317,7 @@ function getOpossitesNodes(node_id, entireNode) {
     if(entireNode==true) node=node_id;
     else node = partialGraph._core.graph.nodesIndex[node_id];
     if(socsemFlag==true) {
+        pr("wtf is this -> if(socsemFlag==true) {");
         cancelSelection(false);
         socsemFlag=false;
     }
@@ -763,6 +764,7 @@ function updateDownNodeEvent(selectionRadius){
 }
 
 function greyEverything(){
+    pr("\t\t\tin grey everything");
     greyColor = '#9b9e9e';
     
     nds = partialGraph._core.graph.nodes.filter(function(n) {
