@@ -41,8 +41,8 @@
 
 
     </head>
-    <body>
-        <div class="container">
+    <body>        
+        <div class="container">            
             <div id="left">
                 <div id="images" style="margin-top:10px;">
                         <img style="cursor: pointer" title="Scholars" 
@@ -69,12 +69,12 @@
                 
             </div>
             
-            <div id="right">
+            <div id="right">                
                     <div id="sliders" style="margin-top:10px;">
                         
                         <div id="category-A" class="unselectable toolbar-middle" style="width: 120px;">
                             <div>
-                                &nbsp;&nbsp;&nbsp;&nbsp;Scholars
+                                &nbsp;&nbsp;&nbsp;&nbsp;Filters
                             </div>
                             <div style="height: 16px; width: 100px;">
                                 <div id="nodeAFilterMinValue"></div>                        
@@ -135,14 +135,14 @@
                     <div id="ofthemiddle" style="border-width: 0px;margin-top:20px;">
                         
                         <div id="cursor-size-block" style="width: 100px; float: left;">
-                            <label for="sliderSelectionZone" class="sliderLabel">cursor size</label>
+                            <label for="sliderSelectionZone" class="sliderLabel">Selector size</label>
                             <div id="sliderSelectionZone"></div>
                         </div>
                         
                         <div id="gexfs" style="margin-left:100px; width: 100px; float: left;"></div>
                         
                         <div id="boxCurrentGraph">
-                            Current graph: <strong><div id="currentGraph"></div></strong>
+                           Current graph: <strong><div id="currentGraph"></div></strong>
                         </div>
                         
                         <div style="float: right;">
@@ -200,7 +200,7 @@
         
         <div id="rightcolumn" style="position:fixed; right:-400px;top:80px;">
             <div id="showChat" onclick="showhideChat();"><a href="#" id="aShowChat"> </a></div>
-            <iframe src="http://webchat.freenode.net/?nick=Ademe&channels=#anoe"
+            <iframe src="http://webchat.freenode.net/?nick=nci&channels=#NCI"
             width="400" height="300"></iframe>
         </div>
         
@@ -231,8 +231,9 @@
                 -->
             </div>
             <div id="leftcontent">
+                
                 <div style="text-align: center;">
-                    <img onclick="changeSwitchImage('fromHtml','')" id="switchbutton" width="60" src="img/trans/showKeywords.png"></img>
+                    <img src="rock/rock.png">
                 </div>
                 <button 
                     style="color: #900;font-weight: bold;font-size: 70%;text-transform: uppercase;float:right;" 
@@ -241,7 +242,34 @@
                 <div id="names"></div>
                 <div id="opossiteNodes"></div>
                 <div id="topPapers"></div>
-                <div id="information"></div>
+                <div id="information">
+<div>
+                    <h1>Semantic Landscape of the Rockefeller Innovators Awards</h1>
+                    <div><p>This map displays the different topics addressed in the
+                         Rockefeller Innovator Awards. Nodes in the graph correspond
+                         to relevant terms which have been extracted from the proposal
+                         with text-mining methods. Nodes are linked when some proposals make a strong relation between the corresponding terms. 
+                         <br/><br/>
+                         Terms are clustered into large topics such as <i>kindergarten & education system</i> and terms belonging to the same large topics
+                         have the same color.
+                         <br/><br/>
+                         When you clic on a node, the main topics it is linked to are displayed as well as a set of more generic and more specitif terms related to this selection.
+
+                    <br/>
+                    </p>
+                    <br/><br/>
+                    <h4>TIPS</h4>
+                    <p> <b>- You can search for an expression in the search bar.</b><br/>
+                    <p> <b>- When a node is selected, you can clic in the side bar on its name to launch a google search on that term.</b><br/>    
+                    <p> <b>- Double clic on a node to get more information</b><br/>
+                    <b>- Double clic an empty area to erase current selection</b></p></div>
+                    <br/><br/>  
+                    
+                    <div id="footer"><p><i>Credits:</i> <a href="http://chavalarias.com" target="_blank"><img src="rock/user.png" width=15></a>  </p></div></div>
+                </div>              
+
+
+                </div>
             </div>
         </div>
 

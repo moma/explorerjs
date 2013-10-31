@@ -11,6 +11,7 @@ $output = "<ul>"; // string sent to the javascript for display
 
 
 $type = $_GET["type"];
+$q=$_GET["query"] ;
 $query = str_replace( '__and__', '&', $_GET["query"] );
 $elems = json_decode($query);
 $table = "";
@@ -26,10 +27,10 @@ if($type=="social"){
 }
 
 if($type=="semantic"){
-	$table = "articles2terms";
-	$column = "terms_id";
-	$id = "wos_id";
-	$restriction=' AND  title_or_abstract=0 ';
+	$table = "ISIterms";
+	$column = "data";
+	$id = "id";
+	$restriction=' AND  rank=0 ';
 	$factor=3;
 }
 
@@ -45,24 +46,32 @@ $sql = str_replace( ' & ', '" OR '.$column.'="', $sql );
 $sql.=')'.$restriction.'
 	GROUP BY '.$id.'
 	ORDER BY count('.$id.') DESC
-	LIMIT 6';
+	LIMIT 1000';
 
 $wos_ids = array();
 $sum=0;
 //echo $sql;//The final query!
 // array of all relevant documents with score
+
+
 foreach ($base->query($sql) as $row) {
         $wos_ids[$row[$id]] = $row["count(*)"];
         $sum = $row["count(*)"] +$sum;
 }
 
+$number_doc=count($wos_ids);
+$count=0;
+
 foreach ($wos_ids as $id => $score) {
-	$output.="<li title='".$score."'>";
+	if ($count<$max_item_displayed){
+		$count+=1;
+			$output.="<li title='".$score."'>";
 	$output.=imagestar($score,$factor).' ';
 	$sql = 'SELECT data FROM ISITITLE WHERE id='.$id;
+	
 	foreach ($base->query($sql) as $row) {
-		$output.='<a href="JavaScript:newPopup(\'php/doc_details.php?id='.$id.'	\')">'.$row['data']." </a> ";		
-		$external_link="<a href=http://scholar.google.com/scholar?q=".urlencode('"'.$row['data'].'"')." target=blank>".' <img width=8% src="img/gs.png"></a>';	
+		$output.='<a href="JavaScript:newPopup(\'php/doc_details.php?id='.$id.'\')">'.$row['data']." </a> ";		
+		$external_link="<a href=http://google.com/scholar?q=".urlencode(''.$row['data'].'')." target=blank>".' <img width=8% src="img/externallink.png"></a>';	
 		//$output.='<a href="JavaScript:newPopup(''php/doc_details.php?id='.$id.''')"> Link</a>';	
 	}
 
@@ -71,19 +80,22 @@ foreach ($wos_ids as $id => $score) {
 	foreach ($base->query($sql) as $row) {
 		$output.=strtoupper($row['data']).', ';
 	}
-	$sql = 'SELECT data FROM ISIpubdate WHERE id='.$id;
-	foreach ($base->query($sql) as $row) {
-		$output.='('.$row['data'].') ';
-	}
+	// $sql = 'SELECT data FROM ISIpubdate WHERE id='.$id;
+	//foreach ($base->query($sql) as $row) {
+	//$output.='('.$row['data'].') ';
+	//}
 
 	
 
 	//<a href="JavaScript:newPopup('http://www.quackit.com/html/html_help.cfm');">Open a popup window</a>'
 
-	$output.=$external_link."</li><br>";
+		$output.=$external_link."</li><br>";
+	}else{
+	continue;
+	}
 }
 
-$output .= "</ul>";
+$output .= "</ul>[".$max_item_displayed." top items over ".$number_doc.']';
 
 function imagestar($score,$factor) {
 // produit le html des images de score

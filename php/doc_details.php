@@ -5,7 +5,7 @@ echo '
 <html>
         <head>
   <meta charset="utf-8" />
-  <title>Document details</title>
+  <title>NCI Awards</title>
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
@@ -22,8 +22,8 @@ echo '
     <body>
     <div id="tabs">
   <ul>
-    <li><a href="#tabs-1">Selected Document</a></li>';
-    //<li><a href="#tabs-2">Starred</a></li>    
+    <li><a href="#tabs-1">Selected Project</a></li>
+    <li><a href="#tabs-2">Full list</a></li>';    
   echo '</ul>';
 
 echo '<div id="tabs-1">';
@@ -40,13 +40,34 @@ $id=$_GET["id"];
 	foreach ($base->query($sql) as $row) {
 		$output.=strtoupper($row['data']).', ';
 	}
-	$sql = 'SELECT data FROM ISIpubdate WHERE id='.$id;
+	// get the date
+  $sql = 'SELECT data FROM ISIpubdate WHERE id='.$id;
 	foreach ($base->query($sql) as $row) {
-		$output.='('.$row['data'].') ';
+		$output.='('.$row['data'].')<br/> ';
 	}
+
+  // get the date
+  $sql = 'SELECT data FROM ISIterms WHERE id='.$id;
+  $output.='<br/><b>Keywords: </b>';
+  $terms=array();
+  foreach ($base->query($sql) as $row) {
+    $terms[]=$row['data'];
+  }
+  $terms=array_unique($terms); // liste des termes de l'article
+  foreach ($terms as $key => $value) {
+    $output.=$value.', ';
+  }
+
+
 	$sql = 'SELECT data FROM ISIABSTRACT WHERE id='.$id;
 	foreach ($base->query($sql) as $row) {
-		$output.='<br/><p><b>Abstract : </b><i>'.$row['data'].' </i></p>';
+    $abs=$row['data'];
+    // adapting to the content format
+    $abs=str_replace('ISSUES:', '<br/><br/><b>ISSUES:</b><br/>', $abs);
+    $abs=str_replace('NOVELTY:', '<br/><br/><b>NOVELTY:</b><br/>', $abs);
+    $abs=str_replace('IMPACT:', '<br/><br/><b>IMPACT:</b><br/>', $abs);
+
+		$output.='<br/><p><b>ABSTRACT </b><i>'.$abs.' </i></p>';
 		$output.="<br>";		
 	}
 

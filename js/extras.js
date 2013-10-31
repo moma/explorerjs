@@ -69,12 +69,18 @@ function updateLeftPanel_uni(){//Uni-partite graph
 //            if(Nodes[i].attributes[j].attr=="period"||
 //                Nodes[i].attributes[j].attr=="cluster_label" 
 //                    )
+                //for (var k in Nodes[i].attributes){
+                //     information +='<li><b>'+k+':' + 
+                //'</b>:&nbsp;'+Nodes[i].attributes[k]+'</li>';
+                //}
+
+
                 information += 
-                '<li><b>density:' + 
-                '</b>:&nbsp;'+Nodes[i].attributes["density"]+'</li>';
-                information += 
-                '<li><b>weight:' + 
-                '</b>:&nbsp;'+Nodes[i].attributes["weight"]+'</li>';
+                '<li><b>Topic' + 
+                '</b>:&nbsp;'+Nodes[i].attributes["cluster_label"]+'</li>';
+
+                information += '<a href="https://www.google.com/#q='+Nodes[i].label+'"  target=blank>'+'www</a>';
+                
         //}
         information += '</div>';            
         information += '</ul><br>';

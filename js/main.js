@@ -15,7 +15,7 @@ if(typeof(getUrlParam.file)!=="undefined"){
         });            
     });
 } else {
-    window.location.href=window.location.origin+window.location.pathname+"?file=0-terms-terms-MainNodes.gexf";
+    window.location.href=window.location.origin+window.location.pathname+"?file=InnovativeAward.gexf";
 }
 
 
