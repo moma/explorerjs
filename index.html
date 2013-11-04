@@ -41,7 +41,7 @@
 
 
     </head>
-    <body>
+    <body onload="getChatFrame();">
         <div class="container">
             <div id="left">
                 <div id="images" style="margin-top:10px;">
@@ -197,11 +197,13 @@
         <div id="overviewzone" class="gradient" onmouseover="overviewHover=true;" onmouseout="overviewHover=false;">
             <canvas id="overview" width="0" height="0"></canvas>
         </div>
-        
+                
         <div id="rightcolumn" style="position:fixed; right:-400px;top:80px;">
+            <!--
             <div id="showChat" onclick="showhideChat();"><a href="#" id="aShowChat"> </a></div>
             <iframe src="http://webchat.freenode.net/?nick=Ademe&channels=#anoe"
             width="400" height="300"></iframe>
+            -->
         </div>
         
         <div id="leftcolumn">

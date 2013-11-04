@@ -46,16 +46,6 @@ getUrlParam = (function () {
     return get;
 })();
 
-function showhideChat(){
-    
-    cg = document.getElementById("rightcolumn");
-    if(cg){
-        if(cg.style.right=="-400px"){
-            cg.style.right="0px";
-        }
-        else cg.style.right="-400px";
-    }
-}
 
 function ArraySortByValue(array, sortFunc){
     var tmp = [];

@@ -178,6 +178,13 @@ function camaraButton(){
     });
 }
 
+function getChatFrame() {    
+    content = '<div id="showChat" onclick="showhideChat();"><a href="#" id="aShowChat"> </a></div>';
+    content += '<iframe src="'+ircUrl+'"'
+    content += 'width="400" height="300"></iframe>';    
+    $("#rightcolumn").html(content);
+}
+
 //JUST ADEME
 function showhideChat(){
     
