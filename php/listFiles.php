@@ -20,7 +20,8 @@ foreach($files as $file){
 }
 sort($filesSorted);
 foreach($filesSorted as $file){
-	$html.="<option>$file</option>";
+	//$html.="<option>".str_replace('_', ' ', substr($file, 0,-3)) ."</option>";// we display grah names
+  $html.="<option>".$file ."</option>";
 }
 $html.="</select>";
 echo $html;
