@@ -40,7 +40,6 @@ function updateLeftPanel_uni(){//Uni-partite graph
     jsonparams=JSON.stringify(params);
     //jsonparams = jsonparams.replaceAll("&","__and__");
     jsonparams = jsonparams.split('&').join('__and__');
-    pr(jsonparams);
     $.ajax({
         type: 'GET',
         url: 'php/test.php',

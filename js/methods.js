@@ -108,6 +108,8 @@ function cancelSelection (fromTagCloud) {
     highlightSelectedNodes(false); //Unselect the selected ones :D
     opossites = [];
     selections = [];
+    //selections.length = 0;
+    selections.splice(0, selections.length);
     partialGraph.refresh();
     
     
@@ -1191,7 +1193,8 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
         }
         if(categoriesIndex.length==1) updateLeftPanel_uni();
         if(categoriesIndex.length==2) updateLeftPanel();
-        if(is_empty(selections)==true){  
+        if(is_empty(selections)==true){
+                pr("cursor radius ON, downNode -> selecciones vacias");
                 $("#names").html(""); //Information extracted, just added
                 $("#opossiteNodes").html(""); //Information extracted, just added
                 $("#information").html("");
@@ -1210,6 +1213,27 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
         overNodes=true;        
         partialGraph.draw();
     });
+}
+
+
+function graphResetColor(){
+    nds = partialGraph._core.graph.nodes.filter(function(x) {
+                            return !x['hidden'];
+          });
+    eds = partialGraph._core.graph.edges.filter(function(x) {
+                            return !x['hidden'];
+          });
+          
+    pr("printing nodes: ");
+    for(var x in nds){
+        pr(nds[x]);
+    }
+    
+    pr("printing edges: ");
+    for(var x in eds){
+        pr(eds[x]);
+    }
+    
 }
 
 function createEdgesForExistingNodes (typeOfNodes) {
@@ -1830,7 +1854,8 @@ function setPanels(){
         partialGraph.startForceAtlas2();
     });
     
-    $('#sigma-example').dblclick(function(event) {        
+    $('#sigma-example').dblclick(function(event) {  
+        pr("bigraph: in the double click event");
         targeted = partialGraph._core.graph.nodes.filter(function(n) {
                 return !!n['hover'];
             }).map(function(n) {

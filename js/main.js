@@ -261,6 +261,7 @@ function startOnePartite(pathfile) {
     });
     
     $('#sigma-example').dblclick(function(event) {
+        pr("monograph: in the double click event");
         targeted = partialGraph._core.graph.nodes.filter(function(n) {
                 return !!n['hover'];
             }).map(function(n) {
@@ -273,15 +274,6 @@ function startOnePartite(pathfile) {
         else {
             if(!is_empty(selections)){
                 cancelSelection(false);
-//                _cG = $("#leftcolumn");    
-//                _cG.animate({
-//                    "left" : "-" + _cG.width() + "px"
-//                }, function() {
-//                    $("#aUnfold").attr("class","rightarrow");
-//                    $("#zonecentre").css({
-//                       left: "0"
-//                    });
-//                });
             }
         }
     });
