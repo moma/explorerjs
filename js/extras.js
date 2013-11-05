@@ -240,3 +240,12 @@ function getTips(){
         "</ul>";
     return text;
 }
+
+
+function closeDialog () {
+    $('#windowTitleDialog').modal('hide'); 
+}
+function okClicked () {
+    //document.title = document.getElementById ("xlInput").value;
+    closeDialog ();
+}

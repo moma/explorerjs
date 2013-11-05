@@ -779,7 +779,9 @@ function search(string) {
         }
     });
     getOpossitesNodes(id_node, false);
-    updateLeftPanel();
+    
+    if(categoriesIndex.length==1) updateLeftPanel_uni();
+    if(categoriesIndex.length==2) updateLeftPanel(); 
     
             /****            
                  *This give me the hoverNodes effect when the FA2 is running.

@@ -36,6 +36,12 @@ function listGexfs(){
 }
 
 function startOnePartite(pathfile) {
+    
+    $("#saveAs").click(function() {
+        pr("event click jiji");
+        $('#windowTitleDialog').modal('show'); 
+    });
+    
     bipartite=false;
     $("#labelchange").hide();
     $("#availableView").hide(); 
@@ -198,13 +204,6 @@ function startOnePartite(pathfile) {
             $(this).val(strSearchBar);
         }
     });
-    $("#searchinput").keyup(function (e) {
-        if (e.keyCode == 13 && $("input#searchinput").data('is_open') !== true) {
-            var s = $("#searchinput").val();
-            search(s);
-            $("#searchinput").val(strSearchBar);
-        }         
-    });
     
     
     $("#searchinput").keydown(function (e) {
@@ -221,22 +220,21 @@ function startOnePartite(pathfile) {
 //                    markAsSelected(i,true);
 //                }
 //                
-//                
-//                
-//                if(is_empty(selections)==true){  
-//                    $("#names").html("");
-//                    $("#opossiteNodes").html("");
-//                    $("#information").html("");
-//                    changeButton("unselectNodes");
-//                }
-//                else {
-//                    greyEverything();
-//                    for(var i in selections){
-//                        markAsSelected(i,true);
-//                    }
-//                    changeButton("selectNode");
-//                    partialGraph.draw();
-//                }
+
+                if(is_empty(selections)==true){  
+                    $("#names").html("");
+                    $("#opossiteNodes").html("");
+                    $("#information").html("");
+                    changeButton("unselectNodes");
+                }
+                else {
+                    greyEverything();
+                    for(var i in selections){
+                        markAsSelected(i,true);
+                    }
+                    changeButton("selectNode");
+                    partialGraph.draw();
+                }
                 checkBox=false;
                 $("input#searchinput").val("");
                 $("input#searchinput").autocomplete( "close" );
@@ -245,7 +243,18 @@ function startOnePartite(pathfile) {
         }
     });
     
+    
+    $("#searchinput").keyup(function (e) {
+        if (e.keyCode == 13 && $("input#searchinput").data('is_open') !== true) {
+            var s = $("#searchinput").val();
+            $("#searchinput").val(strSearchBar);
+            if(categoriesIndex.length==1) updateLeftPanel_uni();
+            if(categoriesIndex.length==2) updateLeftPanel();            
+        }
+    });
+    
     $("#searchsubmit").click(function () {
+        pr("in searchsubmit()");
         var s = $("#searchinput").val();
         search(s);
         $("#searchinput").val(strSearchBar);
@@ -336,7 +345,7 @@ function startOnePartite(pathfile) {
         //return callSlider("#sliderSelectionZone", "selectionRadius");
         }
     });
-    camaraButton();
+    
 }
 
 function startBipartite(pathfile) {
