@@ -83,6 +83,7 @@ function updateLeftPanel_uni(){//Uni-partite graph
     
     $("#names").html(names); //Information extracted, just added
     $("#information").html(information); //Information extracted, just added
+    $("#tips").html("");
         
     /***** The animation *****/
     _cG = $("#leftcolumn");
@@ -178,6 +179,8 @@ function camaraButton(){
     });
 }
 
+
+//JUST ADEME
 function getChatFrame() {    
     content = '<div id="showChat" onclick="showhideChat();"><a href="#" id="aShowChat"> </a></div>';
     content += '<iframe src="'+ircUrl+'"'
@@ -198,7 +201,7 @@ function showhideChat(){
 }
 
 //JUST ADEME
-  function drawPercentBar(width, percent, color, background) { 
+function drawPercentBar(width, percent, color, background) { 
     var pixels = width * (percent / 100); 
     if (!background) { background = "none"; }
  
@@ -213,3 +216,28 @@ function showhideChat(){
 
     document.write("</div>"); 
   } 
+
+
+function getTips(){
+    text = 
+        "<br>"+
+        "Basic Interactions:"+
+        "<ul>"+
+        "<li>Click on a node to select/unselect and get its information. In case of multiple selection, the button unselect clears all selections.</li>"+
+        "<li>The switch button switch allows to change the view type.</li>"+
+        "</ul>"+
+        "<br>"+
+        "Graph manipulation:"+
+        "<ul>"+
+        "<li>Link and node sizes indicate their strength.</li>"+
+        "<li>To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.</li>"+
+        "<li>To select a more of less specific area of the graph, use the 'nodes filter' slider.</li>"+
+        "</ul>"+
+        "<br>"+
+        "Micro/Macro view:"+
+        "<ul>"+
+        "<li>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.</li>"+
+        "<li>Click on the 'all nodes' tab below to view the full clickable list of nodes.</li>"+
+        "</ul>";
+    return text;
+}

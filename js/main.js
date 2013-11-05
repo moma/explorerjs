@@ -261,19 +261,29 @@ function startOnePartite(pathfile) {
     });
     
     $('#sigma-example').dblclick(function(event) {
-        
-        cancelSelection();    
-        /***** The animation *****/
-        _cG = $("#leftcolumn");    
-        _cG.animate({
-            "left" : "-" + _cG.width() + "px"
-        }, function() {
-            $("#aUnfold").attr("class","rightarrow");
-            $("#zonecentre").css({
-                left: "0"
+        targeted = partialGraph._core.graph.nodes.filter(function(n) {
+                return !!n['hover'];
+            }).map(function(n) {
+                return n.id;
             });
-        });
-    /***** The animation *****/
+            
+        if(!is_empty(targeted)){
+            changeHoverActive(document.getElementById("switch"));
+        }
+        else {
+            if(!is_empty(selections)){
+                cancelSelection(false);
+//                _cG = $("#leftcolumn");    
+//                _cG.animate({
+//                    "left" : "-" + _cG.width() + "px"
+//                }, function() {
+//                    $("#aUnfold").attr("class","rightarrow");
+//                    $("#zonecentre").css({
+//                       left: "0"
+//                    });
+//                });
+            }
+        }
     });
     
     $("#overview")

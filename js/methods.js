@@ -130,10 +130,12 @@ function cancelSelection (fromTagCloud) {
     
     if(fromTagCloud==false){
         $("#names").html(""); 
+        $("#topPapers").html("");
         $("#opossiteNodes").html("");
         $("#information").html("");
         $("#searchinput").val("");
         $("#switchbutton").hide();
+        $("#tips").html(getTips());
     }
 }
 
@@ -617,6 +619,7 @@ function updateLeftPanel(){
     $("#names").html(names); //Information extracted, just added
     $("#opossiteNodes").html(opossitesNodes); //Information extracted, just added
     $("#information").html(information); //Information extracted, just added
+    $("#tips").html("");
         
     /***** The animation *****/
     _cG = $("#leftcolumn");
@@ -1192,6 +1195,8 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
                 $("#names").html(""); //Information extracted, just added
                 $("#opossiteNodes").html(""); //Information extracted, just added
                 $("#information").html("");
+                $("#tips").html(getTips());
+                $("topPapers").html("");
                 changeButton("unselectNodes");
                 cancelSelection(false);
         }
@@ -1592,6 +1597,8 @@ function selectOpossites (list){//Expanding selection
                 $("#names").html(""); //Information extracted, just added
                 $("#opossiteNodes").html(""); //Information extracted, just added
                 $("#information").html("");
+                $("topPapers").html("");
+                $("#tips").html(getTips());
                 changeButton("unselectNodes");
                 cancelSelection(false);
     }
@@ -1836,15 +1843,6 @@ function setPanels(){
         else {
             if(!is_empty(selections)){
                 cancelSelection(false);
-                _cG = $("#leftcolumn");    
-                _cG.animate({
-                    "left" : "-" + _cG.width() + "px"
-                }, function() {
-                    $("#aUnfold").attr("class","rightarrow");
-                    $("#zonecentre").css({
-                       left: "0"
-                    });
-                });
             }
         }
     });
@@ -1968,6 +1966,8 @@ function switchSelection(){
 }
 
 function startEnviroment(){
+
+    $("#tips").html(getTips());
     $('#sigma-example').css('background-color','white');
     $("#category-B").hide();
     $("#labelchange").hide();
