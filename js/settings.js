@@ -1,27 +1,61 @@
 
-var bipartite=false;
+// * * < DEVELOPER OPTIONS > * *
 var fa2enabled=false;
-//var mainfile="";
+
 var mainfile="0-terms-terms-MainNodes.gexf";
 
-//"http://webchat.freenode.net/?nick=Ademe&channels=#anoe"
 ircNick="Ademe";
 ircCHN="#anoe";
-var ircUrl="http://webchat.freenode.net/?nick="+ircNick+"&channels="+ircCHN;
 
-//var iterationsFA2=6;
-var categories = {};
-var categoriesIndex = [];
+var catSoc = "Document";
+var catSem = "NGram";
+
 var inactiveColor = '#666';
 var startingNodeId = "1";
 var minLengthAutoComplete = 1;
 var maxSearchResults = 10;
 var strSearchBar = "Search";
+var cursor_size= 100;
+
+var desirableTagCloudFont_MIN=12;
+var desirableTagCloudFont_MAX=20;
+var desirableNodeSizeMIN=4;
+var desirableNodeSizeMAX=12;
+var desirableScholarSize=6; //Remember that all scholars have the same size!
+
+var sigmaJsDrawingProperties = {
+    defaultLabelColor: 'black',
+    defaultLabelSize: 12,//in fact I'm using it as minLabelSize'
+    defaultLabelBGColor: '#fff',
+    defaultLabelHoverColor: '#000',
+    labelThreshold: 6,
+    defaultEdgeType: 'curve',
+    
+    borderSize: 2.5,//Something other than 0
+    nodeBorderColor: "default",//exactly like this
+    defaultNodeBorderColor: "black"//,//Any color of your choice
+    //defaultBorderView: "always"
+};
+var sigmaJsGraphProperties = {
+    minEdgeSize: 2,
+    maxEdgeSize: 2
+};
+var sigmaJsMouseProperties = {
+    minRatio:0.1,
+    maxRatio: 100
+};
+// * * < / DEVELOPER OPTIONS > * *
+
+//"http://webchat.freenode.net/?nick=Ademe&channels=#anoe"
+var ircUrl="http://webchat.freenode.net/?nick="+ircNick+"&channels="+ircCHN;
+//var iterationsFA2=6;
+var categories = {};
+var categoriesIndex = [];
+
 
 
 var gexf;
 //var zoom=0;
-var cursor_size= 100;
 
 var checkBox=false;
 var overNodes=false;
@@ -32,11 +66,6 @@ var swclickPrev="";
 var socsemFlag=false;
 var constantNGramFilter;
 
-var desirableTagCloudFont_MIN=12;
-var desirableTagCloudFont_MAX=20;
-var desirableNodeSizeMIN=4;
-var desirableNodeSizeMAX=12;
-var desirableScholarSize=6; //Remember that all scholars have the same size!
 
 var overviewWidth = 200;
 var overviewHeight = 175;
@@ -81,27 +110,8 @@ var minEdgeWeight=5.0;
 var maxEdgeWeight=0.0;
 //---------------------------------------------------
 
-var sigmaJsDrawingProperties = {
-    defaultLabelColor: 'black',
-    defaultLabelSize: 12,//in fact I'm using it as minLabelSize'
-    defaultLabelBGColor: '#fff',
-    defaultLabelHoverColor: '#000',
-    labelThreshold: 6,
-    defaultEdgeType: 'curve',
-    
-    borderSize: 2.5,//Something other than 0
-    nodeBorderColor: "default",//exactly like this
-    defaultNodeBorderColor: "black"//,//Any color of your choice
-    //defaultBorderView: "always"
-};
-var sigmaJsGraphProperties = {
-    minEdgeSize: 2,
-    maxEdgeSize: 2
-};
-var sigmaJsMouseProperties = {
-    minRatio:0.1,
-    maxRatio: 100
-};
+var bipartite=false;
+
 
 var opts = {
   lines: 13, // The number of lines to draw

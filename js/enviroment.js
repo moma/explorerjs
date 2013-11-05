@@ -450,11 +450,11 @@ function updateNodeFilter(nodeFilterName) {
     nodeType="";
     divName="";
     if(nodeFilterName=="social"){
-        nodeType="Document";
+        nodeType=catSoc;
         divName="#sliderANodeWeight";
     }
     else {
-        nodeType="NGram";
+        nodeType=catSem;
         divName="#sliderBNodeWeight";
     }
     nodes=partialGraph._core.graph.nodes.filter(function(n) {
@@ -462,13 +462,13 @@ function updateNodeFilter(nodeFilterName) {
           });
     nodesBySize=[];
     for(var i in nodes){
-        if(Nodes[nodes[i].id].type=="Document"){
+        if(Nodes[nodes[i].id].type==catSoc){
             if(typeof(nodesBySize[nodes[i].degree])=="undefined"){
                 nodesBySize[nodes[i].degree]=[];
             }
             nodesBySize[nodes[i].degree].push(nodes[i].id);
         }
-        if(Nodes[nodes[i].id].type=="NGram"){
+        if(Nodes[nodes[i].id].type==catSem){
             if(typeof(nodesBySize[nodes[i].size])=="undefined"){
                 nodesBySize[nodes[i].size]=[];
             }
@@ -521,13 +521,13 @@ function updateBothNodeFilters() {
     nodesSortedBySize=[];
     
     for(var i in nodes){
-        if(Nodes[nodes[i].id].type=="Document"){
+        if(Nodes[nodes[i].id].type==catSoc){
             if(typeof(scholarsNodesBySize[nodes[i].degree])=="undefined"){
                 scholarsNodesBySize[nodes[i].degree]=[];
             }
             scholarsNodesBySize[nodes[i].degree].push(nodes[i].id);
         }
-        if(Nodes[nodes[i].id].type=="NGram"){
+        if(Nodes[nodes[i].id].type==catSem){
             if(typeof(keywordsNodesBySize[nodes[i].size])=="undefined"){
                 keywordsNodesBySize[nodes[i].size]=[];
             }
