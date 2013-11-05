@@ -83,7 +83,7 @@ function updateLeftPanel_uni(){//Uni-partite graph
     $("#names").html(names); //Information extracted, just added
     $("#information").html(information); //Information extracted, just added
     $("#tips").html("");
-        
+    $("#topPapers").show();
     /***** The animation *****/
     _cG = $("#leftcolumn");
     _cG.animate({

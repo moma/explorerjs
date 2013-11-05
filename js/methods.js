@@ -132,7 +132,7 @@ function cancelSelection (fromTagCloud) {
     
     if(fromTagCloud==false){
         $("#names").html(""); 
-        $("#topPapers").html("");
+        $("#topPapers").html(""); $("#topPapers").hide();
         $("#opossiteNodes").html("");
         $("#information").html("");
         $("#searchinput").val("");
@@ -622,6 +622,7 @@ function updateLeftPanel(){
     $("#opossiteNodes").html(opossitesNodes); //Information extracted, just added
     $("#information").html(information); //Information extracted, just added
     $("#tips").html("");
+     $("#topPapers").show();
         
     /***** The animation *****/
     _cG = $("#leftcolumn");
@@ -1193,15 +1194,20 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
         }
         if(categoriesIndex.length==1) updateLeftPanel_uni();
         if(categoriesIndex.length==2) updateLeftPanel();
-        if(is_empty(selections)==true){
+        
+        //The most brilliant way of knowing if an array is empty in the world of JavaScript
+        i=0; for(var s in selections) i++;
+        
+        if(is_empty(selections)==true || i==0){
                 pr("cursor radius ON, downNode -> selecciones vacias");
                 $("#names").html(""); //Information extracted, just added
                 $("#opossiteNodes").html(""); //Information extracted, just added
                 $("#information").html("");
                 $("#tips").html(getTips());
-                $("topPapers").html("");
+                $("#topPapers").html(""); $("#topPapers").hide();
                 changeButton("unselectNodes");
-                cancelSelection(false);
+                //cancelSelection(false);
+                graphResetColor();
         }
         else { 
                 greyEverything();
@@ -1224,14 +1230,16 @@ function graphResetColor(){
                             return !x['hidden'];
           });
           
-    pr("printing nodes: ");
     for(var x in nds){
-        pr(nds[x]);
+        n=nds[x];
+        n.attr["grey"] = 0;
+        n.color = n.attr["true_color"];
     }
     
-    pr("printing edges: ");
     for(var x in eds){
-        pr(eds[x]);
+        e=eds[x];
+        e.attr["grey"] = 0;
+        e.color = e.attr["true_color"];
     }
     
 }
@@ -1617,11 +1625,12 @@ function selectOpossites (list){//Expanding selection
         getOpossitesNodes(n,false);
     }
     updateLeftPanel();
-    if(is_empty(selections)==true){  
+    i=0; for(var s in selections) i++;
+    if(is_empty(selections)==true || i==0){  
                 $("#names").html(""); //Information extracted, just added
                 $("#opossiteNodes").html(""); //Information extracted, just added
                 $("#information").html("");
-                $("topPapers").html("");
+                $("#topPapers").html(""); $("#topPapers").hide();
                 $("#tips").html(getTips());
                 changeButton("unselectNodes");
                 cancelSelection(false);
