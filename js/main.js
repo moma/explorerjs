@@ -47,8 +47,13 @@ function bringTheNoise(pathfile,type){
     console.log("parsing...");       
     parse(pathfile);
     
-    if(type=="mono") onepartiteExtract(); 
-    else if(type=="bi") fullExtract(); 
+    if(type=="mono") {
+        onepartiteExtract(); 
+        $("#left").hide();
+    }
+    else if(type=="bi") {
+        fullExtract(); 
+    }
     
     updateEdgeFilter("social");
     updateNodeFilter("social");
