@@ -204,6 +204,11 @@ $(document).ready(function() {
             return t;
         };
         log("reading filters forms..");
+        tags= collect("tags");
+        for(var i in tags){
+            t = tags[i];
+            tags[i] = t.replace("#","_char_");
+        }
         query = {
             categorya: $.trim($("#categorya :selected").text()),
             categoryb: $.trim($("#categoryb :selected").text()),
@@ -211,7 +216,7 @@ $(document).ready(function() {
             countries: collect("countries"),
             laboratories: collect("laboratories"),
             coloredby: [],
-            tags: collect("tags"),
+            tags: tags,
             organizations: collect("organizations")
         };
         //console.log("raw query: ");

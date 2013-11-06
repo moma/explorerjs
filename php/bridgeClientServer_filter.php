@@ -50,7 +50,8 @@ function objectToArray($d) {
 
 //phpinfo();
 /*$gexf = '<?xml version="1.0" encoding="UTF-8"?>';*/
-$data = json_decode($_GET['query']);
+$query = str_replace( '_char_', '#', $_GET["query"] );
+$data = json_decode($query);
 $data = objectToArray($data);
 $iterations = $_GET['it'];
 

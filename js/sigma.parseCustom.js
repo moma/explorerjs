@@ -32,7 +32,6 @@ function parse(){
             dataType: 'jsonp',
             async: false,
             success : function(data){ 
-                //pr("unique_id="+unique_id+"&it="+iterationsFA2);
                 extractFromJson(data); 
                 stopLoader();
                 updateEdgeFilter("social");
@@ -46,8 +45,11 @@ function parse(){
 //
                 startEnviroment(); 
             },
-            error: function(){ 
+            error: function(data){ 
                 pr("Page Not found. parseCustom, inside the IF");
+                pr("what i send");
+                pr("query="+getUrlParam.nodeidparam+"&it="+iterationsFA2);
+                pr(data);
             }
         });
         return true;
