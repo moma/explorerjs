@@ -484,7 +484,6 @@ function fullExtract(){
             //pr(idS+";"+idT);
             if(idS=="D" && idT=="D"){
                 edge.label="nodes1";
-                pr(edge);
                 if( (typeof partialGraph._core.graph.edgesIndex[target+";"+source])=="undefined" ){
                     edge.hidden=false;
                 }
