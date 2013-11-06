@@ -1,5 +1,5 @@
 
-// * * < DEVELOPER OPTIONS > * *
+// ============ < DEVELOPER OPTIONS > ============
 var fa2enabled=false;
 
 var mainfile="0-terms-terms-MainNodes.gexf";
@@ -44,15 +44,17 @@ var sigmaJsMouseProperties = {
     minRatio:0.1,
     maxRatio: 100
 };
-// * * < / DEVELOPER OPTIONS > * *
+// ============ < / DEVELOPER OPTIONS > ============
+
+
+
+
 
 //"http://webchat.freenode.net/?nick=Ademe&channels=#anoe"
 var ircUrl="http://webchat.freenode.net/?nick="+ircNick+"&channels="+ircCHN;
 //var iterationsFA2=6;
 var categories = {};
 var categoriesIndex = [];
-
-
 
 var gexf;
 //var zoom=0;

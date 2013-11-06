@@ -484,7 +484,7 @@ function fullExtract(){
             //pr(idS+";"+idT);
             if(idS=="D" && idT=="D"){
                 edge.label="nodes1";
-                
+                pr(edge);
                 if( (typeof partialGraph._core.graph.edgesIndex[target+";"+source])=="undefined" ){
                     edge.hidden=false;
                 }
@@ -508,10 +508,11 @@ function fullExtract(){
 //                }
 //                else nodes1[target].neighbours.push(source);
             }
-            
-            
+//            
+//            
             if(idS=="N" && idT=="N"){
                 edge.label="nodes2";
+                //pr("nodes2");
                 edge.hidden=true;
                 if((typeof nodes2[source])=="undefined"){                    
                     nodes2[source] = {
@@ -522,10 +523,11 @@ function fullExtract(){
                 }
                 else nodes2[source].neighbours.push(target);
             }
-            
-            
-            if((idS=="D" && idT=="N")||(idS=="N" && idT=="D")){                 
+//            
+//            
+            if((idS=="D" && idT=="N")||(idS=="N" && idT=="D")){
                 edge.label="bipartite";
+                //pr("bipartite");
                 edge.hidden=true;
                 // Document to NGram 
                 if((typeof bipartiteD2N[source])=="undefined"){   
