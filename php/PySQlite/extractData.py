@@ -347,22 +347,35 @@ class extract:
 		if res['login'].strip() in self.scholars_colors:
 			self.scholars_colors[res['login'].strip()]+=1;
 
-	sql="SELECT term,id,occurrences FROM terms"
-	#self.cursor.execute(sql)
+	# With big queries (like France) this won't work
+#	sql="SELECT term,id,occurrences FROM terms"
+#	cont=0
+#	for t in termsMatrix:
+#		if cont==0: 
+#			sql+=' where id='+t
+#			cont+=1
+#		else: sql+=' or id='+t
+#	print sql
+#	for res in self.cursor.execute(sql):
+#		idT = res['id'] 	
+#		info = {}
+#		info['id'] = idT
+#		info['occurrences'] = res['occurrences']
+#		info['term'] = res['term']
+#		self.terms_array[idT] = info
+
+
+	# Inefficient piece of code!
 	cont=0
 	for t in termsMatrix:
-		if cont==0: 
-			sql+=' where id='+t
-			cont+=1
-		else: sql+=' or id='+t
-	#print sql
-	for res in self.cursor.execute(sql):
-		idT = res['id'] 	
-		info = {}
-		info['id'] = idT
-		info['occurrences'] = res['occurrences']
-		info['term'] = res['term']
-		self.terms_array[idT] = info
+		sql='SELECT term,id,occurrences FROM terms where id='+t
+		for res in self.cursor.execute(sql):
+			idT = res['id'] 	
+			info = {}
+			info['id'] = idT
+			info['occurrences'] = res['occurrences']
+			info['term'] = res['term']
+			self.terms_array[idT] = info
 	
 	count=1
 	

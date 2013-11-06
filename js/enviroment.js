@@ -374,7 +374,8 @@ function updateEdgeFilter(edgeFilterName) {
     
     normEdges=[];
     cont=0;
-    index=0;
+    index=0;    
+    nbCuts=Math.floor(edges.length/10);
     for(var i in edgesSortedByWeight){
         for(var j in edgesSortedByWeight[i].value){
             if(typeof(normEdges[index])=="undefined"){
@@ -382,7 +383,7 @@ function updateEdgeFilter(edgeFilterName) {
             }
             normEdges[index].push(edgesSortedByWeight[i].value[j])
             cont++;
-            if(cont%20==0) {
+            if(cont%nbCuts==0) {
                 index++;
                 cont=0;
             }
