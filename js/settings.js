@@ -1,7 +1,7 @@
 
 // ============ < DEVELOPER OPTIONS > ============
 var fa2enabled=false;
-
+var getAdditionalInfo=true;
 var mainfile="0-terms-terms-MainNodes.gexf";
 
 ircNick="Ademe";

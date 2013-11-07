@@ -102,7 +102,6 @@ function returnBaseUrl(){
     return origin+pathname;
 }
 
-
 function cancelSelection (fromTagCloud) {
     pr("\t***in cancelSelection");
     highlightSelectedNodes(false); //Unselect the selected ones :D
@@ -389,26 +388,7 @@ function updateLeftPanel(){
         }
         opossitesNodes += '</div>';
         
-        params=[];
-        for(var i in selections){
-            params.push(Nodes[i].label);
-        }
-        jsonparams=JSON.stringify(params);
-        jsonparams = jsonparams.replace("&","__and__");
-        pr(jsonparams);
-        $.ajax({
-            type: 'GET',
-            url: 'php/test.php',
-            data: "type=social&query="+jsonparams,
-            //contentType: "application/json",
-            //dataType: 'json',
-            success : function(data){ 
-                $("#topPapers").html(data);
-            },
-            error: function(){ 
-                pr('Page Not found: updateLeftPanel(), if(swclickActual=="social")');
-            }
-        });
+        getTopPapers("social");
         
         information += '<br><h4>Information:</h4>';
         information += '<ul>';
@@ -450,24 +430,8 @@ function updateLeftPanel(){
         }
         opossitesNodes+='</div>';
         
-        params=[];
-        for(var i in selections){
-            params.push(Nodes[i].label);
-        }
-        jsonparams=JSON.stringify(params);
-        $.ajax({
-            type: 'GET',
-            url: 'php/test.php',
-            data: "type=semantic&query="+jsonparams,
-            //contentType: "application/json",
-            //dataType: 'json',
-            success : function(data){ 
-                $("#topPapers").html(data);
-            },
-            error: function(){ 
-                pr('Page Not found: updateLeftPanel(), if(swclickActual=="semantic")');
-            }
-        });
+        
+        getTopPapers("semantic");
         
         information += '<br><h4>Information:</h4>';
         information += '<ul>';
@@ -635,7 +599,6 @@ function updateLeftPanel(){
         });
     });
 }
-
 
 function graphNGrams(node_id){   
     pr("\tin graphNGrams");/**/
@@ -1221,7 +1184,6 @@ function hoverNodeEffectWhileFA2(selectionRadius) {
     });
 }
 
-
 function graphResetColor(){
     nds = partialGraph._core.graph.nodes.filter(function(x) {
                             return !x['hidden'];
@@ -1390,7 +1352,6 @@ function unHideElem(id){
         partialGraph._core.graph.edgesIndex[id].hidden=false;
     }
 }
-
 
 function changeToMeso(iwannagraph) { 
     labels=[]
@@ -1646,7 +1607,6 @@ function selectOpossites (list){//Expanding selection
     checkBox = false;      
     partialGraph.draw();
 }
-
 
 function saveGEXF(){
     json = '<?xml version="1.0" encoding="UTF-8"?>\n';

@@ -6,9 +6,6 @@
         <link rel="stylesheet" type="text/css" href="styles/gexfjs.css" />
         <link rel="stylesheet" type="text/css" href="styles/tinaweb.css" />
         <link rel="stylesheet" type="text/css" href="styles/jquery-ui.css" />
-        <!--
-        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" />
-        -->
         <link rel="stylesheet" href="styles/style.css" type="text/css" />
 
         <script src="js/jquery/jquery-1.9.1.js"></script>
@@ -18,11 +15,6 @@
 
         <script src="js/canvas2image/base64.js" type="text/javascript"></script>
         <script src="js/canvas2image/canvas2image.js" type="text/javascript"></script>
-        
-        
-        <script src="bootstrap/js/bootstrap-transition.js" type="text/javascript"></script>
-        <script src="bootstrap/js/bootstrap-modal.js" type="text/javascript"></script>
-        
         
         <script src="js/sigma.min.js" type="text/javascript" language="javascript"></script>
         <script src="js/sigma.forceatlas2.js" type="text/javascript" language="javascript"></script>
@@ -34,21 +26,15 @@
         <script src="js/enviroment.js" type="text/javascript" language="javascript"></script>
         <script src="js/main.js" type="text/javascript" language="javascript"></script>
         <script type="text/javascript">
-        // Popup window code
-        function newPopup(url) {
-        popupWindow = window.open(
-        url,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=no')
-        }
-</script>
-
-
-	<!-- jsProgressBarHandler
-	<script type="text/javascript" src="js/jsprogressbar/prototype.js"></script>
-	<script type="text/javascript" src="js/jsprogressbar/jsProgressBarHandler.js"></script>-->
-
+                // Popup window code
+                function newPopup(url) {
+                popupWindow = window.open(
+                url,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=no')
+                }
+        </script>
 
     </head>
-    <body onload="getChatFrame();$('#windowTitleDialog').hide();">
+    <body onload="getChatFrame();">
         <div class="container">
             <div id="left">
                 <div id="images" style="margin-top:10px;">
@@ -253,22 +239,6 @@
                 <div id="topPapers"></div>
                 <div id="information"></div>
             </div>
-        </div>
-        
-        <div id="windowTitleDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="windowTitleLabel" aria-hidden="true" style="display: none;">
-                <div class="modal-header">
-                        <a href="modaldemo.html" class="close" data-dismiss="modal">×</a>
-                        <h3>Please enter a new title for this window.</h3>
-                </div>
-                <div class="modal-body">
-                        <div class="divDialogElements">
-                                <input class="xlarge" id="xlInput" name="xlInput" type="text">
-                        </div>
-                </div>
-                <div class="modal-footer">
-                        <a href="modaldemo.html" class="btn" onclick="closeDialog ();">Cancel</a>
-                        <a href="modaldemo.html" class="btn btn-primary" onclick="okClicked ();">OK</a>
-                </div>
         </div>
         
     </body>
