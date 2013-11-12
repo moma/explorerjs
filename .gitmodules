@@ -1,0 +1,3 @@
+[submodule "tinawebJS"]
+	path = tinawebJS
+	url = https://github.com/moma/tinawebJS.git
