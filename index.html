@@ -3,64 +3,58 @@
         <head>
         <title>TinaJS</title>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="styles/gexfjs.css" />
-        <link rel="stylesheet" type="text/css" href="styles/tinaweb.css" />
-        <link rel="stylesheet" type="text/css" href="styles/jquery-ui.css" />
-        <link rel="stylesheet" href="styles/style.css" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="tinawebJS/styles/gexfjs.css" />
+        <link rel="stylesheet" type="text/css" href="tinawebJS/styles/tinaweb.css" />
+        <link rel="stylesheet" type="text/css" href="tinawebJS/styles/jquery-ui.css" />
+        <link rel="stylesheet" href="tinawebJS/styles/style.css" type="text/css" />
 
-        <script src="js/jquery/jquery-1.9.1.js"></script>
-        <script src="js/jquery/jquery-ui.js" type="text/javascript"></script>
-        <script src="js/jquery/jquery.ba-dotimeout.min.js" type="text/javascript"></script>
-        <script src="js/jquery/jquery.mousewheel.min.js" type="text/javascript"></script>
+        <script src="libs/jquery/jquery-1.9.1.js"></script>
+        <script src="libs/jquery/jquery-ui.js" type="text/javascript"></script>
+        <script src="libs/jquery/jquery.ba-dotimeout.min.js" type="text/javascript"></script>
+        <script src="libs/jquery/jquery.mousewheel.min.js" type="text/javascript"></script>
 
-        <script src="js/canvas2image/base64.js" type="text/javascript"></script>
-        <script src="js/canvas2image/canvas2image.js" type="text/javascript"></script>
-
+        <script src="tinawebJS/js/canvas2image/base64.js" type="text/javascript"></script>
+        <script src="tinawebJS/js/canvas2image/canvas2image.js" type="text/javascript"></script>
         
-        <script src="js/sigma.min.js" type="text/javascript" language="javascript"></script>
-        <script src="js/sigma.forceatlas2.js" type="text/javascript" language="javascript"></script>
-        <script src="js/settings.js" type="text/javascript" language="javascript"></script>
-        <script src="js/sigma.parseCustom.js" type="text/javascript" language="javascript"></script>
-        <script src="js/extras.js" type="text/javascript" language="javascript"></script>
-        <script src="js/methods.js" type="text/javascript" language="javascript"></script>
-        <script src="js/minimap.js" type="text/javascript" language="javascript"></script>
-        <script src="js/enviroment.js" type="text/javascript" language="javascript"></script>
-        <script src="js/main.js" type="text/javascript" language="javascript"></script>
+        <script src="tinawebJS/js/sigma.min.js" type="text/javascript" language="javascript"></script>
+        <script src="tinawebJS/js/sigma.forceatlas2.js" type="text/javascript" language="javascript"></script>
+        <script src="settings.js" type="text/javascript" language="javascript"></script>
+        <script src="tinawebJS/js/sigma.parseCustom.js" type="text/javascript" language="javascript"></script>
+        <script src="extras.js" type="text/javascript" language="javascript"></script>
+        <script src="tinawebJS/js/methods.js" type="text/javascript" language="javascript"></script>
+        <script src="tinawebJS/js/minimap.js" type="text/javascript" language="javascript"></script>
+        <script src="tinawebJS/js/enviroment.js" type="text/javascript" language="javascript"></script>
+        <script src="tinawebJS/js/main.js" type="text/javascript" language="javascript"></script>
         <script type="text/javascript">
-        // Popup window code
-        function newPopup(url) {
-        popupWindow = window.open(
-        url,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=no')
-        }
-</script>
-
-
-	<!-- jsProgressBarHandler
-	<script type="text/javascript" src="js/jsprogressbar/prototype.js"></script>
-	<script type="text/javascript" src="js/jsprogressbar/jsProgressBarHandler.js"></script>-->
-
+                // Popup window code
+                function newPopup(url) {
+                popupWindow = window.open(
+                url,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=no')
+                }
+        </script>
 
     </head>
-    <body>        
-        <div class="container">            
+    <!--<body onload="getChatFrame();">-->
+    <body>
+        <div class="container">
             <div id="left">
                 <div id="images" style="margin-top:10px;">
                         <img style="cursor: pointer" title="Scholars" 
-                             src="img/trans/active_scholars.png" 
+                             src="tinawebJS/img/trans/active_scholars.png" 
                              width="50" id="socio"
                              onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
                              onClick='changeHoverActive(this)'
                              ></img>
 
                         <img style="cursor: pointer" title="Mixed" 
-                             src="img/trans/inactive_sociosem.png" 
+                             src="tinawebJS/img/trans/inactive_sociosem.png" 
                              width="50" id="sociosemantic"
                              onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
                              onClick='changeHoverActive(this)'                         
                              ></img>
 
                         <img style="cursor: pointer" title="Keywords" 
-                             src="img/trans/inactive_tags.png" 
+                             src="tinawebJS/img/trans/inactive_tags.png" 
                              width="50" id="semantic"
                              onMouseOver='changeInactvHover(this)' onMouseOut='changeHoverInactv(this)'
                              onClick='changeHoverActive(this)'
@@ -69,12 +63,12 @@
                 
             </div>
             
-            <div id="right">                
+            <div id="right">
                     <div id="sliders" style="margin-top:10px;">
                         
                         <div id="category-A" class="unselectable toolbar-middle" style="width: 120px;">
                             <div>
-                                &nbsp;&nbsp;&nbsp;&nbsp;Filters
+                                &nbsp;&nbsp;&nbsp;&nbsp;Scholars
                             </div>
                             <div style="height: 16px; width: 100px;">
                                 <div id="nodeAFilterMinValue"></div>                        
@@ -135,14 +129,14 @@
                     <div id="ofthemiddle" style="border-width: 0px;margin-top:20px;">
                         
                         <div id="cursor-size-block" style="width: 100px; float: left;">
-                            <label for="sliderSelectionZone" class="sliderLabel">Selector size</label>
+                            <label for="sliderSelectionZone" class="sliderLabel">cursor size</label>
                             <div id="sliderSelectionZone"></div>
                         </div>
                         
                         <div id="gexfs" style="margin-left:100px; width: 100px; float: left;"></div>
                         
                         <div id="boxCurrentGraph">
-                           Current graph: <strong><div id="currentGraph"></div></strong>
+                            Current graph: <strong><div id="currentGraph"></div></strong>
                         </div>
                         
                         <div style="float: right;">
@@ -197,28 +191,30 @@
         <div id="overviewzone" class="gradient" onmouseover="overviewHover=true;" onmouseout="overviewHover=false;">
             <canvas id="overview" width="0" height="0"></canvas>
         </div>
-        
+                
         <div id="rightcolumn" style="position:fixed; right:-400px;top:80px;">
+            <!--
             <div id="showChat" onclick="showhideChat();"><a href="#" id="aShowChat"> </a></div>
-            <iframe src="http://webchat.freenode.net/?nick=nci&channels=#NCI"
+            <iframe src="http://webchat.freenode.net/?nick=Ademe&channels=#anoe"
             width="400" height="300"></iframe>
+            -->
         </div>
         
         <div id="leftcolumn">
             <div id="unfold">
                 <a href="#" id="aUnfold" class="rightarrow"> </a>
-                <a href="#" title="Status"><img  width="60" src="img/trans/status_title.png"></img></a>
+                <a href="#" title="Status"><img  width="60" src="tinawebJS/img/trans/status_title.png"></img></a>
                 <div align="center" style="left: -250px">
                     <table cellpadding="0" cellspacing="0">
                         <tr>
                             <td>
                                 <img id="viewType" width="60" onmouseover="neweffectshow();" onmouseout="neweffecthide();" 
-                                     title="Social" src="img/trans/status_macro_view.png"></img>
+                                     title="Social" src="tinawebJS/img/trans/status_macro_view.png"></img>
                             </td>
                             <td id="labelchange" onmouseover="neweffectshow();" onmouseout="justhide();">
-                                <img width="60" src="img/trans/status_title_change.png"></img></td>
+                                <img width="60" src="tinawebJS/img/trans/status_title_change.png"></img></td>
                             <td id="availableView" onmouseover="neweffectshow();" onmouseout="justhide();">
-                                <img id="switch" width="60" src="img/trans/graph_meso_null.png"
+                                <img id="switch" width="60" src="tinawebJS/img/trans/graph_meso_null.png"
                                      onClick='if(swclickActual=="") {swclick="social";} changeHoverActive(this)'>
                                 </img>
                             </td>
@@ -231,47 +227,23 @@
                 -->
             </div>
             <div id="leftcontent">
-                
                 <div style="text-align: center;">
                     <img src="rock/rock.png">
+                </div>
+                <div style="text-align: center;">
+                    <img onclick="changeSwitchImage('fromHtml','')" id="switchbutton" width="60" src="tinawebJS/img/trans/showKeywords.png"></img>
                 </div>
                 <button 
                     style="color: #900;font-weight: bold;font-size: 70%;text-transform: uppercase;float:right;" 
                     onClick='cancelSelection(); $("#aUnfold").click();'
                 >X</button>
+                <div id="tips"></div>
                 <div id="names"></div>
                 <div id="opossiteNodes"></div>
                 <div id="topPapers"></div>
-                <div id="information">
-<div>
-                    <h1>Semantic Landscape of the Rockefeller Innovators Awards</h1>
-                    <div><p>This map displays the different topics addressed in the
-                         Rockefeller Innovator Awards. Nodes in the graph correspond
-                         to relevant terms which have been extracted from the proposal
-                         with text-mining methods. Nodes are linked when some proposals make a strong relation between the corresponding terms. 
-                         <br/><br/>
-                         Terms are clustered into large topics such as <i>kindergarten & education system</i> and terms belonging to the same large topics
-                         have the same color.
-                         <br/><br/>
-                         When you clic on a node, the main topics it is linked to are displayed as well as a set of more generic and more specitif terms related to this selection.
-
-                    <br/>
-                    </p>
-                    <br/><br/>
-                    <h4>TIPS</h4>
-                    <p> <b>- You can search for an expression in the search bar.</b><br/>
-                    <p> <b>- When a node is selected, you can clic in the side bar on its name to launch a google search on that term.</b><br/>    
-                    <p> <b>- Double clic on a node to get more information</b><br/>
-                    <b>- Double clic an empty area to erase current selection</b></p></div>
-                    <br/><br/>  
-                    
-                    <div id="footer"><p><i>Credits:</i> <a href="http://chavalarias.com" target="_blank"><img src="rock/user.png" width=15></a>  </p></div></div>
-                </div>              
-
-
-                </div>
+                <div id="information"></div>
             </div>
         </div>
-
+        
     </body>
 </html>
