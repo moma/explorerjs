@@ -232,23 +232,6 @@ function extractFromJson(data){
     }
 }
 
-//function parse(gexfPath) {
-//    var gexfhttp;
-//    gexfhttp = window.XMLHttpRequest ?
-//    new XMLHttpRequest() :
-//    new ActiveXObject('Microsoft.XMLHTTP');
-//    if(getUrlParam.nodeidparam.indexOf("__")===-1){
-//        gexfPath = "php/getgraph.php?query="+getUrlParam.nodeidparam;
-//    }
-//    else {
-//        gexfPath = "php/get_scholar_graph.php?login="+getUrlParam.nodeidparam;//+"*"+iterationsTinaForce;
-//    }
-//    
-//    gexfhttp.open('GET', gexfPath, false);
-//    gexfhttp.send();
-//    gexf = gexfhttp.responseXML;
-//}
-
 function fullExtract(){
     var i, j, k;
     partialGraph.emptyGraph();
