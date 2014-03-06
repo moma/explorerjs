@@ -281,9 +281,26 @@ function showhideChat(){
 
 
 function getTips(){    
-    param='<a style="cursor:pointer;" onclick="selectionToMap();"><img width="50px" src="'+
-            twjs+'img/world.png" title="See the network world distribution"></img></a>';
-    text = '<div><h1>Mapping "Environmental studies and Virtualization" </h1><div><p>These maps display the different topics addressed in the academic litterature in the domaine of "Environmnental studies and Virtualisation". Nodes in the graph correspond to relevant terms which have been extracted from the scientific papers with text-mining methods. <br/>Nodes are linked when some papers make a strong relation between the corresponding terms.<br/><br/>Terms are clustered into large topics indicated by colors to help in browsing the graph.<br/><br/>When you click on a set of nodes, additionnal information on your selection is displayed on the left panel like,  for example, the most related documents<br/></p><br/><br/><h4>TIPS</h4><p> <b>- You can search for an expression in the search bar.</b><br/> <b>- When a node is selected, you can click in the side bar on its name to launch a google search on that term.</b><br/><br/><b>- Double click an empty area to erase current selection</b></p></div><br/><center><strong>'+param+'</strong></center><br/><div id="footer"><p><i>Credits:</i> <a href="http://chavalarias.com" target="_blank" title="David Chavalarias"><img src="ademe/user.png" width=15></a> <a href="http://alexandre.delanoe.org" target="_blank" title="Alexandre Delanoë"><img src="ademe/user.png" width=15></a> </p></div></div>';
+    text = 
+        "<br>"+
+        "Basic Interactions:"+
+        "<ul>"+
+        "<li>Click on a node to select/unselect and get its information. In case of multiple selection, the button unselect clears all selections.</li>"+
+        "<li>The switch button switch allows to change the view type.</li>"+
+        "</ul>"+
+        "<br>"+
+        "Graph manipulation:"+
+        "<ul>"+
+        "<li>Link and node sizes indicate their strength.</li>"+
+        "<li>To fold/unfold the graph (keep only strong links or weak links), use the 'edges filter' sliders.</li>"+
+        "<li>To select a more of less specific area of the graph, use the 'nodes filter' slider.</li>"+
+        "</ul>"+
+        "<br>"+
+        "Micro/Macro view:"+
+        "<ul>"+
+        "<li>To explore the neighborhood of a selection, either double click on the selected nodes, either click on the macro/meso level button. Zoom out in meso view return to macro view.</li>"+
+        "<li>Click on the 'all nodes' tab below to view the full clickable list of nodes.</li>"+
+        "</ul>";
     return text;
 }
 
