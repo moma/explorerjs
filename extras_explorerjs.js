@@ -2,16 +2,37 @@
  * Customize as you want ;)
  */
 function callGeomap(){
-    db=getCurrentDBforCurrentGexf();
-    db=JSON.stringify(db);
+    db=JSON.stringify('php/community.db');
     if(is_empty(selections)){
         jsonparams='["all"]';
     } else {
-        jsonparams=JSON.stringify(getSelections());
-        jsonparams = jsonparams.split('&').join('__and__');
-    }    
+
+        N=0;
+        k=0;
+        cats=(categoriesIndex.length);
+        arr={};
+        if(cats==2 && swclickActual=="social") {
+            N=Object.keys(partialGraph._core.graph.nodes.filter(function(n){return n.type==catSoc})).length;
+            arr=nodes1;
+        }
+        if(cats==2 && swclickActual=="semantic") {
+            N=Object.keys(partialGraph._core.graph.nodes.filter(function(n){return n.type==catSem})).length;
+            arr=nodes2;
+        }
+        if(cats==1)
+            N=Object.keys(Nodes).length;
+    
+        temp=getNeighs(selections,arr);
+        sel_plus_neigh=Object.keys(temp);
+        k=sel_plus_neigh.length;
+        if(N==k) jsonparams='["all"]';
+        else jsonparams=JSON.stringify(sel_plus_neigh);
+        
+        //jsonparams=JSON.stringify(getSelections());
+        //jsonparams = jsonparams.split('&').join('__and__');
+    }
     pr('in callGeomap: db='+db+'&query='+jsonparams);
-    initiateMap(db,jsonparams,"geomap/");
+    initiateMap(db,jsonparams,"geomap2/");
     $("#ctlzoom").hide();
     $("#CurrentView").hide();
 }
